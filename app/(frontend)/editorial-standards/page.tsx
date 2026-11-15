@@ -3,6 +3,7 @@ export const metadata: Metadata = {
   title: "Editorial Standards",
   description:
     "The editorial principles, evidence standards and human accountability rules governing HEZQEN.",
+  alternates: { canonical: "/editorial-standards" },
 };
 const principles = [
   [
