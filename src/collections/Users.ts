@@ -56,7 +56,9 @@ export const Users: CollectionConfig = {
       access: {
         read: ({ req, id }) => {
           const actor = getActiveUserActor(req.user);
-          return Boolean(actor && (["administrator", "editor"].includes(actor.role ?? "") || actor.id === id));
+          return Boolean(
+            actor && (["administrator", "editor"].includes(actor.role ?? "") || actor.id === id),
+          );
         },
         update: ({ req }) => hasActiveRole(req.user, ["administrator"]),
       },
