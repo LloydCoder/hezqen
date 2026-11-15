@@ -46,7 +46,7 @@ export const Articles: CollectionConfig = {
   slug: "articles",
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "division", "status", "author", "updatedAt"],
+    defaultColumns: ["title", "division", "workflowStatus", "author", "updatedAt"],
     group: "Editorial",
   },
   versions: {
@@ -123,7 +123,6 @@ export const Articles: CollectionConfig = {
       relationTo: "users",
       required: true,
       access: {
-        create: () => false,
         update: () => false,
       },
     },
