@@ -37,7 +37,16 @@ export interface EditorialWorkflowStore {
   beginTransaction(): Promise<string | null>;
   getArticle(id: string, transactionId: string): Promise<StoredEditorialArticle | null>;
   getMaterialClaims(articleId: string, transactionId: string): Promise<Array<{ id: string; sourceIds: string[] }>>;
-  compareAndSwapArticle(id: string, expectedRevision: number, expectedStatus: WorkflowStatus, changes: Record<string, unknown>, transactionId: string): Promise<boolean>;
+  compareAndSwapArticle(
+    id: string,
+    expectedRevision: number,
+    expectedStatus: WorkflowStatus,
+    expectedAuthorId: string | null,
+    expectedEditorId: string | null,
+    expectedFactCheckerId: string | null,
+    changes: Record<string, unknown>,
+    transactionId: string,
+  ): Promise<boolean>;
   appendAuditEvent(event: EditorialAuditEvent, transactionId: string): Promise<void>;
   commitTransaction(transactionId: string): Promise<void>;
   rollbackTransaction(transactionId: string): Promise<void>;
