@@ -23,7 +23,10 @@ export const Evidence: CollectionConfig = {
       ({ data, operation, req }) => {
         const context = req.context as Record<string, unknown> | undefined;
         if (operation === "create" && context?.hezqenEvidencePreservation !== true) {
-          throw new APIError("Evidence can only be created through the preservation endpoint.", 403);
+          throw new APIError(
+            "Evidence can only be created through the preservation endpoint.",
+            403,
+          );
         }
         if (operation === "update") {
           if (context?.hezqenEvidenceVerification !== true) {
