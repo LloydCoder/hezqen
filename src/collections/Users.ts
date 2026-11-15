@@ -57,9 +57,12 @@ export const Users: CollectionConfig = {
       type: "email",
       required: true,
       access: {
-        read: ({ req }) => {
+        read: ({ req, id }) => {
           const actor = actorFromRequest(req.user);
-          return Boolean(actor && (["administrator", "editor"].includes(actor.role ?? "") || actor.id === req.user?.id));
+          return Boolean(
+            actor &&
+              (["administrator", "editor"].includes(actor.role ?? "") || actor.id === id),
+          );
         },
         update: isAdministrator,
       },
