@@ -50,3 +50,8 @@ The live preview is https://hezqen.vercel.app. A READY deployment does not prove
 ## Non-claims
 
 Premium subscriptions, reader accounts, production search, a fully operational CMS, persistent evidence storage, automated publishing and complete ASVS compliance are not claimed as available. Check the implementation phase status for current acceptance gates.
+
+
+## HEZQEN Infrastructure
+
+Five engineering-preview kits: local AI deployment, PII protection middleware, multi-GPU optimization, air-gapped RAG and an infrastructure lab bundle. This catalog does not imply production certification, regulatory compliance, physical GPU validation, or commercial availability. See https://hezqen.tinlance.com/infrastructure and https://github.com/LloydCoder/hezqen-infrastructure-standard.

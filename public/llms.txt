@@ -39,3 +39,9 @@ Important notes:
 ## Full context
 
 - [llms-full.txt](https://hezqen.vercel.app/llms-full.txt): consolidated product, architecture, editorial and implementation context.
+
+
+## Infrastructure
+
+- [HEZQEN Infrastructure kits](https://hezqen.tinlance.com/infrastructure): five open engineering-preview kits, not production-certified or commercially released.
+- Product source and technical manifests: https://github.com/LloydCoder/hezqen-infrastructure-standard

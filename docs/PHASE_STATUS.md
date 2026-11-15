@@ -78,3 +78,8 @@ At main commit `639afb9867c69d025e3d637195cf4436e2711e31`, the following checks 
 Product-specific runtime/acceptance workflows have also passed on the latest commits that touched each product: [IK-01 CPU Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43726371376), [IK-02 PII Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43724537149), [IK-03 Multi-GPU Planner](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729614141), and [IK-04 Disconnected RAG Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43726371365). These are CI/runtime acceptance checks, not physical hardware certification or commercial release approval.
 
 The kits remain engineering previews. Outstanding commercial-release gates include physical GPU testing on supported hardware, PII precision/recall and throughput validation, a transitive SBOM, signed build provenance, model and third-party license review, versioned release artifacts, customer documentation, support policy and pricing. Do not advertise the kits as fully production-certified or commercially released until those gates are complete.
+
+
+## Infrastructure product catalog reconciliation
+
+The public /infrastructure surface lists five HEZQEN Infrastructure Standard kits as **engineering previews** only. It is not a commercial release or production certification. Physical GPU acceptance, representative PII accuracy evaluation, complete dependency/SBOM and provenance review, independent security assessment, installation/rollback runbooks, support terms and versioned release artifacts remain separate acceptance gates. Product source: https://github.com/LloydCoder/hezqen-infrastructure-standard.

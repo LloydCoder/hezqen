@@ -46,3 +46,5 @@ Choose the section that matches what you need.
 - Keep tutorials short and runnable; put exhaustive configuration in reference pages.
 - Prefer relative links for repository documentation.
 - Update this index whenever a document is added, renamed or removed.
+
+- [Infrastructure product catalog](/infrastructure): five engineering-preview kits and their release limitations.

@@ -369,7 +369,7 @@ a:focus-visible {
 }
 .platform-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin-top: 30px;
 }
@@ -695,7 +695,7 @@ a:focus-visible {
     padding: 65px 0 70px;
   }
   .hero-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 45px;
   }
   .hero-copy h1,
@@ -989,5 +989,275 @@ a:focus-visible {
   }
   .vram-lede {
     font-size: 15px;
+  }
+}
+
+/* HEZQEN Infrastructure product surface */
+.infrastructure-hero {
+  padding: 86px 0 72px;
+  background: var(--mist);
+}
+.infrastructure-hero h1 {
+  max-width: 900px;
+  margin: 24px 0 20px;
+  font-size: clamp(42px, 6vw, 68px);
+  letter-spacing: -0.06em;
+  line-height: 1.04;
+}
+.infrastructure-hero h1 em {
+  color: var(--slate);
+  font-style: italic;
+  font-weight: 400;
+}
+.infrastructure-lede {
+  max-width: 740px;
+  margin: 0;
+  color: var(--graphite);
+  font-size: 20px;
+  line-height: 28px;
+}
+.infrastructure-disclosure {
+  display: grid;
+  max-width: 920px;
+  gap: 7px;
+  margin-top: 34px;
+  padding: 18px 22px;
+  border-left: 3px solid var(--amber);
+  background: var(--white);
+  color: var(--graphite);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.infrastructure-disclosure strong {
+  color: var(--navy);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.infrastructure-products-section {
+  padding: 84px 0 100px;
+}
+.infrastructure-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
+  align-items: end;
+  gap: 50px;
+  margin-bottom: 36px;
+}
+.infrastructure-section-heading h2 {
+  margin: 16px 0 0;
+  font-size: clamp(30px, 4vw, 44px);
+  letter-spacing: -0.055em;
+  line-height: 1.1;
+}
+.infrastructure-section-heading > p {
+  margin: 0;
+  color: var(--slate);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.infrastructure-product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.infrastructure-product-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 28px;
+  border: 1px solid var(--line);
+  background: var(--white);
+}
+.infrastructure-product-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.infrastructure-product-id {
+  color: var(--amber-deep);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+.infrastructure-status {
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  background: var(--mist);
+  color: var(--graphite);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.infrastructure-product-card h2 {
+  margin: 24px 0 12px;
+  font-size: 25px;
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+}
+.infrastructure-product-summary {
+  margin: 0;
+  color: var(--slate);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.infrastructure-product-block {
+  margin-top: 26px;
+}
+.infrastructure-product-block h3,
+.infrastructure-product-details h3 {
+  margin: 0 0 10px;
+  color: var(--graphite);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.infrastructure-product-block ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--graphite);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.infrastructure-product-block li::marker {
+  color: var(--amber-deep);
+}
+.infrastructure-product-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--slate);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.infrastructure-product-details {
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.infrastructure-product-details summary {
+  padding: 14px 0 10px;
+  color: var(--navy);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+.infrastructure-product-details summary:focus-visible {
+  outline: 3px solid var(--amber-deep);
+  outline-offset: 3px;
+}
+.infrastructure-product-details > div {
+  padding: 8px 0 4px;
+}
+.infrastructure-product-details h3 {
+  margin-top: 12px;
+  margin-bottom: 5px;
+}
+.infrastructure-product-details p {
+  margin: 0;
+  color: var(--slate);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.infrastructure-source-link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 22px;
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 700;
+}
+.infrastructure-source-link span {
+  flex: 0 0 auto;
+  color: var(--amber-deep);
+}
+.infrastructure-assurance {
+  padding: 82px 0 88px;
+  background: var(--navy);
+  color: var(--white);
+}
+.infrastructure-assurance-grid {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  gap: 60px;
+}
+.infrastructure-assurance .section-label {
+  color: #b7c1cf;
+}
+.infrastructure-assurance h2 {
+  max-width: 760px;
+  margin: -8px 0 20px;
+  font-size: clamp(32px, 4.2vw, 48px);
+  letter-spacing: -0.055em;
+  line-height: 1.12;
+}
+.infrastructure-assurance p:not(.section-label) {
+  max-width: 760px;
+  margin: 0 0 16px;
+  color: #c4ceda;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.infrastructure-assurance-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 30px;
+}
+.infrastructure-assurance-actions .button-primary {
+  background: var(--white);
+  color: var(--navy);
+}
+.infrastructure-assurance-actions .button-primary:hover {
+  background: var(--mist);
+}
+.infrastructure-assurance-actions .text-link {
+  color: var(--white);
+}
+@media (max-width: 800px) {
+  .infrastructure-section-heading,
+  .infrastructure-assurance-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .infrastructure-product-grid {
+    grid-template-columns: 1fr;
+  }
+  .infrastructure-hero {
+    padding: 65px 0 58px;
+  }
+  .infrastructure-products-section,
+  .infrastructure-assurance {
+    padding: 65px 0;
+  }
+}
+@media (max-width: 560px) {
+  .platform-grid {
+    grid-template-columns: 1fr;
+  }
+  .infrastructure-hero h1 {
+    font-size: clamp(40px, 11vw, 54px);
+  }
+  .infrastructure-lede {
+    font-size: 17px;
+    line-height: 28px;
+  }
+  .infrastructure-product-card {
+    padding: 22px;
+  }
+  .infrastructure-assurance-actions {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

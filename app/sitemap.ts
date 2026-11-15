@@ -1,17 +1,32 @@
 import type { MetadataRoute } from "next";
-import { divisions, site } from "@/lib/site";
+import { LAB_CALCULATORS } from "../src/domain/labs/calculator-suite.ts";
+import { divisions, site } from "../src/lib/site.ts";
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/about", "/editorial-standards"].map((route) => ({
-    url: `${site.url}${route}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: route === "" ? 1 : 0.6,
-  }));
+  const staticRoutes = ["", "/about", "/editorial-standards", "/labs", "/infrastructure"].map(
+    (route) => ({
+      url: `${site.url}${route}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: route === "" ? 1 : route === "/labs" ? 0.8 : 0.6,
+    }),
+  );
   const divisionRoutes = divisions.map((division) => ({
     url: `${site.url}/divisions/${division.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
-  return [...staticRoutes, ...divisionRoutes];
+  const calculatorSlugs = [
+    "vram",
+    "ai-cost",
+    ...LAB_CALCULATORS.map((calculator) => calculator.slug),
+  ];
+  const calculatorRoutes = calculatorSlugs.map((slug) => ({
+    url: `${site.url}/labs/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.65,
+  }));
+  return [...staticRoutes, ...divisionRoutes, ...calculatorRoutes];
 }
