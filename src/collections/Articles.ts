@@ -16,10 +16,7 @@ const canReadArticles: Access = ({ req }) => {
       and: [
         { _status: { equals: "published" } },
         {
-        and: [
-          { _status: { equals: "published" } },
-          { workflowStatus: { equals: "published" } },
-        ],
+        and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
       },
       ],
     };
