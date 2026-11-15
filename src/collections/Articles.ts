@@ -147,7 +147,8 @@ export const Articles: CollectionConfig = {
       relationTo: "users",
       access: {
         create: () => false,
-        update: isEditor,
+        update: ({ req }) =>
+          ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
       },
     },
     {
