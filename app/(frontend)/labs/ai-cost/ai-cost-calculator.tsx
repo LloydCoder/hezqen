@@ -81,7 +81,7 @@ export default function AiCostCalculator() {
     Number.isFinite(amount) ? Math.ceil(amount).toLocaleString("en-US") : "Not reached";
 
   return (
-    <main className="vram-page">
+    <section className="vram-page">
       <div className="container">
         <a className="back-link" href="/">
           ← HEZQEN home
@@ -230,6 +230,6 @@ export default function AiCostCalculator() {
           </p>
         </section>
       </div>
-    </main>
+    </section>
   );
 }
