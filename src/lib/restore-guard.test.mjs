@@ -98,3 +98,39 @@ test("restore refuses a non-empty target unless overwrite is explicitly approved
   assert.equal(result.status, 64);
   assert.match(result.stderr, /target is not empty/);
 });
+
+
+test("restore refuses every non-empty target even when overwrite is requested", (t) => {
+  const directory = mkdtempSync(join(tmpdir(), "hezqen-restore-nonempty-"));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+
+  const backupFile = join(directory, "backup.dump");
+  const fakeBin = join(directory, "bin");
+  mkdirSync(fakeBin);
+  writeFileSync(backupFile, "backup-payload");
+  const checksum = createHash("sha256").update("backup-payload").digest("hex");
+  writeFileSync(`${backupFile}.sha256`, `${checksum}  ${backupFile}\\n`);
+  const psql = join(fakeBin, "psql");
+  writeFileSync(psql, "#!/bin/sh\\nprintf '1\\\\n'\\n");
+  chmodSync(psql, 0o755);
+  const pgRestore = join(fakeBin, "pg_restore");
+  writeFileSync(pgRestore, "#!/bin/sh\\necho called > \"$PG_RESTORE_MARKER\"\\n");
+  chmodSync(pgRestore, 0o755);
+
+  const marker = join(directory, "pg_restore-called");
+  const result = spawnSync("sh", ["scripts/db/restore.sh"], {
+    encoding: "utf8",
+    env: {
+      ...baseEnv,
+      PATH: `${fakeBin}:${process.env.PATH}`,
+      BACKUP_FILE: backupFile,
+      HEZQEN_RESTORE_APPROVED: "true",
+      HEZQEN_RESTORE_ALLOW_OVERWRITE: "true",
+      PG_RESTORE_MARKER: marker,
+    },
+  });
+
+  assert.equal(result.status, 64);
+  assert.match(result.stderr, /target database must be empty/);
+  assert.equal(require("node:fs").existsSync(marker), false);
+});
