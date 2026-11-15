@@ -91,17 +91,23 @@ jobs:
 
           path = Path("cloudflare.config.ts")
           source = path.read_text()
+          flags = 'compatibilityFlags: ["nodejs_compat", "nodejs_compat_populate_process_env"]'
           if "nodejs_compat_populate_process_env" not in source:
-              flags = 'compatibilityFlags: ["nodejs_compat", "nodejs_compat_populate_process_env"],'
-              date_match = re.search(r'(\s*compatibilityDate:\s*["\'][^"\']+["\'],)', source)
-              if date_match:
-                  source = source[:date_match.end()] + "\n    " + flags + source[date_match.end():]
+              flags_match = re.search(r'compatibilityFlags\s*:\s*\[[^\]]*\]', source)
+              if flags_match:
+                  source = source[:flags_match.start()] + flags + source[flags_match.end():]
               else:
-                  worker_match = re.search(r'(worker\s*:\s*\{)', source)
-                  if not worker_match:
-                      raise SystemExit("Generated cloudflare.config.ts has no worker config block")
-                  source = source[:worker_match.end()] + '\n    compatibilityDate: "2026-11-15",\n    ' + flags + source[worker_match.end():]
+                  date_match = re.search(r'(\s*compatibilityDate:\s*["\'][^"\']+["\'],)', source)
+                  if date_match:
+                      source = source[:date_match.end()] + "\n    " + flags + "," + source[date_match.end():]
+                  else:
+                      worker_match = re.search(r'(worker\s*:\s*\{)', source)
+                      if not worker_match:
+                          raise SystemExit("Generated cloudflare.config.ts has no worker config block")
+                      source = source[:worker_match.end()] + '\n    compatibilityDate: "2026-11-15",\n    ' + flags + "," + source[worker_match.end():]
               path.write_text(source)
+          if "nodejs_compat_populate_process_env" not in path.read_text():
+              raise SystemExit("Worker process.env binding compatibility flag was not applied")
           print(path.read_text())
           PY
       - name: Install generated Worker toolchain
