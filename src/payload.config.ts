@@ -23,7 +23,9 @@ const secret =
   process.env.PAYLOAD_SECRET ??
   (isProductionBuild ? "hezqen-build-only-secret-never-use-at-runtime" : undefined);
 const originInputs =
-  process.env.HEZQEN_ALLOWED_ORIGINS?.split(",").map((origin) => origin.trim()).filter(Boolean) ??
+  process.env.HEZQEN_ALLOWED_ORIGINS?.split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean) ??
   (isProductionBuild ? ["https://hezqen.tinlance.com"] : ["http://localhost:3000"]);
 const allowedOrigins = [
   ...new Set(
