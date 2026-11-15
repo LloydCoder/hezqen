@@ -12,7 +12,7 @@ import {
 } from "@/lib/public-articles";
 import { divisions, site } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;
