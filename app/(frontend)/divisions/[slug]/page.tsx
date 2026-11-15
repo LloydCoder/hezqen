@@ -7,7 +7,7 @@ import { StructuredData } from "@/components/StructuredData";
 import { getPublicArticles } from "@/lib/public-articles";
 import { divisions, getDivision, site } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export function generateStaticParams() {
   return divisions.map((division) => ({ slug: division.slug }));
