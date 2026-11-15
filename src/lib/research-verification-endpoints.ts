@@ -63,23 +63,25 @@ async function appendVerificationAudit(
   before: unknown,
   after: unknown,
 ): Promise<void> {
-  await req.payload.create({
-    collection: "audit-events",
-    data: {
-      eventId: randomUUID(),
-      actorId: actor.id,
-      actorRole: actor.role,
-      action,
-      resource,
-      resourceId,
-      beforeDigest: digest(before),
-      afterDigest: digest(after),
-      correlationId: correlationId(req),
-      outcome: "success",
-    },
-    overrideAccess: true,
-    req,
-  });
+  await withRequestContext(req, { hezqenAuditWrite: true }, () =>
+    req.payload.create({
+      collection: "audit-events",
+      data: {
+        eventId: randomUUID(),
+        actorId: actor.id,
+        actorRole: actor.role,
+        action,
+        resource,
+        resourceId,
+        beforeDigest: digest(before),
+        afterDigest: digest(after),
+        correlationId: correlationId(req),
+        outcome: "success",
+      },
+      overrideAccess: true,
+      req,
+    }),
+  );
 }
 
 function sourceRecord(value: RecordValue): ResearchSource {
@@ -185,7 +187,7 @@ export const evidenceVerifyEndpoint: Endpoint = {
       return Response.json({ error: "Evidence source metadata is invalid.", blockers: sourceIssues }, { status: 422 });
     }
 
-    let storageConfig;
+    let storageConfig: NeonEvidenceStorageConfig;
     try {
       storageConfig = readNeonEvidenceStorageConfig();
     } catch {
@@ -214,20 +216,25 @@ export const evidenceVerifyEndpoint: Endpoint = {
     }
     req.transactionID = transactionId;
     try {
-      const result = await req.payload.update({
-        collection: "evidence",
-        where: {
-          and: [
-            { id: { equals: evidenceId } },
-            { verificationStatus: { equals: "preserved" } },
-            { sha256: { equals: expectedSha256 } },
-          ],
-        },
-        data: { verificationStatus: "verified" },
-        limit: 1,
-        overrideAccess: true,
+      const result = await withRequestContext(
         req,
-      });
+        { hezqenEvidenceVerification: true },
+        () =>
+          req.payload.update({
+            collection: "evidence",
+            where: {
+              and: [
+                { id: { equals: evidenceId } },
+                { verificationStatus: { equals: "preserved" } },
+                { sha256: { equals: expectedSha256 } },
+              ],
+            },
+            data: { verificationStatus: "verified" },
+            limit: 1,
+            overrideAccess: true,
+            req,
+          }),
+      );
       const updated = result.docs[0];
       if (!updated) {
         await req.payload.db.rollbackTransaction(transactionId);
@@ -343,24 +350,29 @@ export const claimVerifyEndpoint: Endpoint = {
     }
     req.transactionID = transactionId;
     try {
-      const result = await req.payload.update({
-        collection: "claims",
-        where: {
-          and: [
-            { id: { equals: claimId } },
-            { updatedAt: { equals: expectedUpdatedAt } },
-            { verificationStatus: { equals: "unverified" } },
-          ],
-        },
-        data: {
-          verificationStatus: "verified",
-          reviewedBy: actor.id,
-          reviewedAt: now,
-        },
-        limit: 1,
-        overrideAccess: true,
+      const result = await withRequestContext(
         req,
-      });
+        { hezqenClaimVerification: true },
+        () =>
+          req.payload.update({
+            collection: "claims",
+            where: {
+              and: [
+                { id: { equals: claimId } },
+                { updatedAt: { equals: expectedUpdatedAt } },
+                { verificationStatus: { equals: "unverified" } },
+              ],
+            },
+            data: {
+              verificationStatus: "verified",
+              reviewedBy: actor.id,
+              reviewedAt: now,
+            },
+            limit: 1,
+            overrideAccess: true,
+            req,
+          }),
+      );
       if (!result.docs[0]) {
         await req.payload.db.rollbackTransaction(transactionId);
         delete req.transactionID;
