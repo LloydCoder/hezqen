@@ -44,4 +44,4 @@ The CMS is not operational until:
 5. A server-only editorial command invokes the existing workflow state machine and writes state plus audit events transactionally.
 6. Private object storage is provisioned and evidence integrity is verified after upload.
 
-No database migration is applied by the build or CI workflow.
+Initial migration generation is isolated in a dedicated GitHub Actions workflow using an ephemeral PostgreSQL 18 service. Generated migration files are committed to a review branch; a separate PR workflow applies them only to an ephemeral PostgreSQL service and verifies migration status. Neither workflow connects to Neon or applies migrations to any shared database. No database migration is applied by the application build.
