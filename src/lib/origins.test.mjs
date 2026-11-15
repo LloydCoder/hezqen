@@ -85,6 +85,7 @@ test("rejects malformed Vercel deployment hostnames", () => {
       resolveAllowedOrigins({
         configuredOrigins: "https://hezqen.tinlance.com",
         deploymentHostname: "https://attacker.example/path",
+        deploymentEnvironment: "preview",
         nodeEnv: "production",
       }),
     /exact deployment hostname/,
@@ -100,6 +101,7 @@ test("uses the exact Vercel deployment origin for Payload on Preview", () => {
   const allowedOrigins = resolveAllowedOrigins({
     configuredOrigins: "https://hezqen.tinlance.com",
     deploymentHostname: "hezqen-preview-123.vercel.app",
+    deploymentEnvironment: "preview",
     nodeEnv: "production",
   });
 
