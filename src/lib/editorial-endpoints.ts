@@ -31,6 +31,14 @@ function relationIds(value: unknown): string[] {
     : [];
 }
 
+function relationRecords(value: unknown): RawRecord[] {
+  return Array.isArray(value)
+    ? value
+        .filter((item) => item && typeof item === "object" && "id" in item)
+        .map(asRecord)
+    : [];
+}
+
 function normalizeArticle(value: unknown): StoredEditorialArticle {
   const doc = asRecord(value);
   return {
@@ -83,14 +91,14 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
     return doc ? normalizeArticle(doc) : null;
   }
 
-  async getMaterialClaims(articleId: string): Promise<Array<{ id: string; sourceIds: string[] }>> {
+  async getMaterialClaims(articleId: string): Promise<MaterialClaim[]> {
     const result = await this.req.payload.find({
       collection: "claims",
       where: {
         and: [{ article: { equals: articleId } }, { material: { equals: true } }],
       },
-      limit: 500,
-      depth: 0,
+      pagination: false,
+      depth: 2,
       overrideAccess: true,
       req: this.req,
     });
@@ -99,6 +107,16 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
       return {
         id: String(claim.id),
         sourceIds: relationIds(claim.sources),
+        verificationStatus:
+          typeof claim.verificationStatus === "string" ? claim.verificationStatus : "unverified",
+        evidence: relationRecords(claim.evidence).map((record) => ({
+          id: String(record.id),
+          sourceId: relationshipId(record.source) ?? "",
+          verificationStatus:
+            typeof record.verificationStatus === "string"
+              ? record.verificationStatus
+              : "unverified",
+        })),
       };
     });
   }
