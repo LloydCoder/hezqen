@@ -175,7 +175,6 @@ test("rejects a server URL that is not in the explicit origin allowlist", () => 
   );
 });
 
-
 test("uses an explicit allowed Payload server origin for a custom staging hostname", () => {
   const allowedOrigins = resolveAllowedOrigins({
     configuredOrigins: "https://hezqen.tinlance.com,https://staging.hezqen.tinlance.com",
