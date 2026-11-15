@@ -25,7 +25,7 @@ The connected Cloudflare account was inspected on 2026-11-15:
 | DNS | No `hezqen.tinlance.com` record exists | Correctly remains unattached while hosting is evaluated. |
 | Workers | No Worker scripts listed | No existing Worker runtime can be reused. |
 | Pages | No Pages projects listed | Pages is not an existing hosting surface. |
-| R2 | R2 is not enabled for the account; API reports enablement is required before bucket operations | No HEZQEN object storage exists. Do not create a bucket until media/evidence storage is designed and cost reviewed. |
+| R2 | R2 is not enabled for the account; API reports enablement is required before bucket operations | No HEZQEN object storage exists. Do not enable or create a bucket until media/evidence storage is designed and cost reviewed. |
 | Hyperdrive | No Hyperdrive configurations listed | No Cloudflare database pooling configuration exists. |
 | Access | No Cloudflare Access applications listed | No HEZQEN admin Access policy exists. |
 | Tunnels | One inactive tunnel named `tinlyt-api-production` | Reserved for Tinlyt; do not reuse. |
@@ -56,6 +56,17 @@ A separate pull request adds a local Worker build and HTTP smoke test using an e
 ### Cost and limits
 
 Cloudflare documents the default Workers Free plan as 100,000 requests/day and 10 ms CPU per invocation. Workers Paid has a $5/month account minimum and higher included usage; Hyperdrive is included in Free and Paid with 100,000 queries/day on Free. The current zone Website plan does not establish which Workers billing plan is enabled for the account. Verify the Workers plan and usage before any deployment that may incur charges.
+
+### R2 evidence-storage economics and immutability
+
+R2 Standard storage currently includes a monthly free tier of 10 GB-month, 1 million Class A operations and 10 million Class B operations, with zero egress fees. Above the free tier, published rates are $0.015/GB-month, $4.50/million Class A and $0.36/million Class B. Infrequent Access has no free tier and adds retrieval charges; it is not the default recommendation for active evidence custody. R2 supports bucket-lock rules that prevent overwrite/deletion for a specified age, date or indefinitely, and lifecycle rules for retention/transition. Bucket locks override lifecycle deletion and cannot be emptied while configured. R2 documents strong global consistency for object reads/writes/deletes.
+
+For HEZQEN, R2 Standard is a plausible future private evidence store, but it is not provisioned or enabled. Before using bucket locks, define source confidentiality, legal holds, retention periods, data-subject erasure obligations and evidence preservation policy. Do not apply indefinite retention by default. A dedicated EU jurisdiction/location may be evaluated against data-residency requirements; do not assume that the Neon Frankfurt region automatically determines R2 jurisdiction.
+
+- [R2 pricing](https://developers.cloudflare.com/r2/pricing/)
+- [R2 bucket locks](https://developers.cloudflare.com/r2/buckets/bucket-locks/)
+- [R2 object lifecycles](https://developers.cloudflare.com/r2/buckets/object-lifecycles/)
+- [R2 consistency](https://developers.cloudflare.com/r2/reference/consistency/)
 
 - [Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)
 - [Workers limits](https://developers.cloudflare.com/workers/platform/limits/)
