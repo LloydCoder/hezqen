@@ -26,17 +26,21 @@ export function MobileNavigation({ items }: { items: readonly NavigationItem[] }
       triggerRef.current?.focus();
     };
 
-    const handlePointerDown = (event: PointerEvent) => {
-      if (event.target instanceof Node && !rootRef.current?.contains(event.target)) {
+    const closeWhenOutside = (target: EventTarget | null) => {
+      if (target instanceof Node && !rootRef.current?.contains(target)) {
         setOpen(false);
       }
     };
+    const handlePointerDown = (event: PointerEvent) => closeWhenOutside(event.target);
+    const handleFocusIn = (event: FocusEvent) => closeWhenOutside(event.target);
 
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("focusin", handleFocusIn);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("focusin", handleFocusIn);
     };
   }, [open]);
 
