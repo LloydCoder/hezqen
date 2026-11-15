@@ -243,7 +243,7 @@ export async function executeEditorialWorkflowCommand(
           : article.correctionReason,
       correctionPublicNote:
         next.status === "correction_required"
-          ? (command.correctionPublicNote?.trim() || null)
+          ? command.correctionPublicNote?.trim() || null
           : article.correctionPublicNote,
       correctionRequestedAt:
         next.status === "correction_required" ? now : article.correctionRequestedAt,
@@ -253,7 +253,9 @@ export async function executeEditorialWorkflowCommand(
           : article.correctionResolvedAt,
       correctionResolvedById:
         next.status === "published" && article.correctionStatus === "open"
-          ? (actor.role === "service" ? article.approvedById : actor.id)
+          ? actor.role === "service"
+            ? article.approvedById
+            : actor.id
           : article.correctionResolvedById,
     };
 
