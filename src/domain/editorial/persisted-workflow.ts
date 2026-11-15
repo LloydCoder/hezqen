@@ -9,6 +9,7 @@ export interface StoredEditorialArticle {
   revision: number;
   authorId: string | null;
   editorId: string | null;
+  factCheckerId: string | null;
   approvedById: string | null;
   approvedAt: string | null;
   factCheckComplete: boolean;
@@ -53,9 +54,10 @@ export interface EditorialWorkflowCommand {
   correlationId?: string;
 }
 
-export interface EditorialWorkflowActor extends PublishingActor {
+export type EditorialWorkflowActor = Omit<PublishingActor, "role"> & {
+  role: PublishingActor["role"] | "fact_checker" | "researcher";
   active?: boolean;
-}
+};
 
 export type EditorialWorkflowCommandResult =
   | { ok: true; article: StoredEditorialArticle }
@@ -94,6 +96,9 @@ export async function executeEditorialWorkflowCommand(
   if (!command.articleId.trim() || !Number.isInteger(command.expectedRevision) || command.expectedRevision < 1) {
     return { ok: false, status: 400, blockers: ["COMMAND_INVALID"] };
   }
+  if (!["author", "editor", "administrator", "service"].includes(actor.role)) {
+    return { ok: false, status: 403, blockers: ["ACTOR_NOT_AUTHORIZED"] };
+  }
   if (actor.role === "service" && (actor.isHuman || command.targetStatus !== "published")) {
     return { ok: false, status: 403, blockers: ["SERVICE_TRANSITION_NOT_ALLOWED"] };
   }
@@ -123,7 +128,7 @@ export async function executeEditorialWorkflowCommand(
         claims,
         scheduledFor: article.scheduledFor,
       },
-      actor,
+      actor as PublishingActor,
       command.targetStatus,
       { now, scheduledFor: command.scheduledFor, correctionReason: command.correctionReason },
     );
