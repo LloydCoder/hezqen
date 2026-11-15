@@ -48,7 +48,7 @@ try {
 } catch (error) {
   exitCode = 1;
   const message = error instanceof Error ? error.message : "HEZQEN administrator bootstrap failed.";
-  await new Promise<void>((resolve) => process.stderr.write(message + "\n", resolve));
+  process.stderr.write(`${message}\n`);
 } finally {
   if (payload) {
     try {
