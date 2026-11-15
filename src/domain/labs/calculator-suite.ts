@@ -454,8 +454,7 @@ export function calculateLab(slug: string, values: Values): LabCalculation {
       break;
     }
     case "storage-growth": {
-      const capacity =
-        v("initialGb") * (1 + v("monthlyGrowthRate")) ** v("months") * v("replicas");
+      const capacity = v("initialGb") * (1 + v("monthlyGrowthRate")) ** v("months") * v("replicas");
       metrics = [
         metric("Retained capacity", capacity, "GB"),
         metric("Monthly run-rate storage cost", capacity * v("pricePerGbMonth")),
