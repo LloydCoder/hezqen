@@ -19,7 +19,7 @@ HEZQEN is a global technology and business intelligence publication and engineer
 
 ## Preview and release status
 
-The intended public hostname is **https://hezqen.tinlance.com**. It is not yet a production service and must not be treated as live until the hosting, database, security, browser QA, monitoring, backup/restore and rollback gates are accepted. The repository intentionally does not trigger Vercel Git deployments. Cloudflare Workers is under isolated compatibility evaluation; no Cloudflare deployment or DNS change has been made.
+The intended public hostname is **https://hezqen.tinlance.com**. It is not yet a production service and must not be treated as live until the hosting, database, security, browser QA, monitoring, backup/restore and rollback gates are accepted. Vercel remains an approved hosting option: a preview deployment from the current main commit is READY at [the Vercel preview](https://hezqen-5ror02wa7-lloydcoders-projects.vercel.app), but preview SSO protection prevents unauthenticated external QA. The repository intentionally disables automatic Vercel Git deployments; this preview was created explicitly from the connected Git source. Cloudflare's isolated Worker compatibility, build and route/CMS smoke workflows are green and complementary; no Cloudflare production deployment or DNS change has been made.
 
 The public application shell and sixteen HEZQEN Labs calculators can be exercised locally using the Quick Start instructions below.
 

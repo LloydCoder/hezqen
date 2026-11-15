@@ -4,7 +4,7 @@
   "private": true,
   "description": "HEZQEN — Global Technology & Business Intelligence",
   "engines": {
-    "node": "^24.22.3 || >=26.13.1"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "next dev",

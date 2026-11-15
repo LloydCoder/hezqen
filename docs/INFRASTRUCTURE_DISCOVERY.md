@@ -13,7 +13,7 @@
 - Do not attach HEZQEN to Tinlyt, Kalevio, ThreatFade, Hezqara or any other product database, bucket, tunnel or service.
 - Keep staging and production databases separate. Do not run migrations against shared Neon branches without an explicit release approval and verified backup.
 - Do not upgrade to a paid Cloudflare Workers plan, create billable resources, or accept new recurring charges without explicit cost approval.
-- The repository's `vercel.json` disables Git-triggered Vercel deployments. No Vercel deployment is part of the current hosting evaluation.
+- The repository's `vercel.json` disables automatic Git-triggered Vercel deployments. Vercel remains an approved hosting option; a manual preview deployment from current main is READY and SSO-protected. No production deployment or custom-domain attachment has been made.
 
 ## 2. Cloudflare account inventory (read-only)
 
@@ -23,9 +23,9 @@ The connected Cloudflare account was inspected on 2026-11-15:
 |---|---|---|
 | Zones | `tinlance.com` and `threatfade.com` are active; `tinlance.com` shows the Free Website plan | The existing zone can host the HEZQEN subdomain after acceptance. |
 | DNS | No `hezqen.tinlance.com` record exists | Correctly remains unattached while hosting is evaluated. |
-| Workers | No Worker scripts listed | No existing Worker runtime can be reused. |
+| Workers | Read-only API inventory returned no Worker scripts; the account Workers subdomain is `nwachukwuchinaemerem8.workers.dev` | No existing Worker runtime can be reused. The subdomain exists, but no HEZQEN Worker is deployed. |
 | Pages | No Pages projects listed | Pages is not an existing hosting surface. |
-| R2 | R2 is not enabled for the account; API reports enablement is required before bucket operations | No HEZQEN object storage exists. Do not enable or create a bucket until media/evidence storage is designed and cost reviewed. |
+| R2 | A fresh read-only API request returned HTTP 403 / error 10042: “Please enable R2 through the Cloudflare Dashboard.” | R2 is not enabled and no HEZQEN object storage exists. Enabling it requires a dashboard action; do not enable or create a bucket until media/evidence storage is designed and cost reviewed. |
 | Hyperdrive | No Hyperdrive configurations listed | No Cloudflare database pooling configuration exists. |
 | Access | No Cloudflare Access applications listed | No HEZQEN admin Access policy exists. |
 | Tunnels | One inactive tunnel named `tinlyt-api-production` | Reserved for Tinlyt; do not reuse. |
@@ -135,9 +135,13 @@ The following are not yet evidenced as complete:
 - Production secrets and environment wiring for the selected host.
 - Legal trademark clearance and brand/domain review. The supplied logo kit explicitly states HEZQEN has not been legally cleared.
 
-## 8. Historical Vercel record
+## 8. Current Vercel status
 
-An earlier infrastructure discovery recorded a dedicated Vercel project and previous READY deployments. This is historical information, not the current deployment decision. Git-triggered Vercel deployments are disabled in `vercel.json`; the README must not present a Vercel alias as a live HEZQEN preview. Do not use the existing Vercel project or its historical environment variables as proof of a production-ready deployment.
+Vercel remains an approved hosting option; the temporary build-rate obstacle does not remove it from the architecture. The connected hezqen Next.js project produced a READY preview from main commit 55f8e7125ccc22ede4ceafd02b609ef8ac7c802e at https://hezqen-5ror02wa7-lloydcoders-projects.vercel.app. Preview SSO protection is enabled, so unauthenticated external browser QA could not be completed. The Vercel project domain inventory contains only hezqen.vercel.app; hezqen.tinlance.com is not attached. A direct lookup for the canonical custom domain returned not found.
+
+Recent historical Vercel deployments for older commits failed during pnpm run build; the current main preview reached READY. Build logs show Vercel selected Node.js 26.x because package.json allowed >=26.13.1, while GitHub CI uses Node 24.22.3 and the Vercel project setting is Node 24.x. This runtime-selection mismatch is removed by pinning the package engine to 24.x and must be verified by a fresh preview.
+
+The vercel.json file continues to disable automatic Git-triggered deployments; do not treat a preview alias as a production domain.
 
 ## 9. Explicit non-actions
 
