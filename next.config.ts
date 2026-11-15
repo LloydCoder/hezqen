@@ -1,3 +1,4 @@
+import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const securityHeaders = [
@@ -17,9 +18,17 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   typedRoutes: true,
+  webpack: (webpackConfig) => {
+    webpackConfig.resolve.extensionAlias = {
+      ".cjs": [".cts", ".cjs"],
+      ".js": [".ts", ".tsx", ".js", ".jsx"],
+      ".mjs": [".mts", ".mjs"],
+    };
+    return webpackConfig;
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
 };
 
-export default nextConfig;
+export default withPayload(nextConfig, { devBundleServerPackages: false });
