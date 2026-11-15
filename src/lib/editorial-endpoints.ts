@@ -206,7 +206,8 @@ export const editorialWorkflowEndpoint: Endpoint = {
     const articleId = typeof body.articleId === "string" ? body.articleId.trim() : "";
     const correctionReason =
       typeof body.correctionReason === "string" ? body.correctionReason.trim() : undefined;
-    const correctionPublicNote = typeof body.correctionPublicNote === "string" ? body.correctionPublicNote.trim() : undefined;
+    const correctionPublicNote =
+      typeof body.correctionPublicNote === "string" ? body.correctionPublicNote.trim() : undefined;
     const scheduledFor =
       typeof body.scheduledFor === "string" ? body.scheduledFor.trim() : undefined;
     if (
