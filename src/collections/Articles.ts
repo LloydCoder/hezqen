@@ -216,6 +216,71 @@ export const Articles: CollectionConfig = {
       },
     },
     {
+      name: "scheduledFor",
+      type: "date",
+      index: true,
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionStatus",
+      type: "select",
+      defaultValue: "none",
+      required: true,
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+      options: [
+        { label: "None", value: "none" },
+        { label: "Open", value: "open" },
+        { label: "Resolved", value: "resolved" },
+      ],
+    },
+    {
+      name: "correctionReason",
+      type: "textarea",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionPublicNote",
+      type: "textarea",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionRequestedAt",
+      type: "date",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionResolvedAt",
+      type: "date",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionResolvedBy",
+      type: "relationship",
+      relationTo: "users",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
       name: "revision",
       type: "number",
       required: true,
