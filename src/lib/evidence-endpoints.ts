@@ -94,7 +94,7 @@ export const evidenceUploadEndpoint: Endpoint = {
       typeof sourceId !== "string" ||
       !sourceId.trim() ||
       sourceId.length > 128 ||
-      !/^\\d+$/.test(sourceId) ||
+      !/^[0-9]+$/.test(sourceId) ||
       typeof collectionMethod !== "string" ||
       !collectionMethod.trim() ||
       collectionMethod.trim().length > 100
