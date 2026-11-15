@@ -35,9 +35,7 @@ function relationIds(value: unknown): string[] {
 
 function relationRecords(value: unknown): RawRecord[] {
   return Array.isArray(value)
-    ? value
-        .filter((item) => item && typeof item === "object" && "id" in item)
-        .map(asRecord)
+    ? value.filter((item) => item && typeof item === "object" && "id" in item).map(asRecord)
     : [];
 }
 
