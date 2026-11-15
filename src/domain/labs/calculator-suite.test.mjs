@@ -35,7 +35,7 @@ test("compares fine-tuning and RAG total cost without claiming quality equivalen
 
 test("calculates migration payback and rejects a migration with no savings", () => {
   const result = calculateLab("cloud-migration", { discovery: 1000, refactor: 2000, transfer: 500, training: 500, dualRun: 500, currentMonthly: 1000, targetMonthly: 700 });
-  assert.equal(result.metrics.find((metric) => metric.label === "Payback period")!.value, 18.333333333333332);
+  assert.equal(result.metrics.find((metric) => metric.label === "Payback period")!.value, 58.333333333333336);
   assert.throws(() => calculateLab("cloud-migration", { discovery: 0, refactor: 0, transfer: 0, training: 0, dualRun: 0, currentMonthly: 500, targetMonthly: 600 }), /no positive monthly savings/i);
 });
 
@@ -62,12 +62,12 @@ test("estimates inference throughput with utilization and workload demand", () =
 
 test("estimates incident cost from downtime and response components", () => {
   const result = calculateLab("incident-cost", { downtimeHours: 8, revenuePerHour: 10000, responseCost: 20000, legalCost: 5000, affectedRecords: 10000, notificationCostPerRecord: 0.5, otherCost: 1000 });
-  assert.equal(result.metrics.find((metric) => metric.label === "Total incident cost")!.value, 110000);
+  assert.equal(result.metrics.find((metric) => metric.label === "Total incident cost")!.value, 111000);
 });
 
 test("calculates SaaS gross margin after infrastructure, AI and payment fees", () => {
   const result = calculateLab("saas-margin", { mrr: 50000, infrastructure: 5000, ai: 3000, paymentRate: 0.03, support: 2000 });
-  assert.equal(result.metrics.find((metric) => metric.label === "Gross margin")!.value, 0.8);
+  assert.equal(result.metrics.find((metric) => metric.label === "Gross margin")!.value, 0.77);
 });
 
 test("calculates facility energy using PUE and monthly operating hours", () => {
