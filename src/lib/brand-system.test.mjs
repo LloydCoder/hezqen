@@ -33,6 +33,7 @@ test("editorial labels use the supplied 11px semibold and 20 percent tracking", 
     css,
     /\.eyebrow,\s*\.section-label,\s*\.platform-kicker\s*\{[^}]*font-size:\s*11px;[^}]*font-weight:\s*600;[^}]*letter-spacing:\s*0\.2em;/s,
   );
+  assert.match(css, /\.platform-kicker\s*\{[^}]*font-size:\s*11px;/s);
 });
 
 test("horizontal logo never drops below the kit minimum screen width", () => {
