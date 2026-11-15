@@ -38,6 +38,7 @@ const allowedOrigins = resolveAllowedOrigins({
 });
 const serverURL = resolvePayloadServerUrl({
   configuredSiteUrl: process.env.NEXT_PUBLIC_SITE_URL,
+  payloadServerUrl: process.env.HEZQEN_PAYLOAD_SERVER_URL,
   deploymentHostname: process.env.VERCEL_URL,
   deploymentEnvironment: process.env.VERCEL_ENV,
   allowedOrigins,
