@@ -35,6 +35,10 @@ HEZQEN Labs contains sixteen calculators. The original LLM VRAM sizing and API-v
 - vLLM throughput and KV cache configuration: https://docs.vllm.ai/en/latest/cli/bench/throughput/ — runtime memory utilization and benchmark setup affect actual results.
 - OWASP Top 10:2025: https://top10.owasp.org/2025/ — security estimation must not substitute for control verification.
 - GHG Protocol: https://ghgprotocol.org/ — emissions reporting requires an appropriate accounting boundary and factors.
+- AWS RDS operational guidance: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_BestPractices.html — storage headroom, monitoring, working sets, backup and failover behavior require workload-specific validation.
+- Amazon EKS cost monitoring: https://docs.aws.amazon.com/eks/latest/userguide/cost-monitoring.html — Kubernetes cost allocation should be reconciled with actual billing and resource utilization.
+- Google Cloud Well-Architected cost optimization: https://docs.cloud.google.com/architecture/framework/cost-optimization — cloud and on-premises costs have different CapEx/OpEx profiles and should be monitored continuously.
+- NIST AI Risk Management Framework: https://www.nist.gov/itl/ai-risk-management-framework — AI risk assessment is contextual and should be managed as an ongoing governance process, not reduced to a single score.
 
 ## Verification
 The Node test suite checks all fourteen calculators with default scenarios, unique route identifiers, finite labeled metrics, input-boundary rejection, and representative monotonic properties. The CI workflow must additionally build the application, type-check, lint, format-check, audit dependencies and smoke-test every public Labs route before merge.
