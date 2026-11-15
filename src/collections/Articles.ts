@@ -57,7 +57,7 @@ export const Articles: CollectionConfig = {
     create: canCreateArticles,
     read: canReadArticles,
     update: canUpdateArticles,
-    delete: isEditor,
+    delete: () => false,
   },
   hooks: {
     beforeValidate: [
@@ -129,6 +129,7 @@ export const Articles: CollectionConfig = {
       type: "relationship",
       relationTo: "users",
       access: {
+        create: () => false,
         update: isEditor,
       },
     },
