@@ -1573,8 +1573,9 @@ a:focus-visible {
   font-size: 13px;
   line-height: 1.7;
 }
-.article-card-footer {
+ .article-card-footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: end;
   justify-content: space-between;
   gap: 12px;
@@ -1635,6 +1636,9 @@ a:focus-visible {
   border-left: 2px solid var(--amber);
   background: var(--mist);
   padding: 22px 25px;
+}
+.article-empty-inline p {
+  margin: 0;
 }
 .article-empty-inline .text-link {
   display: inline-flex;
