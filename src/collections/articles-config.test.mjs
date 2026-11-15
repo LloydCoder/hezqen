@@ -116,7 +116,6 @@ test("does not double-increment revisions for the audited workflow command", asy
   assert.equal(result, data);
 });
 
-
 test("rejects privileged Local API workflow mutations outside the editorial command service", () => {
   assert.ok(revisionHook);
   assert.throws(
