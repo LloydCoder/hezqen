@@ -7,7 +7,11 @@ export function generateStaticParams() {
   return LAB_CALCULATORS.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const calculator = LAB_CALCULATORS.find((item) => item.slug === slug);
   if (!calculator) return {};
@@ -15,7 +19,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${calculator.title} | HEZQEN Labs`,
     description: calculator.description,
     alternates: { canonical: `/labs/${calculator.slug}` },
-    openGraph: { title: `${calculator.title} | HEZQEN Labs`, description: calculator.description, type: "website" },
+    openGraph: {
+      title: `${calculator.title} | HEZQEN Labs`,
+      description: calculator.description,
+      type: "website",
+    },
   };
 }
 
