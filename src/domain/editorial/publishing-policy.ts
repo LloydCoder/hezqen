@@ -51,14 +51,16 @@ export type PublicationBlocker =
 export function getClaimVerificationBlockers(claims: MaterialClaim[]): PublicationBlocker[] {
   const blockers: PublicationBlocker[] = [];
   for (const claim of claims) {
-    if (claim.sourceIds.length === 0) blockers.push("CLAIM_WITHOUT_SOURCE");
+    const sourceIds = Array.isArray(claim.sourceIds) ? claim.sourceIds : [];
+    const evidenceItems = Array.isArray(claim.evidence) ? claim.evidence : [];
+    if (sourceIds.length === 0) blockers.push("CLAIM_WITHOUT_SOURCE");
     if (claim.verificationStatus !== "verified") blockers.push("CLAIM_NOT_VERIFIED");
-    if (claim.evidence.length === 0) blockers.push("CLAIM_EVIDENCE_REQUIRED");
-    for (const evidence of claim.evidence) {
+    if (evidenceItems.length === 0) blockers.push("CLAIM_EVIDENCE_REQUIRED");
+    for (const evidence of evidenceItems) {
       if (evidence.verificationStatus !== "verified") {
         blockers.push("CLAIM_EVIDENCE_NOT_VERIFIED");
       }
-      if (!claim.sourceIds.includes(evidence.sourceId)) {
+      if (!sourceIds.includes(evidence.sourceId)) {
         blockers.push("CLAIM_EVIDENCE_SOURCE_MISMATCH");
       }
     }
