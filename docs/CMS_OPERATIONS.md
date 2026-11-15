@@ -98,7 +98,7 @@ The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web a
 
 ## 8. Release acceptance checklist
 
-- [x] Payload migration verification run [43774310805](https://github.com/LloydCoder/hezqen/actions/runs/43774310805) passed on the immediately preceding code head.
+- [x] Latest Payload migration verification run [43774399391](https://github.com/LloydCoder/hezqen/actions/runs/43774399391) passed on code head `bc80495` and verified both migrations against ephemeral PostgreSQL.
 - [ ] Cloudflare compatibility, Worker build and public/CMS smoke workflows pass on the same source revision.
 - [x] Both Payload migrations are applied and recorded on isolated Neon staging branch br-lucky-bird-bayxt3by; the scheduled/correction columns were verified read-only. This does not authorize or imply a production migration.
 - [ ] Staging app deploy is made on a commercially permitted host; Vercel Hobby is not an option for production.
