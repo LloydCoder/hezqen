@@ -3,13 +3,10 @@ import type { Access, CollectionConfig } from "payload";
 type Actor = { id: string | number; role?: string } | null;
 
 function actorFromRequest(user: unknown): Actor {
-  return user && typeof user === "object" && "id" in user
-    ? (user as Actor)
-    : null;
+  return user && typeof user === "object" && "id" in user ? (user as Actor) : null;
 }
 
-const isAdministrator: Access = ({ req }) =>
-  actorFromRequest(req.user)?.role === "administrator";
+const isAdministrator: Access = ({ req }) => actorFromRequest(req.user)?.role === "administrator";
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -24,7 +21,8 @@ export const Users: CollectionConfig = {
     defaultColumns: ["email", "name", "role", "updatedAt"],
   },
   access: {
-    admin: ({ req }) => ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
+    admin: ({ req }) =>
+      ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
     create: isAdministrator,
     read: ({ req }) => {
       const actor = actorFromRequest(req.user);
