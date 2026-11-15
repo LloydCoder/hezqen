@@ -76,7 +76,8 @@ jobs:
       - name: Initialize Cloudflare Workers build in the ephemeral checkout
         run: pnpm dlx vinext@1.4.5 init --platform=cloudflare --name=hezqen --cdn-cache=none --data-cache=none --image-optimization=none
       - name: Install generated Worker toolchain
-        run: pnpm install --no-frozen-lockfile
+        # workerd is the Cloudflare Workers runtime; explicitly approve only this reviewed native build.
+        run: pnpm install --no-frozen-lockfile --allow-build=workerd
       - name: Apply Payload migrations to ephemeral PostgreSQL
         run: pnpm payload migrate
         env:
