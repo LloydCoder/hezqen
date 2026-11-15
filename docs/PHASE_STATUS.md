@@ -12,7 +12,7 @@ This file records evidence-backed progress. A phase is not complete merely becau
 | 5 | Evidence/research | NOT STARTED | Source, claim, evidence, provenance and research-methodology persistence not implemented. |
 | 6 | Public website | PARTIAL | Homepage, four division routes, About and Editorial Standards exist. Article, author, investigation, research, policy and CMS-backed content surfaces remain. |
 | 7 | Search/SEO | PARTIAL | Metadata, canonical URLs, robots and sitemap exist. Search, structured-data validation, article indexing and search QA remain. |
-| 8 | HEZQEN Labs | NOT STARTED | Calculators, reproducible formulas, assumptions and methodology tests not implemented. |
+| 8 | HEZQEN Labs | PARTIAL | First interactive LLM VRAM sizing calculator and pure calculation engine implemented on the feature branch; tests and public methodology added. CI and browser verification remain release gates; additional calculators are not started. |
 | 9 | Newsletter/accounts | NOT STARTED | Reader identity, consent, preferences and delivery not implemented. |
 | 10 | HEZQEN Intelligence | NOT STARTED | Premium research, billing and server-side entitlements not implemented. |
 | 11 | Integrations | NOT STARTED | Tinlyt, Searqon and TAS adapters not implemented. |
