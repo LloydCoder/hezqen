@@ -122,5 +122,5 @@ test("claim verification rejects an actor with a non-numeric user ID", async () 
     }),
   );
   assert.equal(response.status, 403);
-  assert.match((await response.json()).error, /assigned editor or fact-checker/);
+  assert.match((await response.json()).error, /active human editor or fact-checker/);
 });
