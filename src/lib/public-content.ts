@@ -7,10 +7,9 @@ import {
   type PublicArticle,
 } from "./public-articles.ts";
 
-export async function findPublicArticles(options: {
-  division?: PublicArticle["division"];
-  limit?: number;
-} = {}): Promise<PublicArticle[]> {
+export async function findPublicArticles(
+  options: { division?: PublicArticle["division"]; limit?: number } = {},
+): Promise<PublicArticle[]> {
   const payload = await getPayload({ config });
   const result = await payload.find({
     collection: "articles",
@@ -88,12 +87,12 @@ export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]
     }),
   );
 
-  return records
-    .flat()
-    .sort(
-      (left, right) =>
-        Date.parse(right.correctionNotice!.correctedAt) -
-        Date.parse(left.correctionNotice!.correctedAt),
-    )
+  const corrections = records.flat().filter((article) => article.correctionNotice !== null);
+  return corrections
+    .sort((left, right) => {
+      const leftDate = left.correctionNotice ? Date.parse(left.correctionNotice.correctedAt) : 0;
+      const rightDate = right.correctionNotice ? Date.parse(right.correctionNotice.correctedAt) : 0;
+      return rightDate - leftDate;
+    })
     .slice(0, Math.min(Math.max(limit, 1), 50));
 }
