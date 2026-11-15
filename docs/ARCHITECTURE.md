@@ -59,6 +59,10 @@ The editorial domain includes a tested publication policy and a tested workflow 
 
 No model, agent, prompt, memory, webpage, tool output or integration may create editorial authority.
 
+## CMS implementation boundary
+
+Payload CMS 3.93.0 is integrated with the Next.js App Router and official PostgreSQL adapter. The admin panel and REST routes are mounted; user, article, topic, source, evidence, claim and audit-event collections define restrictive access. Workflow and verification fields are locked against ordinary client mutations. The database schema has not been migrated, and no public publishing command is enabled. See [CMS_SETUP.md](CMS_SETUP.md).
+
 ## Research provenance
 
 The research domain validates source identity, evidence metadata, checksum shape and claim-to-source/evidence relationships. A claim cannot pass the current verified-claim gate without a valid source and preserved, verified evidence record. This is domain validation only; acquisition, exact-byte storage, digest calculation, immutable provenance, and independent human fact-checking remain to be implemented. See [Research Evidence](RESEARCH_EVIDENCE.md).
