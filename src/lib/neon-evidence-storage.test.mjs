@@ -58,7 +58,7 @@ test("limits evidence uploads to the configured size and safe MIME allowlist", a
         secretAccessKey: "nsk_test",
       },
       {
-        key: "evidence/test",
+        key: "evidence/00000000-0000-4000-8000-000000000000",
         bytes: new TextEncoder().encode("<script>alert(1)</script>"),
         contentType: "text/html",
       },
@@ -78,7 +78,7 @@ test("rejects an expected digest that does not match the supplied bytes before u
         secretAccessKey: "nsk_test",
       },
       {
-        key: "evidence/test",
+        key: "evidence/00000000-0000-4000-8000-000000000000",
         bytes: new TextEncoder().encode("captured evidence"),
         contentType: "text/plain",
         expectedSha256: "0".repeat(64),
