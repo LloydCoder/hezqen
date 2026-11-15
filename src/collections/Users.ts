@@ -75,7 +75,7 @@ export const Users: CollectionConfig = {
         read: ({ req }) =>
           hasActiveRole(req.user, ["administrator", "editor"]),
         create: ({ req }) => hasActiveRole(req.user, ["administrator"]),
-        update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
+        update: ({ req }) => hasActiveRole(req.user, ["administrator"]),
       },
       options: [
         { label: "Reader", value: "reader" },
@@ -91,8 +91,8 @@ export const Users: CollectionConfig = {
       type: "checkbox",
       defaultValue: true,
       access: {
-        read: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
-        update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
+        read: ({ req }) => hasActiveRole(req.user, ["administrator"]),
+        update: ({ req }) => hasActiveRole(req.user, ["administrator"]),
       },
     },
   ],
