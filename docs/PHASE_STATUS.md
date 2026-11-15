@@ -88,7 +88,7 @@ The final PR #12 head `c1db7b3c3b0b3cc2faea7ca47b0b28add37dcff7` passed:
 - [IK-04 Disconnected RAG Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743742560)
 - [IK-05 Offline Bundle Acceptance](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740795)
 
-IK-04's [offline image/model import and local RAG acceptance](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43744342560) also passed on the Node 24 action-migration PR. IK-01 now also validates that Open WebUI static assets are served from a bounded writable tmpfs while the container root remains read-only, and that the stack completes CPU inference, embeddings, backup/restore and egress-isolation checks. These are CI/runtime acceptance checks, not physical hardware certification or commercial release approval.
+The previously recorded IK-04 acceptance was unchanged at the time of PR #12; a fresh IK-04 run passed on the later Node 24 action-migration PR, as recorded below. IK-01 now also validates that Open WebUI static assets are served from a bounded writable tmpfs while the container root remains read-only, and that the stack completes CPU inference, embeddings, backup/restore and egress-isolation checks. These are CI/runtime acceptance checks, not physical hardware certification or commercial release approval.
 
 
 ### HIES security-audit scope and remaining limits
