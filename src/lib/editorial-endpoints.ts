@@ -130,39 +130,34 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
     expectedFactCheckerId: string | null,
     changes: Record<string, unknown>,
   ): Promise<boolean> {
-    const mutableRequest = this.req as unknown as {
-      context?: Record<string, unknown>;
-    };
-    const previousContext = mutableRequest.context;
-    mutableRequest.context = {
-      ...(previousContext ?? {}),
-      hezqenSkipArticleRevisionIncrement: true,
-      hezqenWorkflowCommand: true,
-    };
-    try {
-      const result = await this.req.payload.update({
-        collection: "articles",
-        where: {
-          and: [
-            { id: { equals: id } },
-            { revision: { equals: expectedRevision } },
-            { workflowStatus: { equals: expectedStatus } },
-            { author: { equals: expectedAuthorId } },
-            { assignedEditor: { equals: expectedEditorId } },
-            { assignedFactChecker: { equals: expectedFactCheckerId } },
-          ],
-        },
-        data: changes,
-        limit: 1,
-        depth: 0,
-        overrideAccess: true,
-        req: this.req,
-      });
-      return result.docs.length === 1;
-    } finally {
-      if (previousContext) mutableRequest.context = previousContext;
-      else delete mutableRequest.context;
-    }
+    return withRequestContext(
+      this.req,
+      {
+        hezqenSkipArticleRevisionIncrement: true,
+        hezqenWorkflowCommand: true,
+      },
+      async () => {
+        const result = await this.req.payload.update({
+          collection: "articles",
+          where: {
+            and: [
+              { id: { equals: id } },
+              { revision: { equals: expectedRevision } },
+              { workflowStatus: { equals: expectedStatus } },
+              { author: { equals: expectedAuthorId } },
+              { assignedEditor: { equals: expectedEditorId } },
+              { assignedFactChecker: { equals: expectedFactCheckerId } },
+            ],
+          },
+          data: changes,
+          limit: 1,
+          depth: 0,
+          overrideAccess: true,
+          req: this.req,
+        });
+        return result.docs.length === 1;
+      },
+    );
   }
 
   async appendAuditEvent(event: EditorialAuditEvent): Promise<void> {
