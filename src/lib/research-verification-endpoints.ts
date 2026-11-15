@@ -38,12 +38,18 @@ function relationRecords(value: unknown): RecordValue[] {
     : [];
 }
 
-function actorForVerification(req: PayloadRequest): { id: string; role: string } | null {
+function actorForVerification(req: PayloadRequest): { id: number; role: string } | null {
   if (!req.user) return null;
   const user = asRecord(req.user);
   const role = typeof user.role === "string" ? user.role : "";
-  if (user.active === false || !["editor", "fact_checker"].includes(role)) return null;
-  return { id: String(user.id), role };
+  const id = typeof user.id === "number" ? user.id : Number(user.id);
+  if (
+    user.active === false ||
+    !["editor", "fact_checker"].includes(role) ||
+    !Number.isSafeInteger(id) ||
+    id <= 0
+  ) return null;
+  return { id, role };
 }
 
 function correlationId(req: PayloadRequest): string {
@@ -56,7 +62,7 @@ function digest(value: unknown): string {
 
 async function appendVerificationAudit(
   req: PayloadRequest,
-  actor: { id: string; role: string },
+  actor: { id: number; role: string },
   action: string,
   resource: "evidence" | "claims",
   resourceId: string,
@@ -68,7 +74,7 @@ async function appendVerificationAudit(
       collection: "audit-events",
       data: {
         eventId: randomUUID(),
-        actorId: actor.id,
+        actorId: String(actor.id),
         actorRole: actor.role,
         action,
         resource,
