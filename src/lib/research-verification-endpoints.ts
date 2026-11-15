@@ -266,7 +266,10 @@ export const evidenceVerifyEndpoint: Endpoint = {
     } catch {
       await req.payload.db.rollbackTransaction(transactionId);
       delete req.transactionID;
-      return Response.json({ error: "Evidence verification could not be committed." }, { status: 500 });
+      return Response.json(
+        { error: "Evidence verification could not be committed." },
+        { status: 500 },
+      );
     }
   },
 };
@@ -435,22 +438,17 @@ export const claimVerifyEndpoint: Endpoint = {
         delete req.transactionID;
         return Response.json({ error: "Claim changed during verification." }, { status: 409 });
       }
-      await appendVerificationAudit(
-        req,
-        actor,
-        "claim.verified",
-        "claims",
-        claimId,
-        before,
-        after,
-      );
+      await appendVerificationAudit(req, actor, "claim.verified", "claims", claimId, before, after);
       await req.payload.db.commitTransaction(transactionId);
       delete req.transactionID;
       return Response.json({ ok: true, claimId, verificationStatus: "verified", reviewedAt: now });
     } catch {
       await req.payload.db.rollbackTransaction(transactionId);
       delete req.transactionID;
-      return Response.json({ error: "Claim verification could not be committed." }, { status: 500 });
+      return Response.json(
+        { error: "Claim verification could not be committed." },
+        { status: 500 },
+      );
     }
   },
 };
