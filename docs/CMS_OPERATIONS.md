@@ -69,7 +69,7 @@ The domain is verified, but a real Payload password-reset email has not yet been
 
 ## 6. Runtime environment variables
 
-The following variables are present in branch-scoped Vercel Preview environment metadata for fix/cms-final-reconciliation, in addition to the existing Payload/Neon configuration. Secret values were not decrypted. This confirms configuration records exist, not that live provider operations have succeeded:
+The following variables are present in Vercel Preview environment metadata for fix/cms-final-reconciliation, in addition to the existing Payload/Neon configuration. Some entries are branch-scoped and others apply to Preview generally. Secret values were not decrypted. This confirms configuration records exist, not that live provider operations have succeeded:
 
 | Variable | Purpose | Classification |
 |---|---|---|
@@ -94,7 +94,7 @@ The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web a
 
 ## 8. Release acceptance checklist
 
-- [x] PR #51 final head dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40 passed HEZQEN CI, Payload migration verification and Cloudflare compatibility on 2026-11-15. PR #51 remains draft and unmerged pending the remaining runtime/security gates.
+- [x] Code-bearing PR #51 head dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40 passed HEZQEN CI, Payload migration verification and Cloudflare compatibility on 2026-11-15. Follow-up commits f32f9a69949b99d13aa6b0073092229e357e912f and bd4d677102e39499c365e6877e5e6b59fcc171b0 changed documentation only; no application code changed, and no new workflow runs were reported for those documentation-only commits. PR #51 remains draft and unmerged pending the remaining runtime/security gates.
 - [ ] Cloudflare compatibility, Worker build and public/CMS smoke workflows pass on the same source revision.
 - [x] Both Payload migrations are applied and recorded on isolated Neon staging branch br-lucky-bird-bayxt3by; the scheduled/correction columns were verified read-only. This does not authorize or imply a production migration.
 - [ ] Staging app deploy is made on a commercially permitted host; Vercel Hobby is not an option for production.
@@ -113,7 +113,7 @@ The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web a
 
 ## 9. Verified staging baseline — 2026-11-15
 
-The following checks were performed against the Preview deployment for the exact PR #51 head:
+The following checks were performed against the Preview deployment for the code-bearing PR #51 head:
 
 - Vercel deployment dpl_96t5ckCEdTevrih3Nf3HwSikg76Q is READY and points to commit dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40.
 - GET /api/health/ready, GET /admin/login, and GET /api/articles?limit=1 returned HTTP 200. The articles response was empty.
