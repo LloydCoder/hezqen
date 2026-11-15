@@ -13,7 +13,12 @@ const record = {
   editorId: "editor-1",
   approvedById: null,
   approvedAt: null,
-  claims: [{ id: "claim-1", sourceIds: ["source-1"] }],
+  claims: [{
+    id: "claim-1",
+    sourceIds: ["source-1"],
+    verificationStatus: "verified",
+    evidence: [{ id: "evidence-1", sourceId: "source-1", verificationStatus: "verified" }],
+  }],
   factCheckComplete: false,
   disclosuresReviewed: false,
   revision: 1,
