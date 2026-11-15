@@ -196,6 +196,7 @@ export async function getPublicCorrectionNotices(): Promise<PublicCorrectionNoti
       slug: true,
       division: true,
       correctionStatus: true,
+      workflowStatus: true,
       correctionPublicNote: true,
       correctionRequestedAt: true,
       correctionResolvedAt: true,
