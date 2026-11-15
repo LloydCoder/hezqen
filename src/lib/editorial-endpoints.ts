@@ -273,7 +273,7 @@ export const scheduledPublicationEndpoint: Endpoint = {
   method: "post",
   handler: async (req) => {
     const secret = process.env.HEZQEN_SCHEDULER_SECRET;
-    if (!secret || req.headers.get("authorization") !== \`Bearer \${secret}\`) {
+    if (!secret || req.headers.get("authorization") !== `Bearer ${secret}`) {
       return Response.json({ error: "Unauthorized." }, { status: 401 });
     }
 
