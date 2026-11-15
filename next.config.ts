@@ -6,6 +6,8 @@ import type { NextConfig } from "next";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+const isPreviewDeployment = process.env.VERCEL_ENV === "preview";
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
@@ -36,7 +38,11 @@ const nextConfig: NextConfig = {
     return webpackConfig;
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    const previewRobotsHeader = isPreviewDeployment
+      ? [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }]
+      : [];
+
+    return [{ source: "/:path*", headers: [...securityHeaders, ...previewRobotsHeader] }];
   },
 };
 
