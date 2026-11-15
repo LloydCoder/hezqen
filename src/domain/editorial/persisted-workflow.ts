@@ -295,6 +295,7 @@ export async function executeEditorialReviewAction(
     const allowed =
       (input.action === "complete_fact_check" &&
         actor.role === "fact_checker" &&
+        actor.id === article.factCheckerId &&
         article.workflowStatus === "fact_check") ||
       (input.action === "review_disclosures" &&
         actor.role === "editor" &&
