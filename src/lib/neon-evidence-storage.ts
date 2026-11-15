@@ -61,7 +61,7 @@ function hmac(key: string | Uint8Array, value: string): Buffer {
 }
 
 function signingKey(secret: string, dateStamp: string, region: string): Buffer {
-  const dateKey = hmac(\`AWS4\${secret}\`, dateStamp);
+  const dateKey = hmac(`AWS4${secret}`, dateStamp);
   const regionKey = hmac(dateKey, region);
   const serviceKey = hmac(regionKey, "s3");
   return hmac(serviceKey, "aws4_request");
@@ -69,7 +69,7 @@ function signingKey(secret: string, dateStamp: string, region: string): Buffer {
 
 function objectUrl(config: NeonEvidenceStorageConfig, key: string): URL {
   const encodedKey = key.split("/").map((segment) => encodeURIComponent(segment)).join("/");
-  return new URL(\`/\${config.bucket}/\${encodedKey}\`, config.endpoint);
+  return new URL(`/${config.bucket}/${encodedKey}`, config.endpoint);
 }
 
 function signedHeaders(
@@ -91,7 +91,7 @@ function signedHeaders(
 
   const headerNames = Object.keys(canonicalHeaderValues).sort();
   const canonicalHeaders = headerNames
-    .map((name) => \`\${name}:\${canonicalHeaderValues[name]?.trim()}\n\`)
+    .map((name) => `${name}:${canonicalHeaderValues[name]?.trim()}\n`)
     .join("");
   const signedHeaderNames = headerNames.join(";");
   const canonicalRequest = [
@@ -102,7 +102,7 @@ function signedHeaders(
     signedHeaderNames,
     payloadHash,
   ].join("\n");
-  const credentialScope = \`\${dateStamp}/\${config.region}/s3/aws4_request\`;
+  const credentialScope = `${dateStamp}/${config.region}/s3/aws4_request`;
   const stringToSign = [
     "AWS4-HMAC-SHA256",
     amzDate,
@@ -116,7 +116,7 @@ function signedHeaders(
   const headers = new Headers({
     "x-amz-date": amzDate,
     "x-amz-content-sha256": payloadHash,
-    authorization: \`AWS4-HMAC-SHA256 Credential=\${config.accessKeyId}/\${credentialScope}, SignedHeaders=\${signedHeaderNames}, Signature=\${signature}\`,
+    authorization: `AWS4-HMAC-SHA256 Credential=${config.accessKeyId}/${credentialScope}, SignedHeaders=${signedHeaderNames}, Signature=${signature}`,
   });
   if (contentType) headers.set("content-type", contentType);
   return headers;
@@ -142,7 +142,7 @@ async function requestObject(
 
 async function responseError(response: Response, operation: string): Promise<never> {
   const detail = (await response.text()).slice(0, 300);
-  throw new Error(\`NEON_EVIDENCE_\${operation}_FAILED_\${response.status}: \${detail}\`);
+  throw new Error(`NEON_EVIDENCE_${operation}_FAILED_${response.status}: ${detail}`);
 }
 
 export async function putAndVerifyEvidenceObject(
