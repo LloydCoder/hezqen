@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+
 import { StructuredData } from "@/components/StructuredData";
+import { getPublicCorrectionNotices } from "@/lib/public-articles";
 
 export const metadata: Metadata = {
   title: "Corrections Policy",
@@ -8,7 +11,18 @@ export const metadata: Metadata = {
   alternates: { canonical: "/corrections" },
 };
 
-export default function CorrectionsPage() {
+function formatDate(value?: string | null): string | null {
+  if (!value) return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(date);
+}
+
+export const dynamic = "force-dynamic";
+
+export default async function CorrectionsPage() {
+  const notices = await getPublicCorrectionNotices();
+
   return (
     <section className="prose-page">
       <StructuredData
@@ -56,6 +70,44 @@ export default function CorrectionsPage() {
           Correction decisions are editorial decisions. Commercial relationships, source preferences
           and automated system outputs do not determine the outcome.
         </p>
+
+        <div className="prose-rule" />
+        <section className="correction-log" aria-labelledby="correction-log-heading">
+          <p className="eyebrow">
+            <span className="eyebrow-line" /> PUBLIC RECORD / CORRECTION LOG
+          </p>
+          <h2 id="correction-log-heading">Published correction notices</h2>
+          <p>
+            This log contains public correction notes only. It does not disclose private source
+            material, internal review discussions or unverified allegations.
+          </p>
+          {notices.length > 0 ? (
+            <div className="correction-log-list">
+              {notices.map((notice) => (
+                <article className="correction-log-item" key={notice.id}>
+                  <div className="correction-log-meta">
+                    <span className={notice.correctionStatus === "open" ? "correction-state is-open" : "correction-state"}>
+                      {notice.correctionStatus === "open" ? "Under review" : "Resolved"}
+                    </span>
+                    {formatDate(notice.correctionRequestedAt) ? (
+                      <time dateTime={notice.correctionRequestedAt ?? undefined}>
+                        {formatDate(notice.correctionRequestedAt)}
+                      </time>
+                    ) : null}
+                  </div>
+                  <h3>{notice.title}</h3>
+                  <p>{notice.correctionPublicNote}</p>
+                  <Link className="text-link" href={`/articles/${notice.slug}`}>
+                    {notice.correctionStatus === "open" ? "Read correction notice" : "Read updated article"}
+                    <span aria-hidden="true"> →</span>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="correction-log-empty">No public correction notices are currently listed.</p>
+          )}
+        </section>
       </div>
     </section>
   );
