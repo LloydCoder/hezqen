@@ -14,7 +14,10 @@ test("every kit is accurately labeled as an engineering preview", () => {
   for (const product of infrastructureProducts) {
     assert.equal(product.status, "Engineering preview");
     assert.equal(product.license, "Apache-2.0");
-    assert.match(product.repositoryUrl, /^https:\/\/github\.com\/LloydCoder\/hezqen-infrastructure-standard/);
+    assert.match(
+      product.repositoryUrl,
+      /^https:\/\/github\.com\/LloydCoder\/hezqen-infrastructure-standard/,
+    );
   }
 });
 
