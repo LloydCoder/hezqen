@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -80,7 +80,7 @@ test("restore refuses a non-empty target unless overwrite is explicitly approved
   mkdirSync(fakeBin);
   writeFileSync(backupFile, "backup-payload");
   const checksum = createHash("sha256").update("backup-payload").digest("hex");
-  writeFileSync(`${backupFile}.sha256`, `${checksum}  ${backupFile}\n`);
+  writeFileSync(backupFile + ".sha256", checksum + "  " + backupFile + "\n");
   const psql = join(fakeBin, "psql");
   writeFileSync(psql, "#!/bin/sh\nprintf '1\\n'\n");
   chmodSync(psql, 0o755);
@@ -109,12 +109,12 @@ test("restore refuses every non-empty target even when overwrite is requested", 
   mkdirSync(fakeBin);
   writeFileSync(backupFile, "backup-payload");
   const checksum = createHash("sha256").update("backup-payload").digest("hex");
-  writeFileSync(`${backupFile}.sha256`, `${checksum}  ${backupFile}\\n`);
+  writeFileSync(backupFile + ".sha256", checksum + "  " + backupFile + "\n");
   const psql = join(fakeBin, "psql");
-  writeFileSync(psql, "#!/bin/sh\\nprintf '1\\\\n'\\n");
+  writeFileSync(psql, "#!/bin/sh\nprintf '1\\n'\n");
   chmodSync(psql, 0o755);
   const pgRestore = join(fakeBin, "pg_restore");
-  writeFileSync(pgRestore, "#!/bin/sh\\necho called > \"$PG_RESTORE_MARKER\"\\n");
+  writeFileSync(pgRestore, "#!/bin/sh\necho called > \"$PG_RESTORE_MARKER\"\n");
   chmodSync(pgRestore, 0o755);
 
   const marker = join(directory, "pg_restore-called");
@@ -132,5 +132,5 @@ test("restore refuses every non-empty target even when overwrite is requested", 
 
   assert.equal(result.status, 64);
   assert.match(result.stderr, /target database must be empty/);
-  assert.equal(require("node:fs").existsSync(marker), false);
+  assert.equal(existsSync(marker), false);
 });
