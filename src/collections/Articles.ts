@@ -182,7 +182,7 @@ export const Articles: CollectionConfig = {
       access: {
         create: () => false,
         update: ({ req }) =>
-          ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
+          hasActiveRole(req.user, ["administrator", "editor"]),
       },
     },
     {
