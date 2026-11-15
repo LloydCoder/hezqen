@@ -172,24 +172,29 @@ export async function putAndVerifyEvidenceObject(
     throw new Error("EVIDENCE_CHECKSUM_MISMATCH");
   }
 
-  const uploaded = await requestObject(config, "PUT", input.key, input.bytes, input.contentType);
-  if (!uploaded.ok) await responseError(uploaded, "UPLOAD");
+  try {
+    const uploaded = await requestObject(config, "PUT", input.key, input.bytes, input.contentType);
+    if (!uploaded.ok) await responseError(uploaded, "UPLOAD");
 
-  const retrieved = await requestObject(config, "GET", input.key);
-  if (!retrieved.ok) await responseError(retrieved, "VERIFY");
-  const storedBytes = new Uint8Array(await retrieved.arrayBuffer());
-  const storedSha256 = sha256Hex(storedBytes);
-  if (storedBytes.byteLength !== input.bytes.byteLength || storedSha256 !== sha256) {
-    throw new Error("EVIDENCE_PERSISTED_BYTES_MISMATCH");
+    const retrieved = await requestObject(config, "GET", input.key);
+    if (!retrieved.ok) await responseError(retrieved, "VERIFY");
+    const storedBytes = new Uint8Array(await retrieved.arrayBuffer());
+    const storedSha256 = sha256Hex(storedBytes);
+    if (storedBytes.byteLength !== input.bytes.byteLength || storedSha256 !== sha256) {
+      throw new Error("EVIDENCE_PERSISTED_BYTES_MISMATCH");
+    }
+
+    return {
+      key: input.key,
+      sha256,
+      byteSize: storedBytes.byteLength,
+      contentType: input.contentType,
+      etag: retrieved.headers.get("etag"),
+    };
+  } catch (error) {
+    await deleteEvidenceObject(config, input.key).catch(() => undefined);
+    throw error;
   }
-
-  return {
-    key: input.key,
-    sha256,
-    byteSize: storedBytes.byteLength,
-    contentType: input.contentType,
-    etag: retrieved.headers.get("etag"),
-  };
 }
 
 export async function getPrivateEvidenceObject(
