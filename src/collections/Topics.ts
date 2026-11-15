@@ -1,4 +1,4 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
 
@@ -16,6 +16,13 @@ export const Topics: CollectionConfig = {
     read: () => true,
     update: canManageTopics,
     delete: () => false,
+  },
+  hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("Topics cannot be deleted; update or retire the topic instead.", 403);
+      },
+    ],
   },
   fields: [
     { name: "name", type: "text", required: true },
