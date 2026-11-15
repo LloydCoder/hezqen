@@ -55,7 +55,7 @@ The application-side evidence contract is:
 - Download requires an authorized research/editorial role, re-checks byte size and SHA-256, and writes a download audit event before returning the file as a private attachment.
 - If object verification or metadata persistence fails, the object is deleted where possible.
 
-The bucket has been provisioned, but no evidence object has yet been uploaded and verified through the application endpoint. Live S3 signature, upload, read-back, deletion and download acceptance remain open. Define retention/legal-hold policy before production use; do not assume indefinite retention.
+The bucket has been provisioned, but no evidence object has yet been uploaded and verified through the application endpoint. Live S3 signature, upload, read-back, deletion and download acceptance remain open. Neon currently lists 5 GB of Object Storage per Free project; keep an explicit usage budget and retention/legal-hold policy, and do not assume indefinite retention or unlimited free storage.
 
 ## 5. Transactional email
 
