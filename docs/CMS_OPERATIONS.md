@@ -1,6 +1,6 @@
 # HEZQEN CMS Operations and Release Contract
 
-**Status:** PR #51 latest code head is `bc80495f5ae87e8e85f241d2db191b3a1f416fb2`. Payload migration verification passed on the immediately preceding code head. Cloudflare's compatibility job passed, but its Worker build/smoke job was cancelled. HEZQEN CI reached tests and failed; three follow-up fixes are committed but have not been rerun. The existing Vercel Preview is an older code-bearing baseline. Full staging acceptance remains PARTIAL; PR #51 remains draft.  
+**Status:** PR #51 latest code head is `a006eb2bbfcb3387d341b24b331e517ff944628c`. Payload migration verification passed on the preceding code head. Cloudflare compatibility passed but its Worker build/smoke job was cancelled. HEZQEN CI reached tests and failed twice; the latest two origin-assertion fixes are committed but have not been rerun. The existing Vercel Preview is an older code-bearing baseline. Full staging acceptance remains PARTIAL; PR #51 remains draft.  
 **Production:** not deployed. Do not run production migrations or attach production traffic.
 
 This document is the operational companion to docs/PHASE_STATUS.md. A source implementation or green unit test does not by itself prove live service readiness.
