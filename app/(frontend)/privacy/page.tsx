@@ -43,14 +43,15 @@ export default function PrivacyPage() {
         <h2>Calculators and information you enter</h2>
         <p>
           HEZQEN Labs calculators are intended to calculate results in your browser. Do not enter
-          confidential, personal or regulated information. The site should not be treated as a secure
-          data-processing environment for sensitive workloads.
+          confidential, personal or regulated information. The site should not be treated as a
+          secure data-processing environment for sensitive workloads.
         </p>
         <h2>Accounts, newsletters and payments</h2>
         <p>
           Reader accounts, newsletter subscriptions and paid reader services are not currently
           represented as active public features. This notice must be updated before any such feature
-          is launched, including its providers, data flows, lawful basis, retention and user controls.
+          is launched, including its providers, data flows, lawful basis, retention and user
+          controls.
         </p>
         <h2>Cookies and similar technologies</h2>
         <p>
@@ -68,7 +69,8 @@ export default function PrivacyPage() {
           This is an initial website notice, not a legal opinion or a complete jurisdiction-specific
           privacy policy. Before public production launch, Tinlance must verify the actual hosting
           logs, cookie inventory, processors, retention periods, cross-border transfers, legal bases
-          and applicable data-subject request process, and obtain legal review for the markets served.
+          and applicable data-subject request process, and obtain legal review for the markets
+          served.
         </p>
       </div>
     </section>
