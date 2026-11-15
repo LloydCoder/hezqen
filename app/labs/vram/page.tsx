@@ -88,8 +88,8 @@ export default function VramCalculatorPage() {
     } catch (error) {
       return {
           value: null,
-          error: error instanceof Error ? error.message : "Invalid calculator input.",
-        };
+        error: error instanceof Error ? error.message : "Invalid calculator input.",
+      };
     }
   }, [parametersB, weightFormat, layers, kvHeads, headDimension, contextLength, batchSize, kvCacheFormat, runtimeReservePercent]);
 
