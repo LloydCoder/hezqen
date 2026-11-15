@@ -97,7 +97,7 @@ jobs:
               if date_match:
                   source = source[:date_match.end()] + "\n    " + flags + source[date_match.end():]
               else:
-                  worker_match = re.search(r'(worker\s*:\s*\\{)', source)
+                  worker_match = re.search(r'(worker\s*:\s*\{)', source)
                   if not worker_match:
                       raise SystemExit("Generated cloudflare.config.ts has no worker config block")
                   source = source[:worker_match.end()] + '\n    compatibilityDate: "2026-11-15",\n    ' + flags + source[worker_match.end():]
