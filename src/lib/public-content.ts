@@ -3,22 +3,20 @@ import { getPayload } from "payload";
 import config from "../payload.config.ts";
 import { toPublicArticle, type PublicArticle } from "./public-articles.ts";
 
-const publishedConditions = [
-  { _status: { equals: "published" } },
-  { workflowStatus: { equals: "published" } },
-];
-
 export async function findPublicArticles(options: {
   division?: PublicArticle["division"];
   limit?: number;
 } = {}): Promise<PublicArticle[]> {
   const payload = await getPayload({ config });
-  const conditions = [...publishedConditions];
-  if (options.division) conditions.push({ division: { equals: options.division } });
-
   const result = await payload.find({
     collection: "articles",
-    where: { and: conditions },
+    where: {
+      and: [
+        { _status: { equals: "published" } },
+        { workflowStatus: { equals: "published" } },
+        ...(options.division ? [{ division: { equals: options.division } }] : []),
+      ],
+    },
     limit: Math.min(Math.max(options.limit ?? 10, 1), 50),
     sort: "-publishedAt",
     depth: 1,
@@ -36,7 +34,11 @@ export async function findPublicArticleBySlug(slug: string): Promise<PublicArtic
   const result = await payload.find({
     collection: "articles",
     where: {
-      and: [...publishedConditions, { slug: { equals: slug } }],
+      and: [
+        { _status: { equals: "published" } },
+        { workflowStatus: { equals: "published" } },
+        { slug: { equals: slug } },
+      ],
     },
     limit: 1,
     depth: 1,
@@ -51,7 +53,8 @@ export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]
     collection: "articles",
     where: {
       and: [
-        ...publishedConditions,
+        { _status: { equals: "published" } },
+        { workflowStatus: { equals: "published" } },
         { correctionStatus: { equals: "resolved" } },
         { correctionPublicNote: { exists: true } },
       ],
