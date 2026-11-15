@@ -14,6 +14,7 @@ export type PublicArticle = {
   publishedAt: string;
   updatedAt: string;
   correctionNotice: PublicCorrectionNotice | null;
+  correctionHistory: PublicCorrectionNotice[];
 };
 
 type RecordValue = Record<string, unknown>;
@@ -36,6 +37,33 @@ export function getPublicCorrectionNotice(value: unknown): PublicCorrectionNotic
   const correctedAt = validDate(record.correctionResolvedAt);
   if (!note || note.length > 2000 || !correctedAt) return null;
   return { note, correctedAt };
+}
+
+export function toPublicCorrectionHistory(
+  value: unknown,
+  currentNotice: PublicCorrectionNotice | null = null,
+): PublicCorrectionNotice[] {
+  const versions = Array.isArray(value) ? value : [];
+  const notices = versions.flatMap((item) => {
+    const record = asRecord(item);
+    const version = asRecord(record.version);
+    const notice = getPublicCorrectionNotice({
+      correctionStatus: version.correctionStatus,
+      correctionPublicNote: version.correctionPublicNote,
+      correctionResolvedAt:
+        version.correctionResolvedAt ?? record.updatedAt ?? record.createdAt,
+    });
+    return notice ? [notice] : [];
+  });
+  if (currentNotice) notices.push(currentNotice);
+
+  const unique = new Map<string, PublicCorrectionNotice>();
+  for (const notice of notices) {
+    unique.set(`${notice.correctedAt}\u0000${notice.note}`, notice);
+  }
+  return [...unique.values()].sort(
+    (left, right) => Date.parse(right.correctedAt) - Date.parse(left.correctedAt),
+  );
 }
 
 export function toPublicArticle(value: unknown): PublicArticle | null {
@@ -72,6 +100,7 @@ export function toPublicArticle(value: unknown): PublicArticle | null {
     typeof author.name === "string" && author.name.trim() ? author.name.trim().slice(0, 120) : null;
   const body = asRecord(record.body);
   const hasBody = Object.keys(body).length > 0;
+  const correctionNotice = getPublicCorrectionNotice(record);
 
   return {
     id: String(record.id ?? slug),
@@ -83,6 +112,7 @@ export function toPublicArticle(value: unknown): PublicArticle | null {
     authorName,
     publishedAt,
     updatedAt,
-    correctionNotice: getPublicCorrectionNotice(record),
+    correctionNotice,
+    correctionHistory: correctionNotice ? [correctionNotice] : [],
   };
 }
