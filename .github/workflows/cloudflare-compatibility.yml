@@ -117,6 +117,8 @@ jobs:
               "PAYLOAD_SECRET": "bindings.secret()",
               "NEXT_PUBLIC_SITE_URL": 'bindings.text("http://localhost:3001")',
               "HEZQEN_ALLOWED_ORIGINS": 'bindings.text("http://localhost:3001")',
+              "CI": 'bindings.text("true")',
+              "HEZQEN_LOCAL_RUNTIME_TEST": 'bindings.text("true")',
           }
           for name, binding in required.items():
               if f"{name}:" not in source:
