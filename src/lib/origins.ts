@@ -61,10 +61,7 @@ export function resolveAllowedOrigins(input: AllowedOriginsInput): string[] {
   return [
     ...new Set(
       [...configured, ...(deploymentOrigin ? [deploymentOrigin] : []), ...defaults].map((origin) =>
-        parseOrigin(
-          origin,
-          input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true,
-        ),
+        parseOrigin(origin, input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true),
       ),
     ),
   ];
