@@ -25,23 +25,33 @@ const secret =
 const originInputs =
   process.env.HEZQEN_ALLOWED_ORIGINS?.split(",").map((origin) => origin.trim()).filter(Boolean) ??
   (isProductionBuild ? ["https://hezqen.tinlance.com"] : ["http://localhost:3000"]);
-const allowedOrigins = [...new Set(originInputs.map((origin) => {
-  const parsed = new URL(origin);
-  if (
-    parsed.username ||
-    parsed.password ||
-    parsed.pathname !== "/" ||
-    parsed.search ||
-    parsed.hash ||
-    (parsed.protocol !== "https:" && parsed.hostname !== "localhost")
-  ) {
-    throw new Error("HEZQEN_ALLOWED_ORIGINS must contain only HTTPS origins (localhost is allowed for development).");
-  }
-  return parsed.origin;
-}))];
+const allowedOrigins = [
+  ...new Set(
+    originInputs.map((origin) => {
+      const parsed = new URL(origin);
+      if (
+        parsed.username ||
+        parsed.password ||
+        parsed.pathname !== "/" ||
+        parsed.search ||
+        parsed.hash ||
+        (parsed.protocol !== "https:" && parsed.hostname !== "localhost")
+      ) {
+        throw new Error(
+          "HEZQEN_ALLOWED_ORIGINS must contain only HTTPS origins (localhost is allowed for development).",
+        );
+      }
+      return parsed.origin;
+    }),
+  ),
+];
 const serverURL = process.env.NEXT_PUBLIC_SITE_URL ?? allowedOrigins[0];
 
-if (allowedOrigins.length === 0 || !serverURL || !allowedOrigins.includes(new URL(serverURL).origin)) {
+if (
+  allowedOrigins.length === 0 ||
+  !serverURL ||
+  !allowedOrigins.includes(new URL(serverURL).origin)
+) {
   throw new Error("NEXT_PUBLIC_SITE_URL must match one of HEZQEN_ALLOWED_ORIGINS.");
 }
 
