@@ -114,6 +114,7 @@ export default function HomePage() {
               <Link className="text-link" href="/labs/ai-cost">
                 Compare API and self-hosted AI costs <span aria-hidden="true">↗</span>
               </Link>
+              <Link className="text-link" href="/labs">Explore all 16 HEZQEN Labs calculators <span aria-hidden="true">↗</span></Link>
             </article>
             <article className="platform-card">
               <span className="platform-kicker">03 — DECISION SUPPORT</span>
@@ -122,6 +123,12 @@ export default function HomePage() {
                 Deeper research and briefings for leaders making consequential technology and
                 business decisions.
               </p>
+            </article>
+            <article className="platform-card">
+              <span className="platform-kicker">04 — ENGINEERING PRODUCTS</span>
+              <h2>HEZQEN Infrastructure</h2>
+              <p>Open engineering kits for local AI, privacy, multi-GPU planning and air-gapped retrieval deployments.</p>
+              <Link className="text-link" href="/infrastructure">Explore the infrastructure kits <span aria-hidden="true">↗</span></Link>
             </article>
           </div>
         </div>
