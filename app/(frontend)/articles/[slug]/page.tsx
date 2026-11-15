@@ -39,11 +39,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArticlePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const article = await findPublicArticleBySlug(slug);
   if (!article) notFound();
@@ -85,7 +81,9 @@ export default async function ArticlePage({
         </div>
         {correctionNotice ? (
           <aside className="correction-notice" aria-label="Correction notice">
-            <p className="correction-notice-label">CORRECTION / {formatDate(correctionNotice.correctedAt)}</p>
+            <p className="correction-notice-label">
+              CORRECTION / {formatDate(correctionNotice.correctedAt)}
+            </p>
             <p>{correctionNotice.note}</p>
             <Link href="/corrections">Read HEZQEN&apos;s corrections record ↗</Link>
           </aside>
@@ -96,7 +94,9 @@ export default async function ArticlePage({
             <ol>
               {article.correctionHistory.map((correction) => (
                 <li key={`${correction.correctedAt}-${correction.note}`}>
-                  <time dateTime={correction.correctedAt}>{formatDate(correction.correctedAt)}</time>
+                  <time dateTime={correction.correctedAt}>
+                    {formatDate(correction.correctedAt)}
+                  </time>
                   <p>{correction.note}</p>
                 </li>
               ))}
