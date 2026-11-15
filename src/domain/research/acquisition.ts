@@ -154,7 +154,7 @@ async function resolvePublicAddress(hostname: string): Promise<PublicAddress> {
     if (!isPublicIpAddress(hostname)) {
       throw new Error("Evidence target IP address must be globally routable and public.");
     }
-    return { address: hostname, family };
+    return { address: hostname, family: family as 4 | 6 };
   }
 
   const addresses = await lookup(hostname, { all: true, verbatim: true });
