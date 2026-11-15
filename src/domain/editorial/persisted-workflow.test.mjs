@@ -268,5 +268,8 @@ test("includes the public correction note in the immutable after-state audit dig
   const first = await publishCorrection("We corrected the figure.");
   const second = await publishCorrection("We corrected the date.");
   assert.notEqual(first.event.afterDigest, second.event.afterDigest);
-  assert.equal(first.result.ok && first.result.article.correctionPublicNote, "We corrected the figure.");
+  assert.equal(
+    first.result.ok && first.result.article.correctionPublicNote,
+    "We corrected the figure.",
+  );
 });
