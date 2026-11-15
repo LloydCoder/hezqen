@@ -115,3 +115,18 @@ test("does not double-increment revisions for the audited workflow command", asy
   });
   assert.equal(result, data);
 });
+
+
+test("rejects privileged Local API workflow mutations outside the editorial command service", () => {
+  assert.ok(revisionHook);
+  assert.throws(
+    () =>
+      revisionHook({
+        data: { workflowStatus: "published", revision: 99 },
+        originalDoc: { workflowStatus: "approved", revision: 3 },
+        operation: "update",
+        req: { context: { hezqenSkipArticleRevisionIncrement: true } },
+      }),
+    /editorial workflow command service/,
+  );
+});
