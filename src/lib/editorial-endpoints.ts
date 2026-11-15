@@ -64,18 +64,16 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
   }
 
   async getArticle(id: string): Promise<StoredEditorialArticle | null> {
-    try {
-      const doc = await this.req.payload.findByID({
-        collection: "articles",
-        id,
-        depth: 0,
-        overrideAccess: true,
-        req: this.req,
-      });
-      return normalizeArticle(doc);
-    } catch {
-      return null;
-    }
+    const result = await this.req.payload.find({
+      collection: "articles",
+      where: { id: { equals: id } },
+      limit: 1,
+      depth: 0,
+      overrideAccess: true,
+      req: this.req,
+    });
+    const doc = result.docs[0];
+    return doc ? normalizeArticle(doc) : null;
   }
 
   async getMaterialClaims(articleId: string): Promise<Array<{ id: string; sourceIds: string[] }>> {
