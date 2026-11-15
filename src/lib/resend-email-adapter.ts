@@ -23,7 +23,7 @@ function normalizeRecipients(value: SendEmailOptions["to"]): string[] {
 
 export function createResendEmailAdapter(options: ResendEmailAdapterOptions): PayloadEmailAdapter {
   const fetchImpl = options.fetchImpl ?? fetch;
-  const from = \`\${options.defaultFromName} <\${options.defaultFromAddress}>\`;
+  const from = `${options.defaultFromName} <${options.defaultFromAddress}>`;
 
   return () => ({
     name: "hezqen-resend",
@@ -48,7 +48,7 @@ export function createResendEmailAdapter(options: ResendEmailAdapterOptions): Pa
       const response = await fetchImpl("https://api.resend.com/emails", {
         method: "POST",
         headers: {
-          authorization: \`Bearer \${options.apiKey}\`,
+          authorization: `Bearer ${options.apiKey}`,
           "content-type": "application/json",
         },
         body: JSON.stringify(payload),
@@ -56,7 +56,7 @@ export function createResendEmailAdapter(options: ResendEmailAdapterOptions): Pa
 
       if (!response.ok) {
         const detail = (await response.text()).slice(0, 300);
-        throw new Error(\`Resend delivery failed with HTTP \${response.status}: \${detail}\`);
+        throw new Error(`Resend delivery failed with HTTP ${response.status}: ${detail}`);
       }
       return response.json();
     },
