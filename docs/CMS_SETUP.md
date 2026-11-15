@@ -46,3 +46,8 @@ The CMS is not operational until:
 7. Staging login, admin, public article reads, correction flow, error handling and rollback are accepted.
 
 Initial migration generation is isolated in a dedicated GitHub Actions workflow using an ephemeral PostgreSQL 18 service. The generated migration is checked into `src/migrations/20261115_155359_initial.ts` with its snapshot. A separate PR workflow applies it only to an ephemeral PostgreSQL service and verifies migration status. Neither workflow connects to Neon or applies migrations to any shared database. No database migration is applied by the application build.
+
+
+## Current operational reconciliation
+
+For the latest implementation state, runtime environment variables, editorial workflow authority, private evidence storage, transactional email, scheduler setup and release gates, see [CMS Operations and Release Contract](CMS_OPERATIONS.md). This addendum supersedes older setup assumptions where they conflict; it does not mark staging or production as accepted.
