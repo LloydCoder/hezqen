@@ -55,6 +55,10 @@ The editorial domain includes a tested publication policy and a tested workflow 
 
 No model, agent, prompt, memory, webpage, tool output or integration may create editorial authority.
 
+## Research provenance
+
+The research domain validates source identity, evidence metadata, checksum shape and claim-to-source/evidence relationships. A claim cannot pass the current verified-claim gate without a valid source and preserved, verified evidence record. This is domain validation only; acquisition, exact-byte storage, digest calculation, immutable provenance, and independent human fact-checking remain to be implemented. See [Research Evidence](RESEARCH_EVIDENCE.md).
+
 ## Security posture
 
 The initial application disables the powered-by header and sets baseline response headers. A strict Content Security Policy, session controls, upload controls, rate limits, database authorization, secrets handling, audit persistence and complete threat-model mappings remain required.
