@@ -95,12 +95,7 @@ export function isPublicIpAddress(address: string): boolean {
   const ipv4MappedPrefix = value >> 32n;
   if (ipv4MappedPrefix === 0xffffn) {
     const ipv4 = Number(value & 0xffffffffn);
-    const octets = [
-      (ipv4 >>> 24) & 255,
-      (ipv4 >>> 16) & 255,
-      (ipv4 >>> 8) & 255,
-      ipv4 & 255,
-    ];
+    const octets = [(ipv4 >>> 24) & 255, (ipv4 >>> 16) & 255, (ipv4 >>> 8) & 255, ipv4 & 255];
     return isPublicIpv4(octets.join("."));
   }
 
@@ -276,7 +271,9 @@ export async function acquireEvidence(
 
     if (REDIRECT_STATUSES.has(response.status)) {
       if (!response.location || redirects >= maxRedirects) {
-        throw new Error("Evidence source exceeded the redirect limit or omitted its redirect target.");
+        throw new Error(
+          "Evidence source exceeded the redirect limit or omitted its redirect target.",
+        );
       }
       current = validateEvidenceTarget(new URL(response.location, current).toString());
       continue;
