@@ -1,10 +1,10 @@
 # HEZQEN Implementation Phase Status
 
-**Last reconciled:** 2026-11-15 (HEZQEN/HIES operational and security changes merged; both CI systems migrated to Node 24 actions)  
+**Last reconciled:** 2026-11-15 (PR #51 staging implementation, CI, database migration and preview runtime re-verified)  
 **Canonical launch target:** `https://hezqen.tinlance.com`  
 **Release state:** NOT READY FOR PUBLIC PRODUCTION
 
-This register is evidence-based. A phase is not complete because documentation or source files exist. A green CI run proves only the checks that workflow actually executes; it does not prove live service operation, production security, editorial readiness, legal clearance or business readiness.
+This register is evidence-based. A phase is not complete because documentation or source files exist. A green CI run proves only the checks that workflow actually executes; it does not prove live service operation, production security, editorial readiness, legal clearance or business readiness. Dated inventory sections below are historical snapshots; the final Current verified state — 2026-11-15 section supersedes older conflicting statements.
 
 ## Six-phase execution sequence
 
@@ -58,9 +58,9 @@ Vercel remains an approved hosting option; `vercel.json` continues to disable au
 
 ## Shared database safety
 
-The Neon staging and production branches were inspected read-only. Both returned database `hezqen`, role `hezqen_app`, and zero tables in the `public` schema at inspection time. No migration was applied to either shared branch. The checked-in migration was validated only against ephemeral CI PostgreSQL.
+The latest read-only verification shows that isolated Neon staging branch br-lucky-bird-bayxt3by now contains the Payload schema and both recorded migrations, including scheduling/correction metadata. The main and production branches were not changed by this CMS staging migration. The production branch remains a separate release boundary. Staging is unprotected on the current Neon Free plan.
 
-The Neon connector explicitly requires user approval before shared-database migrations. Do not apply the migration to staging or production through an autonomous workflow.
+The Neon connector requires explicit approval for shared-database migrations. Do not apply migrations to production through an autonomous workflow.
 
 ## Release decision
 
@@ -164,3 +164,43 @@ These changes modernize CI execution runtimes; they do not change the Node.js 24
 ## Current operational reconciliation
 
 For the latest implementation state, runtime environment variables, editorial workflow authority, private evidence storage, transactional email, scheduler setup and release gates, see [CMS Operations and Release Contract](CMS_OPERATIONS.md). This addendum supersedes older setup assumptions where they conflict; it does not mark staging or production as accepted.
+
+## Current verified state — 2026-11-15
+
+This section supersedes older, dated inventory statements above where they conflict.
+
+### Repository and PR inventory
+
+- HEZQEN LloydCoder/hezqen: zero open GitHub issues; one open PR, #51, feat(cms): complete transactional editorial and evidence workflows.
+- PR #51 is still draft, unmerged, with no submitted reviews or inline review threads. Its head is dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40; the PR contains 25 changed files.
+- The exact PR head passed all three required workflows: HEZQEN CI (https://github.com/LloydCoder/hezqen/actions/runs/43771124102), Payload migration verification (https://github.com/LloydCoder/hezqen/actions/runs/43771124059), and Cloudflare compatibility (https://github.com/LloydCoder/hezqen/actions/runs/43771124064).
+- The connected Vercel Preview deployment dpl_96t5ckCEdTevrih3Nf3HwSikg76Q is READY on that same commit. This is not a production deployment.
+- HIES LloydCoder/hezqen-infrastructure-standard: zero open issues and zero open PRs at the latest inventory check. Its main branch remains separate from the HEZQEN publication runtime.
+
+### Staging database, CMS and runtime
+
+- Neon project old-bird-82399990, branch br-lucky-bird-bayxt3by (staging) is READY and remains unprotected.
+- The staging database records both 20261115_155359_initial and 20261116_000000_editorial_scheduling_corrections. The scheduling and correction columns are present. No production migration was applied.
+- The staging database contains one active administrator, zero articles, zero sources and zero audit events.
+- Preview runtime checks returned HTTP 200 for /api/health/ready, /admin/login, and /api/articles?limit=1. Unauthenticated reads of users, audit events, evidence, claims and sources returned HTTP 403; public topics returned HTTP 200. The actual administrator login and authenticated role matrix were not exercised.
+- The private hezqen-evidence bucket exists on staging and has zero objects. No real application upload/read-back/download round-trip has been accepted.
+- Preview environment metadata contains the staging storage and Resend variable records. Secret values were not decrypted; metadata does not prove successful live storage or email delivery.
+- The hezqen_cms database role cannot create databases, roles or the public schema and does not bypass RLS, but it still has table-level DELETE privileges on immutable/content tables. This is a defense-in-depth blocker: narrow those grants and test the deployed app before production.
+- The CMS runtime log query for the preceding 30 minutes returned no warning/error/fatal records.
+
+### Remaining release blockers
+
+1. Complete authenticated role-matrix and direct REST/Local API bypass acceptance.
+2. Prove real PostgreSQL workflow transaction rollback when the audit write fails.
+3. Revoke unnecessary database-level UPDATE/DELETE rights on immutable evidence/source/claim/audit data and verify runtime behavior.
+4. Perform a real private evidence upload, read-back, checksum verification, download, deletion/cleanup and audit round-trip.
+5. Deliver and receive a real Payload password-reset email through Resend.
+6. Implement and verify the public correction notice and article-history presentation.
+7. Configure and manually test the scheduler only after staging endpoint acceptance; its Worker currently has no Cron Trigger or secret binding.
+8. Resolve staging branch protection/backup/restore controls within the current plan limits.
+9. Select a commercially permitted production host. Vercel Hobby is non-commercial; Cloudflare Workers Free has a 10 ms CPU limit and vinext remains beta, so neither production suitability nor cost envelope is accepted yet.
+10. Complete production backup/restore, monitoring, incident response, rollback, legal/trademark, accessibility and launch acceptance.
+
+The implementation and CI are substantially advanced, but CMS staging acceptance is PARTIAL and public production is NOT READY. No production deployment, production migration, production admin bootstrap, production DNS cutover, paid-plan upgrade or scheduler activation has occurred.
+
+See CMS_OPERATIONS.md for detailed endpoint, storage, email, scheduler and acceptance procedures.
