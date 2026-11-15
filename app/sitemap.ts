@@ -17,7 +17,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
-  const calculatorSlugs = ["vram", "ai-cost", ...LAB_CALCULATORS.map((calculator) => calculator.slug)];
+  const calculatorSlugs = [
+    "vram",
+    "ai-cost",
+    ...LAB_CALCULATORS.map((calculator) => calculator.slug),
+  ];
   const calculatorRoutes = calculatorSlugs.map((slug) => ({
     url: `${site.url}/labs/${slug}`,
     lastModified: new Date(),
