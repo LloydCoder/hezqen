@@ -47,7 +47,7 @@ export const Users: CollectionConfig = {
       if (!actor) return false;
       return actor.role === "administrator" ? true : { id: { equals: actor.id } };
     },
-    delete: isAdministrator,
+    delete: () => false,
   },
   fields: [
     {
