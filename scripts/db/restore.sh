@@ -29,12 +29,28 @@ if [ "$HEZQEN_RESTORE_ENV" = "production" ] && [ "${HEZQEN_PRODUCTION_RESTORE_AP
   exit 64
 fi
 
+if [ "$HEZQEN_RESTORE_ENV" = "production" ] && [ "${HEZQEN_RESTORE_ALLOW_OVERWRITE:-}" != "true" ]; then
+  echo "Production restore refused: HEZQEN_RESTORE_ALLOW_OVERWRITE=true is required." >&2
+  exit 64
+fi
+
 if [ ! -f "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE.sha256" ]; then
   echo "Restore refused: backup archive or checksum is missing." >&2
   exit 66
 fi
 
 sha256sum --check "$BACKUP_FILE.sha256" >/dev/null
+existing_objects=$(psql "$RESTORE_DATABASE_URL" -Atqc "SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname NOT LIKE 'pg_%' AND n.nspname <> 'information_schema' AND c.relkind IN ('r', 'p', 'v', 'm', 'S', 'f')")
+case "$existing_objects" in
+  ""|*[!0-9]*)
+    echo "Restore refused: could not verify target database contents." >&2
+    exit 1
+    ;;
+esac
+if [ "$existing_objects" -gt 0 ] && [ "${HEZQEN_RESTORE_ALLOW_OVERWRITE:-}" != "true" ]; then
+  echo "Restore refused: target is not empty; set HEZQEN_RESTORE_ALLOW_OVERWRITE=true after review." >&2
+  exit 64
+fi
 pg_restore --clean --if-exists --no-owner --no-privileges --dbname="$RESTORE_DATABASE_URL" "$BACKUP_FILE"
 
 echo "HEZQEN database restore completed for the explicitly confirmed target."

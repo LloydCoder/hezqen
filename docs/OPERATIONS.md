@@ -30,7 +30,7 @@ HEZQEN_RESTORE_APPROVED=true \
 sh scripts/db/restore.sh
 ```
 
-Production restores additionally require `HEZQEN_PRODUCTION_RESTORE_APPROVED=true`. The restore script validates the archive checksum and refuses missing approval, an invalid environment, or a mismatched target confirmation. Never place production credentials in CI or use the CI restore flag for a real environment.
+Restores into a non-empty target require `HEZQEN_RESTORE_ALLOW_OVERWRITE=true`; Production additionally requires both `HEZQEN_PRODUCTION_RESTORE_APPROVED=true` and `HEZQEN_RESTORE_ALLOW_OVERWRITE=true`. The restore script validates the archive checksum and refuses missing approval, an invalid environment, or a mismatched target confirmation. Never place production credentials in CI or use the CI restore flag for a real environment.
 
 ## CI backup/restore drill
 

@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           for endpoint in /api/health /api/health/ready; do
-            response="$(curl --fail --silent --show-error --retry 3 --retry-delay 2 "${HEZQEN_HEALTH_URL%/}${endpoint}")"
+            response="$(curl --fail --silent --show-error --connect-timeout 5 --max-time 15 --retry 3 --retry-delay 2 --retry-all-errors "${HEZQEN_HEALTH_URL%/}${endpoint}")"
             case "$endpoint" in
               /api/health) expected="ok" ;;
               /api/health/ready) expected="ready" ;;
