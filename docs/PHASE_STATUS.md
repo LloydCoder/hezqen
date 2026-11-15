@@ -1,6 +1,6 @@
 # HEZQEN Implementation Phase Status
 
-**Last reconciled:** 2026-11-15 (post-PR #42 operational-readiness integration; HIES build-tool security remediation in progress)  
+**Last reconciled:** 2026-11-15 (HEZQEN operational readiness merged; HIES Python build-tool CVE remediation merged)  
 **Canonical launch target:** `https://hezqen.tinlance.com`  
 **Release state:** NOT READY FOR PUBLIC PRODUCTION
 
@@ -31,7 +31,7 @@ The six phases are sequential macro-gates. A later macro-phase cannot be called 
 | 5 | Evidence and research | PARTIAL | Source/evidence/claim domain validation and SSRF-aware HTTPS acquisition logic exist, including redirect revalidation, content limits and SHA-256 calculation. | Private object storage; durable evidence capture/retrieval; immutable/versioned retention; network egress enforcement; claim-to-evidence UI and transactional audit; independent fact-check operations. |
 | 6 | Public publication website | PARTIAL | Homepage, About, Editorial Standards and four division routes exist. | CMS-backed article pages, author/editor profiles, investigations/research pages, correction notices, disclosure surfaces, pagination and verified empty/error states. |
 | 7 | Search, SEO and structured discovery | PARTIAL | Canonical metadata, robots.txt, sitemap.xml, llms.txt and llms-full.txt exist. Sitemap now includes all sixteen Labs routes plus the Infrastructure catalog route. Default canonical host is `hezqen.tinlance.com`. | Structured data and validation; published-content sitemap integration; internal search; indexation/privacy checks; Search Console and live crawl QA after launch. |
-| 8 | HEZQEN Labs and Infrastructure products | CALCULATORS IMPLEMENTED; KITS ENGINEERING PREVIEW | Sixteen deterministic calculators exist in this repository. PR #32 added the public `/infrastructure` catalog, navigation and homepage discovery for five reusable engineering-preview kits maintained in the HIES monorepo `LloydCoder/hezqen-infrastructure-standard`; its previously audited main commit is `639afb9867c69d025e3d637195cf4436e2711e31`. Sitemap and regression tests cover all sixteen Labs routes and the Infrastructure catalog. | Independent calculator formula review; browser/accessibility QA; physical GPU validation; PII performance validation; transitive SBOM and signed provenance; model/third-party license review; commercial documentation, support and release artifacts. |
+| 8 | HEZQEN Labs and Infrastructure products | CALCULATORS IMPLEMENTED; KITS ENGINEERING PREVIEW | Sixteen deterministic calculators exist in this repository. PR #32 added the public `/infrastructure` catalog, navigation and homepage discovery for five reusable engineering-preview kits maintained in the HIES monorepo `LloydCoder/hezqen-infrastructure-standard`; its current main commit is `bcb71131fb63b0eedb4311e83d3d87a82ef5104c`. Sitemap and regression tests cover all sixteen Labs routes and the Infrastructure catalog. | Independent calculator formula review; browser/accessibility QA; physical GPU validation; PII performance validation; transitive SBOM and signed provenance; model/third-party license review; commercial documentation, support and release artifacts. |
 | 9 | Newsletter and reader accounts | NOT STARTED | No accepted reader-account or newsletter workflow is evidenced. | Consent, double opt-in, preferences, unsubscribe, data export/deletion, secure authentication and deliverability controls. |
 | 10 | HEZQEN Intelligence | NOT STARTED | No production premium research, billing or entitlement system is evidenced. | Product definition, secure billing integration, server-side entitlements, pricing/legal terms, support and refund operations. |
 | 11 | Integrations | NOT STARTED | No production Tinlyt, Searqon or TAS integration is evidenced. | Scoped credentials, explicit authorization, auditability, rate limits, failure isolation and human approval boundaries. |
@@ -77,13 +77,23 @@ The infrastructure product line is implemented in [LloydCoder/hezqen-infrastruct
 4. **IK-04 — Air-Gapped RAG Kit**
 5. **IK-05 — Complete Infrastructure Lab Bundle**
 
-At main commit `639afb9867c69d025e3d637195cf4436e2711e31`, the following checks are green:
+At current main commit `bcb71131fb63b0eedb4311e83d3d87a82ef5104c`, PR #11 added a pinned Python dependency audit (`pip-audit==2.10.1`), and PR #12 remediated CVE-2025-47273 by upgrading the two product build backends from `setuptools==75.8.0` to `84.2.1`. The monorepo validator now requires product build-system pins to match the audited requirements inventory.
 
-- [HIES CI](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729698285)
-- [HIES Security Hygiene](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729698293)
-- [IK-05 Offline Bundle Acceptance](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729698296)
+The final PR #12 head `c1db7b3c3b0b3cc2faea7ca47b0b28add37dcff7` passed:
+- [HIES CI](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740739)
+- [HIES Security Hygiene / pip-audit](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740650)
+- [IK-01 CPU Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740723)
+- [IK-02 PII Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740691)
+- [IK-03 Multi-GPU Planner](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740794)
+- [IK-05 Offline Bundle Acceptance](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740795)
 
-Product-specific runtime/acceptance workflows have also passed on the latest commits that touched each product: [IK-01 CPU Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43726371376), [IK-02 PII Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43724537149), [IK-03 Multi-GPU Planner](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729614141), and [IK-04 Disconnected RAG Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43726371365). These are CI/runtime acceptance checks, not physical hardware certification or commercial release approval.
+The prior [IK-04 Disconnected RAG Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43726371365) acceptance remains the latest recorded run for that unchanged product. IK-01 now also validates that Open WebUI static assets are served from a bounded writable tmpfs while the container root remains read-only, and that the stack completes CPU inference, embeddings, backup/restore and egress-isolation checks. These are CI/runtime acceptance checks, not physical hardware certification or commercial release approval.
+
+
+
+### HIES security-audit scope and remaining limits
+
+The new Python dependency gate covers the pinned validation and build-backend dependencies represented in `requirements-dev.txt`. The validator prevents product build-system requirements from drifting outside that audited set. It does not yet scan container operating-system packages, Ollama/Open WebUI base-image CVEs, downloaded model artifacts, or provide signed build provenance. HIES products remain engineering previews. IK-01's CI validates CPU operation only; physical NVIDIA GPU acceptance remains open. IK-02 still requires representative precision/recall and throughput evaluation. IK-03 remains a CPU estimator without physical multi-GPU benchmark evidence. IK-04 still needs its stated production hardening and security acceptance. IK-05 still needs a complete transitive SBOM and verifiable signed provenance.
 
 The kits remain engineering previews. Outstanding commercial-release gates include physical GPU testing on supported hardware, PII precision/recall and throughput validation, a transitive SBOM, signed build provenance, model and third-party license review, versioned release artifacts, customer documentation, support policy and pricing. Do not advertise the kits as fully production-certified or commercially released until those gates are complete.
 
