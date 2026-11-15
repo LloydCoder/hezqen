@@ -1,7 +1,11 @@
 import { getPayload } from "payload";
 
 import config from "../payload.config.ts";
-import { toPublicArticle, type PublicArticle } from "./public-articles.ts";
+import {
+  toPublicArticle,
+  toPublicCorrectionHistory,
+  type PublicArticle,
+} from "./public-articles.ts";
 
 export async function findPublicArticles(options: {
   division?: PublicArticle["division"];
@@ -42,7 +46,22 @@ export async function findPublicArticleBySlug(slug: string): Promise<PublicArtic
     limit: 1,
     depth: 1,
   });
-  return toPublicArticle(result.docs[0]);
+  const article = toPublicArticle(result.docs[0]);
+  if (!article) return null;
+
+  const versions = await payload.findVersions({
+    collection: "articles",
+    where: { parent: { equals: article.id } },
+    limit: 100,
+    sort: "-updatedAt",
+    depth: 0,
+    overrideAccess: true,
+  });
+
+  return {
+    ...article,
+    correctionHistory: toPublicCorrectionHistory(versions.docs, article.correctionNotice),
+  };
 }
 
 export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]> {
