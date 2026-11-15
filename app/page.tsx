@@ -108,6 +108,9 @@ export default function HomePage() {
               <p>
                 Practical tools, transparent calculators, benchmarks and engineering experiments.
               </p>
+              <Link className="text-link" href="/labs/vram">
+                Explore the VRAM calculator <span aria-hidden="true">↗</span>
+              </Link>
             </article>
             <article className="platform-card">
               <span className="platform-kicker">03 — DECISION SUPPORT</span>
