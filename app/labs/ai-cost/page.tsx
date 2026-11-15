@@ -10,8 +10,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "API vs Self-Hosted AI Cost Calculator | HEZQEN Labs",
-    description:
-      "Model monthly AI API and self-hosted GPU costs with explicit assumptions.",
+    description: "Model monthly AI API and self-hosted GPU costs with explicit assumptions.",
     type: "website",
   },
 };
