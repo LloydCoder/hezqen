@@ -39,9 +39,9 @@ test("mobile layout collapses navigation and content without horizontal nav scro
   const css = read("app/(frontend)/globals.css");
   assert.match(css, /@media\s*\(max-width:\s*900px\)[\s\S]*?\.primary-nav\s*\{\s*display:\s*none;/);
   assert.match(css, /\.mobile-navigation\s*\{\s*display:\s*block;/);
-  assert.match(css, /\.hero-grid\s*\{\s*grid-template-columns:\s*1fr;/);
+  assert.match(css, /\.hero-grid\s*\{\s*grid-template-columns:\s*(?:minmax\(0,\s*)?1fr\)?;/);
   assert.doesNotMatch(css, /\.primary-nav\s*\{[^}]*overflow-x:\s*auto/s);
-  assert.match(css, /min-height:\s*44px/);
+  assert.match(css, /min-height:\s*48px/);
   assert.match(css, /env\(safe-area-inset/);
 });
 
