@@ -11,7 +11,7 @@ import { Evidence } from "./collections/Evidence";
 import { Sources } from "./collections/Sources";
 import { Topics } from "./collections/Topics";
 import { Users } from "./collections/Users";
-import { resolveAllowedOrigins } from "./lib/origins.ts";
+import { resolveAllowedOrigins, resolvePayloadServerUrl } from "./lib/origins.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -22,14 +22,20 @@ const allowedOrigins = resolveAllowedOrigins({
   deploymentHostname: process.env.VERCEL_URL,
   nodeEnv: process.env.NODE_ENV,
 });
-const serverURL = process.env.NEXT_PUBLIC_SITE_URL ?? allowedOrigins[0];
+const serverURL = resolvePayloadServerUrl({
+  configuredSiteUrl: process.env.NEXT_PUBLIC_SITE_URL,
+  deploymentHostname: process.env.VERCEL_URL,
+  deploymentEnvironment: process.env.VERCEL_ENV,
+  allowedOrigins,
+  nodeEnv: process.env.NODE_ENV,
+});
 
 if (
   allowedOrigins.length === 0 ||
   !serverURL ||
   !allowedOrigins.includes(new URL(serverURL).origin)
 ) {
-  throw new Error("NEXT_PUBLIC_SITE_URL must match one of HEZQEN_ALLOWED_ORIGINS.");
+  throw new Error("Payload server URL must match one of HEZQEN_ALLOWED_ORIGINS.");
 }
 
 if (!databaseUrl) {
