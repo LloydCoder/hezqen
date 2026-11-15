@@ -1,6 +1,7 @@
 import { APIError, type Access, type CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
+import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
 const canReadEvidence: Access = ({ req }) =>
   hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
@@ -26,15 +27,14 @@ export const Evidence: CollectionConfig = {
     ],
     beforeChange: [
       ({ data, operation, req }) => {
-        const context = req.context as Record<string, unknown> | undefined;
-        if (operation === "create" && context?.hezqenEvidencePreservation !== true) {
+        if (operation === "create" && !hasTrustedRequestContext(req.context, "hezqenEvidencePreservation")) {
           throw new APIError(
             "Evidence can only be created through the preservation endpoint.",
             403,
           );
         }
         if (operation === "update") {
-          if (context?.hezqenEvidenceVerification !== true) {
+          if (!hasTrustedRequestContext(req.context, "hezqenEvidenceVerification")) {
             throw new APIError("Evidence metadata is immutable outside human verification.", 403);
           }
           const allowedFields = ["verificationStatus", "updatedAt"];
