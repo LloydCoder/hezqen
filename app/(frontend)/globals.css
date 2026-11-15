@@ -1573,7 +1573,7 @@ a:focus-visible {
   font-size: 13px;
   line-height: 1.7;
 }
- .article-card-footer {
+.article-card-footer {
   display: flex;
   flex-wrap: wrap;
   align-items: end;
