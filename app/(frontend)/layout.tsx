@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  robots:
+    process.env.VERCEL_ENV === "preview"
+      ? { index: false, follow: false, noarchive: true }
+      : undefined,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -21,11 +25,13 @@ export const metadata: Metadata = {
     title: "HEZQEN — Global Technology & Business Intelligence",
     description: site.description,
     url: site.url,
+    images: ["/brand/hezqen-open-graph-1200x630.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "HEZQEN — Global Technology & Business Intelligence",
     description: site.description,
+    images: ["/brand/hezqen-open-graph-1200x630.png"],
   },
   icons: { icon: "/favicon.svg" },
   manifest: "/site.webmanifest",
@@ -40,6 +46,7 @@ export const viewport: Viewport = {
 };
 
 const navItems = [
+  { href: "/articles", label: "Articles" },
   { href: "/divisions/ai-technology", label: "AI & Technology" },
   { href: "/divisions/cybersecurity", label: "Cybersecurity" },
   { href: "/divisions/cloud-engineering", label: "Cloud & Engineering" },
@@ -56,6 +63,7 @@ const mobileNavItems = [
 ] as const;
 
 const footerLinks = [
+  { href: "/articles", label: "Articles" },
   { href: "/about", label: "About" },
   { href: "/editorial-standards", label: "Editorial standards" },
   { href: "/corrections", label: "Corrections" },
