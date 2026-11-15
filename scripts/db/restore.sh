@@ -39,7 +39,7 @@ if [ ! -f "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE.sha256" ]; then
   exit 66
 fi
 
-sha256sum --check "$BACKUP_FILE.sha256" >/dev/null
+sha256sum -c "$BACKUP_FILE.sha256" >/dev/null
 existing_objects=$(psql "$RESTORE_DATABASE_URL" -Atqc "SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname NOT LIKE 'pg_%' AND n.nspname <> 'information_schema' AND c.relkind IN ('r', 'p', 'v', 'm', 'S', 'f')")
 case "$existing_objects" in
   ""|*[!0-9]*)
