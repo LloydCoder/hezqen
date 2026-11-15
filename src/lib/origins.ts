@@ -70,11 +70,26 @@ export function resolveAllowedOrigins(input: AllowedOriginsInput): string[] {
 }
 
 export function resolvePayloadServerUrl(input: PayloadServerUrlInput): string | undefined {
+  if (input.nodeEnv === "production" && !input.configuredSiteUrl) {
+    throw new Error("NEXT_PUBLIC_SITE_URL is required in production.");
+  }
+
+  const canonicalOrigin = input.configuredSiteUrl
+    ? parseOrigin(
+        input.configuredSiteUrl,
+        input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true,
+      )
+    : undefined;
+
+  if (canonicalOrigin && !input.allowedOrigins.includes(canonicalOrigin)) {
+    throw new Error("The canonical site origin must be allowed.");
+  }
+
   const previewOrigin =
     input.deploymentEnvironment === "preview" && input.deploymentHostname
       ? parseDeploymentOrigin(input.deploymentHostname)
       : undefined;
-  const candidate = previewOrigin ?? input.configuredSiteUrl ?? input.allowedOrigins[0];
+  const candidate = previewOrigin ?? canonicalOrigin ?? input.allowedOrigins[0];
   if (!candidate) return undefined;
 
   const origin = parseOrigin(
