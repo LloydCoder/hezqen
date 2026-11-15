@@ -2,6 +2,7 @@ export interface AllowedOriginsInput {
   configuredOrigins?: string;
   deploymentHostname?: string;
   nodeEnv?: string;
+  allowLocalRuntimeTest?: boolean;
 }
 
 export interface PayloadServerUrlInput {
@@ -10,6 +11,7 @@ export interface PayloadServerUrlInput {
   deploymentEnvironment?: string;
   allowedOrigins: string[];
   nodeEnv?: string;
+  allowLocalRuntimeTest?: boolean;
 }
 
 function parseOrigin(value: string, allowLocalhostHttp: boolean): string {
@@ -59,7 +61,7 @@ export function resolveAllowedOrigins(input: AllowedOriginsInput): string[] {
   return [
     ...new Set(
       [...configured, ...(deploymentOrigin ? [deploymentOrigin] : []), ...defaults].map((origin) =>
-        parseOrigin(origin, input.nodeEnv !== "production"),
+        parseOrigin(origin, (input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true)),
       ),
     ),
   ];
@@ -73,7 +75,10 @@ export function resolvePayloadServerUrl(input: PayloadServerUrlInput): string | 
   const candidate = previewOrigin ?? input.configuredSiteUrl ?? input.allowedOrigins[0];
   if (!candidate) return undefined;
 
-  const origin = parseOrigin(candidate, input.nodeEnv !== "production");
+  const origin = parseOrigin(
+    candidate,
+    input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true,
+  );
   if (!input.allowedOrigins.includes(origin)) {
     throw new Error("NEXT_PUBLIC_SITE_URL or the current Vercel preview origin must be allowed.");
   }
