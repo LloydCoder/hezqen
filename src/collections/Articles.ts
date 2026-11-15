@@ -1,6 +1,7 @@
 import { APIError, type Access, type CollectionConfig, type Where } from "payload";
 
 import { getActiveUserActor, hasActiveRole } from "../lib/access.ts";
+import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
 const publishedArticleFilter: Where = {
   and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
@@ -81,7 +82,8 @@ export const Articles: CollectionConfig = {
     beforeChange: [
       ({ data, originalDoc, operation, req }) => {
         if (operation !== "update") return data;
-        const context = req.context as Record<string, unknown> | undefined;
+        const trustedWorkflowCommand = hasTrustedRequestContext(req.context, "hezqenWorkflowCommand");
+        const skipRevisionIncrement = hasTrustedRequestContext(req.context, "hezqenSkipArticleRevisionIncrement");
         const workflowFields = [
           "author",
           "workflowStatus",
@@ -102,15 +104,14 @@ export const Articles: CollectionConfig = {
         const hasWorkflowMutation = workflowFields.some((field) =>
           Object.hasOwn(data ?? {}, field),
         );
-        if (hasWorkflowMutation && context?.hezqenWorkflowCommand !== true) {
+        if (hasWorkflowMutation && !trustedWorkflowCommand) {
           throw new APIError(
             "Editorial workflow fields must be changed through the editorial workflow command service.",
             403,
           );
         }
         if (
-          context?.hezqenWorkflowCommand === true ||
-          context?.hezqenSkipArticleRevisionIncrement === true
+          trustedWorkflowCommand || skipRevisionIncrement
         ) {
           return data;
         }
