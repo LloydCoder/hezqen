@@ -12,7 +12,7 @@ This file records evidence-backed progress. A phase is not complete merely becau
 | 5 | Evidence/research | PARTIAL | Pure TypeScript source/evidence provenance validators and claim verification gate added on the feature branch with unit tests and methodology documentation. Persistent records, acquisition, exact-byte storage, cryptographic digest calculation, independent fact-checking and audit history remain. |
 | 6 | Public website | PARTIAL | Homepage, four division routes, About and Editorial Standards exist. Article, author, investigation, research, policy and CMS-backed content surfaces remain. |
 | 7 | Search/SEO | PARTIAL | Metadata, canonical URLs, robots and sitemap exist. Search, structured-data validation, article indexing and search QA remain. |
-| 8 | HEZQEN Labs | PARTIAL | First interactive LLM VRAM sizing calculator, pure calculation engine, tests and public methodology merged in PR #6. Browser verification remains; additional calculators are not started. |
+| 8 | HEZQEN Labs | PARTIAL | LLM VRAM sizing calculator merged in PR #6. A second interactive API vs self-hosted AI cost break-even calculator, deterministic cost engine, tests and methodology are on this feature branch. Browser verification, production telemetry and further tools remain. |
 | 9 | Newsletter/accounts | NOT STARTED | Reader identity, consent, preferences and delivery not implemented. |
 | 10 | HEZQEN Intelligence | NOT STARTED | Premium research, billing and server-side entitlements not implemented. |
 | 11 | Integrations | NOT STARTED | Tinlyt, Searqon and TAS adapters not implemented. |
