@@ -32,6 +32,6 @@ export default function LabsIndexPage() {
         ))}
         <p style={{ color: "#5b6678", fontSize: ".82rem", lineHeight: 1.6, marginTop: "2rem" }}>The fourteen tools on this index are additional to the existing VRAM sizing and API-versus-self-hosted AI cost calculators. All results are estimates, not provider quotes, benchmarks, legal advice or investment recommendations.</p>
       </div>
-    </main>
+    </div>
   );
 }
