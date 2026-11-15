@@ -12,11 +12,21 @@ import { Sources } from "./collections/Sources";
 import { Topics } from "./collections/Topics";
 import { Users } from "./collections/Users";
 import { resolveAllowedOrigins, resolvePayloadServerUrl } from "./lib/origins.ts";
+import {
+  editorialReviewEndpoint,
+  editorialWorkflowEndpoint,
+  scheduledPublicationEndpoint,
+} from "./lib/editorial-endpoints.ts";
+import { createResendEmailAdapter } from "./lib/resend-email-adapter.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 const databaseUrl = process.env.DATABASE_URL;
 const secret = process.env.PAYLOAD_SECRET;
+const emailFrom = process.env.PAYLOAD_EMAIL_FROM ?? "HEZQEN <no-reply@tinlance.com>";
+const emailFromMatch = /^(.*?)\\s*<([^<>]+)>$/.exec(emailFrom);
+const emailFromName = emailFromMatch?.[1]?.trim() || "HEZQEN";
+const emailFromAddress = emailFromMatch?.[2]?.trim() || "no-reply@tinlance.com";
 const allowedOrigins = resolveAllowedOrigins({
   configuredOrigins: process.env.HEZQEN_ALLOWED_ORIGINS,
   deploymentHostname: process.env.VERCEL_URL,
@@ -59,6 +69,14 @@ export default buildConfig({
     },
   },
   collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents],
+  endpoints: [editorialWorkflowEndpoint, editorialReviewEndpoint, scheduledPublicationEndpoint],
+  email: process.env.RESEND_API_KEY
+    ? createResendEmailAdapter({
+        apiKey: process.env.RESEND_API_KEY,
+        defaultFromAddress: emailFromAddress,
+        defaultFromName: emailFromName,
+      })
+    : undefined,
   editor: lexicalEditor(),
   serverURL,
   csrf: allowedOrigins,
