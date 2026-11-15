@@ -79,3 +79,16 @@ This expression is not a complete WAF rule by itself. In the Cloudflare Skip act
 8. WCAG 2.2 AA and Core Web Vitals measurements on representative real browsers/devices.
 
 A green CI run proves only the automated checks in the workflow. It does not prove production readiness, indexation, AI crawler visibility, legal compliance or ranking.
+
+
+## Cloudflare zone read-only inventory
+
+The Cloudflare API read-only inspection of the active `tinlance.com` zone returned:
+- No DNS record named `hezqen.tinlance.com`.
+- Zone SSL mode is `flexible`; Always Use HTTPS is `off`.
+- Zone `security_level` is `medium`; `browser_check` is `on`; `challenge_ttl` is 1800 seconds.
+- No entrypoint ruleset was found for `http_request_firewall_custom`, `http_request_firewall_managed` or `http_ratelimit`.
+- Legacy WAF package inventory returned no packages. The legacy firewall-rules endpoint is deprecated (HTTP 410), so no inference is made about rules from that endpoint.
+- The `bot_fight_mode` setting is not exposed as a zone setting by this API. This does not prove Bot Fight Mode or any other bot product is disabled; dashboard/account-level product state remains unverified.
+
+**Security recommendation:** Do not create a crawler bypass rule. The HEZQEN hostname is not yet routed through the zone. Before DNS cutover, configure an origin-appropriate SSL mode (Full strict when the origin certificate is valid), enforce HTTPS redirects, verify the intended Vercel custom-domain target, then test ordinary verified-bot GET requests. Only add a narrow `cf.client.bot` Skip exception if Security Events prove a specific custom challenge rule is incorrectly challenging a verified bot. Keep managed WAF, rate limits, bot protections and DDoS controls enabled.
