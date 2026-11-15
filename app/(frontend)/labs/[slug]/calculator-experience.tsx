@@ -85,6 +85,6 @@ export default function CalculatorExperience({ calculator }: { calculator: LabCa
         </div>
         <p className={styles.method}>Methodology: deterministic arithmetic over the values shown. No external provider prices, benchmark measurements, legal assessments or hidden data are fetched by this calculator.</p>
       </div>
-    </main>
+    </div>
   );
 }
