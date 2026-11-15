@@ -54,7 +54,7 @@ Migration generation and verification remain isolated in GitHub Actions using ep
 - The scheduler endpoint and secret configuration exist, but no production Cron Trigger has been enabled or verified.
 - The public correction policy page exists; public article rendering with correction notices is not yet accepted.
 - The Vercel project is on Hobby. Vercel documents Hobby as non-commercial, so it is not an acceptable production host for HEZQEN. Cloudflare Worker compatibility and local smoke checks run in CI, but no production Worker deployment has been accepted.
-- Database role privilege hardening, full authenticated role-matrix acceptance, live storage/email tests, scheduler execution, public article/correction rendering, and production hosting/cutover remain release gates.
+- Main immutable tables (`audit_events`, `evidence`, `claims`, `sources`) have no UPDATE/DELETE grants, and `articles`, `topics`, `users` have no DELETE grants. Remaining DELETE grants are limited to Payload internal/version/relationship/session/preferences tables; review `_articles_v` retention. Full authenticated role-matrix acceptance, live storage/email tests, scheduler execution, public article/correction rendering, and production hosting/cutover remain release gates.
 ## Current operational reconciliation
 
 For the latest implementation state, runtime environment variables, editorial workflow authority, private evidence storage, transactional email, scheduler setup and release gates, see [CMS Operations and Release Contract](CMS_OPERATIONS.md). This addendum supersedes older setup assumptions where they conflict; it does not mark staging or production as accepted.
