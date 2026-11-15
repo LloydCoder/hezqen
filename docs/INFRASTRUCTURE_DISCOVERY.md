@@ -13,7 +13,7 @@
 - Do not attach HEZQEN to Tinlyt, Kalevio, ThreatFade, Hezqara or any other product database, bucket, tunnel or service.
 - Keep staging and production databases separate. Do not run migrations against shared Neon branches without an explicit release approval and verified backup.
 - Do not upgrade to a paid Cloudflare Workers plan, create billable resources, or accept new recurring charges without explicit cost approval.
-- The repository's `vercel.json` disables Git-triggered Vercel deployments. No Vercel deployment is part of the current hosting evaluation.
+- **Vercel remains an approved hosting option** and is the current standard Node.js deployment target under evaluation. The existing `hezqen` Vercel project is linked to this repository on the Hobby plan. `vercel.json` currently disables Git-triggered deployments while the team is consuming the daily deployment allowance through iterative engineering; this is a temporary deployment-throttling control, not a decision to remove Vercel. Use controlled deployments only after GitHub CI is green. Do not upgrade the plan or incur charges without explicit cost approval.
 
 ## 2. Cloudflare account inventory (read-only)
 
@@ -43,13 +43,13 @@ Cloudflare's current Next.js guidance recommends vinext for new Next.js-on-Worke
 
 The HEZQEN repository has a pinned, non-deploying compatibility workflow. It reported 86% compatibility, with 10 supported features, 4 partial-support findings and no hard issues. The partial findings include Turbopack/webpack loader behavior, typed-route generation and React Strict Mode behavior. A compatibility score is not proof of runtime acceptance.
 
-A separate pull request adds a local Worker build and HTTP smoke test using an ephemeral PostgreSQL service. It also verifies the Payload migration in ephemeral PostgreSQL. The evaluation must pass all build and route checks before Cloudflare is selected. The Worker must be exercised for public routes, Labs, robots/sitemap, Payload admin, authentication and CMS APIs. Do not merge a failed or incomplete hosting evaluation.
+The mainline Cloudflare workflow runs a compatibility check and a separate local Worker build/HTTP smoke job using ephemeral PostgreSQL. At main commit `5877dac0424fe5d25a4c36fd94140e4406d693ae`, both the compatibility-check job and the Worker build/smoke job passed, including ephemeral Payload migration and public/CMS route smoke tests. This validates the isolated Worker candidate only; Cloudflare Workers + vinext remains a beta alternative, not an automatic replacement for Vercel.
 
 ### Application dependencies and known gates
 
 - Application stack: Next.js 16.4.6, React 19.3.1 and Payload CMS 3.93.0.
 - Payload uses the PostgreSQL adapter with Postgres.js. Cloudflare documents Hyperdrive as included in Workers Free and Paid plans, with 100,000 database queries/day on Free; a HEZQEN Hyperdrive config has not been created.
-- The current Payload collections do not declare upload fields. The existing Payload config imports Sharp. Cloudflare's migration guidance specifically warns to replace native modules such as Sharp when moving to Workers. A separate TDD branch evaluates removing the Sharp runtime configuration because the present collections do not use upload transforms. Keep this decision isolated until the Worker build and CMS tests prove the behavior.
+- The current Payload collections do not declare upload fields, and `src/payload.config.ts` no longer imports or configures native Sharp. The `sharp` package remains in the dependency graph. Cloudflare Worker compatibility is validated only by the isolated Worker build and route smoke tests; removing a config import alone is not runtime acceptance.
 - No current collection provides a media upload endpoint or evidence object storage. Do not infer that R2 is required for the current public shell; it is a prerequisite for the future private evidence vault and any upload feature.
 - No application cache binding, durable object or queue is configured. Avoid adding these until workload and invalidation semantics are specified.
 
@@ -108,19 +108,21 @@ Production CMS configuration requires:
 
 Local development uses localhost. A staging hostname must have its own explicit origin and matching site URL. Do not allow arbitrary preview domains. Do not copy secrets between staging and production.
 
-## 6. Domain and TLS cutover
+## 6. Hosting, domain and TLS cutover
 
-Cloudflare Custom Domains can create the DNS record and issue the required certificate automatically after an active Worker exists. Cloudflare cautions that a custom domain cannot be created on a hostname that already has a CNAME record. The intended sequence is therefore:
+Vercel remains an approved deployment target for the standard Node.js Next.js + Payload runtime. Cloudflare remains complementary for authoritative DNS and edge security, with Workers + vinext retained as a separately evaluated beta alternative. No host or custom domain is accepted for production yet.
 
-1. Complete and accept the Worker runtime evaluation.
-2. Deploy to an isolated `workers.dev` staging hostname.
-3. Pass CMS, public-route, security, accessibility, performance and rollback checks.
-4. Verify the intended Workers plan and cost ceiling.
-5. Only then attach `hezqen.tinlance.com` as a Worker Custom Domain; let Cloudflare manage the record and certificate.
-6. Verify HTTPS, redirects, canonical URLs, robots, sitemap, Open Graph and admin CORS/CSRF.
-7. Do not modify the apex or `www` DNS records.
+The safe sequence is:
 
-Reference: [Cloudflare Workers Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/).
+1. Complete application, CMS, security and operational acceptance on an isolated Vercel preview using the dedicated Neon staging branch. Keep Git-triggered deployments disabled while the Hobby daily deployment limit is being conserved; do not create repeated builds to probe the limit.
+2. Verify environment mapping, runtime logs, database connectivity, auth/CSRF, all public routes, all sixteen Labs routes, error handling and rollback.
+3. Verify the Vercel plan and cost ceiling. Do not upgrade the plan or add paid resources without approval.
+4. Add `hezqen.tinlance.com` to the existing HEZQEN Vercel project only after acceptance. Coordinate the exact DNS record in the existing Cloudflare `tinlance.com` zone as a separate release operation; no record currently exists.
+5. Keep the apex, `www`, mail and every other product record unchanged. Do not alter the zone-wide SSL mode as part of this cutover.
+6. If Cloudflare Workers is later selected instead, first pass the full Worker build and route/CMS acceptance on an isolated `workers.dev` hostname, then review its beta status, plan and measured cost before any custom-domain operation.
+7. Verify HTTPS, redirects, canonical URLs, robots, sitemap, Open Graph and Payload CORS/CSRF after the approved host/domain attachment.
+
+References: [Vercel deployment limits](https://vercel.com/docs/limits), [Cloudflare Workers Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/).
 
 ## 7. Operational gaps
 
@@ -135,9 +137,13 @@ The following are not yet evidenced as complete:
 - Production secrets and environment wiring for the selected host.
 - Legal trademark clearance and brand/domain review. The supplied logo kit explicitly states HEZQEN has not been legally cleared.
 
-## 8. Historical Vercel record
+## 8. Current Vercel project evidence
 
-An earlier infrastructure discovery recorded a dedicated Vercel project and previous READY deployments. This is historical information, not the current deployment decision. Git-triggered Vercel deployments are disabled in `vercel.json`; the README must not present a Vercel alias as a live HEZQEN preview. Do not use the existing Vercel project or its historical environment variables as proof of a production-ready deployment.
+Read-only inspection on 2026-11-15 confirmed an existing Vercel project named `hezqen`, linked to `LloydCoder/hezqen`, using the Next.js framework and the Hobby plan. The project has the system aliases `hezqen.vercel.app`, `hezqen-lloydcoders-projects.vercel.app` and `hezqen-git-main-lloydcoders-projects.vercel.app`; only `hezqen.vercel.app` is listed as a verified project domain. `hezqen.tinlance.com` is not attached.
+
+`vercel.json` currently sets `git.deploymentEnabled` to `false` to conserve the Hobby plan's 100-deployments-per-24-hours allowance during active implementation. This is a temporary operational control. It does not remove Vercel from the architecture or prevent a controlled deployment after CI passes.
+
+A Vercel deployment from commit `9b0137c1842b27fd903057069434b0532939bc8c` failed during Payload config generation because `HEZQEN_ALLOWED_ORIGINS` was absent. This is distinct from the separate Vercel bot errors on the older PR #20, which reported the daily deployment limit. The follow-up implementation adds the exact `VERCEL_URL` deployment origin to Payload's allowlist and configures the canonical origin for Preview and Production. Re-run a controlled preview deployment after the branch is merged and the daily limit permits it; do not interpret either historical error as proof that Vercel is unsupported.
 
 ## 9. Explicit non-actions
 
