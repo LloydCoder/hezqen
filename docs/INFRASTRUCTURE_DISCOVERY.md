@@ -2,7 +2,7 @@
 
 **Last reconciled:** 2026-11-15  
 **Canonical launch target:** `https://hezqen.tinlance.com`  
-**Decision:** Keep HEZQEN isolated. Evaluate Cloudflare Workers without changing DNS or shared product infrastructure. No production deployment is authorized by this document.
+**Decision:** Retain Vercel as the approved standard Node.js host for Next.js + Payload. Cloudflare remains complementary for DNS/edge security; Workers + vinext is a beta alternative under isolated compatibility evaluation. Keep HEZQEN isolated and make no DNS or shared-product changes. No production deployment is authorized by this document.
 
 ## 1. Scope and safety boundaries
 
@@ -85,7 +85,7 @@ Read-only inspection on 2026-11-15 returned:
 | Staging | `hezqen` | `hezqen_app` | 0 |
 | Production | `hezqen` | `hezqen_app` | 0 |
 
-Read-only table inventory returned zero application tables on `main`, `staging` and `production`. The project has no snapshots, and all three automatic snapshot schedules are empty; history retention is 21,600 seconds (6 hours). Backup/restore is not configured or tested. No schema migration has been applied to the shared staging or production branches. The initial Payload migration is checked into `src/migrations/` and is tested by GitHub Actions against ephemeral PostgreSQL. The CI database is not the shared Neon project.
+Read-only table inventory returned zero application tables on `main`, `staging` and `production`. The project has no snapshots, and all three automatic snapshot schedules are empty; history retention is 21,600 seconds (6 hours). Backup/restore is not configured or tested. Neon's backup-schedule API requires a paid plan, so automated snapshot scheduling is not available on this Free v3 project without a plan change. See [Neon backup schedule API](https://api-docs.neon.tech/reference/setsnapshotschedule) and [history window limits](https://neon.com/docs/postgres/backup-restore/history-window). No schema migration has been applied to the shared staging or production branches. The initial Payload migration is checked into `src/migrations/` and is tested by GitHub Actions against ephemeral PostgreSQL. The CI database is not the shared Neon project.
 
 The Vercel environment inventory contains Preview and Production `DATABASE_URL` secrets. The Preview variable is described as the staging Neon branch; the Production variable is described as the production branch. Secret values were not decrypted or exposed, so exact host-to-branch mapping remains unverified. The configured branch-to-environment mapping must still be verified without exposing connection strings. Before staging migration:
 1. Verify the Preview/staging `DATABASE_URL` points to the staging branch.
@@ -144,7 +144,7 @@ Read-only inspection on 2026-11-15 confirmed an existing Vercel project named `h
 
 The READY Preview from PR #35 head `c56f59b16ae20f2625346c91de6239fc17b3f8da` is available at https://hezqen-ix8xrxv5s-lloydcoders-projects.vercel.app. The PR merged as `3888d2ccb9d77c1398c39a53fd5f969f472025b1`. The package engine is pinned to Node 24.x, matching the Vercel project setting and GitHub Actions CI. The preview build completed successfully with this pin and generated the homepage, all four divisions, the Infrastructure catalog, Labs, all sixteen calculator routes, Payload admin/API routes, robots.txt and sitemap.xml.
 
-The Hobby plan has a documented limit of 100 deployments per 24 hours. `vercel.json` sets `git.deploymentEnabled` to false to conserve the allowance during iterative implementation. This is a temporary throttling control, not a decision to remove Vercel. Use controlled deployments after GitHub CI passes; do not upgrade the plan without cost approval.
+The Hobby plan has documented limits of 100 deployments per 24 hours, 32 builds per hour and one concurrent build. `vercel.json` sets `git.deploymentEnabled` to false to conserve the allowance during iterative implementation. See [Vercel limits](https://vercel.com/docs/limits) and [Hobby plan](https://vercel.com/docs/plans/hobby). This is a temporary throttling control, not a decision to remove Vercel. Use controlled deployments after GitHub CI passes; do not upgrade the plan without cost approval.
 
 Do not treat a preview alias as a production domain. No custom-domain attachment, production deployment or DNS cutover has been made.
 
