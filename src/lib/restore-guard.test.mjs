@@ -99,7 +99,6 @@ test("restore refuses a non-empty target unless overwrite is explicitly approved
   assert.match(result.stderr, /target is not empty/);
 });
 
-
 test("restore refuses every non-empty target even when overwrite is requested", (t) => {
   const directory = mkdtempSync(join(tmpdir(), "hezqen-restore-nonempty-"));
   t.after(() => rmSync(directory, { recursive: true, force: true }));
@@ -114,7 +113,9 @@ test("restore refuses every non-empty target even when overwrite is requested", 
   writeFileSync(psql, "#!/bin/sh\nprintf '1\\n'\n");
   chmodSync(psql, 0o755);
   const pgRestore = join(fakeBin, "pg_restore");
-  writeFileSync(pgRestore, "#!/bin/sh\necho called > \"$PG_RESTORE_MARKER\"\n");
+  writeFileSync(pgRestore, '#!/bin/sh
+echo called > "$PG_RESTORE_MARKER"
+');
   chmodSync(pgRestore, 0o755);
 
   const marker = join(directory, "pg_restore-called");
