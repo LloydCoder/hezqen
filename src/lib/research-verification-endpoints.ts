@@ -201,7 +201,8 @@ export const evidenceVerifyEndpoint: Endpoint = {
     }
 
     const storageRef = typeof evidence.storageRef === "string" ? evidence.storageRef : "";
-    const expectedContentType =\n      typeof evidence.contentType === "string" ? evidence.contentType : "";
+    const expectedContentType =
+      typeof evidence.contentType === "string" ? evidence.contentType : "";
     try {
       const stored = await getPrivateEvidenceObject(storageConfig, storageRef);
       const actualSha256 = sha256Hex(stored.bytes);
@@ -230,17 +231,17 @@ export const evidenceVerifyEndpoint: Endpoint = {
     try {
       const result = await withRequestContext(req, { hezqenEvidenceVerification: true }, () =>
         req.payload.update({
-            collection: "evidence",
-            where: {
-              and: [
-                { id: { equals: evidenceId } },
-                { verificationStatus: { equals: "preserved" } },
-                { sha256: { equals: expectedSha256 } },
-              ],
-            },
-            data: { verificationStatus: "verified" },
-            limit: 1,
-            overrideAccess: true,
+          collection: "evidence",
+          where: {
+            and: [
+              { id: { equals: evidenceId } },
+              { verificationStatus: { equals: "preserved" } },
+              { sha256: { equals: expectedSha256 } },
+            ],
+          },
+          data: { verificationStatus: "verified" },
+          limit: 1,
+          overrideAccess: true,
           req,
         }),
       );
@@ -411,21 +412,21 @@ export const claimVerifyEndpoint: Endpoint = {
     try {
       const result = await withRequestContext(req, { hezqenClaimVerification: true }, () =>
         req.payload.update({
-            collection: "claims",
-            where: {
-              and: [
-                { id: { equals: claimId } },
-                { updatedAt: { equals: expectedUpdatedAt } },
-                { verificationStatus: { equals: "unverified" } },
-              ],
-            },
-            data: {
-              verificationStatus: "verified",
-              reviewedBy: actor.id,
-              reviewedAt: now,
-            },
-            limit: 1,
-            overrideAccess: true,
+          collection: "claims",
+          where: {
+            and: [
+              { id: { equals: claimId } },
+              { updatedAt: { equals: expectedUpdatedAt } },
+              { verificationStatus: { equals: "unverified" } },
+            ],
+          },
+          data: {
+            verificationStatus: "verified",
+            reviewedBy: actor.id,
+            reviewedAt: now,
+          },
+          limit: 1,
+          overrideAccess: true,
           req,
         }),
       );
