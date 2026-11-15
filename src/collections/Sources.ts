@@ -1,21 +1,12 @@
 import type { Access, CollectionConfig } from "payload";
 
-type Actor = { role?: string } | null;
-
-function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
-}
+import { hasActiveRole } from "../lib/access.ts";
 
 const canResearch: Access = ({ req }) =>
-  ["administrator", "editor", "researcher", "fact_checker"].includes(
-    roleFromRequest(req.user) ?? "",
-  );
+  hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
 
 const canRead: Access = ({ req }) =>
-  Boolean(req.user) &&
-  ["administrator", "editor", "researcher", "fact_checker"].includes(
-    roleFromRequest(req.user) ?? "",
-  );
+  hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
 
 export const Sources: CollectionConfig = {
   slug: "sources",
@@ -54,7 +45,7 @@ export const Sources: CollectionConfig = {
       access: {
         read: ({ req }) =>
           ["administrator", "editor", "researcher", "fact_checker"].includes(
-            roleFromRequest(req.user) ?? "",
+            (req.user && typeof req.user === "object" && "active" in req.user && (req.user as {active?:boolean}).active === false) ? "" : (req.user && typeof req.user === "object" && "role" in req.user ? String((req.user as {role?:unknown}).role ?? "") : ""),
           ),
       },
     },
