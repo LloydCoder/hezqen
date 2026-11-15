@@ -91,7 +91,7 @@ test("draft content edits increment revision and invalidate prior review flags",
 test("blocks direct content edits to published and correction-required articles", async () => {
   assert.ok(revisionHook);
   for (const workflowStatus of ["published", "correction_required"]) {
-    await assert.rejects(
+    assert.throws(
       () =>
         revisionHook({
           data: { title: "Unapproved edit" },
