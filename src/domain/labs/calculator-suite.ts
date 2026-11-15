@@ -439,7 +439,7 @@ export function calculateLab(slug: string, values: Values): LabCalculation {
       metrics = [
         metric("Direct cost of revenue", cogs),
         metric("Gross profit", v("mrr") - cogs),
-        metric("Gross margin", v("mrr") === 0 ? 0 : (v("mrr") - cogs) / v("mrr"), "fraction"),
+        ...(v("mrr") > 0 ? [metric("Gross margin", (v("mrr") - cogs) / v("mrr"), "fraction")] : []),
         metric("Payment processing", fees),
       ];
       break;
@@ -474,10 +474,9 @@ export function calculateLab(slug: string, values: Values): LabCalculation {
         metric("Model token cost", tokens),
         metric("Tool/API cost", tools),
         metric("Monthly total", tokens + tools + v("monthlyPlatformCost")),
-        metric(
-          "Cost per agent run",
-          v("runs") === 0 ? 0 : (tokens + tools + v("monthlyPlatformCost")) / v("runs"),
-        ),
+        ...(v("runs") > 0
+          ? [metric("Cost per agent run", (tokens + tools + v("monthlyPlatformCost")) / v("runs"))]
+          : []),
       ];
       break;
     }
