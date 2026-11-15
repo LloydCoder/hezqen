@@ -199,7 +199,8 @@ export const editorialWorkflowEndpoint: Endpoint = {
   handler: async (req) => {
     const actor = actorFromRequest(req);
     if (!actor) return Response.json({ error: "Authentication required." }, { status: 401 });
-    if (actor.active === false) return Response.json({ error: "Account disabled." }, { status: 403 });
+    if (actor.active === false)
+      return Response.json({ error: "Account disabled." }, { status: 403 });
 
     const body = asRecord(await req.json().catch(() => null));
     if (
@@ -219,8 +220,10 @@ export const editorialWorkflowEndpoint: Endpoint = {
           expectedRevision: body.expectedRevision,
           targetStatus: body.targetStatus,
           scheduledFor: typeof body.scheduledFor === "string" ? body.scheduledFor : undefined,
-          correctionReason: typeof body.correctionReason === "string" ? body.correctionReason : undefined,
-          correctionPublicNote: typeof body.correctionPublicNote === "string" ? body.correctionPublicNote : undefined,
+          correctionReason:
+            typeof body.correctionReason === "string" ? body.correctionReason : undefined,
+          correctionPublicNote:
+            typeof body.correctionPublicNote === "string" ? body.correctionPublicNote : undefined,
           correlationId: correlationId(req),
         },
       );
@@ -307,7 +310,11 @@ export const scheduledPublicationEndpoint: Endpoint = {
             correlationId: correlationId(req),
           },
         );
-        results.push({ articleId: article.id, ok: result.ok, blockers: result.ok ? [] : result.blockers });
+        results.push({
+          articleId: article.id,
+          ok: result.ok,
+          blockers: result.ok ? [] : result.blockers,
+        });
       } catch {
         results.push({ articleId: article.id, ok: false, blockers: ["PUBLISH_FAILED"] });
       }

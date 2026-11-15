@@ -70,7 +70,8 @@ export const evidenceUploadEndpoint: Endpoint = {
   method: "post",
   handler: async (req) => {
     const actor = actorForEvidence(req);
-    if (!actor) return Response.json({ error: "Authenticated research access required." }, { status: 403 });
+    if (!actor)
+      return Response.json({ error: "Authenticated research access required." }, { status: 403 });
 
     let form: FormData;
     try {
@@ -94,10 +95,16 @@ export const evidenceUploadEndpoint: Endpoint = {
       !collectionMethod.trim() ||
       collectionMethod.trim().length > 100
     ) {
-      return Response.json({ error: "File, sourceId and collectionMethod are required." }, { status: 400 });
+      return Response.json(
+        { error: "File, sourceId and collectionMethod are required." },
+        { status: 400 },
+      );
     }
     if (file.size < 1 || file.size > MAX_EVIDENCE_BYTES) {
-      return Response.json({ error: "Evidence files must be between 1 byte and 4 MiB." }, { status: 413 });
+      return Response.json(
+        { error: "Evidence files must be between 1 byte and 4 MiB." },
+        { status: 413 },
+      );
     }
 
     const contentType = file.type.toLowerCase().split(";")[0]?.trim() ?? "";
@@ -109,11 +116,17 @@ export const evidenceUploadEndpoint: Endpoint = {
       }
     })();
     if (!storageConfig) {
-      return Response.json({ error: "Private evidence storage is not configured." }, { status: 503 });
+      return Response.json(
+        { error: "Private evidence storage is not configured." },
+        { status: 503 },
+      );
     }
 
     if (!ALLOWED_EVIDENCE_CONTENT_TYPES.has(contentType)) {
-      return Response.json({ error: "This evidence content type is not allowed." }, { status: 415 });
+      return Response.json(
+        { error: "This evidence content type is not allowed." },
+        { status: 415 },
+      );
     }
 
     try {
@@ -130,7 +143,10 @@ export const evidenceUploadEndpoint: Endpoint = {
 
     const bytes = new Uint8Array(await file.arrayBuffer());
     if (bytes.byteLength !== file.size || bytes.byteLength > MAX_EVIDENCE_BYTES) {
-      return Response.json({ error: "Evidence upload size could not be verified." }, { status: 400 });
+      return Response.json(
+        { error: "Evidence upload size could not be verified." },
+        { status: 400 },
+      );
     }
 
     const key = `evidence/${randomUUID()}`;
@@ -149,7 +165,10 @@ export const evidenceUploadEndpoint: Endpoint = {
     const transactionId = await req.payload.db.beginTransaction();
     if (!transactionId) {
       await deleteEvidenceObject(storageConfig, key).catch(() => undefined);
-      return Response.json({ error: "Database transactions are required for evidence preservation." }, { status: 503 });
+      return Response.json(
+        { error: "Database transactions are required for evidence preservation." },
+        { status: 503 },
+      );
     }
     req.transactionID = transactionId;
 
@@ -171,7 +190,13 @@ export const evidenceUploadEndpoint: Endpoint = {
         req,
       });
       const evidenceId = String(evidence.id);
-      await appendEvidenceAudit(req, actor, "evidence.preserved", evidenceId, verifiedObject.sha256);
+      await appendEvidenceAudit(
+        req,
+        actor,
+        "evidence.preserved",
+        evidenceId,
+        verifiedObject.sha256,
+      );
       await req.payload.db.commitTransaction(transactionId);
       delete req.transactionID;
       return Response.json({
@@ -186,7 +211,10 @@ export const evidenceUploadEndpoint: Endpoint = {
       delete req.transactionID;
       await deleteEvidenceObject(storageConfig, key).catch(() => undefined);
       const code = error instanceof Error ? error.message : "EVIDENCE_METADATA_FAILED";
-      return Response.json({ error: "Evidence metadata could not be committed.", code }, { status: 500 });
+      return Response.json(
+        { error: "Evidence metadata could not be committed.", code },
+        { status: 500 },
+      );
     }
   },
 };
@@ -196,7 +224,8 @@ export const evidenceDownloadEndpoint: Endpoint = {
   method: "post",
   handler: async (req) => {
     const actor = actorForEvidence(req);
-    if (!actor) return Response.json({ error: "Authenticated research access required." }, { status: 403 });
+    if (!actor)
+      return Response.json({ error: "Authenticated research access required." }, { status: 403 });
 
     const body = asRecord(await req.json().catch(() => null));
     if (typeof body.evidenceId !== "string" || !body.evidenceId.trim()) {
@@ -219,7 +248,11 @@ export const evidenceDownloadEndpoint: Endpoint = {
     }
 
     const storageRef = typeof evidence.storageRef === "string" ? evidence.storageRef : "";
-    if (!storageRef.startsWith("evidence/") || storageRef.includes("..") || storageRef.includes("\\")) {
+    if (
+      !storageRef.startsWith("evidence/") ||
+      storageRef.includes("..") ||
+      storageRef.includes("\\")
+    ) {
       return Response.json({ error: "Evidence storage reference is invalid." }, { status: 409 });
     }
 
@@ -227,7 +260,10 @@ export const evidenceDownloadEndpoint: Endpoint = {
     try {
       storageConfig = readNeonEvidenceStorageConfig();
     } catch {
-      return Response.json({ error: "Private evidence storage is not configured." }, { status: 503 });
+      return Response.json(
+        { error: "Private evidence storage is not configured." },
+        { status: 503 },
+      );
     }
 
     try {
@@ -238,12 +274,18 @@ export const evidenceDownloadEndpoint: Endpoint = {
         actualSha256 !== expectedSha256 ||
         stored.bytes.byteLength !== Number(evidence.byteSize)
       ) {
-        return Response.json({ error: "Stored evidence failed its integrity check." }, { status: 409 });
+        return Response.json(
+          { error: "Stored evidence failed its integrity check." },
+          { status: 409 },
+        );
       }
 
       const transactionId = await req.payload.db.beginTransaction();
       if (!transactionId) {
-        return Response.json({ error: "Database transactions are required for evidence access auditing." }, { status: 503 });
+        return Response.json(
+          { error: "Database transactions are required for evidence access auditing." },
+          { status: 503 },
+        );
       }
       req.transactionID = transactionId;
       try {

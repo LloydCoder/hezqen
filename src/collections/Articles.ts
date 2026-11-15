@@ -84,9 +84,7 @@ export const Articles: CollectionConfig = {
         if (context?.hezqenSkipArticleRevisionIncrement === true) return data;
 
         const contentFields = ["title", "slug", "excerpt", "body", "division", "topics"];
-        const changed = contentFields.some((field) =>
-          Object.hasOwn(data ?? {}, field),
-        );
+        const changed = contentFields.some((field) => Object.hasOwn(data ?? {}, field));
         if (!changed) return data;
 
         const currentStatus = String(originalDoc?.workflowStatus ?? "draft");

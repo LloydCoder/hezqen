@@ -47,7 +47,13 @@ export function readNeonEvidenceStorageConfig(
     throw new Error("NEON_EVIDENCE_STORAGE_NOT_CONFIGURED");
   }
   const parsed = new URL(endpoint);
-  if (parsed.protocol !== "https:" || parsed.username || parsed.password || parsed.search || parsed.hash) {
+  if (
+    parsed.protocol !== "https:" ||
+    parsed.username ||
+    parsed.password ||
+    parsed.search ||
+    parsed.hash
+  ) {
     throw new Error("NEON_EVIDENCE_STORAGE_ENDPOINT_INVALID");
   }
   if (!/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/.test(bucket)) {
@@ -68,7 +74,10 @@ function signingKey(secret: string, dateStamp: string, region: string): Buffer {
 }
 
 function objectUrl(config: NeonEvidenceStorageConfig, key: string): URL {
-  const encodedKey = key.split("/").map((segment) => encodeURIComponent(segment)).join("/");
+  const encodedKey = key
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
   return new URL(`/${config.bucket}/${encodedKey}`, config.endpoint);
 }
 
@@ -109,7 +118,10 @@ function signedHeaders(
     credentialScope,
     createHash("sha256").update(canonicalRequest).digest("hex"),
   ].join("\n");
-  const signature = createHmac("sha256", signingKey(config.secretAccessKey, dateStamp, config.region))
+  const signature = createHmac(
+    "sha256",
+    signingKey(config.secretAccessKey, dateStamp, config.region),
+  )
     .update(stringToSign, "utf8")
     .digest("hex");
 

@@ -36,7 +36,10 @@ export interface EditorialAuditEvent {
 export interface EditorialWorkflowStore {
   beginTransaction(): Promise<string | number | null>;
   getArticle(id: string, transactionId: string | number): Promise<StoredEditorialArticle | null>;
-  getMaterialClaims(articleId: string, transactionId: string | number): Promise<Array<{ id: string; sourceIds: string[] }>>;
+  getMaterialClaims(
+    articleId: string,
+    transactionId: string | number,
+  ): Promise<Array<{ id: string; sourceIds: string[] }>>;
   compareAndSwapArticle(
     id: string,
     expectedRevision: number,
@@ -95,7 +98,12 @@ function snapshot(article: StoredEditorialArticle): Record<string, unknown> {
   };
 }
 
-function rollbackResult(store: EditorialWorkflowStore, transactionId: string | number, status: 400 | 403 | 404 | 409, ...blockers: string[]): Promise<EditorialWorkflowCommandResult> {
+function rollbackResult(
+  store: EditorialWorkflowStore,
+  transactionId: string | number,
+  status: 400 | 403 | 404 | 409,
+  ...blockers: string[]
+): Promise<EditorialWorkflowCommandResult> {
   return store.rollbackTransaction(transactionId).then(() => ({ ok: false, status, blockers }));
 }
 
@@ -107,7 +115,11 @@ export async function executeEditorialWorkflowCommand(
   if (actor.active === false || (!actor.isHuman && actor.role !== "service")) {
     return { ok: false, status: 403, blockers: ["ACTOR_NOT_AUTHORIZED"] };
   }
-  if (!command.articleId.trim() || !Number.isInteger(command.expectedRevision) || command.expectedRevision < 1) {
+  if (
+    !command.articleId.trim() ||
+    !Number.isInteger(command.expectedRevision) ||
+    command.expectedRevision < 1
+  ) {
     return { ok: false, status: 400, blockers: ["COMMAND_INVALID"] };
   }
   if (!["author", "editor", "administrator", "service"].includes(actor.role)) {
@@ -186,7 +198,18 @@ export async function executeEditorialWorkflowCommand(
       changes.correctionResolvedBy = actor.role === "service" ? article.approvedById : actor.id;
     }
 
-    if (!(await store.compareAndSwapArticle(article.id, command.expectedRevision, article.workflowStatus, article.authorId, article.editorId, article.factCheckerId, changes, transactionId))) {
+    if (
+      !(await store.compareAndSwapArticle(
+        article.id,
+        command.expectedRevision,
+        article.workflowStatus,
+        article.authorId,
+        article.editorId,
+        article.factCheckerId,
+        changes,
+        transactionId,
+      ))
+    ) {
       return await rollbackResult(store, transactionId, 409, "REVISION_CONFLICT");
     }
 
@@ -208,7 +231,7 @@ export async function executeEditorialWorkflowCommand(
             : article.correctionStatus,
       correctionReason:
         next.status === "correction_required"
-          ? command.correctionReason?.trim() ?? null
+          ? (command.correctionReason?.trim() ?? null)
           : article.correctionReason,
     };
 
@@ -240,12 +263,22 @@ export type EditorialReviewAction = "complete_fact_check" | "review_disclosures"
 export async function executeEditorialReviewAction(
   store: EditorialWorkflowStore,
   actor: EditorialWorkflowActor,
-  input: { articleId: string; expectedRevision: number; action: EditorialReviewAction; now?: string; correlationId?: string },
+  input: {
+    articleId: string;
+    expectedRevision: number;
+    action: EditorialReviewAction;
+    now?: string;
+    correlationId?: string;
+  },
 ): Promise<EditorialWorkflowCommandResult> {
   if (actor.active === false || !actor.isHuman) {
     return { ok: false, status: 403, blockers: ["ACTOR_NOT_AUTHORIZED"] };
   }
-  if (!input.articleId.trim() || !Number.isInteger(input.expectedRevision) || input.expectedRevision < 1) {
+  if (
+    !input.articleId.trim() ||
+    !Number.isInteger(input.expectedRevision) ||
+    input.expectedRevision < 1
+  ) {
     return { ok: false, status: 400, blockers: ["COMMAND_INVALID"] };
   }
 
@@ -260,8 +293,13 @@ export async function executeEditorialReviewAction(
     }
 
     const allowed =
-      (input.action === "complete_fact_check" && actor.role === "fact_checker" && article.workflowStatus === "fact_check") ||
-      (input.action === "review_disclosures" && actor.role === "editor" && article.editorId === actor.id && article.workflowStatus === "editorial_review");
+      (input.action === "complete_fact_check" &&
+        actor.role === "fact_checker" &&
+        article.workflowStatus === "fact_check") ||
+      (input.action === "review_disclosures" &&
+        actor.role === "editor" &&
+        article.editorId === actor.id &&
+        article.workflowStatus === "editorial_review");
     if (!allowed) {
       return await rollbackResult(store, transactionId, 403, "ACTOR_NOT_AUTHORIZED");
     }
@@ -270,7 +308,18 @@ export async function executeEditorialReviewAction(
       input.action === "complete_fact_check"
         ? { factCheckComplete: true, revision: article.revision + 1 }
         : { disclosuresReviewed: true, revision: article.revision + 1 };
-    if (!(await store.compareAndSwapArticle(article.id, input.expectedRevision, article.workflowStatus, article.authorId, article.editorId, article.factCheckerId, changes, transactionId))) {
+    if (
+      !(await store.compareAndSwapArticle(
+        article.id,
+        input.expectedRevision,
+        article.workflowStatus,
+        article.authorId,
+        article.editorId,
+        article.factCheckerId,
+        changes,
+        transactionId,
+      ))
+    ) {
       return await rollbackResult(store, transactionId, 409, "REVISION_CONFLICT");
     }
 

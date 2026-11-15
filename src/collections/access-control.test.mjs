@@ -45,8 +45,14 @@ test("workflow and publication authority fields cannot be written through collec
   for (const name of protectedFields) {
     const field = Articles.fields?.find((item) => item.name === name);
     assert.ok(field, `Missing protected field ${name}`);
-    assert.equal(field.access?.create?.({ req: { user: { id: 1, role: "administrator" } } }), false);
-    assert.equal(field.access?.update?.({ req: { user: { id: 1, role: "administrator" } } }), false);
+    assert.equal(
+      field.access?.create?.({ req: { user: { id: 1, role: "administrator" } } }),
+      false,
+    );
+    assert.equal(
+      field.access?.update?.({ req: { user: { id: 1, role: "administrator" } } }),
+      false,
+    );
   }
 });
 

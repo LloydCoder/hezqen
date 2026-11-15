@@ -70,7 +70,13 @@ export default buildConfig({
     },
   },
   collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents],
-  endpoints: [editorialWorkflowEndpoint, editorialReviewEndpoint, scheduledPublicationEndpoint, evidenceUploadEndpoint, evidenceDownloadEndpoint],
+  endpoints: [
+    editorialWorkflowEndpoint,
+    editorialReviewEndpoint,
+    scheduledPublicationEndpoint,
+    evidenceUploadEndpoint,
+    evidenceDownloadEndpoint,
+  ],
   email: process.env.RESEND_API_KEY
     ? createResendEmailAdapter({
         apiKey: process.env.RESEND_API_KEY,

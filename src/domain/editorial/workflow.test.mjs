@@ -165,7 +165,10 @@ test("correction workflow reopens a new revision and clears prior approval", () 
     factCheckComplete: true,
     disclosuresReviewed: true,
   };
-  const reopened = transitionPublication(published, editor, "correction_required", { now, correctionReason: "A material figure was misstated." });
+  const reopened = transitionPublication(published, editor, "correction_required", {
+    now,
+    correctionReason: "A material figure was misstated.",
+  });
   assert.equal(reopened.ok, true);
   if (reopened.ok) {
     const revised = transitionPublication(reopened.record, editor, "draft", { now });
@@ -208,12 +211,9 @@ test("allows the scheduler to publish only due articles with prior assigned-edit
   assert.equal(result.ok, true);
   if (result.ok) assert.equal(result.record.status, "published");
   assert.equal(
-    transitionPublication(
-      { ...scheduled, approvedById: "other-editor" },
-      agent,
-      "published",
-      { now: "2026-11-15T12:00:00.000Z" },
-    ).ok,
+    transitionPublication({ ...scheduled, approvedById: "other-editor" }, agent, "published", {
+      now: "2026-11-15T12:00:00.000Z",
+    }).ok,
     false,
   );
 });

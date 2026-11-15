@@ -118,10 +118,7 @@ export function transitionPublication(
     };
   }
 
-  if (
-    (record.status === "approved" || record.status === "scheduled") &&
-    targetStatus === "draft"
-  ) {
+  if ((record.status === "approved" || record.status === "scheduled") && targetStatus === "draft") {
     if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     return {
       ok: true,

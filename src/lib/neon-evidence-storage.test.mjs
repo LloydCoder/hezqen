@@ -18,10 +18,7 @@ test("computes a stable SHA-256 digest for the exact evidence bytes", () => {
 });
 
 test("requires a complete private Neon storage configuration", () => {
-  assert.throws(
-    () => readNeonEvidenceStorageConfig({}),
-    /NEON_EVIDENCE_STORAGE_NOT_CONFIGURED/,
-  );
+  assert.throws(() => readNeonEvidenceStorageConfig({}), /NEON_EVIDENCE_STORAGE_NOT_CONFIGURED/);
   const config = readNeonEvidenceStorageConfig({
     AWS_ENDPOINT_URL_S3: "https://br-example.storage.c-8.eu-central-1.aws.neon.tech",
     AWS_REGION: "eu-central-1",
