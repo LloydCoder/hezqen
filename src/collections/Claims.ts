@@ -1,6 +1,7 @@
 import { APIError, type Access, type CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
+import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
 const canReadClaims: Access = ({ req }) =>
   hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
@@ -29,7 +30,6 @@ export const Claims: CollectionConfig = {
     ],
     beforeChange: [
       ({ data, operation, req }) => {
-        const context = req.context as Record<string, unknown> | undefined;
         if (operation === "create") {
           if (data?.verificationStatus !== undefined && data.verificationStatus !== "unverified") {
             throw new APIError("New claims must begin as unverified.", 403);
@@ -39,7 +39,7 @@ export const Claims: CollectionConfig = {
           }
         }
         if (operation === "update") {
-          if (context?.hezqenClaimVerification !== true) {
+          if (!hasTrustedRequestContext(req.context, "hezqenClaimVerification")) {
             throw new APIError("Claims are immutable outside the verification workflow.", 403);
           }
           const allowedFields = ["verificationStatus", "reviewedBy", "reviewedAt", "updatedAt"];
