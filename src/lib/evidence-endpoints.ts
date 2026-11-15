@@ -249,10 +249,13 @@ export const evidenceDownloadEndpoint: Endpoint = {
     }
 
     const storageRef = typeof evidence.storageRef === "string" ? evidence.storageRef : "";
+    const expectedContentType =
+      typeof evidence.contentType === "string" ? evidence.contentType : "";
     if (
       !storageRef.startsWith("evidence/") ||
       storageRef.includes("..") ||
-      storageRef.includes("\\")
+      storageRef.includes("\\") ||
+      !ALLOWED_EVIDENCE_CONTENT_TYPES.has(expectedContentType)
     ) {
       return Response.json({ error: "Evidence storage reference is invalid." }, { status: 409 });
     }
@@ -273,7 +276,8 @@ export const evidenceDownloadEndpoint: Endpoint = {
       const actualSha256 = sha256Hex(stored.bytes);
       if (
         actualSha256 !== expectedSha256 ||
-        stored.bytes.byteLength !== Number(evidence.byteSize)
+        stored.bytes.byteLength !== Number(evidence.byteSize) ||
+        stored.contentType !== expectedContentType
       ) {
         return Response.json(
           { error: "Stored evidence failed its integrity check." },
@@ -308,7 +312,7 @@ export const evidenceDownloadEndpoint: Endpoint = {
       return new Response(Buffer.from(stored.bytes), {
         status: 200,
         headers: {
-          "content-type": stored.contentType,
+          "content-type": expectedContentType,
           "content-length": String(stored.bytes.byteLength),
           "content-disposition": `attachment; filename="hezqen-evidence-${String(evidence.evidenceId)}"`,
           "cache-control": "private, no-store",
