@@ -10,6 +10,7 @@ on:
       - "package.json"
       - "pnpm-lock.yaml"
       - "tsconfig.json"
+      - "docs/INFRASTRUCTURE_DISCOVERY.md"
       - ".github/workflows/cloudflare-compatibility.yml"
   pull_request:
     branches: [main]
@@ -20,6 +21,7 @@ on:
       - "package.json"
       - "pnpm-lock.yaml"
       - "tsconfig.json"
+      - "docs/INFRASTRUCTURE_DISCOVERY.md"
       - ".github/workflows/cloudflare-compatibility.yml"
   workflow_dispatch:
 
