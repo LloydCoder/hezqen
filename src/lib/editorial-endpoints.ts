@@ -100,6 +100,9 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
     id: string,
     expectedRevision: number,
     expectedStatus: WorkflowStatus,
+    expectedAuthorId: string | null,
+    expectedEditorId: string | null,
+    expectedFactCheckerId: string | null,
     changes: Record<string, unknown>,
   ): Promise<boolean> {
     const result = await this.req.payload.update({
@@ -109,6 +112,9 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
           { id: { equals: id } },
           { revision: { equals: expectedRevision } },
           { workflowStatus: { equals: expectedStatus } },
+          { author: { equals: expectedAuthorId } },
+          { assignedEditor: { equals: expectedEditorId } },
+          { assignedFactChecker: { equals: expectedFactCheckerId } },
         ],
       },
       data: changes,
