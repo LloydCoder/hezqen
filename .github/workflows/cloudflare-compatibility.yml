@@ -83,6 +83,10 @@ jobs:
             echo "Generated Vite configuration:"
             sed -n '1,240p' vite.config.ts
           fi
+          if [ -f cloudflare.config.ts ]; then
+            echo "Generated Cloudflare configuration:"
+            sed -n '1,260p' cloudflare.config.ts
+          fi
       - name: Enable process.env access to Worker bindings
         run: |
           python - <<'PY'
@@ -120,11 +124,11 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: http://localhost:3001
           HEZQEN_ALLOWED_ORIGINS: http://localhost:3001
-      - name: Provide isolated Worker preview bindings
-        # Cloudflare Vite preview reads .dev.vars copied into the build output; process env alone is not a Worker binding.
+      - name: Provide isolated production-mode Worker preview bindings
+        # Vite plugin v2 preview reuses the mode recorded at build time; use a temporary production-mode env file.
         run: |
           umask 077
-          cat > .dev.vars <<'EOF'
+          cat > .env.production <<'EOF'
           DATABASE_URL=postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
           PAYLOAD_SECRET=ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL=http://localhost:3001
@@ -170,4 +174,3 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: http://localhost:3001
           HEZQEN_ALLOWED_ORIGINS: http://localhost:3001
-          CLOUDFLARE_INCLUDE_PROCESS_ENV: "true"
