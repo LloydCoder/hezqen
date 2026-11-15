@@ -4,7 +4,7 @@ import { calculateLab, type CalculatorDefinition } from "@/domain/labs/calculato
 
 export default function CalculatorExperience({definition}:{definition:CalculatorDefinition}){
  const [values,setValues]=useState<Record<string,number>>(()=>Object.fromEntries(definition.fields.map((field)=>[field.key,field.initial])));
- const result=useMemo(()=>{try{return calculateLab(definition.slug,values);}catch(e){return null;}},[definition.slug,values]);
+ const result=useMemo(()=>{try{return calculateLab(definition.slug,values);}catch{return null;}},[definition.slug,values]);
  const update=(key:string,value:string)=>{const number=Number(value);setValues((current)=>({...current,[key]:number}));};
  const money=(value:number)=>value.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2});
  const formatted=(value:number,unit:string,precision=2)=>unit==="USD"?money(value):value.toLocaleString("en-US",{maximumFractionDigits:precision})+" "+unit;
