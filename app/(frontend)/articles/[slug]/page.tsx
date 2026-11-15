@@ -89,6 +89,19 @@ export default async function ArticlePage({
             <Link href="/corrections">Read HEZQEN&apos;s corrections record ↗</Link>
           </aside>
         ) : null}
+        {article.correctionHistory.length > 1 ? (
+          <section className="correction-history" aria-labelledby="correction-history-heading">
+            <h2 id="correction-history-heading">Correction history</h2>
+            <ol>
+              {article.correctionHistory.map((correction) => (
+                <li key={`${correction.correctedAt}-${correction.note}`}>
+                  <time dateTime={correction.correctedAt}>{formatDate(correction.correctedAt)}</time>
+                  <p>{correction.note}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
         <div className="article-rich-text">
           {article.body ? (
             <RichText data={article.body as SerializedEditorState} />
