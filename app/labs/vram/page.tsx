@@ -129,20 +129,60 @@ export default function VramCalculatorPage() {
               <h2 id="vram-input-heading">Model and serving parameters</h2>
             </div>
             <div className="vram-fields">
-              <NumberField label="Model parameters (billions)" value={parametersB} onChange={setParametersB} min={0.01} step={0.1} />
-              <SelectField label="Model weight format" value={weightFormat} options={formats} onChange={setWeightFormat} />
+              <NumberField
+                label="Model parameters (billions)"
+                value={parametersB}
+                onChange={setParametersB}
+                min={0.01}
+                step={0.1}
+              />
+              <SelectField
+                label="Model weight format"
+                value={weightFormat}
+                options={formats}
+                onChange={setWeightFormat}
+              />
               <NumberField label="Transformer layers" value={layers} onChange={setLayers} />
               <NumberField label="KV heads (GQA/MQA)" value={kvHeads} onChange={setKvHeads} />
-              <NumberField label="Head dimension" value={headDimension} onChange={setHeadDimension} />
-              <NumberField label="Context length (tokens)" value={contextLength} onChange={setContextLength} />
-              <NumberField label="Concurrent batch size" value={batchSize} onChange={setBatchSize} />
-              <SelectField label="KV cache format" value={kvCacheFormat} options={cacheFormats} onChange={setKvCacheFormat} />
-              <NumberField label="Runtime reserve (%)" value={runtimeReservePercent} onChange={setRuntimeReservePercent} min={0} />
+              <NumberField
+                label="Head dimension"
+                value={headDimension}
+                onChange={setHeadDimension}
+              />
+              <NumberField
+                label="Context length (tokens)"
+                value={contextLength}
+                onChange={setContextLength}
+              />
+              <NumberField
+                label="Concurrent batch size"
+                value={batchSize}
+                onChange={setBatchSize}
+              />
+              <SelectField
+                label="KV cache format"
+                value={kvCacheFormat}
+                options={cacheFormats}
+                onChange={setKvCacheFormat}
+              />
+              <NumberField
+                label="Runtime reserve (%)"
+                value={runtimeReservePercent}
+                onChange={setRuntimeReservePercent}
+                min={0}
+              />
             </div>
-            <p className="vram-footnote">All numeric inputs must be positive whole numbers except model size and runtime reserve.</p>
+            <p className="vram-footnote">
+              All numeric inputs must be positive whole numbers except model size and runtime
+              reserve.
+            </p>
           </section>
 
-          <section className="vram-results" aria-live="polite" aria-labelledby="vram-results-heading">
+          <section
+            className="vram-results"
+            aria-live="polite"
+            aria-labelledby="vram-results-heading"
+          >
             <p className="section-label">ESTIMATED MEMORY FOOTPRINT</p>
             <h2 id="vram-results-heading">GPU memory requirement</h2>
             {result.error ? (
@@ -152,13 +192,29 @@ export default function VramCalculatorPage() {
             ) : result.value ? (
               <>
                 <p className="vram-total">{formatGiB(result.value.totalMemoryGiB)}</p>
-                <p className="vram-recommendation">Plan for at least <strong>{result.value.recommendedVramGiB} GiB</strong> of available VRAM.</p>
+                <p className="vram-recommendation">
+                  Plan for at least <strong>{result.value.recommendedVramGiB} GiB</strong> of
+                  available VRAM.
+                </p>
                 <div className="vram-breakdown">
-                  <div><span>Model weights</span><strong>{formatGiB(result.value.weightMemoryGiB)}</strong></div>
-                  <div><span>KV cache</span><strong>{formatGiB(result.value.kvCacheMemoryGiB)}</strong></div>
-                  <div><span>Runtime reserve</span><strong>{formatGiB(result.value.runtimeReserveGiB)}</strong></div>
+                  <div>
+                    <span>Model weights</span>
+                    <strong>{formatGiB(result.value.weightMemoryGiB)}</strong>
+                  </div>
+                  <div>
+                    <span>KV cache</span>
+                    <strong>{formatGiB(result.value.kvCacheMemoryGiB)}</strong>
+                  </div>
+                  <div>
+                    <span>Runtime reserve</span>
+                    <strong>{formatGiB(result.value.runtimeReserveGiB)}</strong>
+                  </div>
                 </div>
-                <p className="vram-assumption">Weight storage uses {result.value.assumptions.weightBytesPerParameter} bytes per parameter. KV cache uses {result.value.assumptions.kvCacheBytesPerElement} bytes per element. Runtime reserve: {result.value.assumptions.runtimeReservePercent}%.</p>
+                <p className="vram-assumption">
+                  Weight storage uses {result.value.assumptions.weightBytesPerParameter} bytes per
+                  parameter. KV cache uses {result.value.assumptions.kvCacheBytesPerElement} bytes
+                  per element. Runtime reserve: {result.value.assumptions.runtimeReservePercent}%.
+                </p>
               </>
             ) : null}
           </section>
