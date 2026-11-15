@@ -42,7 +42,9 @@ export const Users: CollectionConfig = {
     read: ({ req }) => {
       const actor = actorFromRequest(req.user);
       if (!actor) return false;
-      return actor.role === "administrator" ? true : { id: { equals: actor.id } };
+      return ["administrator", "editor"].includes(actor.role ?? "")
+        ? true
+        : { id: { equals: actor.id } };
     },
     update: ({ req }) => {
       const actor = actorFromRequest(req.user);
@@ -63,7 +65,7 @@ export const Users: CollectionConfig = {
             actor && (["administrator", "editor"].includes(actor.role ?? "") || actor.id === id),
           );
         },
-        update: isAdministrator,
+        update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
       },
     },
     {
@@ -79,7 +81,7 @@ export const Users: CollectionConfig = {
       access: {
         read: ({ req }) =>
           ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
-        create: isAdministrator,
+        create: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
         update: isAdministrator,
       },
       options: [
@@ -96,7 +98,7 @@ export const Users: CollectionConfig = {
       type: "checkbox",
       defaultValue: true,
       access: {
-        read: isAdministrator,
+        read: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
         update: isAdministrator,
       },
     },
