@@ -1,6 +1,6 @@
 # HEZQEN CMS Operations and Release Contract
 
-**Status:** PR #51 implementation deployed to a protected Vercel Preview; baseline runtime and staging schema checks passed on 2026-11-15. Full staging acceptance remains PARTIAL; PR #51 remains draft.  
+**Status:** PR #51 contains the current CMS implementation; latest code head `b6d8d55e22d4d3938d637ecd28cea34abeab2c1c` has Payload migration verification and Cloudflare compatibility green, while HEZQEN CI is pending. The existing Vercel Preview is an older code-bearing baseline, not this head. Full staging acceptance remains PARTIAL; PR #51 remains draft.  
 **Production:** not deployed. Do not run production migrations or attach production traffic.
 
 This document is the operational companion to docs/PHASE_STATUS.md. A source implementation or green unit test does not by itself prove live service readiness.
@@ -16,8 +16,10 @@ The CMS exposes server-side commands under the Payload API:
 | POST /api/editorial/publish-due | Publish due scheduled articles | Bearer secret only; service actor may publish only an already human-approved, due scheduled article |
 | POST /api/evidence/upload | Preserve a private evidence object and metadata | Active administrator, editor, researcher or fact-checker |
 | POST /api/evidence/download | Retrieve a private evidence object after integrity verification | Active administrator, editor, researcher or fact-checker |
+| POST /api/evidence/verify | Verify preserved evidence bytes and source metadata before it can support a claim | Active editor or fact-checker |
+| POST /api/claims/verify | Verify a material claim against its verified evidence during fact-check | Assigned active editor or fact-checker on the linked article |
 
-The workflow command uses a PostgreSQL transaction. The article mutation and immutable audit event are committed together; an audit failure rolls back the article update. Optimistic concurrency checks include article revision, workflow status and author/editor/fact-checker assignments. The endpoint does not accept caller-supplied actor identity.
+The workflow command uses a PostgreSQL transaction. The article mutation and immutable audit event are committed together; an audit failure rolls back the article update. Optimistic concurrency checks include article revision, workflow status and author/editor/fact-checker assignments. The endpoint does not accept caller-supplied actor identity. Protected Local API writes use a module-private request-context capability rather than caller-spoofable string flags; collection hooks reject direct privileged writes and deletion of immutable records.
 
 Human editorial approval remains authoritative. The scheduler is deliberately narrower: it can only publish a scheduled article whose existing approval is by the assigned human editor and whose schedule time has arrived. It cannot approve, edit, schedule or otherwise transition articles.
 
@@ -25,7 +27,7 @@ Direct content edits to fact_check, editorial_review, approved, scheduled, publi
 
 ## 2. Corrections
 
-A published article can enter correction_required only through the assigned editor's workflow command and with a non-empty correction reason. The system stores the reason, optional public note, request time and resolution metadata. The assigned editor returns the article to draft, which increments its revision and clears approval and review flags. A corrected article must pass the normal review/approval process before publication. The correction remains open until that corrected article is republished.
+A published article can enter correction_required only through the assigned editor's workflow command and with a non-empty correction reason. The system stores the reason, optional public note, request time and resolution metadata. The assigned editor returns the article to draft, which increments its revision and clears approval and review flags. A corrected article must pass the normal review/approval process before publication. The correction remains open until that corrected article is republished. The public correction-notice and article-history presentation is not yet accepted.
 
 The public correction-notice presentation remains a separate frontend acceptance gate; the metadata and state lifecycle alone do not prove readers can see the correction notice.
 
@@ -45,6 +47,8 @@ The scheduler is not operational until all five gates pass.
 ## 4. Private evidence custody
 
 Staging object storage is enabled on Neon branch br-lucky-bird-bayxt3by in eu-central-1. A private bucket named hezqen-evidence exists. A branch-scoped credential named hezqen-staging-evidence-storage has storage:read and storage:write scope. Its S3-compatible access credentials are configured as branch-specific Preview environment variables; secret values are not recorded in this document.
+
+The application-side evidence contract now includes a separate verification endpoint. Evidence remains `preserved` after upload; an editor or fact-checker must verify the private object's read-back bytes and source metadata before a claim can use it. A material claim can be verified only by the assigned editor/fact-checker while its article is in `fact_check`. Fact-check completion is blocked until every material claim and attached evidence item is verified.
 
 The application-side evidence contract is:
 - Private objects only; generated keys are confined to evidence/<UUID>.
@@ -94,12 +98,13 @@ The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web a
 
 ## 8. Release acceptance checklist
 
-- [x] Code-bearing PR #51 head dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40 passed HEZQEN CI, Payload migration verification and Cloudflare compatibility on 2026-11-15. Follow-up commits f32f9a69949b99d13aa6b0073092229e357e912f and bd4d677102e39499c365e6877e5e6b59fcc171b0 changed documentation only; no application code changed, and no new workflow runs were reported for those documentation-only commits. PR #51 remains draft and unmerged pending the remaining runtime/security gates.
+- [x] Latest PR #51 head `b6d8d55e22d4d3938d637ecd28cea34abeab2c1c`: Payload migration verification run 43773856489 passed; Cloudflare compatibility run 43773856483 passed, including Worker build and public-route smoke. HEZQEN CI run 43773856462 is pending and has not yet produced jobs. The older code-bearing head dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40 passed earlier CI, but that does not validate the latest implementation.
 - [ ] Cloudflare compatibility, Worker build and public/CMS smoke workflows pass on the same source revision.
 - [x] Both Payload migrations are applied and recorded on isolated Neon staging branch br-lucky-bird-bayxt3by; the scheduled/correction columns were verified read-only. This does not authorize or imply a production migration.
 - [ ] Staging app deploy is made on a commercially permitted host; Vercel Hobby is not an option for production.
 - [ ] Authenticated role matrix passes for administrator, editor, author, fact-checker, researcher and unauthenticated callers.
-- [ ] Direct REST and Local API attempts cannot write workflow, review, publication, correction, evidence or audit fields.
+- [x] Collection-hook tests cover protected REST/Local API mutation paths, private write capabilities, and deletion guards for articles, topics, users, sources, claims, evidence and audit events.
+- [ ] Full authenticated REST/Local API role-matrix acceptance is performed against the deployed staging runtime.
 - [ ] Workflow transaction rollback is verified against real PostgreSQL, including audit-write failure.
 - [ ] Scheduled publication publishes only due articles with prior human approval; no premature or unapproved publication is possible.
 - [ ] Correction notice is visible to readers and corrected article history is preserved.
@@ -115,7 +120,7 @@ The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web a
 
 The following checks were performed against the Preview deployment for the code-bearing PR #51 head:
 
-- Vercel deployment dpl_96t5ckCEdTevrih3Nf3HwSikg76Q is READY and points to commit dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40.
+- Vercel deployment dpl_96t5ckCEdTevrih3Nf3HwSikg76Q is READY and points to commit dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40. It does not contain the latest claim/evidence verification controls, private capability guards, or current editorial policy changes.
 - GET /api/health/ready, GET /admin/login, and GET /api/articles?limit=1 returned HTTP 200. The articles response was empty.
 - Unauthenticated GET requests to /api/users, /api/audit-events, /api/evidence, /api/claims, and /api/sources returned HTTP 403. Public /api/topics returned HTTP 200.
 - The staging Neon branch reports both 20261115_155359_initial and 20261116_000000_editorial_scheduling_corrections in payload_migrations. The new scheduling and correction columns are present.
@@ -132,7 +137,7 @@ These checks establish a deployed preview and unauthenticated route baseline onl
 4. No real Payload password-reset email has been accepted and received by a controlled mailbox.
 5. The scheduler Worker has no Cron Trigger or configured secret binding; it must remain dormant.
 6. The correction lifecycle has metadata and workflow commands, but the public correction-notice UI is not yet accepted.
-7. The full authenticated role matrix, actual administrator login, real-Postgres transaction rollback on audit failure, and direct Local API bypass tests remain open.
+7. The full authenticated role matrix, actual administrator login, real-Postgres transaction rollback on audit failure, and end-to-end authenticated Local API bypass acceptance remain open. Collection-hook unit tests now cover the protected write/delete boundaries.
 8. The Vercel Hobby plan cannot host this commercial publication in production. Cloudflare Workers Free/vinext is not accepted until CMS/admin compatibility and CPU budgets are measured on a deployed candidate.
 
-**Current verdict:** PR #51 has green CI and a READY Preview with a verified staging migration baseline. CMS staging acceptance is PARTIAL; production remains NOT READY. No production database migration, production deployment, production administrator bootstrap, production DNS cutover, paid-plan upgrade or scheduler activation has been performed.
+**Current verdict:** Latest PR #51 head has green Payload migration and Cloudflare compatibility workflows; HEZQEN CI remains pending. The READY Vercel Preview is an older source revision. CMS staging acceptance is PARTIAL; production remains NOT READY. No production database migration, production deployment, production administrator bootstrap, production DNS cutover, paid-plan upgrade or scheduler activation has been performed.
