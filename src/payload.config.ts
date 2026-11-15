@@ -21,6 +21,8 @@ const allowedOrigins = resolveAllowedOrigins({
   configuredOrigins: process.env.HEZQEN_ALLOWED_ORIGINS,
   deploymentHostname: process.env.VERCEL_URL,
   nodeEnv: process.env.NODE_ENV,
+  allowLocalRuntimeTest:
+    process.env.CI === "true" && process.env.HEZQEN_LOCAL_RUNTIME_TEST === "true",
 });
 const serverURL = resolvePayloadServerUrl({
   configuredSiteUrl: process.env.NEXT_PUBLIC_SITE_URL,
@@ -28,6 +30,8 @@ const serverURL = resolvePayloadServerUrl({
   deploymentEnvironment: process.env.VERCEL_ENV,
   allowedOrigins,
   nodeEnv: process.env.NODE_ENV,
+  allowLocalRuntimeTest:
+    process.env.CI === "true" && process.env.HEZQEN_LOCAL_RUNTIME_TEST === "true",
 });
 
 if (
