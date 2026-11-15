@@ -40,7 +40,16 @@ jobs:
           node-version: 24.22.3
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
+      - name: Check whether an initial migration already exists
+        id: migration-state
+        run: |
+          if find src/migrations -type f -name '*.ts' ! -name 'index.ts' -print -quit 2>/dev/null | grep -q .; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Generate initial migration
+        if: steps.migration-state.outputs.exists == 'false'
         run: pnpm payload migrate:create initial --skip-empty
         env:
           DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
@@ -48,6 +57,7 @@ jobs:
           NEXT_PUBLIC_SITE_URL: https://hezqen.tinlance.com
           HEZQEN_ALLOWED_ORIGINS: https://hezqen.tinlance.com
       - name: Commit generated migration
+        if: steps.migration-state.outputs.exists == 'false'
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
