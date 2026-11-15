@@ -85,7 +85,7 @@ export const Articles: CollectionConfig = {
 
         const contentFields = ["title", "slug", "excerpt", "body", "division", "topics"];
         const changed = contentFields.some((field) =>
-          Object.prototype.hasOwnProperty.call(data ?? {}, field),
+          Object.hasOwn(data ?? {}, field),
         );
         if (!changed) return data;
 
