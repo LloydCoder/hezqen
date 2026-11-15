@@ -11,6 +11,7 @@ HEZQEN is organized into three connected product surfaces:
 - **HEZQEN Media:** public reporting, investigations, analysis and explainers.
 - **HEZQEN Labs:** tools, calculators, benchmarks and engineering experiments.
 - **HEZQEN Intelligence:** premium research, briefings and decision support.
+- **HEZQEN Infrastructure:** reusable local-AI deployment, PII protection, multi-GPU optimization, air-gapped RAG and offline lab-bundle products. Source code and engineering acceptance live in the separate [HEZQEN Infrastructure Standard repository](https://github.com/LloydCoder/hezqen-infrastructure-standard); the publication site is a discovery and distribution surface, not a runtime dependency.
 
 The four editorial divisions are AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
 
