@@ -36,9 +36,7 @@ test("rejects non-HTTPS, credential-bearing and malformed source URLs", () => {
       "SOURCE_URL_CREDENTIALS_FORBIDDEN",
     ),
   );
-  assert.ok(
-    validateSourceRecord({ ...source, url: "not-a-url" }).includes("SOURCE_URL_INVALID"),
-  );
+  assert.ok(validateSourceRecord({ ...source, url: "not-a-url" }).includes("SOURCE_URL_INVALID"));
 });
 
 test("rejects a source whose publication date is after retrieval", () => {
