@@ -1,7 +1,14 @@
 import Link from "next/link";
+
+import { ArticleCard } from "@/components/articles/ArticleCard";
+import { getPublicArticles } from "@/lib/public-articles";
 import { divisions, site } from "@/lib/site";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const latestArticles = await getPublicArticles({ limit: 3 });
+
   return (
     <>
       <section className="hero-section">
@@ -18,12 +25,12 @@ export default function HomePage() {
               building, governing and investing in what comes next.
             </p>
             <div className="hero-actions">
-              <a className="button button-primary" href="#divisions">
+              <Link className="button button-primary" href="/articles">
+                Read the latest <span aria-hidden="true">→</span>
+              </Link>
+              <a className="text-link" href="#divisions">
                 Explore our coverage <span aria-hidden="true">↓</span>
               </a>
-              <Link className="text-link" href="/editorial-standards">
-                How we work <span aria-hidden="true">↗</span>
-              </Link>
             </div>
           </div>
           <aside className="hero-aside" aria-label="HEZQEN editorial principle">
@@ -55,11 +62,38 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+      <section className="latest-reporting-section" aria-labelledby="latest-reporting-heading">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <p className="section-label">02 / LATEST REPORTING</p>
+              <h2 id="latest-reporting-heading">Evidence before assertion.</h2>
+            </div>
+            <Link className="text-link" href="/articles">
+              All articles <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          {latestArticles.docs.length > 0 ? (
+            <div className="article-grid">
+              {latestArticles.docs.map((article) => (
+                <ArticleCard article={article} key={article.id} />
+              ))}
+            </div>
+          ) : (
+            <div className="article-empty-inline">
+              <p>The newsroom is preparing its first edition. Published work appears here after human editorial approval.</p>
+              <Link className="text-link" href="/editorial-standards">
+                How our editorial process works <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
       <section className="divisions-section" id="divisions">
         <div className="container">
           <div className="section-heading">
             <div>
-              <p className="section-label">02 / EDITORIAL DIVISIONS</p>
+              <p className="section-label">03 / EDITORIAL DIVISIONS</p>
               <h2>Four lenses. One connected world.</h2>
             </div>
             <p className="section-intro">
@@ -92,7 +126,7 @@ export default function HomePage() {
       </section>
       <section className="platform-section">
         <div className="container">
-          <p className="section-label">03 / THE HEZQEN PLATFORM</p>
+          <p className="section-label">04 / THE HEZQEN PLATFORM</p>
           <div className="platform-grid">
             <article className="platform-card platform-card-featured">
               <span className="platform-kicker">01 — PUBLICATION</span>
@@ -142,7 +176,7 @@ export default function HomePage() {
       </section>
       <section className="standards-band">
         <div className="container standards-grid">
-          <p className="section-label">04 / OUR STANDARD</p>
+          <p className="section-label">05 / OUR STANDARD</p>
           <div>
             <h2>
               AI may assist the newsroom. <em>AI must not become the newsroom.</em>
