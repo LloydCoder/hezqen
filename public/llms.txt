@@ -2,7 +2,7 @@
 
 > HEZQEN is a global technology and business intelligence publication by Tinlance. It connects evidence-led reporting, original research and technical analysis across AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
 
-HEZQEN has three product surfaces: Media, Labs and Intelligence. The current public application includes the publication shell and two engineering calculators. CMS, research and premium capabilities remain subject to the implementation gates documented in the repository.
+HEZQEN has three product surfaces: Media, Labs and Intelligence. The Labs portfolio contains sixteen calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage, AI data-leakage scenario risk, hardware ROI, fine-tuning versus RAG, cloud migration, Kubernetes cost, database capacity, API pricing comparison, inference throughput, incident cost, SaaS margin, data-centre energy, storage growth and AI-agent operating cost. CMS, research and premium capabilities remain subject to the implementation gates documented in the repository.
 
 Important notes:
 - Human editors retain approval and publishing authority.
@@ -23,7 +23,7 @@ Important notes:
 - [VRAM sizing calculator](https://hezqen.vercel.app/labs/vram): first-pass model memory estimate.
 - [AI cost calculator](https://hezqen.vercel.app/labs/ai-cost): API and self-hosted monthly cost comparison.
 - [VRAM methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_METHODOLOGY.md): formulas and limitations.
-- [AI cost methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/AI_COST_CALCULATOR_METHODOLOGY.md): cost model assumptions and exclusions.
+- [AI cost methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/AI_COST_CALCULATOR_METHODOLOGY.md): cost model assumptions and exclusions.\n- [All Labs calculators](https://hezqen.vercel.app/labs): categorized index of sixteen calculators.\n- [Fourteen-calculator suite methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_CALCULATOR_SUITE.md): formulas, assumptions and limitations.
 
 ## Editorial, architecture and security
 
