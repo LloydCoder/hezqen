@@ -68,3 +68,5 @@ Apache License 2.0. See [LICENSE](LICENSE).
 
 - [Logical Data Model](docs/DATA_MODEL.md)
 - [CMS and PostgreSQL Architecture Decision](docs/adr/0001-editorial-cms-and-postgres.md)
+
+- [CMS Setup and Migration Gates](docs/CMS_SETUP.md)
