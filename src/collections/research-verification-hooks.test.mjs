@@ -50,13 +50,14 @@ test("evidence verification cannot mutate immutable provenance fields", async ()
     evidenceHook({ data, operation: "update", req }),
   );
   assert.equal(result, data);
-  assert.throws(
-    () =>
+  await assert.rejects(
+    withRequestContext(req, { hezqenEvidenceVerification: true }, async () =>
       evidenceHook({
         data: { storageRef: "evidence/replaced" },
         operation: "update",
-        req: { context: { hezqenEvidenceVerification: true } },
+        req,
       }),
+    ),
     /Only evidence verification status/,
   );
 });
