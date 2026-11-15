@@ -171,8 +171,7 @@ export const Articles: CollectionConfig = {
       relationTo: "users",
       access: {
         create: () => false,
-        update: ({ req }) =>
-          hasActiveRole(req.user, ["administrator", "editor"]),
+        update: ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]),
       },
     },
     {
