@@ -369,7 +369,7 @@ export const claimVerifyEndpoint: Endpoint = {
       actor.role === "editor"
         ? relationshipId(article.assignedEditor)
         : relationshipId(article.assignedFactChecker);
-    if (assignedReviewer !== actor.id) {
+    if (assignedReviewer !== String(actor.id)) {
       return Response.json(
         { error: "Only the assigned editor or fact-checker may verify this article claim." },
         { status: 403 },
