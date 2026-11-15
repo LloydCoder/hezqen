@@ -21,6 +21,11 @@ export const Users: CollectionConfig = {
     defaultColumns: ["email", "name", "role", "updatedAt"],
   },
   hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("User accounts cannot be deleted; deactivate the account instead.", 403);
+      },
+    ],
     beforeLogin: [
       ({ user }) => {
         if ((user as { active?: boolean }).active === false) {
