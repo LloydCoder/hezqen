@@ -203,10 +203,24 @@ export const editorialWorkflowEndpoint: Endpoint = {
       return Response.json({ error: "Account disabled." }, { status: 403 });
 
     const body = asRecord(await req.json().catch(() => null));
+    const articleId = typeof body.articleId === "string" ? body.articleId.trim() : "";
+    const correctionReason =
+      typeof body.correctionReason === "string" ? body.correctionReason.trim() : undefined;
+    const correctionPublicNote =
+      typeof body.correctionPublicNote === "string"
+        ? body.correctionPublicNote.trim()
+        : undefined;
+    const scheduledFor =
+      typeof body.scheduledFor === "string" ? body.scheduledFor.trim() : undefined;
     if (
-      typeof body.articleId !== "string" ||
+      !articleId ||
+      articleId.length > 128 ||
       typeof body.expectedRevision !== "number" ||
-      !isWorkflowStatus(body.targetStatus)
+      !Number.isInteger(body.expectedRevision) ||
+      !isWorkflowStatus(body.targetStatus) ||
+      (correctionReason !== undefined && correctionReason.length > 2000) ||
+      (correctionPublicNote !== undefined && correctionPublicNote.length > 2000) ||
+      (scheduledFor !== undefined && scheduledFor.length > 64)
     ) {
       return Response.json({ error: "Invalid workflow command." }, { status: 400 });
     }
@@ -216,14 +230,12 @@ export const editorialWorkflowEndpoint: Endpoint = {
         new PayloadEditorialWorkflowStore(req),
         actor,
         {
-          articleId: body.articleId,
+          articleId,
           expectedRevision: body.expectedRevision,
           targetStatus: body.targetStatus,
-          scheduledFor: typeof body.scheduledFor === "string" ? body.scheduledFor : undefined,
-          correctionReason:
-            typeof body.correctionReason === "string" ? body.correctionReason : undefined,
-          correctionPublicNote:
-            typeof body.correctionPublicNote === "string" ? body.correctionPublicNote : undefined,
+          scheduledFor,
+          correctionReason,
+          correctionPublicNote,
           correlationId: correlationId(req),
         },
       );
