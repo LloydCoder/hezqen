@@ -20,7 +20,6 @@ export async function findPublicArticles(options: {
     limit: Math.min(Math.max(options.limit ?? 10, 1), 50),
     sort: "-publishedAt",
     depth: 1,
-    overrideAccess: true,
   });
 
   return result.docs
@@ -42,7 +41,6 @@ export async function findPublicArticleBySlug(slug: string): Promise<PublicArtic
     },
     limit: 1,
     depth: 1,
-    overrideAccess: true,
   });
   return toPublicArticle(result.docs[0]);
 }
@@ -62,7 +60,6 @@ export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]
     limit: Math.min(Math.max(limit, 1), 50),
     sort: "-correctionResolvedAt",
     depth: 1,
-    overrideAccess: true,
   });
   return result.docs
     .map((doc) => toPublicArticle(doc))
