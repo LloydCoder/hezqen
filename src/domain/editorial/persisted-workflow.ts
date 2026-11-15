@@ -34,9 +34,9 @@ export interface EditorialAuditEvent {
 }
 
 export interface EditorialWorkflowStore {
-  beginTransaction(): Promise<string | null>;
-  getArticle(id: string, transactionId: string): Promise<StoredEditorialArticle | null>;
-  getMaterialClaims(articleId: string, transactionId: string): Promise<Array<{ id: string; sourceIds: string[] }>>;
+  beginTransaction(): Promise<string | number | null>;
+  getArticle(id: string, transactionId: string | number): Promise<StoredEditorialArticle | null>;
+  getMaterialClaims(articleId: string, transactionId: string | number): Promise<Array<{ id: string; sourceIds: string[] }>>;
   compareAndSwapArticle(
     id: string,
     expectedRevision: number,
@@ -45,11 +45,11 @@ export interface EditorialWorkflowStore {
     expectedEditorId: string | null,
     expectedFactCheckerId: string | null,
     changes: Record<string, unknown>,
-    transactionId: string,
+    transactionId: string | number,
   ): Promise<boolean>;
-  appendAuditEvent(event: EditorialAuditEvent, transactionId: string): Promise<void>;
-  commitTransaction(transactionId: string): Promise<void>;
-  rollbackTransaction(transactionId: string): Promise<void>;
+  appendAuditEvent(event: EditorialAuditEvent, transactionId: string | number): Promise<void>;
+  commitTransaction(transactionId: string | number): Promise<void>;
+  rollbackTransaction(transactionId: string | number): Promise<void>;
 }
 
 export interface EditorialWorkflowCommand {
@@ -90,7 +90,7 @@ function snapshot(article: StoredEditorialArticle): Record<string, unknown> {
   };
 }
 
-function rollbackResult(store: EditorialWorkflowStore, transactionId: string, status: 400 | 403 | 404 | 409, ...blockers: string[]): Promise<EditorialWorkflowCommandResult> {
+function rollbackResult(store: EditorialWorkflowStore, transactionId: string | number, status: 400 | 403 | 404 | 409, ...blockers: string[]): Promise<EditorialWorkflowCommandResult> {
   return store.rollbackTransaction(transactionId).then(() => ({ ok: false, status, blockers }));
 }
 
