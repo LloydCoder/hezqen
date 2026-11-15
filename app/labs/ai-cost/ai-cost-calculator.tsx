@@ -72,7 +72,11 @@ export default function AiCostCalculator() {
   }, [values]);
 
   const money = (amount: number) =>
-    amount.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+    amount.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 2,
+    });
   const number = (amount: number) =>
     Number.isFinite(amount) ? Math.ceil(amount).toLocaleString("en-US") : "Not reached";
 
@@ -100,26 +104,72 @@ export default function AiCostCalculator() {
               <h2 id="ai-cost-input-heading">Monthly usage</h2>
             </div>
             <div className="vram-fields">
-              <NumberField label="Requests per month" value={values.monthlyRequests} onChange={update("monthlyRequests")} />
-              <NumberField label="Input tokens per request" value={values.inputTokensPerRequest} onChange={update("inputTokensPerRequest")} />
-              <NumberField label="Output tokens per request" value={values.outputTokensPerRequest} onChange={update("outputTokensPerRequest")} />
-              <NumberField label="API input price (USD / 1M tokens)" value={values.apiInputPricePerMillion} onChange={update("apiInputPricePerMillion")} step={0.01} />
-              <NumberField label="API output price (USD / 1M tokens)" value={values.apiOutputPricePerMillion} onChange={update("apiOutputPricePerMillion")} step={0.01} />
-              <NumberField label="GPU count" value={values.gpuCount} onChange={update("gpuCount")} />
-              <NumberField label="GPU cost per hour (USD)" value={values.gpuHourlyCost} onChange={update("gpuHourlyCost")} step={0.01} />
-              <NumberField label="GPU hours per month" value={values.gpuHoursPerMonth} onChange={update("gpuHoursPerMonth")} />
-              <NumberField label="Other monthly infrastructure (USD)" value={values.monthlyInfrastructureOverhead} onChange={update("monthlyInfrastructureOverhead")} step={0.01} />
+              <NumberField
+                label="Requests per month"
+                value={values.monthlyRequests}
+                onChange={update("monthlyRequests")}
+              />
+              <NumberField
+                label="Input tokens per request"
+                value={values.inputTokensPerRequest}
+                onChange={update("inputTokensPerRequest")}
+              />
+              <NumberField
+                label="Output tokens per request"
+                value={values.outputTokensPerRequest}
+                onChange={update("outputTokensPerRequest")}
+              />
+              <NumberField
+                label="API input price (USD / 1M tokens)"
+                value={values.apiInputPricePerMillion}
+                onChange={update("apiInputPricePerMillion")}
+                step={0.01}
+              />
+              <NumberField
+                label="API output price (USD / 1M tokens)"
+                value={values.apiOutputPricePerMillion}
+                onChange={update("apiOutputPricePerMillion")}
+                step={0.01}
+              />
+              <NumberField
+                label="GPU count"
+                value={values.gpuCount}
+                onChange={update("gpuCount")}
+              />
+              <NumberField
+                label="GPU cost per hour (USD)"
+                value={values.gpuHourlyCost}
+                onChange={update("gpuHourlyCost")}
+                step={0.01}
+              />
+              <NumberField
+                label="GPU hours per month"
+                value={values.gpuHoursPerMonth}
+                onChange={update("gpuHoursPerMonth")}
+              />
+              <NumberField
+                label="Other monthly infrastructure (USD)"
+                value={values.monthlyInfrastructureOverhead}
+                onChange={update("monthlyInfrastructureOverhead")}
+                step={0.01}
+              />
             </div>
             <p className="vram-footnote">
               Uses the prices you enter; it does not assume a particular API vendor or GPU provider.
             </p>
           </section>
 
-          <section className="vram-results" aria-live="polite" aria-labelledby="ai-cost-results-heading">
+          <section
+            className="vram-results"
+            aria-live="polite"
+            aria-labelledby="ai-cost-results-heading"
+          >
             <p className="section-label">MONTHLY COST COMPARISON</p>
             <h2 id="ai-cost-results-heading">Estimated economics</h2>
             {result.error ? (
-              <p className="vram-error" role="alert">{result.error}</p>
+              <p className="vram-error" role="alert">
+                {result.error}
+              </p>
             ) : result.value ? (
               <>
                 <p className="vram-total">{money(result.value.monthlySavings)}</p>
@@ -131,11 +181,26 @@ export default function AiCostCalculator() {
                       : "Estimated monthly cost parity"}
                 </p>
                 <dl className="vram-breakdown">
-                  <div><dt>API monthly spend</dt><dd>{money(result.value.apiMonthlyCost)}</dd></div>
-                  <div><dt>Self-hosted monthly cost</dt><dd>{money(result.value.selfHostedMonthlyCost)}</dd></div>
-                  <div><dt>API cost per request</dt><dd>{money(result.value.apiCostPerRequest)}</dd></div>
-                  <div><dt>Break-even monthly requests</dt><dd>{number(result.value.breakEvenMonthlyRequests)}</dd></div>
-                  <div><dt>Difference vs API spend</dt><dd>{result.value.savingsPercent.toFixed(1)}%</dd></div>
+                  <div>
+                    <dt>API monthly spend</dt>
+                    <dd>{money(result.value.apiMonthlyCost)}</dd>
+                  </div>
+                  <div>
+                    <dt>Self-hosted monthly cost</dt>
+                    <dd>{money(result.value.selfHostedMonthlyCost)}</dd>
+                  </div>
+                  <div>
+                    <dt>API cost per request</dt>
+                    <dd>{money(result.value.apiCostPerRequest)}</dd>
+                  </div>
+                  <div>
+                    <dt>Break-even monthly requests</dt>
+                    <dd>{number(result.value.breakEvenMonthlyRequests)}</dd>
+                  </div>
+                  <div>
+                    <dt>Difference vs API spend</dt>
+                    <dd>{result.value.savingsPercent.toFixed(1)}%</dd>
+                  </div>
                 </dl>
                 <p className="vram-footnote">
                   {result.value.recommendation === "self_hosted"
@@ -152,16 +217,16 @@ export default function AiCostCalculator() {
           <h2>What this estimate includes</h2>
           <p>
             API cost is calculated from input and output token volume multiplied by the prices
-            supplied. Self-hosted cost is GPU count × hourly GPU cost × monthly GPU hours, plus
-            the additional monthly infrastructure overhead entered above.
+            supplied. Self-hosted cost is GPU count × hourly GPU cost × monthly GPU hours, plus the
+            additional monthly infrastructure overhead entered above.
           </p>
           <p>
-            This is a cost-only break-even model, not a capacity or deployment recommendation.
-            It excludes engineering and on-call labour, model quality differences, utilization
+            This is a cost-only break-even model, not a capacity or deployment recommendation. It
+            excludes engineering and on-call labour, model quality differences, utilization
             inefficiency, autoscaling, networking, storage beyond the overhead input, redundancy,
             taxes, discounts, minimum commitments and workload-specific throughput constraints.
-            Confirm that the selected hardware can serve the workload before using the result
-            for a purchasing decision.
+            Confirm that the selected hardware can serve the workload before using the result for a
+            purchasing decision.
           </p>
         </section>
       </div>
