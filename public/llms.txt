@@ -2,7 +2,7 @@
 
 > HEZQEN is a global technology and business intelligence publication by Tinlance. It connects evidence-led reporting, original research and technical analysis across AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
 
-HEZQEN has three product surfaces: Media, Labs and Intelligence. The current public application includes the publication shell and two engineering calculators. CMS, research and premium capabilities remain subject to the implementation gates documented in the repository.
+HEZQEN has three product surfaces: Media, Labs and Intelligence. The current public application includes the publication shell and a sixteen-calculator HEZQEN Labs portfolio: VRAM sizing, AI API-vs-self-hosted cost, RAG storage, AI data-leakage risk, local hardware ROI, fine-tuning-vs-RAG, cloud migration, Kubernetes cost, database capacity, API pricing comparison, inference throughput, incident cost, SaaS margin, data-centre energy, storage growth and AI-agent operating cost. CMS, research and premium capabilities remain subject to the implementation gates documented in the repository.
 
 Important notes:
 - Human editors retain approval and publishing authority.
@@ -20,10 +20,24 @@ Important notes:
 
 ## Labs
 
-- [VRAM sizing calculator](https://hezqen.vercel.app/labs/vram): first-pass model memory estimate.
-- [AI cost calculator](https://hezqen.vercel.app/labs/ai-cost): API and self-hosted monthly cost comparison.
-- [VRAM methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_METHODOLOGY.md): formulas and limitations.
-- [AI cost methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/AI_COST_CALCULATOR_METHODOLOGY.md): cost model assumptions and exclusions.
+- [Complete Labs catalog](https://hezqen.vercel.app/labs): all sixteen calculators.
+- [Calculator portfolio methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_CALCULATOR_PORTFOLIO.md): formulas, assumptions and exclusions for the fourteen added tools.
+- [VRAM sizing calculator](https://hezqen.vercel.app/labs/vram).
+- [AI cost break-even calculator](https://hezqen.vercel.app/labs/ai-cost).
+- [RAG storage sizing](https://hezqen.vercel.app/labs/rag-storage).
+- [AI data-leakage risk estimator](https://hezqen.vercel.app/labs/compliance-risk).
+- [Local AI hardware ROI](https://hezqen.vercel.app/labs/hardware-roi).
+- [Fine-tuning vs RAG](https://hezqen.vercel.app/labs/finetune-vs-rag).
+- [Cloud migration cost](https://hezqen.vercel.app/labs/cloud-migration).
+- [Kubernetes infrastructure cost](https://hezqen.vercel.app/labs/kubernetes-cost).
+- [Database capacity planner](https://hezqen.vercel.app/labs/database-capacity).
+- [AI API pricing comparison](https://hezqen.vercel.app/labs/api-pricing).
+- [LLM inference throughput estimator](https://hezqen.vercel.app/labs/inference-throughput).
+- [Cybersecurity incident cost](https://hezqen.vercel.app/labs/incident-cost).
+- [SaaS infrastructure margin](https://hezqen.vercel.app/labs/saas-margin).
+- [Data-centre energy cost](https://hezqen.vercel.app/labs/datacenter-energy).
+- [Storage growth calculator](https://hezqen.vercel.app/labs/storage-growth).
+- [AI-agent operating cost](https://hezqen.vercel.app/labs/agent-cost).
 
 ## Editorial, architecture and security
 
