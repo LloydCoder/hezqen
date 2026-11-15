@@ -46,6 +46,11 @@ export const Articles: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ["title", "division", "workflowStatus", "author", "updatedAt"],
     group: "Editorial",
+    components: {
+      edit: {
+        beforeDocumentControls: ["/src/components/admin/ArticleWorkflowControlsServer"],
+      },
+    },
   },
   versions: {
     drafts: {
