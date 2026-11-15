@@ -1,13 +1,9 @@
 import type { Access, CollectionConfig } from "payload";
 
-type Actor = { role?: string } | null;
-
-function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
-}
+import { hasActiveRole } from "../lib/access.ts";
 
 const canReadAudit: Access = ({ req }) =>
-  ["administrator", "editor"].includes(roleFromRequest(req.user) ?? "");
+  hasActiveRole(req.user, ["administrator", "editor"]);
 
 export const AuditEvents: CollectionConfig = {
   slug: "audit-events",
