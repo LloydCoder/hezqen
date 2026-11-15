@@ -202,7 +202,7 @@ export const editorialWorkflowEndpoint: Endpoint = {
     if (actor.active === false)
       return Response.json({ error: "Account disabled." }, { status: 403 });
 
-    const body = asRecord(await req.json().catch(() => null));
+    const body = asRecord(await req.json?.().catch(() => null));
     const articleId = typeof body.articleId === "string" ? body.articleId.trim() : "";
     const correctionReason =
       typeof body.correctionReason === "string" ? body.correctionReason.trim() : undefined;
@@ -252,7 +252,7 @@ export const editorialReviewEndpoint: Endpoint = {
   handler: async (req) => {
     const actor = actorFromRequest(req);
     if (!actor) return Response.json({ error: "Authentication required." }, { status: 401 });
-    const body = asRecord(await req.json().catch(() => null));
+    const body = asRecord(await req.json?.().catch(() => null));
     const articleId = typeof body.articleId === "string" ? body.articleId.trim() : "";
     if (
       !articleId ||
