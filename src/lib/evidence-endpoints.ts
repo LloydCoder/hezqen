@@ -7,6 +7,7 @@ import {
   getPrivateEvidenceObject,
   MAX_EVIDENCE_BYTES,
   putAndVerifyEvidenceObject,
+  type NeonEvidenceStorageConfig,
   readNeonEvidenceStorageConfig,
   sha256Hex,
 } from "./neon-evidence-storage.ts";
@@ -222,7 +223,7 @@ export const evidenceDownloadEndpoint: Endpoint = {
       return Response.json({ error: "Evidence storage reference is invalid." }, { status: 409 });
     }
 
-    let storageConfig;
+    let storageConfig: NeonEvidenceStorageConfig;
     try {
       storageConfig = readNeonEvidenceStorageConfig();
     } catch {
