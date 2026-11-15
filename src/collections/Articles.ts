@@ -3,9 +3,7 @@ import type { Access, CollectionConfig } from "payload";
 type Actor = { id: string | number; role?: string } | null;
 
 function actorFromRequest(user: unknown): Actor {
-  return user && typeof user === "object" && "id" in user
-    ? (user as Actor)
-    : null;
+  return user && typeof user === "object" && "id" in user ? (user as Actor) : null;
 }
 
 const isEditor: Access = ({ req }) =>
