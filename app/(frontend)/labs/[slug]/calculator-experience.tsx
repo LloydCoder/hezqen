@@ -47,7 +47,7 @@ export default function CalculatorExperience({ calculator }: { calculator: LabCa
                       min={item.min}
                       max={item.max}
                       step={item.step}
-                      value={values[item.key]}
+                      value={Number.isNaN(values[item.key]) ? "" : values[item.key]}
                       onChange={(event) => setValues((current) => ({
                         ...current,
                         [item.key]: event.target.value === "" ? Number.NaN : Number(event.target.value),
