@@ -132,7 +132,7 @@ export const evidenceUploadEndpoint: Endpoint = {
       return Response.json({ error: "Evidence upload size could not be verified." }, { status: 400 });
     }
 
-    const key = \`evidence/\${randomUUID()}\`;
+    const key = `evidence/${randomUUID()}`;
     let verifiedObject: Awaited<ReturnType<typeof putAndVerifyEvidenceObject>>;
     try {
       verifiedObject = await putAndVerifyEvidenceObject(storageConfig, {
@@ -266,7 +266,7 @@ export const evidenceDownloadEndpoint: Endpoint = {
         headers: {
           "content-type": stored.contentType,
           "content-length": String(stored.bytes.byteLength),
-          "content-disposition": \`attachment; filename="hezqen-evidence-\${String(evidence.evidenceId)}"\`,
+          "content-disposition": `attachment; filename="hezqen-evidence-${String(evidence.evidenceId)}"`,
           "cache-control": "private, no-store",
           "x-content-type-options": "nosniff",
         },
