@@ -40,23 +40,6 @@ test("restore requires a separate production approval", () => {
   assert.match(result.stderr, /HEZQEN_PRODUCTION_RESTORE_APPROVED=true/);
 });
 
-test("production restore requires a separate overwrite approval", () => {
-  const result = spawnSync("sh", ["scripts/db/restore.sh"], {
-    encoding: "utf8",
-    env: {
-      ...baseEnv,
-      HEZQEN_RESTORE_ENV: "production",
-      HEZQEN_RESTORE_CONFIRM_TARGET: "production",
-      HEZQEN_RESTORE_APPROVED: "true",
-      HEZQEN_PRODUCTION_RESTORE_APPROVED: "true",
-      HEZQEN_RESTORE_ALLOW_OVERWRITE: "false",
-    },
-  });
-
-  assert.equal(result.status, 64);
-  assert.match(result.stderr, /HEZQEN_RESTORE_ALLOW_OVERWRITE=true/);
-});
-
 test("restore rejects a confirmation target that differs from the selected environment", () => {
   const result = spawnSync("sh", ["scripts/db/restore.sh"], {
     encoding: "utf8",
@@ -96,7 +79,7 @@ test("restore refuses a non-empty target unless overwrite is explicitly approved
   });
 
   assert.equal(result.status, 64);
-  assert.match(result.stderr, /target is not empty/);
+  assert.match(result.stderr, /target database must be empty/);
 });
 
 test("restore refuses every non-empty target even when overwrite is requested", (t) => {
