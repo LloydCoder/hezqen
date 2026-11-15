@@ -49,9 +49,9 @@ Tinlyt, Searqon and TAS integrations are optional adapters over authenticated AP
 
 ## Editorial authority
 
-The tested publishing-policy module expresses the initial domain invariant: a human editor must be the actor, a record must have an accountable author/editor, explicit approval, completed fact-check and disclosure review, and material claims must reference sources.
+The editorial domain includes a tested publication policy and a tested workflow state machine. The state machine models pitch, research, draft, fact-check, editorial review, approval, scheduling, publication, correction and archive transitions. Approval and publication require the assigned human editor, separation of author/editor duties, completed fact-check, disclosure review and source-backed material claims.
 
-**Important:** this module is not yet connected to a CMS or persistence layer. It does not currently enforce production publishing permissions. The CMS must call the rule from a server-only authorization boundary and test direct API bypass attempts.
+**Important:** these modules are not yet connected to a CMS, authenticated server session or persistence layer. They do not currently enforce production publishing permissions. The CMS must call the rules from server-only mutation handlers, persist state and audit events transactionally, and test direct API bypass and stale-write attempts. See [Editorial Workflow](EDITORIAL_WORKFLOW.md).
 
 No model, agent, prompt, memory, webpage, tool output or integration may create editorial authority.
 
