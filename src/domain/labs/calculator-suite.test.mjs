@@ -87,10 +87,7 @@ test("calculates migration payback and rejects a migration with no savings", () 
     currentMonthly: 1000,
     targetMonthly: 700,
   });
-  assert.equal(
-    result.metrics.find((metric) => metric.label === "Payback period")?.value,
-    15,
-  );
+  assert.equal(result.metrics.find((metric) => metric.label === "Payback period")?.value, 15);
   assert.throws(
     () =>
       calculateLab("cloud-migration", {
@@ -242,7 +239,10 @@ test("does not invent unit ratios when revenue or agent-run denominators are zer
     paymentRate: 0.03,
     support: 2,
   });
-  assert.equal(saas.metrics.some((metric) => metric.label === "Gross margin"), false);
+  assert.equal(
+    saas.metrics.some((metric) => metric.label === "Gross margin"),
+    false,
+  );
 
   const agent = calculateLab("agent-cost", {
     runs: 0,
@@ -254,7 +254,10 @@ test("does not invent unit ratios when revenue or agent-run denominators are zer
     toolCostPerRun: 0.01,
     monthlyPlatformCost: 200,
   });
-  assert.equal(agent.metrics.some((metric) => metric.label === "Cost per agent run"), false);
+  assert.equal(
+    agent.metrics.some((metric) => metric.label === "Cost per agent run"),
+    false,
+  );
   assert.equal(agent.metrics.find((metric) => metric.label === "Monthly total")?.value, 200);
 });
 
