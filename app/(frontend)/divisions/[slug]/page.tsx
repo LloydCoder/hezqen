@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { divisions, getDivision } from "@/lib/site";
+
+import { ArticleCard } from "@/components/articles/ArticleCard";
+import { StructuredData } from "@/components/StructuredData";
+import { getPublicArticles } from "@/lib/public-articles";
+import { divisions, getDivision, site } from "@/lib/site";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return divisions.map((division) => ({ slug: division.slug }));
@@ -24,6 +30,8 @@ export default async function DivisionPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const division = getDivision(slug);
   if (!division) notFound();
+  const articles = await getPublicArticles({ division: division.slug, limit: 12 });
+
   return (
     <section className="division-page">
       <div className="container">
@@ -60,6 +68,46 @@ export default async function DivisionPage({ params }: { params: Promise<{ slug:
             Read our editorial standards ↗
           </Link>
         </div>
+
+        <section className="division-articles" aria-labelledby="division-articles-heading">
+          <div className="articles-section-heading">
+            <div>
+              <p className="section-label">LATEST REPORTING / {division.number}</p>
+              <h2 id="division-articles-heading">Latest in {division.name}</h2>
+            </div>
+            <Link className="text-link" href={`/articles?division=${division.slug}`}>
+              View all articles <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          {articles.docs.length > 0 ? (
+            <div className="article-grid">
+              {articles.docs.slice(0, 3).map((article) => (
+                <ArticleCard article={article} key={article.id} />
+              ))}
+            </div>
+          ) : (
+            <p className="article-empty-inline">No articles have been published in this division yet.</p>
+          )}
+        </section>
+        <StructuredData
+          data={{
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "@id": `${site.url}/divisions/${division.slug}#webpage`,
+            name: `HEZQEN — ${division.name}`,
+            url: `${site.url}/divisions/${division.slug}`,
+            description: division.description,
+            mainEntity: {
+              "@type": "ItemList",
+              itemListElement: articles.docs.slice(0, 3).map((article, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                url: `${site.url}/articles/${article.slug}`,
+                name: article.title,
+              })),
+            },
+          }}
+        />
       </div>
     </section>
   );
