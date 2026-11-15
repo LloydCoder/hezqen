@@ -40,10 +40,7 @@ export interface EditorialAuditEvent {
 export interface EditorialWorkflowStore {
   beginTransaction(): Promise<string | number | null>;
   getArticle(id: string, transactionId: string | number): Promise<StoredEditorialArticle | null>;
-  getMaterialClaims(
-    articleId: string,
-    transactionId: string | number,
-  ): Promise<MaterialClaim[]>;
+  getMaterialClaims(articleId: string, transactionId: string | number): Promise<MaterialClaim[]>;
   compareAndSwapArticle(
     id: string,
     expectedRevision: number,
