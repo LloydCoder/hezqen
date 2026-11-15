@@ -49,7 +49,10 @@ export default async function CorrectionsPage() {
         {corrections.length ? (
           <div className="correction-record-list">
             {corrections.map((article) => (
-              <article className="correction-record" key={article.id}>
+              <article
+                className="correction-record"
+                key={`${article.id}-${article.correctionNotice!.correctedAt}`}
+              >
                 <p className="correction-record-date">
                   Corrected {formatDate(article.correctionNotice!.correctedAt)}
                 </p>
