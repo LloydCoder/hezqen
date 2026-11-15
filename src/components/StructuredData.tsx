@@ -13,7 +13,7 @@ export const publisherGraph = {
       "@type": "Organization",
       "@id": "https://hezqen.tinlance.com/#tinlance",
       name: "Tinlance",
-      url: "https://tinlance.com"
+      url: "https://tinlance.com",
     },
     {
       "@type": "NewsMediaOrganization",
@@ -21,15 +21,16 @@ export const publisherGraph = {
       name: "HEZQEN",
       alternateName: "HEZQEN — BY TINLANCE",
       url: "https://hezqen.tinlance.com",
-      description: "Global technology and business intelligence publication covering AI, cybersecurity, cloud engineering, and business.",
+      description:
+        "Global technology and business intelligence publication covering AI, cybersecurity, cloud engineering, and business.",
       slogan: "Research. Intelligence. Perspective.",
       parentOrganization: { "@id": "https://hezqen.tinlance.com/#tinlance" },
       logo: {
         "@type": "ImageObject",
         "@id": "https://hezqen.tinlance.com/#logo",
         url: "https://hezqen.tinlance.com/brand/hezqen-horizontal-color.svg",
-        contentUrl: "https://hezqen.tinlance.com/brand/hezqen-horizontal-color.svg"
-      }
+        contentUrl: "https://hezqen.tinlance.com/brand/hezqen-horizontal-color.svg",
+      },
     },
     {
       "@type": "WebSite",
@@ -37,7 +38,7 @@ export const publisherGraph = {
       url: "https://hezqen.tinlance.com",
       name: "HEZQEN",
       publisher: { "@id": "https://hezqen.tinlance.com/#organization" },
-      inLanguage: "en"
-    }
-  ]
+      inLanguage: "en",
+    },
+  ],
 } satisfies Record<string, unknown>;
