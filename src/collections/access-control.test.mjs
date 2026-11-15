@@ -4,6 +4,10 @@ import test from "node:test";
 import { Articles } from "./Articles.ts";
 import { AuditEvents } from "./AuditEvents.ts";
 import { Evidence } from "./Evidence.ts";
+import { Claims } from "./Claims.ts";
+import { Sources } from "./Sources.ts";
+import { Topics } from "./Topics.ts";
+import { Users } from "./Users.ts";
 
 function accessResult(access, user) {
   return access({ req: { user } });
@@ -76,4 +80,25 @@ test("audit events are immutable through Payload collection access", () => {
   assert.equal(AuditEvents.access.delete({ req: { user: admin } }), false);
   assert.equal(AuditEvents.access.read({ req: { user: admin } }), true);
   assert.equal(AuditEvents.access.read({ req: { user: { id: 2, role: "author" } } }), false);
+});
+
+
+test("disabled authenticated accounts lose all privileged CMS access immediately", () => {
+  const disabledAdmin = { id: 99, role: "administrator", active: false };
+  assert.equal(Articles.access.create({ req: { user: disabledAdmin } }), false);
+  assert.equal(Articles.access.update({ req: { user: disabledAdmin } }), false);
+  assert.deepEqual(Articles.access.read({ req: { user: disabledAdmin } }), {
+    and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
+  });
+  assert.equal(Evidence.access.read({ req: { user: disabledAdmin } }), false);
+  assert.equal(Claims.access.read({ req: { user: disabledAdmin } }), false);
+  assert.equal(Claims.access.create({ req: { user: disabledAdmin } }), false);
+  assert.equal(Sources.access.read({ req: { user: disabledAdmin } }), false);
+  assert.equal(Sources.access.create({ req: { user: disabledAdmin } }), false);
+  assert.equal(Topics.access.create({ req: { user: disabledAdmin } }), false);
+  assert.equal(Topics.access.update({ req: { user: disabledAdmin } }), false);
+  assert.equal(AuditEvents.access.read({ req: { user: disabledAdmin } }), false);
+  assert.equal(Users.access.admin({ req: { user: disabledAdmin } }), false);
+  assert.equal(Users.access.read({ req: { user: disabledAdmin } }), false);
+  assert.equal(Users.access.update({ req: { user: disabledAdmin } }), false);
 });
