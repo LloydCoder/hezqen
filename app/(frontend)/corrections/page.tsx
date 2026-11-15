@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+
 import { StructuredData } from "@/components/StructuredData";
+import { findPublicCorrections } from "@/lib/public-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Corrections Policy",
@@ -8,7 +13,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/corrections" },
 };
 
-export default function CorrectionsPage() {
+function formatDate(value: string): string {
+  return new Intl.DateTimeFormat("en", { dateStyle: "long", timeZone: "UTC" }).format(
+    new Date(value),
+  );
+}
+
+export default async function CorrectionsPage() {
+  const corrections = await findPublicCorrections();
   return (
     <section className="prose-page">
       <StructuredData
@@ -33,6 +45,24 @@ export default function CorrectionsPage() {
           aim to correct it clearly and preserve an accountable record of the change.
         </p>
         <div className="prose-rule" />
+        <h2>Published correction record</h2>
+        {corrections.length ? (
+          <div className="correction-record-list">
+            {corrections.map((article) => (
+              <article className="correction-record" key={article.id}>
+                <p className="correction-record-date">
+                  Corrected {formatDate(article.correctionNotice!.correctedAt)}
+                </p>
+                <h3>
+                  <Link href={`/articles/${article.slug}`}>{article.title}</Link>
+                </h3>
+                <p>{article.correctionNotice!.note}</p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p>No published correction notices have been recorded yet.</p>
+        )}
         <h2>How to report a concern</h2>
         <p>
           Email <a href="mailto:hello@tinlance.com">hello@tinlance.com</a> with the page or article
@@ -47,9 +77,9 @@ export default function CorrectionsPage() {
         </p>
         <h2>How corrections are displayed</h2>
         <p>
-          Where a material factual error is confirmed, the published item should carry a dated
-          correction note describing what changed. Updates that add new information without
-          correcting an error should be distinguished from corrections.
+          Where a material factual error is confirmed, the published item carries a dated correction
+          note describing what changed. Updates that add new information without correcting an error
+          are distinguished from corrections.
         </p>
         <h2>Editorial independence</h2>
         <p>
