@@ -11,7 +11,7 @@ These criteria define what must be true before HEZQEN is considered ready for pu
 
 - [ ] The platform communicates HEZQEN's identity and global technology/business intelligence mission immediately.
 - [ ] The four editorial divisions are discoverable: AI & Technology, Cybersecurity, Cloud & Engineering, Business & Startups.
-- [ ] Navigation clearly separates editorial coverage, research, Labs/tools, and premium Intelligence experiences.
+- [ ] Navigation clearly separates Media, Labs/tools, Intelligence, and Infrastructure products.
 - [ ] The homepage is an editorial front page, not merely a reverse-chronological blog feed.
 - [ ] Search supports discovery across published articles, investigations, research, topics, companies, technologies, and tools as those content types are introduced.
 - [ ] Every page has a clear purpose, useful hierarchy, and meaningful empty/error/loading states.
