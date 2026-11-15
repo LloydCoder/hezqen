@@ -3,9 +3,7 @@ import type { Access, CollectionConfig } from "payload";
 type Actor = { id: string | number; role?: string } | null;
 
 function actorFromRequest(user: unknown): Actor {
-  return user && typeof user === "object" && "id" in user
-    ? (user as Actor)
-    : null;
+  return user && typeof user === "object" && "id" in user ? (user as Actor) : null;
 }
 
 const canReadClaims: Access = ({ req }) =>
@@ -76,7 +74,12 @@ export const Claims: CollectionConfig = {
       ],
     },
     { name: "material", type: "checkbox", defaultValue: true },
-    { name: "reviewedBy", type: "relationship", relationTo: "users", access: { update: () => false } },
+    {
+      name: "reviewedBy",
+      type: "relationship",
+      relationTo: "users",
+      access: { update: () => false },
+    },
     { name: "reviewedAt", type: "date", access: { update: () => false } },
   ],
   timestamps: true,
