@@ -1438,3 +1438,220 @@ a:focus-visible {
     flex-direction: column;
   }
 }
+
+.latest-section,
+.division-articles {
+  padding: 96px 0;
+}
+.latest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 34px;
+  border: 1px solid var(--line);
+  background: var(--line);
+}
+.latest-card {
+  display: flex;
+  min-height: 250px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--white);
+  padding: 30px;
+}
+.latest-card-meta,
+.correction-record-date {
+  margin: 0;
+  color: var(--slate);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+.latest-card-meta span {
+  color: var(--amber-deep);
+}
+.latest-card h3 {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.2;
+}
+.latest-card h3 a:hover,
+.correction-record h3 a:hover {
+  color: var(--amber-deep);
+}
+.latest-card > p:not(.latest-card-meta) {
+  margin: 0;
+  color: var(--slate);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.latest-card .text-link {
+  margin-top: auto;
+}
+.latest-empty {
+  margin-top: 34px;
+  border-left: 3px solid var(--amber);
+  background: var(--mist);
+  padding: 22px 26px;
+  color: var(--graphite);
+}
+.article-page {
+  padding: 64px 0 110px;
+}
+.article-container {
+  max-width: 920px;
+}
+.article-page h1 {
+  max-width: 900px;
+  margin: 28px 0 18px;
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+}
+.article-deck {
+  max-width: 780px;
+  margin: 0;
+  color: var(--slate);
+  font-size: clamp(19px, 2.2vw, 24px);
+  line-height: 1.55;
+}
+.article-byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin-top: 28px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 22px;
+  color: var(--slate);
+  font-size: 12px;
+  font-weight: 600;
+}
+.correction-notice {
+  margin-top: 28px;
+  border: 1px solid #e7c98e;
+  border-left: 4px solid var(--amber);
+  background: #fffaf0;
+  padding: 20px 24px;
+}
+.correction-notice-label {
+  margin: 0 0 8px;
+  color: var(--amber-deep);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.correction-notice p:not(.correction-notice-label) {
+  margin: 0 0 10px;
+  color: var(--graphite);
+}
+.correction-notice a,
+.article-endnote a {
+  color: var(--amber-deep);
+  font-size: 13px;
+  font-weight: 700;
+}
+.article-rich-text {
+  margin-top: 48px;
+  color: var(--graphite);
+  font-size: 19px;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+.article-rich-text h2,
+.article-rich-text h3,
+.article-rich-text h4 {
+  margin: 1.8em 0 0.6em;
+  color: var(--navy);
+  line-height: 1.2;
+}
+.article-rich-text p {
+  margin: 0 0 1.35em;
+}
+.article-rich-text a {
+  color: var(--amber-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.article-rich-text ul,
+.article-rich-text ol {
+  margin: 0 0 1.4em;
+  padding-left: 1.5em;
+}
+.article-rich-text blockquote {
+  margin: 1.8em 0;
+  border-left: 3px solid var(--amber);
+  padding: 8px 0 8px 24px;
+  color: var(--slate);
+  font-size: 1.08em;
+}
+.article-rich-text pre {
+  overflow-x: auto;
+  border-radius: 6px;
+  background: var(--navy);
+  color: var(--white);
+  padding: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.article-endnote {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 64px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+.article-endnote p {
+  margin: 0;
+  color: var(--slate);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.correction-record-list {
+  display: grid;
+  gap: 0;
+  margin: 22px 0 44px;
+  border-top: 1px solid var(--line);
+}
+.correction-record {
+  border-bottom: 1px solid var(--line);
+  padding: 22px 0;
+}
+.correction-record h3 {
+  margin: 8px 0;
+  font-size: 22px;
+  line-height: 1.25;
+}
+.correction-record p:last-child {
+  margin: 0;
+}
+@media (max-width: 760px) {
+  .latest-section,
+  .division-articles {
+    padding: 66px 0;
+  }
+  .latest-grid {
+    grid-template-columns: 1fr;
+  }
+  .latest-card {
+    min-height: 0;
+    padding: 24px;
+  }
+  .article-page {
+    padding: 42px 0 76px;
+  }
+  .article-page h1 {
+    font-size: clamp(38px, 10vw, 54px);
+  }
+  .article-rich-text {
+    margin-top: 34px;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+}
