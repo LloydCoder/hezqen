@@ -1,4 +1,4 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
 
