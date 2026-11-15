@@ -123,6 +123,17 @@ export default function HomePage() {
                 business decisions.
               </p>
             </article>
+            <article className="platform-card">
+              <span className="platform-kicker">04 — ENGINEERING PRODUCTS</span>
+              <h2>HEZQEN Infrastructure</h2>
+              <p>
+                Open engineering kits for local AI, privacy, multi-GPU planning and air-gapped
+                retrieval deployments.
+              </p>
+              <Link className="text-link" href="/infrastructure">
+                Explore the infrastructure kits <span aria-hidden="true">↗</span>
+              </Link>
+            </article>
           </div>
         </div>
       </section>
