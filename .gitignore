@@ -22,3 +22,8 @@ test-results/
 
 .DS_Store
 Thumbs.db
+
+# Cloudflare local development secrets and generated runtime output
+.dev.vars*
+.wrangler/
+.cloudflare/
