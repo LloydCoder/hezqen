@@ -212,6 +212,39 @@ test("requires the assigned fact-checker to complete fact-checking", async () =>
   assert.equal(store.auditEvents.length, 1);
 });
 
+test("blocks fact-check completion until every material claim and evidence item is verified", async () => {
+  const store = new MemoryStore();
+  store.article = { ...initialArticle, workflowStatus: "fact_check", factCheckComplete: false };
+  store.claims = [
+    {
+      id: "claim-1",
+      sourceIds: ["source-1"],
+      verificationStatus: "unverified",
+      evidence: [],
+    },
+  ];
+  const result = await executeEditorialReviewAction(
+    store,
+    { id: "checker-1", role: "fact_checker", isHuman: true, active: true },
+    {
+      articleId: "article-1",
+      expectedRevision: 4,
+      action: "complete_fact_check",
+      now,
+    },
+  );
+
+  assert.equal(result.ok, false);
+  if (!result.ok) {
+    assert.ok(result.blockers.includes("CLAIM_NOT_VERIFIED"));
+    assert.ok(result.blockers.includes("CLAIM_EVIDENCE_REQUIRED"));
+  }
+  assert.equal(store.article.factCheckComplete, false);
+  assert.equal(store.article.revision, 4);
+  assert.equal(store.auditEvents.length, 0);
+  assert.equal(store.rolledBack, true);
+});
+
 test("rejects a fact-checker who is not assigned to the article", async () => {
   const store = new MemoryStore();
   store.article = { ...initialArticle, workflowStatus: "fact_check", factCheckComplete: false };
