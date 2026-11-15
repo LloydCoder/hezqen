@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { LAB_CALCULATORS } from "@/domain/labs/calculator-suite";
 
@@ -68,7 +68,7 @@ export default function LabsIndexPage() {
             ].map((item) => (
               <Link
                 key={item.href}
-                href={item.href}
+                href={item.href as Route}
                 style={{
                   display: "block",
                   background: "#fff",
@@ -120,7 +120,7 @@ export default function LabsIndexPage() {
               {LAB_CALCULATORS.filter((item) => item.category === category).map((item) => (
                 <Link
                   key={item.slug}
-                  href={`/labs/${item.slug}`}
+                  href={`/labs/${item.slug}` as Route}
                   style={{
                     display: "block",
                     background: "#fff",
