@@ -15,6 +15,11 @@ export const Claims: CollectionConfig = {
     useAsTitle: "claimText",
     defaultColumns: ["claimText", "verificationStatus", "updatedAt"],
     group: "Research",
+    components: {
+      edit: {
+        beforeDocumentControls: ["/src/components/admin/ClaimVerificationControlsServer"],
+      },
+    },
   },
   access: {
     create: canCreateClaims,
