@@ -1,7 +1,8 @@
-import { MigrateDownArgs, MigrateUpArgs, sql } from "@payloadcms/db-postgres";
+import { sql } from "@payloadcms/db-postgres";
+import type { MigrateDownArgs, MigrateUpArgs } from "@payloadcms/db-postgres";
 
 export async function up({ db }: MigrateUpArgs): Promise<void> {
-  await db.execute(sql\`
+  await db.execute(sql`
     CREATE TYPE "public"."enum_articles_correction_status" AS ENUM('none', 'open', 'resolved');
     CREATE TYPE "public"."enum__articles_v_version_correction_status" AS ENUM('none', 'open', 'resolved');
 
@@ -37,11 +38,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     CREATE INDEX "articles_correction_status_idx" ON "articles" USING btree ("correction_status");
     CREATE INDEX "_articles_v_version_version_scheduled_for_idx" ON "_articles_v" USING btree ("version_scheduled_for");
     CREATE INDEX "_articles_v_version_version_correction_status_idx" ON "_articles_v" USING btree ("version_correction_status");
-  \`);
+  `);
 }
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
-  await db.execute(sql\`
+  await db.execute(sql`
     DROP INDEX IF EXISTS "articles_scheduled_for_idx";
     DROP INDEX IF EXISTS "articles_correction_status_idx";
     DROP INDEX IF EXISTS "_articles_v_version_version_scheduled_for_idx";
@@ -72,5 +73,5 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
 
     DROP TYPE IF EXISTS "public"."enum_articles_correction_status";
     DROP TYPE IF EXISTS "public"."enum__articles_v_version_correction_status";
-  \`);
+  `);
 }
