@@ -255,9 +255,12 @@ export const editorialReviewEndpoint: Endpoint = {
     const actor = actorFromRequest(req);
     if (!actor) return Response.json({ error: "Authentication required." }, { status: 401 });
     const body = asRecord(await req.json().catch(() => null));
+    const articleId = typeof body.articleId === "string" ? body.articleId.trim() : "";
     if (
-      typeof body.articleId !== "string" ||
+      !articleId ||
+      articleId.length > 128 ||
       typeof body.expectedRevision !== "number" ||
+      !Number.isInteger(body.expectedRevision) ||
       !["complete_fact_check", "review_disclosures"].includes(String(body.action))
     ) {
       return Response.json({ error: "Invalid editorial review command." }, { status: 400 });
@@ -268,7 +271,7 @@ export const editorialReviewEndpoint: Endpoint = {
         new PayloadEditorialWorkflowStore(req),
         actor,
         {
-          articleId: body.articleId,
+          articleId,
           expectedRevision: body.expectedRevision,
           action: body.action as "complete_fact_check" | "review_disclosures",
           correlationId: correlationId(req),
