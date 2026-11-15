@@ -101,6 +101,9 @@ The Neon migration connector requires explicit approval before applying changes 
 
 Production CMS configuration requires:
 
+Vercel provides `VERCEL_URL` and `VERCEL_ENV` for each deployment. The Payload origin resolver adds the exact Vercel hostname only when `VERCEL_ENV=preview`; it uses the canonical `NEXT_PUBLIC_SITE_URL` in Production. The configured `HEZQEN_ALLOWED_ORIGINS` value remains the exact canonical origin in Preview and Production. No wildcard or forwarded-host trust is introduced. The `HEZQEN_LOCAL_RUNTIME_TEST` exception is enabled only in the ephemeral Cloudflare CI harness together with `CI=true`; it is not set in Vercel.
+
+
 - `DATABASE_URL`: dedicated HEZQEN branch only.
 - `PAYLOAD_SECRET`: unique high-entropy secret, never committed or printed.
 - `NEXT_PUBLIC_SITE_URL`: `https://hezqen.tinlance.com` in production.

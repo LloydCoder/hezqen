@@ -8,7 +8,7 @@ Copy .env.example to .env and provide:
 - NEXT_PUBLIC_SITE_URL: the canonical origin for the current environment.
 - HEZQEN_ALLOWED_ORIGINS: comma-separated exact HTTPS origins allowed by Payload CORS/CSRF. Local development may use http://localhost:3000.
 
-Production must explicitly provide all four values. The application does not fall back to a build-time or known secret at runtime.
+Production must explicitly provide all four values. On Vercel, `VERCEL_URL` is added as an exact HTTPS origin only when `VERCEL_ENV=preview`; Payload's `serverURL` resolves to that exact Preview hostname. Production uses the canonical `NEXT_PUBLIC_SITE_URL` and does not add the Vercel deployment hostname to the allowlist. This keeps Payload's own server origin correct without permitting wildcard domains. `HEZQEN_ALLOWED_ORIGINS` must still contain the canonical origin; arbitrary hosts, wildcard origins and untrusted forwarded-host values are not accepted. `NEXT_PUBLIC_SITE_URL` remains the canonical public/SEO origin. The Cloudflare Worker CI smoke harness uses an explicit `CI=true` plus `HEZQEN_LOCAL_RUNTIME_TEST=true` flag for its local HTTP listener only; remote HTTP origins remain rejected, and the flag is not configured in Vercel or production. The application does not fall back to a build-time or known secret at runtime.
 
 ## Commands
 

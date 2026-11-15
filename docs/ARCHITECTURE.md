@@ -18,7 +18,7 @@ The four editorial divisions are AI & Technology, Cybersecurity, Cloud & Enginee
 ## Runtime and delivery
 
 - Next.js App Router, React Server Components by default, React 19, strict TypeScript and Node.js 24 for the standard Next.js development/build path.
-- Cloudflare Workers + vinext is an isolated hosting candidate, not an accepted production runtime. The compatibility check reported partial feature support; a local Worker build and route smoke test are being evaluated separately. vinext is beta.
+- The existing Vercel `hezqen` project is the approved standard Node.js hosting target under evaluation for Next.js + Payload. It remains in the architecture; Git-triggered deployments are temporarily disabled to conserve the Hobby daily deployment allowance while CI and application configuration are stabilized. Cloudflare is complementary for DNS/edge services. Cloudflare Workers + vinext is a separately evaluated beta alternative, not a forced migration or accepted production runtime.
 - PostgreSQL 18 in a dedicated Neon project in AWS eu-central-1; do not confuse Neon-managed infrastructure with a HEZQEN-owned AWS account.
 - Separate Neon `main`, `staging`, and `production` branches. Shared staging and production currently have no application tables; neither has received the checked-in migration.
 - GitHub Actions CI checks formatting, lint, tests, dependency audit, production build, runtime routes, TypeScript and ephemeral PostgreSQL migrations.
@@ -76,7 +76,8 @@ The initial application disables the powered-by header and sets baseline respons
 
 - Development: local or isolated engineering environment.
 - Preview/staging: isolated host preview or `workers.dev` staging candidate + Neon staging branch; not yet provisioned or accepted.
-- Production: selected host + Neon production branch + `hezqen.tinlance.com`; not yet deployed or attached.
-- Evidence/media: dedicated private HEZQEN object-storage namespace; not yet provisioned.
+- Production: existing Vercel project (approved target, not yet production-accepted) + Neon production branch + `hezqen.tinlance.com`; no production deployment or custom-domain attachment is accepted yet.
+- Cloudflare: authoritative DNS and potential edge-security layer; Workers + vinext remains a beta alternative pending full runtime acceptance.
+- Evidence/media: dedicated private HEZQEN object-storage namespace; not yet provisioned. Cloudflare R2 is not enabled in the account and must not be enabled without cost and retention review.
 
-No Vercel deployment is part of the current hosting decision. Existing Tinlance product services and DNS records remain out of scope.
+The existing Vercel project remains an approved part of the hosting strategy. Existing Tinlance product services and DNS records remain out of scope.
