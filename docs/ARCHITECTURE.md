@@ -6,7 +6,7 @@
 
 ## Product boundaries
 
-HEZQEN is organized into three connected product surfaces:
+HEZQEN is organized into four connected product surfaces:
 
 - **HEZQEN Media:** public reporting, investigations, analysis and explainers.
 - **HEZQEN Labs:** tools, calculators, benchmarks and engineering experiments.
@@ -17,7 +17,6 @@ The four editorial divisions are AI & Technology, Cybersecurity, Cloud & Enginee
 
 ## Runtime and delivery
 
-- Next.js App Router, React Server Components by default, React 19 and strict TypeScript.
 - Next.js App Router, React Server Components by default, React 19, strict TypeScript and Node.js 24 for the standard Next.js development/build path.
 - Cloudflare Workers + vinext is an isolated hosting candidate, not an accepted production runtime. The compatibility check reported partial feature support; a local Worker build and route smoke test are being evaluated separately. vinext is beta.
 - PostgreSQL 18 in a dedicated Neon project in AWS eu-central-1; do not confuse Neon-managed infrastructure with a HEZQEN-owned AWS account.
