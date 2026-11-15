@@ -4,7 +4,7 @@ import { ArticleCard } from "@/components/articles/ArticleCard";
 import { getPublicArticles } from "@/lib/public-articles";
 import { divisions, site } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function HomePage() {
   const latestArticles = await getPublicArticles({ limit: 3 });
