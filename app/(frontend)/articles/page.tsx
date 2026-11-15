@@ -22,14 +22,16 @@ export const metadata: Metadata = {
 };
 
 type ArticlesPageProps = {
-  searchParams: Promise<{ page?: string; division?: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export default async function ArticlesPage({ searchParams }: ArticlesPageProps) {
   const params = await searchParams;
-  const pageValue = Number(params.page ?? "1");
+  const pageParam = typeof params.page === "string" ? params.page : "1";
+  const divisionParam = typeof params.division === "string" ? params.division : undefined;
+  const pageValue = Number(pageParam);
   const page = Number.isSafeInteger(pageValue) && pageValue > 0 ? Math.min(pageValue, 1000) : 1;
-  const division = divisions.find((item) => item.slug === params.division);
+  const division = divisions.find((item) => item.slug === divisionParam);
   const result = await getPublicArticles({ page, division: division?.slug, limit: 12 });
 
   const itemList = result.docs.map((article, index) => ({
