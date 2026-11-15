@@ -2,6 +2,7 @@ type StructuredDataProps = { data: Record<string, unknown> };
 
 export function StructuredData({ data }: StructuredDataProps) {
   const serialized = JSON.stringify(data).replace(/</g, "\\u003c");
+  // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized from trusted application data and escapes "<" to prevent script termination.
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serialized }} />;
 }
 
