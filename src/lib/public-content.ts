@@ -1,23 +1,24 @@
-import { getPayload, type Where } from "payload";
+import { getPayload } from "payload";
 
 import config from "../payload.config.ts";
 import { toPublicArticle, type PublicArticle } from "./public-articles.ts";
 
-const publishedWhere: Where = {
-  and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
-};
+const publishedConditions = [
+  { _status: { equals: "published" } },
+  { workflowStatus: { equals: "published" } },
+];
 
 export async function findPublicArticles(options: {
   division?: PublicArticle["division"];
   limit?: number;
 } = {}): Promise<PublicArticle[]> {
   const payload = await getPayload({ config });
-  const clauses = [...(publishedWhere.and ?? [])];
-  if (options.division) clauses.push({ division: { equals: options.division } });
+  const conditions = [...publishedConditions];
+  if (options.division) conditions.push({ division: { equals: options.division } });
 
   const result = await payload.find({
     collection: "articles",
-    where: { and: clauses },
+    where: { and: conditions },
     limit: Math.min(Math.max(options.limit ?? 10, 1), 50),
     sort: "-publishedAt",
     depth: 1,
@@ -35,7 +36,7 @@ export async function findPublicArticleBySlug(slug: string): Promise<PublicArtic
   const result = await payload.find({
     collection: "articles",
     where: {
-      and: [...(publishedWhere.and ?? []), { slug: { equals: slug } }],
+      and: [...publishedConditions, { slug: { equals: slug } }],
     },
     limit: 1,
     depth: 1,
@@ -50,7 +51,7 @@ export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]
     collection: "articles",
     where: {
       and: [
-        ...(publishedWhere.and ?? []),
+        ...publishedConditions,
         { correctionStatus: { equals: "resolved" } },
         { correctionPublicNote: { exists: true } },
       ],
@@ -62,5 +63,8 @@ export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]
   });
   return result.docs
     .map((doc) => toPublicArticle(doc))
-    .filter((article): article is PublicArticle => article !== null && article.correctionNotice !== null);
+    .filter(
+      (article): article is PublicArticle =>
+        article !== null && article.correctionNotice !== null,
+    );
 }
