@@ -2,8 +2,7 @@ import type { Access, CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
 
-const canReadAudit: Access = ({ req }) =>
-  hasActiveRole(req.user, ["administrator", "editor"]);
+const canReadAudit: Access = ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]);
 
 export const AuditEvents: CollectionConfig = {
   slug: "audit-events",
