@@ -8,7 +8,7 @@ Copy .env.example to .env and provide:
 - NEXT_PUBLIC_SITE_URL: the canonical origin for the current environment.
 - HEZQEN_ALLOWED_ORIGINS: comma-separated exact HTTPS origins allowed by Payload CORS/CSRF. Local development may use http://localhost:3000.
 
-Production must explicitly provide all four values. The application does not fall back to a build-time or known secret at runtime.
+Production must explicitly provide all four values. On Vercel, `VERCEL_URL` is added as an exact HTTPS origin for the current deployment so the Payload admin can use its own Preview hostname without permitting wildcard domains. `HEZQEN_ALLOWED_ORIGINS` must still contain the canonical origin; arbitrary hosts, wildcard origins and untrusted forwarded-host values are not accepted. The application does not fall back to a build-time or known secret at runtime.
 
 ## Commands
 
