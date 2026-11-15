@@ -52,12 +52,13 @@ test("requires an explicit return-to-draft transition before editing reviewed or
   assert.ok(revisionHook);
   for (const workflowStatus of ["fact_check", "editorial_review", "approved", "scheduled"]) {
     await assert.rejects(
-      () => revisionHook({
-        data: { body: { root: { children: [] } } },
-        originalDoc: { workflowStatus, revision: 3 },
-        operation: "update",
-        req: { context: {} },
-      }),
+      () =>
+        revisionHook({
+          data: { body: { root: { children: [] } } },
+          originalDoc: { workflowStatus, revision: 3 },
+          operation: "update",
+          req: { context: {} },
+        }),
       /Return the article to draft/,
     );
   }
@@ -91,12 +92,13 @@ test("blocks direct content edits to published and correction-required articles"
   assert.ok(revisionHook);
   for (const workflowStatus of ["published", "correction_required"]) {
     await assert.rejects(
-      () => revisionHook({
-        data: { title: "Unapproved edit" },
-        originalDoc: { workflowStatus, revision: 2 },
-        operation: "update",
-        req: { context: {} },
-      }),
+      () =>
+        revisionHook({
+          data: { title: "Unapproved edit" },
+          originalDoc: { workflowStatus, revision: 2 },
+          operation: "update",
+          req: { context: {} },
+        }),
       /correction workflow/,
     );
   }
