@@ -68,8 +68,7 @@ export function resolveAllowedOrigins(input: AllowedOriginsInput): string[] {
 }
 
 export function resolvePayloadServerUrl(input: PayloadServerUrlInput): string | undefined {
-  const allowLocalhostHttp =
-    input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true;
+  const allowLocalhostHttp = input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true;
   const canonicalOrigin = input.configuredSiteUrl
     ? parseOrigin(input.configuredSiteUrl, allowLocalhostHttp)
     : undefined;
