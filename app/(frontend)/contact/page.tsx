@@ -42,7 +42,7 @@ export default function ContactPage() {
         <p>
           Identify the article or page, the specific claim, and any supporting source material. We
           review substantive corrections under our{" "}
-            <Link href="/corrections">corrections policy</Link>.
+          <Link href="/corrections">corrections policy</Link>.
         </p>
         <h2>Editorial independence</h2>
         <p>
