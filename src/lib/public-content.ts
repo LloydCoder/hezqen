@@ -65,25 +65,33 @@ export async function findPublicArticleBySlug(slug: string): Promise<PublicArtic
 }
 
 export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]> {
+  const articles = await findPublicArticles({ limit: 50 });
   const payload = await getPayload({ config });
-  const result = await payload.find({
-    collection: "articles",
-    where: {
-      and: [
-        { _status: { equals: "published" } },
-        { workflowStatus: { equals: "published" } },
-        { correctionStatus: { equals: "resolved" } },
-        { correctionPublicNote: { exists: true } },
-      ],
-    },
-    limit: Math.min(Math.max(limit, 1), 50),
-    sort: "-correctionResolvedAt",
-    depth: 1,
-  });
-  return result.docs
-    .map((doc) => toPublicArticle(doc))
-    .filter(
-      (article): article is PublicArticle =>
-        article !== null && article.correctionNotice !== null,
-    );
+  const records = await Promise.all(
+    articles.map(async (article) => {
+      const versions = await payload.findVersions({
+        collection: "articles",
+        where: { parent: { equals: article.id } },
+        limit: 100,
+        sort: "-updatedAt",
+        depth: 0,
+        overrideAccess: true,
+      });
+      const history = toPublicCorrectionHistory(versions.docs, article.correctionNotice);
+      return history.map((notice) => ({
+        ...article,
+        correctionNotice: notice,
+        correctionHistory: history,
+      }));
+    }),
+  );
+
+  return records
+    .flat()
+    .sort(
+      (left, right) =>
+        Date.parse(right.correctionNotice!.correctedAt) -
+        Date.parse(left.correctionNotice!.correctedAt),
+    )
+    .slice(0, Math.min(Math.max(limit, 1), 50));
 }
