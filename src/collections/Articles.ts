@@ -93,7 +93,6 @@ export const Articles: CollectionConfig = {
           "correctionResolvedAt",
           "correctionResolvedBy",
           "revision",
-          "_status",
         ];
         const hasWorkflowMutation = workflowFields.some((field) =>
           Object.hasOwn(data ?? {}, field),
