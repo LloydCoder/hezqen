@@ -32,4 +32,35 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: https://hezqen.tinlance.com
           HEZQEN_ALLOWED_ORIGINS: https://hezqen.tinlance.com
+      - name: Runtime smoke test without deployment provider
+        run: |
+          pnpm start > /tmp/hezqen-next.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000/ >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/hezqen-next.log
+            exit 1
+          fi
+          for route in / /about /editorial-standards /labs/vram /labs/ai-cost /divisions/ai-technology /robots.txt /sitemap.xml; do
+            status=$(curl --silent --output /tmp/hezqen-response --write-out "%{http_code}" "http://127.0.0.1:3000$route")
+            if [ "$status" != "200" ]; then
+              echo "Unexpected HTTP $status for $route"
+              cat /tmp/hezqen-response
+              cat /tmp/hezqen-next.log
+              exit 1
+            fi
+          done
+        env:
+          DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
+          PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
+          NEXT_PUBLIC_SITE_URL: https://hezqen.tinlance.com
+          HEZQEN_ALLOWED_ORIGINS: https://hezqen.tinlance.com
       - run: pnpm run typecheck
