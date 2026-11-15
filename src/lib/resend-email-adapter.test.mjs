@@ -5,7 +5,7 @@ import { createResendEmailAdapter } from "./resend-email-adapter.ts";
 
 test("sends Payload authentication messages through the configured verified sender", async () => {
   let requestUrl = "";
-  let requestInit: RequestInit | undefined;
+  let requestInit;
   const adapter = createResendEmailAdapter({
     apiKey: "re_test_only",
     defaultFromAddress: "no-reply@tinlance.com",
@@ -16,7 +16,7 @@ test("sends Payload authentication messages through the configured verified send
       return Response.json({ id: "email-test-id" });
     },
   });
-  const initialized = adapter({ payload: {} as never });
+  const initialized = adapter({ payload: {} });
   const result = await initialized.sendEmail({
     to: "editor@example.com",
     subject: "Reset your HEZQEN password",
@@ -26,11 +26,8 @@ test("sends Payload authentication messages through the configured verified send
   assert.equal(requestUrl, "https://api.resend.com/emails");
   assert.equal(result && typeof result, "object");
   assert.equal(requestInit?.method, "POST");
-  assert.equal(
-    (requestInit?.headers as Record<string, string>).authorization,
-    "Bearer re_test_only",
-  );
-  const body = JSON.parse(String(requestInit?.body)) as Record<string, unknown>;
+  assert.equal(new Headers(requestInit?.headers).get("authorization"), "Bearer re_test_only");
+  const body = JSON.parse(String(requestInit?.body));
   assert.equal(body.from, "HEZQEN <no-reply@tinlance.com>");
   assert.deepEqual(body.to, ["editor@example.com"]);
 });
@@ -48,7 +45,7 @@ test("rejects invalid recipients before making a network request", async () => {
   });
 
   await assert.rejects(
-    adapter({ payload: {} as never }).sendEmail({
+    adapter({ payload: {} }).sendEmail({
       to: [],
       subject: "Test",
       text: "Test",
@@ -67,7 +64,7 @@ test("surfaces provider rejection so password-reset delivery cannot appear succe
   });
 
   await assert.rejects(
-    adapter({ payload: {} as never }).sendEmail({
+    adapter({ payload: {} }).sendEmail({
       to: "editor@example.com",
       subject: "Test",
       text: "Test",
