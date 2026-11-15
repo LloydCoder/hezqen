@@ -16,6 +16,7 @@ export interface WorkflowOptions {
   now?: string;
   scheduledFor?: string;
   correctionReason?: string;
+  correctionPublicNote?: string;
 }
 
 export type WorkflowBlocker =
@@ -27,7 +28,8 @@ export type WorkflowBlocker =
   | "SCHEDULE_TIME_REQUIRED"
   | "SCHEDULE_TIME_INVALID"
   | "SCHEDULE_TIME_NOT_REACHED"
-  | "CORRECTION_REASON_REQUIRED";
+  | "CORRECTION_REASON_REQUIRED"
+  | "CORRECTION_PUBLIC_NOTE_REQUIRED";
 
 export type WorkflowTransitionResult =
   | { ok: true; record: EditorialWorkflowRecord }
@@ -216,6 +218,9 @@ export function transitionPublication(
     if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     if (targetStatus === "correction_required" && !options.correctionReason?.trim()) {
       return resultWithBlockers("CORRECTION_REASON_REQUIRED");
+    }
+    if (targetStatus === "correction_required" && !options.correctionPublicNote?.trim()) {
+      return resultWithBlockers("CORRECTION_PUBLIC_NOTE_REQUIRED");
     }
     return { ok: true, record: { ...record, status: targetStatus } };
   }
