@@ -217,8 +217,8 @@ This section supersedes earlier PR #51 head/count/check-status statements above.
 
 ### Latest code and CI evidence
 
-- Payload migration verification run [43774310805](https://github.com/LloydCoder/hezqen/actions/runs/43774310805) passed on the immediately preceding code head and verified both migrations against ephemeral PostgreSQL.
-- Cloudflare vinext compatibility job in run [43774310832](https://github.com/LloydCoder/hezqen/actions/runs/43774310832) passed. Its separate Cloudflare Worker build/smoke job was cancelled, so no complete Worker runtime smoke result is accepted.
+- Latest Payload migration verification run [43774399391](https://github.com/LloydCoder/hezqen/actions/runs/43774399391) passed on code head `bc80495` and verified both migrations against ephemeral PostgreSQL.
+- Latest Cloudflare vinext compatibility job in run [43774399395](https://github.com/LloydCoder/hezqen/actions/runs/43774399395) passed. Its separate Cloudflare Worker build was cancelled before completion and the public-route smoke job was skipped.
 - HEZQEN CI run [43774310822](https://github.com/LloydCoder/hezqen/actions/runs/43774310822) completed with failure in `pnpm test` after lint and format passed. It exposed three test failures: claim-policy fixtures without relation arrays, an evidence hook test that used a spoofed context marker for a field-level assertion, and an outdated origin-error regex. Follow-up commits `db2a0a4`, `a4b560e`, and `bc80495` addressed those failures. A second run [43774399468](https://github.com/LloydCoder/hezqen/actions/runs/43774399468) passed lint and format but failed two origin-error assertions; commit `a006eb2` fixes them. No fresh CI run exists on current head `a006eb2bbfcb3387d341b24b331e517ff944628c`. Audit, build, typecheck and runtime smoke did not run after the test failure.
 - The previous green CI result on code-bearing head `dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40` predates the current editorial/research verification implementation and is not evidence for the latest code.
 
