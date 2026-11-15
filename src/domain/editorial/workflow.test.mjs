@@ -81,10 +81,20 @@ test("prevents authors from approving their own work", () => {
 });
 
 test("rejects automated actors and administrator role from approval", () => {
-  const review = { ...record, status: "editorial_review", factCheckComplete: true, disclosuresReviewed: true };
+  const review = {
+    ...record,
+    status: "editorial_review",
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
   assert.equal(transitionPublication(review, agent, "approved", { now }).ok, false);
   assert.equal(
-    transitionPublication(review, { id: "editor-1", role: "administrator", isHuman: true }, "approved", { now }).ok,
+    transitionPublication(
+      review,
+      { id: "editor-1", role: "administrator", isHuman: true },
+      "approved",
+      { now },
+    ).ok,
     false,
   );
 });
