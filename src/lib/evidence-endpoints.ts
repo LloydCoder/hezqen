@@ -188,7 +188,7 @@ export const evidenceUploadEndpoint: Endpoint = {
           byteSize: verifiedObject.byteSize,
           sha256: verifiedObject.sha256,
           storageRef: verifiedObject.key,
-          verificationStatus: "verified",
+          verificationStatus: "preserved",
         },
         overrideAccess: true,
         req,
