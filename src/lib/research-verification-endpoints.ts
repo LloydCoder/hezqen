@@ -3,6 +3,7 @@ import type { Endpoint, PayloadRequest } from "payload";
 
 import { assessClaim, validateSourceRecord } from "../domain/research/evidence.ts";
 import type { ResearchEvidence, ResearchSource } from "../domain/research/evidence.ts";
+import type { NeonEvidenceStorageConfig } from "./neon-evidence-storage.ts";
 import {
   getPrivateEvidenceObject,
   readNeonEvidenceStorageConfig,
@@ -308,32 +309,48 @@ export const claimVerifyEndpoint: Endpoint = {
         { status: 409 },
       );
     }
+    if (claim.material !== true) {
+      return Response.json(
+        { error: "Only material claims require editorial verification." },
+        { status: 409 },
+      );
+    }
     const articleId = relationshipId(claim.article);
-    if (articleId) {
-      let article: RecordValue;
-      try {
-        article = asRecord(
-          await req.payload.findByID({
-            collection: "articles",
-            id: articleId,
-            depth: 1,
-            overrideAccess: true,
-            req,
-          }),
-        );
-      } catch {
-        return Response.json({ error: "The linked article no longer exists." }, { status: 409 });
-      }
-      const assignedReviewer =
-        actor.role === "editor"
-          ? relationshipId(article.assignedEditor)
-          : relationshipId(article.assignedFactChecker);
-      if (assignedReviewer !== actor.id) {
-        return Response.json(
-          { error: "Only the assigned editor or fact-checker may verify this article claim." },
-          { status: 403 },
-        );
-      }
+    if (!articleId) {
+      return Response.json(
+        { error: "A claim must be linked to an article before editorial verification." },
+        { status: 422 },
+      );
+    }
+    let article: RecordValue;
+    try {
+      article = asRecord(
+        await req.payload.findByID({
+          collection: "articles",
+          id: articleId,
+          depth: 1,
+          overrideAccess: true,
+          req,
+        }),
+      );
+    } catch {
+      return Response.json({ error: "The linked article no longer exists." }, { status: 409 });
+    }
+    if (article.workflowStatus !== "fact_check") {
+      return Response.json(
+        { error: "Claims can only be verified during the article fact-check stage." },
+        { status: 409 },
+      );
+    }
+    const assignedReviewer =
+      actor.role === "editor"
+        ? relationshipId(article.assignedEditor)
+        : relationshipId(article.assignedFactChecker);
+    if (assignedReviewer !== actor.id) {
+      return Response.json(
+        { error: "Only the assigned editor or fact-checker may verify this article claim." },
+        { status: 403 },
+      );
     }
     if (typeof claim.updatedAt !== "string" || claim.updatedAt !== expectedUpdatedAt) {
       return Response.json({ error: "Claim changed before verification." }, { status: 409 });
