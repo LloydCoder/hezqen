@@ -3,7 +3,7 @@ import { APIError, type Access, type CollectionConfig, type Where } from "payloa
 import { getActiveUserActor, hasActiveRole } from "../lib/access.ts";
 import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
-function slugifyArticleTitle(value: unknown): string {
+export function slugifyArticleTitle(value: unknown): string {
   if (typeof value !== "string") return "";
   return value
     .normalize("NFKD")
