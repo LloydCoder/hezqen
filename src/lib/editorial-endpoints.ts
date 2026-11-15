@@ -8,6 +8,7 @@ import {
   type StoredEditorialArticle,
   type EditorialAuditEvent,
 } from "../domain/editorial/persisted-workflow.ts";
+import type { MaterialClaim } from "../domain/editorial/publishing-policy.ts";
 import type { WorkflowStatus } from "../domain/editorial/workflow.ts";
 
 type RawRecord = Record<string, unknown>;
