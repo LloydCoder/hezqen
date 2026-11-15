@@ -3,7 +3,6 @@ import test from "node:test";
 
 import { LAB_CALCULATORS } from "../domain/labs/calculator-suite.ts";
 import { createSitemap } from "../../app/sitemap.ts";
-import type { PublicArticle } from "./public-articles.ts";
 
 test("sitemap publishes all sixteen public Labs calculator routes", () => {
   const routes = new Set(createSitemap().map((entry) => new URL(entry.url).pathname));
@@ -49,7 +48,7 @@ test("sitemap includes only supplied published article projections with content 
     publishedAt: "2026-11-15T08:00:00.000Z",
     updatedAt: "2026-11-16T08:00:00.000Z",
     correctionNotice: null,
-  } satisfies PublicArticle;
+  };
   const entry = createSitemap([article]).find((item) => item.url.endsWith("/articles/verified-report"));
   assert.ok(entry);
   assert.equal(entry?.lastModified?.toISOString(), "2026-11-16T08:00:00.000Z");
