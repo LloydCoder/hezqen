@@ -18,7 +18,20 @@ test("sitemap publishes all sixteen public Labs calculator routes", () => {
 
 test("sitemap includes core publication and infrastructure surfaces", () => {
   const routes = new Set(sitemap().map((entry) => new URL(entry.url).pathname));
-  for (const route of ["/", "/about", "/contact", "/corrections", "/editorial-standards", "/privacy", "/cookies", "/terms", "/security", "/sitemap", "/labs", "/infrastructure"]) {
+  for (const route of [
+    "/",
+    "/about",
+    "/contact",
+    "/corrections",
+    "/editorial-standards",
+    "/privacy",
+    "/cookies",
+    "/terms",
+    "/security",
+    "/sitemap",
+    "/labs",
+    "/infrastructure",
+  ]) {
     assert.ok(routes.has(route), `Missing sitemap route: ${route}`);
   }
 });
