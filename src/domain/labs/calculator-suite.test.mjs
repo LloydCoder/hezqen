@@ -12,7 +12,8 @@ test("calculates replicated RAG vector storage and monthly cost", () => {
     documents: 1000, chunksPerDocument: 10, dimensions: 1536, bytesPerDimension: 4,
     replicas: 2, metadataMbPerDocument: 1, pricePerGbMonth: 0.1,
   });
-  assert.ok(result.metrics.some((metric) => metric.label === "Vector payload" && metric.value > 0));
+  assert.equal(result.metrics.find((metric) => metric.label === "Vector payload")!.value, 0.06152);
+  assert.ok(result.metrics.some((metric) => metric.label === "Estimated index overhead" && metric.value > 0));
   assert.ok(result.metrics.some((metric) => metric.label === "Monthly storage cost"));
 });
 
