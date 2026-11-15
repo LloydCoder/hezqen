@@ -39,6 +39,7 @@ const navItems = [
   { href: "/divisions/cloud-engineering", label: "Cloud & Engineering" },
   { href: "/divisions/business-startups", label: "Business & Startups" },
   { href: "/labs", label: "Labs" },
+  { href: "/infrastructure", label: "Infrastructure" },
 ] as const;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -93,6 +94,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <div className="footer-links">
                 <Link href="/about">About</Link>
                 <Link href="/labs">Labs</Link>
+                <Link href="/infrastructure">Infrastructure</Link>
                 <Link href="/editorial-standards">Editorial standards</Link>
                 <a href="https://tinlance.com" rel="noopener noreferrer">
                   Tinlance
