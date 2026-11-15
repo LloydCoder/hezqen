@@ -183,8 +183,8 @@ export const evidenceUploadEndpoint: Endpoint = {
     try {
       const evidence = await withRequestContext(req, { hezqenEvidencePreservation: true }, () =>
         req.payload.create({
-            collection: "evidence",
-            data: {
+          collection: "evidence",
+          data: {
               evidenceId: randomUUID(),
               source: Number(sourceId),
               collectionMethod: collectionMethod.trim(),
