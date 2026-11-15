@@ -93,7 +93,6 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: http://localhost:3001
           HEZQEN_ALLOWED_ORIGINS: http://localhost:3001
-          CLOUDFLARE_INCLUDE_PROCESS_ENV: "true"
       - name: Provide isolated Worker preview bindings
         # Cloudflare Vite preview reads .dev.vars copied into the build output; process env alone is not a Worker binding.
         run: |
@@ -144,3 +143,4 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: http://localhost:3001
           HEZQEN_ALLOWED_ORIGINS: http://localhost:3001
+          CLOUDFLARE_INCLUDE_PROCESS_ENV: "true"
