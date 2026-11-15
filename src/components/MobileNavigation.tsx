@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { Route } from "next";
 
 type NavigationItem = {
-  href: Route;
+  href: string;
   label: string;
 };
 
@@ -76,7 +76,7 @@ export function MobileNavigation({ items }: { items: readonly NavigationItem[] }
             return (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={item.href as Route}
                   aria-current={current ? "page" : undefined}
                   onClick={() => setOpen(false)}
                 >
