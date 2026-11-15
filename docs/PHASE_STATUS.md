@@ -212,14 +212,14 @@ This section supersedes earlier PR #51 head/count/check-status statements above.
 ### Repository inventory
 
 - HEZQEN (`LloydCoder/hezqen`): zero open issues; one open draft PR, #51. It remains unmerged and has no submitted reviews or inline review threads.
-- Latest code-bearing head: `bc80495f5ae87e8e85f241d2db191b3a1f416fb2`; the current PR branch head is a documentation-only follow-up after that code head. The PR has 49 changed files.
+- Latest code-bearing head: `a006eb2bbfcb3387d341b24b331e517ff944628c`. The PR has 49 changed files.
 - HIES (`LloydCoder/hezqen-infrastructure-standard`): zero open issues and zero open PRs at the latest inventory check.
 
 ### Latest code and CI evidence
 
 - Payload migration verification run [43774310805](https://github.com/LloydCoder/hezqen/actions/runs/43774310805) passed on the immediately preceding code head and verified both migrations against ephemeral PostgreSQL.
 - Cloudflare vinext compatibility job in run [43774310832](https://github.com/LloydCoder/hezqen/actions/runs/43774310832) passed. Its separate Cloudflare Worker build/smoke job was cancelled, so no complete Worker runtime smoke result is accepted.
-- HEZQEN CI run [43774310822](https://github.com/LloydCoder/hezqen/actions/runs/43774310822) completed with failure in `pnpm test` after lint and format passed. It exposed three test failures: claim-policy fixtures without relation arrays, an evidence hook test that used a spoofed context marker for a field-level assertion, and an outdated origin-error regex. Follow-up commits `db2a0a4`, `a4b560e`, and `bc80495` address these failures; no fresh CI run exists on current head `bc80495f5ae87e8e85f241d2db191b3a1f416fb2`. Audit, build, typecheck and runtime smoke did not run after the test failure.
+- HEZQEN CI run [43774310822](https://github.com/LloydCoder/hezqen/actions/runs/43774310822) completed with failure in `pnpm test` after lint and format passed. It exposed three test failures: claim-policy fixtures without relation arrays, an evidence hook test that used a spoofed context marker for a field-level assertion, and an outdated origin-error regex. Follow-up commits `db2a0a4`, `a4b560e`, and `bc80495` addressed those failures. A second run [43774399468](https://github.com/LloydCoder/hezqen/actions/runs/43774399468) passed lint and format but failed two origin-error assertions; commit `a006eb2` fixes them. No fresh CI run exists on current head `a006eb2bbfcb3387d341b24b331e517ff944628c`. Audit, build, typecheck and runtime smoke did not run after the test failure.
 - The previous green CI result on code-bearing head `dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40` predates the current editorial/research verification implementation and is not evidence for the latest code.
 
 ### Implementation reconciliation
@@ -253,4 +253,4 @@ This section supersedes earlier PR #51 head/count/check-status statements above.
 9. Commercially permitted production hosting decision and measured CMS/admin runtime suitability.
 10. Production backup/restore, monitoring, alerting, incident response, rollback and launch approval.
 
-**Current verdict:** code implementation is substantially advanced, but latest head is not CI-accepted. Payload migration passed on the preceding head; Cloudflare compatibility passed while Worker build/smoke was cancelled; HEZQEN CI failed tests and follow-up fixes are unverified. CMS staging acceptance remains PARTIAL and production is NOT READY.
+**Current verdict:** code implementation is substantially advanced, but latest head is not CI-accepted. Payload migration passed on the preceding head; Cloudflare compatibility passed while Worker build/smoke was cancelled; HEZQEN CI failed tests twice and the latest assertion fixes are unverified. CMS staging acceptance remains PARTIAL and production is NOT READY.
