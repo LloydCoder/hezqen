@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 
+import { getClaimVerificationBlockers } from "./publishing-policy.ts";
 import type { MaterialClaim, PublishingActor } from "./publishing-policy.ts";
 import { transitionPublication, type WorkflowStatus } from "./workflow.ts";
 
@@ -324,6 +325,15 @@ export async function executeEditorialReviewAction(
         article.workflowStatus === "editorial_review");
     if (!allowed) {
       return await rollbackResult(store, transactionId, 403, "ACTOR_NOT_AUTHORIZED");
+    }
+
+    if (input.action === "complete_fact_check") {
+      const blockers = getClaimVerificationBlockers(
+        await store.getMaterialClaims(article.id, transactionId),
+      );
+      if (blockers.length > 0) {
+        return await rollbackResult(store, transactionId, 409, ...blockers);
+      }
     }
 
     const changes =
