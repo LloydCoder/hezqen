@@ -87,7 +87,7 @@ Read-only inspection on 2026-11-15 returned:
 
 Read-only table inventory returned zero application tables on `main`, `staging` and `production`. The project has no snapshots, and all three automatic snapshot schedules are empty; history retention is 21,600 seconds (6 hours). Backup/restore is not configured or tested. No schema migration has been applied to the shared staging or production branches. The initial Payload migration is checked into `src/migrations/` and is tested by GitHub Actions against ephemeral PostgreSQL. The CI database is not the shared Neon project.
 
-The configured branch-to-environment mapping must still be verified without exposing connection strings. Before staging migration:
+The Vercel environment inventory contains Preview and Production `DATABASE_URL` secrets. The Preview variable is described as the staging Neon branch; the Production variable is described as the production branch. Secret values were not decrypted or exposed, so exact host-to-branch mapping remains unverified. The configured branch-to-environment mapping must still be verified without exposing connection strings. Before staging migration:
 1. Verify the Preview/staging `DATABASE_URL` points to the staging branch.
 2. Verify the production `DATABASE_URL` points to the production branch.
 3. Take a backup or Neon restore point and document recovery steps.
@@ -95,7 +95,7 @@ The configured branch-to-environment mapping must still be verified without expo
 5. Apply only the reviewed migration to staging and verify schema, login, API access and restore.
 6. Production migration remains a separate approved release step.
 
-The Neon migration connector requires explicit approval before applying changes to a shared branch. Do not bypass that control.
+The Neon migration connector requires explicit approval before applying changes to a shared branch. The current Free v3 project has no protected branches; until an approved plan change is available, enforce change control through migration PR review, explicit migration approval, restricted connector access, and a verified backup/restore procedure. Do not bypass that control.
 
 ## 5. Environment contract
 
