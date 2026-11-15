@@ -77,7 +77,39 @@ export const Articles: CollectionConfig = {
       ({ data, originalDoc, operation, req }) => {
         if (operation !== "update") return data;
         const context = req.context as Record<string, unknown> | undefined;
-        if (context?.hezqenSkipArticleRevisionIncrement === true) return data;
+        const workflowFields = [
+          "author",
+          "workflowStatus",
+          "factCheckComplete",
+          "disclosuresReviewed",
+          "approvedBy",
+          "approvedAt",
+          "publishedAt",
+          "scheduledFor",
+          "correctionStatus",
+          "correctionReason",
+          "correctionPublicNote",
+          "correctionRequestedAt",
+          "correctionResolvedAt",
+          "correctionResolvedBy",
+          "revision",
+          "_status",
+        ];
+        const hasWorkflowMutation = workflowFields.some((field) =>
+          Object.hasOwn(data ?? {}, field),
+        );
+        if (hasWorkflowMutation && context?.hezqenWorkflowCommand !== true) {
+          throw new APIError(
+            "Editorial workflow fields must be changed through the editorial workflow command service.",
+            403,
+          );
+        }
+        if (
+          context?.hezqenWorkflowCommand === true ||
+          context?.hezqenSkipArticleRevisionIncrement === true
+        ) {
+          return data;
+        }
 
         const contentFields = ["title", "slug", "excerpt", "body", "division", "topics"];
         const changed = contentFields.some((field) => Object.hasOwn(data ?? {}, field));
