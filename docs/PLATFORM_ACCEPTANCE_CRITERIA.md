@@ -76,7 +76,17 @@ These criteria define what must be true before HEZQEN is considered ready for pu
 - [ ] Tool pages provide useful references and links to relevant editorial research.
 - [ ] Tools remain modular and do not create unnecessary runtime coupling to the publication.
 
-## 7. Accounts, subscriptions, and premium Intelligence
+## 7. HEZQEN Infrastructure products
+
+- [ ] Each infrastructure kit has a versioned product specification, supported-platform matrix, prerequisites, install/rollback instructions and operational runbook.
+- [ ] Reproducible build artifacts include checksums, an SBOM and signed provenance.
+- [ ] Third-party model, dataset, runtime and dependency licenses are reviewed for redistribution and commercial use.
+- [ ] Runtime acceptance is distinct from physical hardware certification; GPU and privacy claims are backed by measurements on supported hardware.
+- [ ] PII protection reports precision, recall, false-positive/false-negative rates and throughput on a documented test corpus.
+- [ ] Offline bundles are installable without network access and include dependency closure, license notices and verification instructions.
+- [ ] Pricing, support, compatibility policy, security response and refund terms are defined before sale.
+
+## 8. Accounts, subscriptions, and premium Intelligence
 
 - [ ] Authentication and authorization are enforced server-side.
 - [ ] Reader, author, editor, administrator, and service permissions are explicit and least-privilege.
@@ -85,7 +95,7 @@ These criteria define what must be true before HEZQEN is considered ready for pu
 - [ ] Personalization is transparent, optional where appropriate, and privacy-conscious.
 - [ ] Account deletion and data export behavior are documented before reader accounts launch.
 
-## 8. Security and privacy
+## 9. Security and privacy
 
 - [ ] Threat modeling is completed for authentication, editorial publishing, search, uploads, integrations, and administrative functions.
 - [ ] OWASP Top 10 risks are assessed; relevant ASVS controls are mapped to implementation and tests.
@@ -100,7 +110,7 @@ These criteria define what must be true before HEZQEN is considered ready for pu
 - [ ] Data collection is minimized and privacy notices accurately describe actual behavior.
 - [ ] External content, tool outputs, and agent observations are treated as untrusted data.
 
-## 9. Accessibility and performance
+## 10. Accessibility and performance
 
 - [ ] Target WCAG 2.2 AA for core user journeys.
 - [ ] Keyboard navigation and visible focus work across navigation, search, forms, dialogs, and interactive tools.
@@ -111,7 +121,7 @@ These criteria define what must be true before HEZQEN is considered ready for pu
 - [ ] Images, fonts, scripts, and data requests are optimized; third-party scripts are minimized.
 - [ ] No serious accessibility blocker or performance regression is knowingly shipped.
 
-## 10. Engineering quality and operations
+## 11. Engineering quality and operations
 
 - [ ] Architecture is modular and maintainable; avoid premature microservices.
 - [ ] TypeScript strict mode is used if TypeScript is selected for the application.
@@ -124,7 +134,7 @@ These criteria define what must be true before HEZQEN is considered ready for pu
 - [ ] Backups and restore have been exercised, not merely configured.
 - [ ] No unexpected paid infrastructure is introduced without explicit approval; cost assumptions are documented.
 
-## 11. Release gates
+## 12. Release gates
 
 ### Gate A — Foundation
 - [ ] Brand assets and design tokens are integrated correctly.
@@ -151,7 +161,7 @@ These criteria define what must be true before HEZQEN is considered ready for pu
 - [ ] Privacy, retention, export, and deletion workflows are verified.
 - [ ] Operational monitoring, backup restoration, and incident procedures are exercised.
 
-## 12. Definition of done
+## 13. Definition of done
 
 A release is accepted only when:
 1. All applicable acceptance criteria are checked with evidence.
