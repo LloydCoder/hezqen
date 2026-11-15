@@ -1,0 +1,31 @@
+{
+  "name": "hezqen",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HEZQEN \u2014 Global Technology & Business Intelligence",
+  "engines": {
+    "node": "24.x || 22.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "pnpm dlx @biomejs/biome@2.6.7 lint .",
+    "test": "node --experimental-strip-types --test src/domain/editorial/publishing-policy.test.mjs src/lib/site.test.mjs",
+    "format:check": "pnpm dlx @biomejs/biome@2.6.7 format app src package.json biome.json next.config.ts next-env.d.ts tsconfig.json"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "5.9.3"
+  },
+  "type": "module",
+  "packageManager": "pnpm@12.21.0"
+}
