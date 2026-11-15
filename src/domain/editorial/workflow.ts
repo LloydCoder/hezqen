@@ -49,12 +49,21 @@ function resultWithBlockers(...blockers: WorkflowBlocker[]): WorkflowTransitionR
   return { ok: false, blockers };
 }
 
+function hasExplicitTimezone(value: string): boolean {
+  return /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d{1,3})?)?(?:Z|[+-]\\d{2}:\\d{2})$/.test(
+    value,
+  );
+}
+
 function publishScheduledRecord(
   record: EditorialWorkflowRecord,
   nowMs: number,
 ): WorkflowTransitionResult {
   if (record.status !== "scheduled" || !record.scheduledFor) {
     return resultWithBlockers("INVALID_TRANSITION");
+  }
+  if (!hasExplicitTimezone(record.scheduledFor)) {
+    return resultWithBlockers("SCHEDULE_TIME_INVALID");
   }
   const scheduledMs = Date.parse(record.scheduledFor);
   if (Number.isNaN(scheduledMs)) return resultWithBlockers("SCHEDULE_TIME_INVALID");
@@ -165,6 +174,9 @@ export function transitionPublication(
   if (record.status === "approved" && targetStatus === "scheduled") {
     if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     if (!options.scheduledFor) return resultWithBlockers("SCHEDULE_TIME_REQUIRED");
+    if (!hasExplicitTimezone(options.scheduledFor)) {
+      return resultWithBlockers("SCHEDULE_TIME_INVALID");
+    }
     const scheduledMs = Date.parse(options.scheduledFor);
     if (Number.isNaN(scheduledMs) || scheduledMs <= nowMs) {
       return resultWithBlockers("SCHEDULE_TIME_INVALID");
@@ -181,7 +193,11 @@ export function transitionPublication(
   ) {
     if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     if (record.status === "scheduled") {
-      if (!record.scheduledFor || Number.isNaN(Date.parse(record.scheduledFor))) {
+      if (
+        !record.scheduledFor ||
+        !hasExplicitTimezone(record.scheduledFor) ||
+        Number.isNaN(Date.parse(record.scheduledFor))
+      ) {
         return resultWithBlockers("SCHEDULE_TIME_INVALID");
       }
       if (Date.parse(record.scheduledFor) > nowMs) {
