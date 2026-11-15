@@ -1,4 +1,4 @@
-import type { EmailAdapter, SendEmailOptions } from "payload";
+import type { PayloadEmailAdapter, SendEmailOptions } from "payload";
 
 export interface ResendEmailAdapterOptions {
   apiKey: string;
@@ -21,7 +21,7 @@ function normalizeRecipients(value: SendEmailOptions["to"]): string[] {
   return values.map(normalizeAddress).filter((address): address is string => address !== null);
 }
 
-export function createResendEmailAdapter(options: ResendEmailAdapterOptions): EmailAdapter {
+export function createResendEmailAdapter(options: ResendEmailAdapterOptions): PayloadEmailAdapter {
   const fetchImpl = options.fetchImpl ?? fetch;
   const from = \`\${options.defaultFromName} <\${options.defaultFromAddress}>\`;
 
