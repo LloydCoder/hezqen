@@ -1,6 +1,6 @@
 # HEZQEN CMS Operations and Release Contract
 
-**Status:** implementation in PR #51; not yet merged or accepted in a live staging runtime.  
+**Status:** PR #51 implementation deployed to a protected Vercel Preview; baseline runtime and staging schema checks passed on 2026-11-15. Full staging acceptance remains PARTIAL; PR #51 remains draft.  
 **Production:** not deployed. Do not run production migrations or attach production traffic.
 
 This document is the operational companion to docs/PHASE_STATUS.md. A source implementation or green unit test does not by itself prove live service readiness.
@@ -55,7 +55,7 @@ The application-side evidence contract is:
 - Download requires an authorized research/editorial role, re-checks byte size and SHA-256, and writes a download audit event before returning the file as a private attachment.
 - If object verification or metadata persistence fails, the object is deleted where possible.
 
-The bucket has been provisioned, but no evidence object has yet been uploaded and verified through the application endpoint. Live S3 signature, upload, read-back, deletion and download acceptance remain open. Neon currently lists 5 GB of Object Storage per Free project; keep an explicit usage budget and retention/legal-hold policy, and do not assume indefinite retention or unlimited free storage.
+The bucket is confirmed private on staging branch br-lucky-bird-bayxt3by; the current object listing is empty. Preview environment metadata contains branch-scoped storage endpoint/credential variables, but secret values were not decrypted. No evidence object has yet been uploaded through the application endpoint. Live SigV4, upload, read-back, deletion, download and audit acceptance therefore remain open. Neon documents 5 GB of Object Storage per Free project; enforce a usage budget and retention/legal-hold policy rather than assuming indefinite retention or unlimited free storage (https://neon.com/blog/neon-free-plan-1-gb-per-project).
 
 ## 5. Transactional email
 
@@ -69,7 +69,7 @@ The domain is verified, but a real Payload password-reset email has not yet been
 
 ## 6. Runtime environment variables
 
-Staging requires these variables in addition to the existing Payload/Neon configuration:
+The following variables are present in branch-scoped Vercel Preview environment metadata for fix/cms-final-reconciliation, in addition to the existing Payload/Neon configuration. Secret values were not decrypted. This confirms configuration records exist, not that live provider operations have succeeded:
 
 | Variable | Purpose | Classification |
 |---|---|---|
@@ -86,17 +86,17 @@ Cloudflare Worker compatibility CI declares matching environment bindings. The l
 
 ## 7. Hosting and cost boundary
 
-The connected Vercel project hezqen is on Hobby. Vercel documents Hobby as a personal, non-commercial plan. HEZQEN is intended to be a commercial publication; therefore Hobby must not be used for production or treated as an accepted commercial hosting solution. No Pro upgrade or other paid plan has been authorized.
+The connected Vercel project hezqen is on Hobby. Vercel's current terms restrict Hobby to personal/non-commercial use; HEZQEN is intended to be a commercial publication, so Hobby is not an acceptable production host (https://vercel.com/docs/plans/hobby, https://vercel.com/docs/limits/fair-use-guidelines). The current Vercel deployment is a protected Preview used for validation only. No Pro upgrade or other paid plan has been authorized.
 
-Cloudflare Workers Free is a potential no-new-spend candidate, but its documented CPU limit is 10 ms per invocation. The HEZQEN Cloudflare compatibility workflow tests a vinext build and local Worker smoke routes; it does not prove that production CMS/admin requests fit the Free CPU limit. The Cloudflare account's Workers Builds API also reports that the account is not connected to GitHub. A one-time GitHub integration authorization in the Cloudflare dashboard is required before a repo-connected Worker build can be created.
+Cloudflare Workers Free remains a candidate, not an accepted production host: current limits are 100,000 requests/day and 10 ms CPU per HTTP/Cron invocation, while heavier SSR/auth workloads commonly need 10–20 ms. Cloudflare currently recommends vinext for Next.js on Workers but documents vinext as beta; the repository workflow proves compatibility/build/local smoke only, not production CMS/admin performance (https://developers.cloudflare.com/workers/platform/limits/, https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/). The Cloudflare account's Workers Builds API reports that the account is not connected to GitHub; repo-connected builds still require dashboard authorization.
 
 The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web application. It has no Cron Trigger. No production DNS, production Worker or production deployment has been created.
 
 ## 8. Release acceptance checklist
 
-- [ ] PR #51 merged only after all required CI workflows pass on the final PR head.
+- [x] PR #51 final head dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40 passed HEZQEN CI, Payload migration verification and Cloudflare compatibility on 2026-11-15. PR #51 remains draft and unmerged pending the remaining runtime/security gates.
 - [ ] Cloudflare compatibility, Worker build and public/CMS smoke workflows pass on the same source revision.
-- [ ] Migration is applied to the isolated staging Neon branch only after backup/restore evidence and explicit staging approval.
+- [x] Both Payload migrations are applied and recorded on isolated Neon staging branch br-lucky-bird-bayxt3by; the scheduled/correction columns were verified read-only. This does not authorize or imply a production migration.
 - [ ] Staging app deploy is made on a commercially permitted host; Vercel Hobby is not an option for production.
 - [ ] Authenticated role matrix passes for administrator, editor, author, fact-checker, researcher and unauthenticated callers.
 - [ ] Direct REST and Local API attempts cannot write workflow, review, publication, correction, evidence or audit fields.
@@ -110,3 +110,29 @@ The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web a
 - [ ] Production database migration, production administrator bootstrap, production host and DNS cutover remain separate explicit release approvals.
 
 **Current verdict:** implementation and ephemeral database migration coverage are in progress; live staging acceptance and commercial production hosting are not complete.
+
+## 9. Verified staging baseline — 2026-11-15
+
+The following checks were performed against the Preview deployment for the exact PR #51 head:
+
+- Vercel deployment dpl_96t5ckCEdTevrih3Nf3HwSikg76Q is READY and points to commit dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40.
+- GET /api/health/ready, GET /admin/login, and GET /api/articles?limit=1 returned HTTP 200. The articles response was empty.
+- Unauthenticated GET requests to /api/users, /api/audit-events, /api/evidence, /api/claims, and /api/sources returned HTTP 403. Public /api/topics returned HTTP 200.
+- The staging Neon branch reports both 20261115_155359_initial and 20261116_000000_editorial_scheduling_corrections in payload_migrations. The new scheduling and correction columns are present.
+- Staging contains one active administrator, zero articles, zero sources and zero audit events. The private hezqen-evidence bucket exists and currently contains zero objects.
+- Vercel runtime-log inspection for the deployment's preceding 30 minutes returned no warning/error/fatal records.
+
+These checks establish a deployed preview and unauthenticated route baseline only. They do not prove a successful administrator login, authenticated role matrix, REST/Local API write-bypass resistance, live evidence upload/download, real Resend delivery, scheduled execution, or public correction rendering.
+
+### Remaining security and operational blockers
+
+1. The hezqen_cms database role is non-superuser and cannot create databases, roles or the public schema, and it does not bypass RLS. However, it still has table-level DELETE privileges across content, evidence and audit tables. Payload collection access denies these operations, but the database credential itself is not least-privilege for immutable records. Revoke unnecessary UPDATE/DELETE privileges at the database layer and verify the resulting runtime before production.
+2. The Neon staging branch is unprotected on the current Free plan. Keep migrations isolated and explicitly approved; do not upgrade the plan without approval.
+3. No live object-storage upload/read-back/download test has been completed; the bucket is empty.
+4. No real Payload password-reset email has been accepted and received by a controlled mailbox.
+5. The scheduler Worker has no Cron Trigger or configured secret binding; it must remain dormant.
+6. The correction lifecycle has metadata and workflow commands, but the public correction-notice UI is not yet accepted.
+7. The full authenticated role matrix, actual administrator login, real-Postgres transaction rollback on audit failure, and direct Local API bypass tests remain open.
+8. The Vercel Hobby plan cannot host this commercial publication in production. Cloudflare Workers Free/vinext is not accepted until CMS/admin compatibility and CPU budgets are measured on a deployed candidate.
+
+**Current verdict:** PR #51 has green CI and a READY Preview with a verified staging migration baseline. CMS staging acceptance is PARTIAL; production remains NOT READY. No production database migration, production deployment, production administrator bootstrap, production DNS cutover, paid-plan upgrade or scheduler activation has been performed.
