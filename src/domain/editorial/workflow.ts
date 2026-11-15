@@ -102,11 +102,11 @@ export function transitionPublication(
   }
 
   if (record.status === "editorial_review" && targetStatus === "approved") {
+    if (record.authorId === record.editorId) {
+      return resultWithBlockers("AUTHOR_EDITOR_CONFLICT");
+    }
     if (!isHumanAssignedEditor(record, actor)) {
       return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    }
-    if (record.authorId === actor.id) {
-      return resultWithBlockers("AUTHOR_EDITOR_CONFLICT");
     }
     const candidate: EditorialWorkflowRecord = {
       ...record,
