@@ -34,9 +34,9 @@ export default function InfrastructurePage() {
           <div className="infrastructure-disclosure" role="note">
             <strong>Engineering preview — not production certification.</strong>
             <span>
-              The kits have automated CI and runtime acceptance evidence, but several
-              hardware, privacy, supply-chain and commercial-release gates remain open.
-              Review each kit's limitations before adapting it to a production environment.
+              The kits have automated CI and runtime acceptance evidence, but several hardware,
+              privacy, supply-chain and commercial-release gates remain open. Review each kit's
+              limitations before adapting it to a production environment.
             </span>
           </div>
         </div>
@@ -50,8 +50,8 @@ export default function InfrastructurePage() {
               <h2>Five kits. One shared standard.</h2>
             </div>
             <p>
-              Each kit is versioned and documented in the separate HEZQEN Infrastructure
-              Standard repository. Source code remains open for inspection and adaptation.
+              Each kit is versioned and documented in the separate HEZQEN Infrastructure Standard
+              repository. Source code remains open for inspection and adaptation.
             </p>
           </div>
 
@@ -111,15 +111,14 @@ export default function InfrastructurePage() {
           <div>
             <h2>Test evidence is not a certification.</h2>
             <p>
-              Automated workflows verify defined behaviors in controlled environments.
-              They do not replace physical GPU benchmarks, representative PII accuracy
-              studies, a complete transitive SBOM, signed provenance, third-party license
-              review or production security assessment.
+              Automated workflows verify defined behaviors in controlled environments. They do not
+              replace physical GPU benchmarks, representative PII accuracy studies, a complete
+              transitive SBOM, signed provenance, third-party license review or production security
+              assessment.
             </p>
             <p>
-              Commercial release remains gated on those checks, supported-platform
-              documentation, installation and rollback runbooks, support terms and
-              versioned release artifacts.
+              Commercial release remains gated on those checks, supported-platform documentation,
+              installation and rollback runbooks, support terms and versioned release artifacts.
             </p>
             <div className="infrastructure-assurance-actions">
               <a
