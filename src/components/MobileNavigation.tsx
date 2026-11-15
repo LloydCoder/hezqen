@@ -65,15 +65,9 @@ export function MobileNavigation({ items }: { items: readonly NavigationItem[] }
         </span>
         <span>{open ? "Close" : "Menu"}</span>
       </button>
-      <nav
-        className="mobile-nav"
-        id={panelId}
-        aria-label="Mobile navigation"
-        hidden={!open}
-      >
+      <nav className="mobile-nav" id={panelId} aria-label="Mobile navigation" hidden={!open}>
         {items.map((item) => {
-          const current =
-            pathname === item.href || pathname.startsWith(`${item.href}/`);
+          const current = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
               href={item.href}
