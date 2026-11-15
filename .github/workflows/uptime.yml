@@ -1,0 +1,43 @@
+name: HEZQEN uptime
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uptime-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  health:
+    if: ${{ vars.HEZQEN_HEALTH_URL != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Validate canonical health URL
+        env:
+          HEZQEN_HEALTH_URL: ${{ vars.HEZQEN_HEALTH_URL }}
+        run: |
+          node --input-type=module - <<'NODE'
+          const url = new URL(process.env.HEZQEN_HEALTH_URL);
+          if (url.protocol !== "https:" || url.origin !== "https://hezqen.tinlance.com" || url.pathname !== "/") {
+            throw new Error("HEZQEN_HEALTH_URL must be the canonical HEZQEN HTTPS origin.");
+          }
+          NODE
+      - name: Check liveness and database readiness
+        env:
+          HEZQEN_HEALTH_URL: ${{ vars.HEZQEN_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+          for endpoint in /api/health /api/health/ready; do
+            response="$(curl --fail --silent --show-error --connect-timeout 5 --max-time 15 --retry 3 --retry-delay 2 --retry-all-errors "${HEZQEN_HEALTH_URL%/}${endpoint}")"
+            case "$endpoint" in
+              /api/health) expected="ok" ;;
+              /api/health/ready) expected="ready" ;;
+            esac
+            node -e 'const payload = JSON.parse(process.argv[1]); if (payload.status !== process.argv[2]) process.exit(1);' "$response" "$expected"
+          done
