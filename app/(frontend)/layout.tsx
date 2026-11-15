@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 import { site } from "@/lib/site";
+import { StructuredData, publisherGraph } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -42,10 +43,25 @@ const navItems = [
   { href: "/infrastructure", label: "Infrastructure" },
 ] as const;
 
+const footerLinks = [
+  { href: "/about", label: "About" },
+  { href: "/editorial-standards", label: "Editorial standards" },
+  { href: "/corrections", label: "Corrections" },
+  { href: "/contact", label: "Contact" },
+  { href: "/security", label: "Security" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/cookies", label: "Cookies" },
+  { href: "/terms", label: "Terms" },
+  { href: "/sitemap", label: "HTML sitemap" },
+  { href: "/labs", label: "Labs" },
+  { href: "/infrastructure", label: "Infrastructure" },
+] as const;
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>
+        <StructuredData data={publisherGraph} />
         <div className="site-shell">
           <div className="topline">
             <div className="container topline-inner">
@@ -91,15 +107,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 />
                 <p>Research. Intelligence. Perspective.</p>
               </div>
-              <div className="footer-links">
-                <Link href="/about">About</Link>
-                <Link href="/labs">Labs</Link>
-                <Link href="/infrastructure">Infrastructure</Link>
-                <Link href="/editorial-standards">Editorial standards</Link>
-                <a href="https://tinlance.com" rel="noopener noreferrer">
-                  Tinlance
-                </a>
-              </div>
+              <nav className="footer-links" aria-label="Footer navigation">
+                {footerLinks.map((item) => (
+                  <Link href={item.href} key={item.href}>{item.label}</Link>
+                ))}
+                <a href="https://tinlance.com" rel="noopener noreferrer">Tinlance</a>
+              </nav>
             </div>
             <div className="container footer-bottom">
               <span>© {new Date().getFullYear()} HEZQEN. Published by Tinlance.</span>
