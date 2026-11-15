@@ -29,7 +29,7 @@ export const Evidence: CollectionConfig = {
           if (context?.hezqenEvidenceVerification !== true) {
             throw new APIError("Evidence metadata is immutable outside human verification.", 403);
           }
-          const allowedFields = ["verificationStatus"];
+          const allowedFields = ["verificationStatus", "updatedAt"];
           if (Object.keys(data ?? {}).some((field) => !allowedFields.includes(field))) {
             throw new APIError("Only evidence verification status may be updated.", 403);
           }
