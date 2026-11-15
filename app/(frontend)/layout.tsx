@@ -112,7 +112,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               </div>
               <nav className="footer-links" aria-label="Footer navigation">
                 {footerLinks.map((item) => (
-                  <Link href={item.href} key={item.href}>{item.label}</Link>
+                  <Link href={item.href} key={item.href}>
+                      {item.label}
+                    </Link>
                 ))}
                 <a href="https://tinlance.com" rel="noopener noreferrer">
                   Tinlance
