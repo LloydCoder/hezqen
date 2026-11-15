@@ -678,7 +678,9 @@ a:focus-visible {
   }
 }
 @media (max-width: 900px) {
-  .primary-nav,
+  .primary-nav {
+    display: none;
+  }
   .header-link {
     display: none;
   }
@@ -806,7 +808,7 @@ a:focus-visible {
     padding-bottom: 10px;
   }
   .brand-logo {
-    width: clamp(112px, 36vw, 138px);
+    width: 132px;
   }
   .footer-brand img {
     width: 200px;
