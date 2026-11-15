@@ -91,7 +91,7 @@ test("blocks direct content edits to published and correction-required articles"
   assert.ok(revisionHook);
   for (const workflowStatus of ["published", "correction_required"]) {
     await assert.rejects(
-      revisionHook({
+      () => revisionHook({
         data: { title: "Unapproved edit" },
         originalDoc: { workflowStatus, revision: 2 },
         operation: "update",
