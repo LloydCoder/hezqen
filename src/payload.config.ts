@@ -14,19 +14,13 @@ import { Users } from "./collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
-const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
-
-const databaseUrl =
-  process.env.DATABASE_URL ??
-  (isProductionBuild ? "postgres://build:build@127.0.0.1:5432/build" : undefined);
-const secret =
-  process.env.PAYLOAD_SECRET ??
-  (isProductionBuild ? "hezqen-build-only-secret-never-use-at-runtime" : undefined);
+const databaseUrl = process.env.DATABASE_URL;
+const secret = process.env.PAYLOAD_SECRET;
 const originInputs =
   process.env.HEZQEN_ALLOWED_ORIGINS?.split(",")
     .map((origin) => origin.trim())
     .filter(Boolean) ??
-  (isProductionBuild ? ["https://hezqen.tinlance.com"] : ["http://localhost:3000"]);
+  (process.env.NODE_ENV === "production" ? [] : ["http://localhost:3000"]);
 const allowedOrigins = [
   ...new Set(
     originInputs.map((origin) => {
