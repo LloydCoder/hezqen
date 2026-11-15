@@ -1,8 +1,4 @@
-import {
-  canPublish,
-  type PublicationRecord,
-  type PublishingActor,
-} from "./publishing-policy.ts";
+import { canPublish, type PublicationRecord, type PublishingActor } from "./publishing-policy.ts";
 
 export type WorkflowStatus =
   | PublicationRecord["status"]
@@ -35,17 +31,11 @@ export type WorkflowTransitionResult =
   | { ok: true; record: EditorialWorkflowRecord }
   | { ok: false; blockers: WorkflowBlocker[] };
 
-function isHumanAssignedEditor(
-  record: EditorialWorkflowRecord,
-  actor: PublishingActor,
-): boolean {
+function isHumanAssignedEditor(record: EditorialWorkflowRecord, actor: PublishingActor): boolean {
   return actor.isHuman && actor.role === "editor" && actor.id === record.editorId;
 }
 
-function isAssignedContributor(
-  record: EditorialWorkflowRecord,
-  actor: PublishingActor,
-): boolean {
+function isAssignedContributor(record: EditorialWorkflowRecord, actor: PublishingActor): boolean {
   return (
     actor.isHuman &&
     ((actor.role === "author" && actor.id === record.authorId) ||
