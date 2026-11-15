@@ -21,6 +21,21 @@ export const Sources: CollectionConfig = {
     update: () => false,
     delete: () => false,
   },
+  hooks: {
+    beforeChange: [
+      ({ data, operation }) => {
+        if (operation === "update") {
+          throw new APIError("Source records are immutable; add a new source record instead.", 403);
+        }
+        return data;
+      },
+    ],
+    beforeDelete: [
+      () => {
+        throw new APIError("Source records cannot be deleted; preserve provenance history.", 403);
+      },
+    ],
+  },
   fields: [
     { name: "title", type: "text", required: true },
     { name: "canonicalUrl", type: "text", required: true, index: true },
