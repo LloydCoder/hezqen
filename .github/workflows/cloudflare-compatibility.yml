@@ -109,9 +109,23 @@ jobs:
                       if not worker_match:
                           raise SystemExit("Generated cloudflare.config.ts has no worker config block")
                       source = source[:worker_match.end()] + '\n    compatibilityDate: "2026-11-15",\n    ' + flags + "," + source[worker_match.end():]
-              path.write_text(source)
-          if "nodejs_compat_populate_process_env" not in path.read_text():
-              raise SystemExit("Worker process.env binding compatibility flag was not applied")
+          bindings = '''env: {
+                ASSETS: bindings.assets(),
+                DATABASE_URL: bindings.secret(),
+                PAYLOAD_SECRET: bindings.secret(),
+                NEXT_PUBLIC_SITE_URL: bindings.text(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001"),
+                HEZQEN_ALLOWED_ORIGINS: bindings.text(process.env.HEZQEN_ALLOWED_ORIGINS ?? "http://localhost:3001"),
+              }'''
+          env_match = re.search(r'env:\s*\{\s*ASSETS:\s*bindings\.assets\(\),\s*\}', source)
+          if env_match:
+              source = source[:env_match.start()] + bindings + source[env_match.end():]
+          elif "DATABASE_URL: bindings.secret()" not in source:
+              raise SystemExit("Could not add Payload environment bindings to generated Worker config")
+          path.write_text(source)
+          required = ["nodejs_compat_populate_process_env", "DATABASE_URL: bindings.secret()", "PAYLOAD_SECRET: bindings.secret()", "NEXT_PUBLIC_SITE_URL: bindings.text(", "HEZQEN_ALLOWED_ORIGINS: bindings.text("]
+          missing = [item for item in required if item not in path.read_text()]
+          if missing:
+              raise SystemExit(f"Worker runtime bindings are incomplete: {missing}")
           print(path.read_text())
           PY
       - name: Install generated Worker toolchain
