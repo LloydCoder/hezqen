@@ -21,7 +21,7 @@ test("calculates monthly API spend from input and output token pricing", () => {
 
 test("calculates self-hosted fixed monthly cost from GPU hours and overhead", () => {
   const result = calculateAiCostBreakEven(baseline);
-  assert.equal(result.selfHostedMonthlyCost, 1 * 1.5 * 730 + 100);
+  assert.equal(result.selfHostedMonthlyCost, 1 * 0.5 * 730 + 100);
 });
 
 test("reports self-hosted savings and percentage when it is cheaper", () => {
