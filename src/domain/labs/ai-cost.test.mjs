@@ -53,14 +53,14 @@ test("handles zero workload without division by zero", () => {
   const result = calculateAiCostBreakEven({ ...baseline, monthlyRequests: 0 });
   assert.equal(result.apiMonthlyCost, 0);
   assert.equal(result.monthlySavings, -result.selfHostedMonthlyCost);
-  assert.equal(result.breakEvenMonthlyRequests, Math.ceil(result.selfHostedMonthlyCost / result.apiCostPerRequest));
+  assert.equal(
+    result.breakEvenMonthlyRequests,
+    Math.ceil(result.selfHostedMonthlyCost / result.apiCostPerRequest),
+  );
 });
 
 test("rejects negative or non-finite cost and workload inputs", () => {
-  assert.throws(
-    () => calculateAiCostBreakEven({ ...baseline, monthlyRequests: -1 }),
-    RangeError,
-  );
+  assert.throws(() => calculateAiCostBreakEven({ ...baseline, monthlyRequests: -1 }), RangeError);
   assert.throws(
     () => calculateAiCostBreakEven({ ...baseline, gpuHourlyCost: Number.NaN }),
     RangeError,
@@ -72,12 +72,6 @@ test("rejects negative or non-finite cost and workload inputs", () => {
 });
 
 test("rejects fractional GPU counts and invalid monthly GPU hours", () => {
-  assert.throws(
-    () => calculateAiCostBreakEven({ ...baseline, gpuCount: 1.5 }),
-    RangeError,
-  );
-  assert.throws(
-    () => calculateAiCostBreakEven({ ...baseline, gpuHoursPerMonth: 800 }),
-    RangeError,
-  );
+  assert.throws(() => calculateAiCostBreakEven({ ...baseline, gpuCount: 1.5 }), RangeError);
+  assert.throws(() => calculateAiCostBreakEven({ ...baseline, gpuHoursPerMonth: 800 }), RangeError);
 });
