@@ -1,72 +1,181 @@
-# HEZQEN
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/brand/hezqen-horizontal-reversed.svg">
+    <img src="public/brand/hezqen-horizontal-color.svg" alt="HEZQEN" width="320">
+  </picture>
+</p>
 
-**HEZQEN — BY TINLANCE**  
-**Global Technology & Business Intelligence**  
-_Research. Intelligence. Perspective._
+<h1 align="center">HEZQEN</h1>
+<p align="center"><strong>Global Technology &amp; Business Intelligence</strong><br>Research. Intelligence. Perspective.</p>
 
-HEZQEN is a global technology and business intelligence publication featuring original research, investigative journalism, technical analysis, industry insights, benchmarks, and engineering tools across four editorial divisions:
+HEZQEN is a global technology and business intelligence publication for people building, governing and investing in technology. It connects evidence-led reporting, original research and technical analysis across AI, cybersecurity, cloud engineering, and business.
 
-- AI & Technology
-- Cybersecurity
-- Cloud & Engineering
-- Business & Startups
+<p align="center">
+  <a href="https://github.com/LloydCoder/hezqen/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/LloydCoder/hezqen/ci.yml?branch=main&label=CI" alt="CI status"></a>
+  <a href="https://github.com/LloydCoder/hezqen/blob/main/LICENSE"><img src="https://img.shields.io/github/license/LloydCoder/hezqen" alt="Apache-2.0 license"></a>
+  <img src="https://img.shields.io/badge/Node.js-24.x-339933?logo=nodedotjs&logoColor=white" alt="Node.js 24">
+  <img src="https://img.shields.io/badge/pnpm-12.x-F69220?logo=pnpm&logoColor=white" alt="pnpm 12">
+</p>
 
-## The platform
+## Visual proof
 
-- **HEZQEN Media** — reporting, investigations, analysis, and explainers.
-- **HEZQEN Labs** — tools, calculators, benchmarks, and engineering experiments.
-- **HEZQEN Intelligence** — premium research and decision-support products.
+**[Open the HEZQEN live preview](https://hezqen.vercel.app)** · [Try the VRAM sizing calculator](https://hezqen.vercel.app/labs/vram) · [Try the AI cost calculator](https://hezqen.vercel.app/labs/ai-cost)
 
-The product is designed as an editorial and intelligence platform, not a high-volume content blog.
+The live preview demonstrates the current public application shell and Labs tools. A recorded product walkthrough is not yet included; screenshots and demo recordings will be added after the public routes receive visual QA.
 
-## Editorial integrity
+## Why HEZQEN
 
-Our governing principle is: **AI may assist the newsroom; AI must not become the newsroom.**
+HEZQEN is designed as an editorial and intelligence platform, not a high-volume content blog.
 
-Every published item requires accountable human authorship and human editorial approval. Material claims must be traceable to evidence. AI-generated material, sources, quotations, statistics, and benchmark results must never be published as verified facts without independent human verification.
+| Surface | Purpose |
+|---|---|
+| **HEZQEN Media** | Reporting, investigations, analysis and explainers |
+| **HEZQEN Labs** | Transparent calculators, benchmarks and engineering experiments |
+| **HEZQEN Intelligence** | Research and briefings for consequential technology and business decisions |
 
-Read the [HEZQEN Editorial Standards](docs/EDITORIAL_STANDARDS.md).
+The four editorial divisions are AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups. Our editorial principle is simple: **AI may assist the newsroom; AI must not become the newsroom.** Every published item requires accountable human authorship and human editorial approval. Material claims must be traceable to evidence.
 
-## Engineering and quality
+## Quick Start
 
-The initial application uses Next.js App Router, React, strict TypeScript, Node's built-in test runner and Biome. The architecture is a modular monolith. The CI workflow runs linting, formatting, type checks, unit tests, dependency audit and production build.
+Prerequisites: Node.js 24.22.3 or a supported version in `package.json`, pnpm 12.21.0, and a local PostgreSQL 18 database. The Payload configuration requires a database URL and a strong application secret.
 
-Install dependencies with pnpm install --frozen-lockfile and start the development server with pnpm dev.
+```bash
+corepack enable
+pnpm install --frozen-lockfile
+cp .env.example .env
+pnpm dev
+```
 
-Before opening a pull request, run pnpm lint, pnpm format:check, pnpm typecheck, pnpm test, pnpm audit --audit-level moderate and pnpm build.
+Before starting the server, edit `.env`: set `DATABASE_URL` to your local HEZQEN database and replace `PAYLOAD_SECRET` with a unique secret of at least 32 random bytes. Keep local development isolated from staging and production. The first dependency installation depends on your network and may take longer than 30 seconds.
 
-## Project documentation
+Open [http://localhost:3000](http://localhost:3000). The public application shell and Labs pages are available independently of the unfinished production CMS rollout. The admin interface requires the reviewed database migration and administrator bootstrap described in [CMS setup](docs/CMS_SETUP.md).
 
-- [Editorial Standards](docs/EDITORIAL_STANDARDS.md)
-- [Editorial Workflow](docs/EDITORIAL_WORKFLOW.md)
-- [Research Evidence](docs/RESEARCH_EVIDENCE.md)
-- [Platform Acceptance Criteria](docs/PLATFORM_ACCEPTANCE_CRITERIA.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Brand System](docs/BRAND_SYSTEM.md)
-- [Infrastructure Discovery](docs/INFRASTRUCTURE_DISCOVERY.md)
-- [Implementation Phase Status](docs/PHASE_STATUS.md)
-- [Security Policy](SECURITY.md)
-- [Contributing](CONTRIBUTING.md)
+## Installation
 
-## Project status
+| Requirement | Supported configuration |
+|---|---|
+| Node.js | `^24.22.3 || >=26.13.1` |
+| Package manager | pnpm `12.21.0` (declared in `package.json`) |
+| Database | PostgreSQL 18 for CMS development |
+| Framework | Next.js 16, React 19, strict TypeScript |
+| Tooling | Biome 2.6.7 and Node's built-in test runner |
 
-The application foundation and public-facing shell are under implementation. The homepage, four division landing pages, About page, Editorial Standards page, brand assets, SEO route metadata, baseline response headers, and initial editorial publication-policy tests exist.
+pnpm is the supported package manager because the repository commits `pnpm-lock.yaml` and CI uses frozen installs. From the repository root:
 
-The CMS, dedicated database, evidence registry, search, Labs tools, accounts, subscriptions, integrations, production monitoring, backups, and complete security/accessibility gates are not yet implemented. This repository does not claim production readiness.
+```bash
+corepack enable
+pnpm install --frozen-lockfile
+```
 
-## Brand system
+Configure the environment using [the local environment guide](docs/how-to/configure-local-environment.md). Do not point local development at a production database.
 
-The supplied HEZQEN logo kit and usage guidelines are the source of truth for logo assets, colors, typography, and application. Preserve the supplied marks and their proportions; do not recreate or distort them.
+## Usage
 
-## License
+Start the development server:
 
-Apache License 2.0. See [LICENSE](LICENSE).
+```bash
+pnpm dev
+```
 
-- [AI Cost Calculator Methodology](docs/AI_COST_CALCULATOR_METHODOLOGY.md)
+Run the quality checks used by CI:
 
-- [Security Threat Model](docs/THREAT_MODEL.md)
+```bash
+pnpm lint
+pnpm format:check
+pnpm typecheck
+pnpm test
+pnpm audit --audit-level moderate
+pnpm build
+```
 
-- [Logical Data Model](docs/DATA_MODEL.md)
-- [CMS and PostgreSQL Architecture Decision](docs/adr/0001-editorial-cms-and-postgres.md)
+Run a production build locally after configuring the required environment variables:
 
-- [CMS Setup and Migration Gates](docs/CMS_SETUP.md)
+```bash
+pnpm build
+pnpm start
+```
+
+The Payload CLI wrapper is available through `pnpm payload`. Database migration and administrator-bootstrap commands are operational tasks: follow [CMS setup](docs/CMS_SETUP.md), use an isolated database, and do not run migrations against shared or production databases without review and explicit approval.
+
+## Configuration
+
+Copy `.env.example` to `.env` and set the values for your local environment.
+
+| Variable | Example/default | Purpose |
+|---|---|---|
+| `DATABASE_URL` | `postgres://hezqen:replace-me@localhost:5432/hezqen` | PostgreSQL connection string |
+| `PAYLOAD_SECRET` | `replace-with-at-least-32-random-bytes` | Unique Payload session/application secret |
+| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` | Canonical origin for the current environment |
+| `HEZQEN_ALLOWED_ORIGINS` | `http://localhost:3000` | Comma-separated allowed Payload CORS/CSRF origins |
+
+These are example values, not production defaults. Production must use distinct secrets, database credentials and HTTPS origins. See [Configuration Reference](docs/reference/configuration.md).
+
+## Features
+
+| Capability | Current implementation status |
+|---|---|
+| Public application shell | Homepage, About, editorial standards and four division routes exist |
+| HEZQEN Labs | VRAM sizing and API-versus-self-hosted AI cost calculators have deterministic domain logic and tests |
+| Payload CMS | Next.js admin/API integration and restricted collections are present; initial database migration and operational acceptance remain outstanding |
+| Editorial workflow | Human-controlled workflow state machine and publication-policy tests exist; persistent server-side workflow commands remain outstanding |
+| Research evidence | Source/evidence validation and guarded HTTPS acquisition logic exist; private object storage, persistence and production egress controls remain outstanding |
+| CI and dependency hygiene | GitHub Actions quality pipeline and weekly Dependabot updates are configured |
+
+HEZQEN is under active development. The repository does not claim that the CMS, evidence vault, search, reader accounts, subscriptions or premium Intelligence service are production-ready. The current implementation boundaries are tracked in [Phase Status](docs/PHASE_STATUS.md).
+
+## Documentation
+
+Start at the [documentation index](docs/README.md).
+
+| Need | Documentation |
+|---|---|
+| First local run | [Tutorial](docs/tutorials/first-local-run.md) |
+| Environment configuration | [How-to guide](docs/how-to/configure-local-environment.md) |
+| CMS and migrations | [CMS setup](docs/CMS_SETUP.md) |
+| Architecture and boundaries | [Architecture](docs/ARCHITECTURE.md) |
+| Data model | [Data model](docs/DATA_MODEL.md) |
+| Editorial rules | [Editorial standards](docs/EDITORIAL_STANDARDS.md) |
+| Editorial state machine | [Editorial workflow](docs/EDITORIAL_WORKFLOW.md) |
+| Research provenance | [Research evidence](docs/RESEARCH_EVIDENCE.md) |
+| Security assumptions | [Threat model](docs/THREAT_MODEL.md) |
+| Platform gates | [Acceptance criteria](docs/PLATFORM_ACCEPTANCE_CRITERIA.md) |
+| Brand application | [Brand system](docs/BRAND_SYSTEM.md) |
+| Architecture decision | [ADR-0001](docs/adr/0001-editorial-cms-and-postgres.md) |
+| AI cost calculator | [Methodology](docs/AI_COST_CALCULATOR_METHODOLOGY.md) |
+| VRAM calculator | [Methodology](docs/LABS_METHODOLOGY.md) |
+
+Machine-readable documentation entry points: [llms.txt](public/llms.txt) and [llms-full.txt](public/llms-full.txt).
+
+## Contributing
+
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md), follow the editorial and security boundaries, add tests for behavior changes, and submit a pull request against `main`. Do not include secrets, fabricated evidence or unverified editorial claims.
+
+## License and acknowledgements
+
+The repository is identified as **Apache License 2.0**; see [LICENSE](LICENSE). Apache-2.0 does not grant trademark rights. HEZQEN brand usage must follow the supplied [brand system](docs/BRAND_SYSTEM.md). The logo kit states that trademark and domain clearance has not been completed.
+
+The project uses Next.js, React, Payload CMS, PostgreSQL, Biome and pnpm. Their respective licenses and notices remain with their upstream projects.
+
+<details>
+<summary>Roadmap and release status</summary>
+
+HEZQEN implementation progress is maintained in [PHASE_STATUS.md](docs/PHASE_STATUS.md). The near-term engineering gates are reviewed database migrations, server-side editorial workflow commands, persistent audit events, evidence storage and integrity verification, and security/accessibility acceptance.
+
+</details>
+
+<details>
+<summary>Troubleshooting</summary>
+
+- **Payload reports missing environment variables:** copy `.env.example` to `.env` and configure all four values.
+- **Database connection fails:** verify PostgreSQL is running and that `DATABASE_URL` targets your local database.
+- **Admin routes are not operational:** the initial migration and administrator bootstrap are not yet a completed production setup. Follow [CMS setup](docs/CMS_SETUP.md).
+- **Lockfile installation fails:** use the pnpm version declared by `package.json` and run `pnpm install --frozen-lockfile`.
+
+</details>
+
+<details>
+<summary>Support</summary>
+
+For project questions, consult [SUPPORT.md](SUPPORT.md) or open a GitHub issue. Do not disclose vulnerabilities, credentials or private evidence in public issues.
+
+</details>

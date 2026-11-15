@@ -1,0 +1,97 @@
+# HEZQEN — Full Project Context
+
+## Identity and purpose
+
+HEZQEN is a global technology and business intelligence publication by Tinlance. Its positioning is “Global Technology & Business Intelligence” and its tagline is “Research. Intelligence. Perspective.” The four editorial divisions are AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
+
+HEZQEN is designed as a research and intelligence publication, not a high-volume content blog. It aims to help people building, governing and investing in technology understand consequential developments through original reporting, investigative journalism, technical analysis, transparent methodologies, benchmarks and engineering tools.
+
+The product surfaces are:
+- HEZQEN Media: reporting, investigations, analysis and explainers.
+- HEZQEN Labs: calculators, benchmarks and engineering experiments.
+- HEZQEN Intelligence: deeper research, briefings and decision support. This premium surface is planned, not yet implemented.
+
+## Editorial authority and integrity
+
+The governing principle is: “AI may assist the newsroom; AI must not become the newsroom.”
+
+Every published item requires accountable human authorship and human editorial approval. Material claims must be traceable to identifiable evidence. Human staff independently verify facts, quotations, calculations, source context and conclusions. Automated publication without accountable human editorial approval is prohibited.
+
+No model, agent, prompt, memory, retrieved webpage, tool output or integration may grant editorial authority. Authors and editors must be separate people for approval. Only the assigned human editor may approve and publish after fact-checking, disclosure review and source-backed material claims.
+
+Editorial policy prohibits fabricated authors, sources, interviews, quotations, datasets, metrics, screenshots, benchmarks and expert endorsements. Research must distinguish measured results from estimates and theoretical calculations. Commercial relationships do not confer editorial approval rights.
+
+## Current engineering stack
+
+- Next.js App Router 16.
+- React 19.
+- Strict TypeScript.
+- Node.js 24 runtime.
+- pnpm 12 package management with a committed lockfile.
+- Payload CMS 3 with the official PostgreSQL adapter and Lexical editor.
+- PostgreSQL 18 target.
+- Biome linting and formatting.
+- Node built-in test runner.
+- GitHub Actions CI and Dependabot.
+
+The application is structured as a modular monolith. Public rendering must not have direct access to privileged editorial writes. Public APIs should expose published content only.
+
+## Implemented application surfaces
+
+The public application shell includes a homepage, About page, Editorial Standards page, four division routes, a VRAM calculator and an API-versus-self-hosted AI cost calculator.
+
+The Labs calculators have deterministic domain logic and tests. The VRAM estimator calculates model weight memory, KV-cache memory and a configurable runtime reserve. It is a planning estimate, not a hardware compatibility guarantee. The AI cost calculator compares user-supplied token pricing with user-supplied self-hosted GPU and infrastructure costs; it excludes engineering labor, utilization, throughput and several other operational factors.
+
+## CMS and data status
+
+Payload CMS is integrated with the Next.js App Router. The admin and API routes are mounted, and collections exist for users, articles, topics, sources, evidence, claims and audit events. Access restrictions and protected workflow fields are implemented in the collection configuration.
+
+The initial database migration has not yet been generated and applied to the dedicated database. The administrator bootstrap is not a substitute for migration or operational acceptance. The CMS is therefore an integration foundation, not a production-ready newsroom.
+
+Before CMS release, HEZQEN needs reviewed versioned migrations, isolated staging validation, a first administrator, direct REST and Local API authorization tests, persistent workflow commands, transactional audit events, concurrency controls and verified backup/restore.
+
+## Editorial workflow domain
+
+The repository contains a deterministic state machine for pitch, research, draft, fact-check, editorial review, approval, scheduling, publication, correction and archive transitions. It requires a human assigned editor for approval and publishing and rejects author/editor self-approval.
+
+The state machine is not itself a production authorization system. A server-only command handler must derive identity from a verified session, enforce persisted assignments, call the state machine, persist the state and audit event atomically, and defend against stale writes and direct API bypass.
+
+## Research evidence domain
+
+The repository contains source/evidence validation, claim verification checks and guarded HTTPS acquisition logic. The acquisition code applies URL validation, DNS resolution, public-IP checks, destination pinning, redirect revalidation, content-type restrictions, byte limits, timeouts and SHA-256 calculation.
+
+These modules do not yet provide a persistent immutable evidence vault, private object storage, network-level egress enforcement, production audit history or independent human fact-checking. The acquisition guard requires security review before arbitrary public URL acquisition is enabled in production.
+
+## Infrastructure and deployment
+
+Project documentation records a dedicated HEZQEN Vercel project and a dedicated Neon PostgreSQL 18 project with main, staging and production branches. The branded hostname and production database migration remain pending. HEZQEN infrastructure is isolated from other Tinlance products and must not repurpose their databases, projects or DNS records.
+
+The existing public preview URL is https://hezqen.vercel.app. A preview deployment being READY does not prove every route or future CMS workflow has passed production acceptance.
+
+## Security posture
+
+The threat model addresses access control, authentication, injection, software supply chain, cryptographic integrity, SSRF, prompt injection, audit logging, exceptional conditions and publication authority. It maps planned controls to OWASP Top 10:2025 and establishes an ASVS 5.0 verification target.
+
+The threat model is an engineering baseline, not an ASVS attestation or independent security certification. Production release requires server-side authorization tests, private evidence storage, egress controls, session and upload security, database backup/restore, logging, alerting and incident response.
+
+## Repository workflows
+
+The repository includes GitHub Actions CI for linting, formatting, unit tests, dependency audit, production build, runtime smoke tests and TypeScript checks. Dependabot checks npm and GitHub Actions dependencies weekly. Separate workflows generate Payload migrations on dedicated branches and verify migrations against ephemeral PostgreSQL.
+
+The supported local commands are defined in package.json and documented in README.md and CONTRIBUTING.md. Use pnpm with the committed lockfile.
+
+## Documentation map
+
+- https://github.com/LloydCoder/hezqen/blob/main/docs/README.md
+- https://github.com/LloydCoder/hezqen/blob/main/docs/ARCHITECTURE.md
+- https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_STANDARDS.md
+- https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_WORKFLOW.md
+- https://github.com/LloydCoder/hezqen/blob/main/docs/RESEARCH_EVIDENCE.md
+- https://github.com/LloydCoder/hezqen/blob/main/docs/THREAT_MODEL.md
+- https://github.com/LloydCoder/hezqen/blob/main/docs/CMS_SETUP.md
+- https://github.com/LloydCoder/hezqen/blob/main/docs/DATA_MODEL.md
+- https://github.com/LloydCoder/hezqen/blob/main/docs/PHASE_STATUS.md
+
+## Explicit non-claims
+
+HEZQEN does not currently claim that premium subscriptions, reader accounts, search, a production CMS, persistent evidence storage, automated publishing, production backup/restore or complete ASVS compliance are available. Consult PHASE_STATUS.md and PLATFORM_ACCEPTANCE_CRITERIA.md for the current gates.
