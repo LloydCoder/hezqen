@@ -257,3 +257,20 @@ test("allows an assigned editor to return fact-check work to draft", () => {
   assert.equal(result.ok, true);
   if (result.ok) assert.equal(result.record.factCheckComplete, false);
 });
+
+test("rejects scheduled timestamps without an explicit timezone", () => {
+  const approved = {
+    ...record,
+    status: "approved",
+    approvedById: "editor-1",
+    approvedAt: now,
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
+  const result = transitionPublication(approved, editor, "scheduled", {
+    now,
+    scheduledFor: "2026-11-16T10:00:00",
+  });
+  assert.equal(result.ok, false);
+  if (!result.ok) assert.ok(result.blockers.includes("SCHEDULE_TIME_INVALID"));
+});
