@@ -82,7 +82,6 @@ test("audit events are immutable through Payload collection access", () => {
   assert.equal(AuditEvents.access.read({ req: { user: { id: 2, role: "author" } } }), false);
 });
 
-
 test("disabled authenticated accounts lose all privileged CMS access immediately", () => {
   const disabledAdmin = { id: 99, role: "administrator", active: false };
   assert.equal(Articles.access.create({ req: { user: disabledAdmin } }), false);
