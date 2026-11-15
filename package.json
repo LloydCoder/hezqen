@@ -12,7 +12,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "lint": "pnpm dlx @biomejs/biome@2.6.7 lint .",
-    "test": "node --experimental-strip-types --test src/domain/editorial/publishing-policy.test.mjs src/lib/site.test.mjs src/domain/labs/vram-estimator.test.mjs src/domain/editorial/workflow.test.mjs src/domain/research/evidence.test.mjs src/domain/labs/ai-cost.test.mjs src/domain/labs/calculator-suite.test.mjs src/domain/research/acquisition.test.mjs src/collections/articles-config.test.mjs",
+    "test": "node --experimental-strip-types --test src/domain/editorial/publishing-policy.test.mjs src/lib/site.test.mjs src/domain/labs/vram-estimator.test.mjs src/domain/editorial/workflow.test.mjs src/domain/research/evidence.test.mjs src/domain/labs/ai-cost.test.mjs src/domain/labs/calculator-suite.test.mjs src/domain/research/acquisition.test.mjs src/collections/articles-config.test.mjs src/payload-config-compatibility.test.mjs",
     "format:check": "pnpm dlx @biomejs/biome@2.6.7 format app src package.json biome.json next.config.ts next-env.d.ts tsconfig.json",
     "payload": "node scripts/payload-cli.mjs",
     "bootstrap:admin": "node --experimental-strip-types scripts/bootstrap-admin.ts",
