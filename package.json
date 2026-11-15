@@ -4,7 +4,7 @@
   "private": true,
   "description": "HEZQEN — Global Technology & Business Intelligence",
   "engines": {
-    "node": "24.x || 22.x"
+    "node": "^24.22.3 || >=26.13.1"
   },
   "scripts": {
     "dev": "next dev",
@@ -18,13 +18,18 @@
   "dependencies": {
     "next": "16.4.6",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "@payloadcms/db-postgres": "3.93.0",
+    "@payloadcms/next": "3.93.0",
+    "@payloadcms/richtext-lexical": "3.93.0",
+    "payload": "3.93.0",
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   },
   "type": "module",
   "packageManager": "pnpm@12.21.0"
