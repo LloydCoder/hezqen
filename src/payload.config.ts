@@ -18,6 +18,7 @@ import {
   scheduledPublicationEndpoint,
 } from "./lib/editorial-endpoints.ts";
 import { createResendEmailAdapter } from "./lib/resend-email-adapter.ts";
+import { evidenceDownloadEndpoint, evidenceUploadEndpoint } from "./lib/evidence-endpoints.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -69,7 +70,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents],
-  endpoints: [editorialWorkflowEndpoint, editorialReviewEndpoint, scheduledPublicationEndpoint],
+  endpoints: [editorialWorkflowEndpoint, editorialReviewEndpoint, scheduledPublicationEndpoint, evidenceUploadEndpoint, evidenceDownloadEndpoint],
   email: process.env.RESEND_API_KEY
     ? createResendEmailAdapter({
         apiKey: process.env.RESEND_API_KEY,
