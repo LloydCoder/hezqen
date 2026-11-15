@@ -23,7 +23,11 @@ The intended public hostname is **https://hezqen.tinlance.com**. It is not yet a
 
 The public application shell and sixteen HEZQEN Labs calculators can be exercised locally using the Quick Start instructions below.
 
-## HEZQEN Labs\n\nThe Labs portfolio contains sixteen calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage sizing, AI data-leakage scenario risk, local hardware ROI, fine-tuning versus RAG, cloud migration cost, Kubernetes infrastructure cost, database capacity, AI API pricing comparison, LLM inference throughput, cybersecurity incident cost, SaaS gross margin, data-centre energy, storage growth and AI-agent operating cost. See the [calculator methodology and limitations](docs/LABS_CALCULATOR_SUITE.md) for formulas, assumptions, units and exclusions. The sixteen-calculator portfolio is implemented on `main` and covered by deterministic regression tests, production-build validation and runtime HTTP smoke tests. Production browser QA, live deployment telemetry and public-hostname verification remain separate release checks.\n\n## Why HEZQEN
+## HEZQEN Labs
+
+The Labs portfolio contains sixteen calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage sizing, AI data-leakage scenario risk, local hardware ROI, fine-tuning versus RAG, cloud migration cost, Kubernetes infrastructure cost, database capacity, AI API pricing comparison, LLM inference throughput, cybersecurity incident cost, SaaS gross margin, data-centre energy, storage growth and AI-agent operating cost. See the [calculator methodology and limitations](docs/LABS_CALCULATOR_SUITE.md) for formulas, assumptions, units and exclusions. The sixteen-calculator portfolio is implemented on `main` and covered by deterministic regression tests, production-build validation and runtime HTTP smoke tests. Production browser QA, live deployment telemetry and public-hostname verification remain separate release checks.
+
+## Why HEZQEN
 
 HEZQEN is designed as an editorial and intelligence platform, not a high-volume content blog.
 
