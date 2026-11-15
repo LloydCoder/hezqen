@@ -10,6 +10,7 @@ import {
 } from "../domain/editorial/persisted-workflow.ts";
 import type { MaterialClaim } from "../domain/editorial/publishing-policy.ts";
 import type { WorkflowStatus } from "../domain/editorial/workflow.ts";
+import { withRequestContext } from "./request-context.ts";
 
 type RawRecord = Record<string, unknown>;
 
@@ -167,12 +168,14 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
   }
 
   async appendAuditEvent(event: EditorialAuditEvent): Promise<void> {
-    await this.req.payload.create({
-      collection: "audit-events",
-      data: event,
-      overrideAccess: true,
-      req: this.req,
-    });
+    await withRequestContext(this.req, { hezqenAuditWrite: true }, () =>
+      this.req.payload.create({
+        collection: "audit-events",
+        data: event,
+        overrideAccess: true,
+        req: this.req,
+      }),
+    );
   }
 
   async commitTransaction(transactionId: string | number): Promise<void> {
