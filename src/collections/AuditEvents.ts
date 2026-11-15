@@ -1,4 +1,4 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
 
@@ -16,6 +16,16 @@ export const AuditEvents: CollectionConfig = {
     read: canReadAudit,
     update: () => false,
     delete: () => false,
+  },
+  hooks: {
+    beforeChange: [
+      ({ operation, req }) => {
+        const context = req.context as Record<string, unknown> | undefined;
+        if (operation !== "create" || context?.hezqenAuditWrite !== true) {
+          throw new APIError("Audit events are append-only and server generated.", 403);
+        }
+      },
+    ],
   },
   fields: [
     { name: "eventId", type: "text", required: true, unique: true },
