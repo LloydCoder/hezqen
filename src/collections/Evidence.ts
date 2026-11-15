@@ -3,9 +3,7 @@ import type { Access, CollectionConfig } from "payload";
 type Actor = { role?: string } | null;
 
 function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user
-    ? (user as Actor)?.role
-    : undefined;
+  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
 }
 
 const canReadEvidence: Access = ({ req }) =>
