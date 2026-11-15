@@ -23,7 +23,7 @@ The connected Cloudflare account was inspected on 2026-11-15:
 |---|---|---|
 | Zones | `tinlance.com` and `threatfade.com` are active; `tinlance.com` shows the Free Website plan | The existing zone can host the HEZQEN subdomain after acceptance. |
 | DNS | No `hezqen.tinlance.com` record exists | Correctly remains unattached while hosting is evaluated. |
-| Workers | Read-only API inventory returned no Worker scripts; the account Workers subdomain is `nwachukwuchinaemerem8.workers.dev` | No existing Worker runtime can be reused. The subdomain exists, but no HEZQEN Worker is deployed. |
+| Workers | No Worker scripts listed; the account Workers subdomain is `nwachukwuchinaemerem8.workers.dev` | No existing Worker runtime can be reused. The subdomain exists, but no HEZQEN Worker is deployed. |
 | Pages | No Pages projects listed | Pages is not an existing hosting surface. |
 | R2 | A fresh read-only API request returned HTTP 403 / error 10042: “Please enable R2 through the Cloudflare Dashboard.” | R2 is not enabled and no HEZQEN object storage exists. Enabling it requires a dashboard action; do not enable or create a bucket until media/evidence storage is designed and cost reviewed. |
 | Hyperdrive | No Hyperdrive configurations listed | No Cloudflare database pooling configuration exists. |
@@ -85,7 +85,7 @@ Read-only inspection on 2026-11-15 returned:
 | Staging | `hezqen` | `hezqen_app` | 0 |
 | Production | `hezqen` | `hezqen_app` | 0 |
 
-No schema migration has been applied to the shared staging or production branches. The initial Payload migration is checked into `src/migrations/` and is tested by GitHub Actions against ephemeral PostgreSQL. The CI database is not the shared Neon project.
+Read-only table inventory returned zero application tables on `main`, `staging` and `production`. The project has no snapshots, and all three automatic snapshot schedules are empty; history retention is 21,600 seconds (6 hours). Backup/restore is not configured or tested. No schema migration has been applied to the shared staging or production branches. The initial Payload migration is checked into `src/migrations/` and is tested by GitHub Actions against ephemeral PostgreSQL. The CI database is not the shared Neon project.
 
 The configured branch-to-environment mapping must still be verified without exposing connection strings. Before staging migration:
 1. Verify the Preview/staging `DATABASE_URL` points to the staging branch.
@@ -138,13 +138,15 @@ The following are not yet evidenced as complete:
 - Production secrets and environment wiring for the selected host.
 - Legal trademark clearance and brand/domain review. The supplied logo kit explicitly states HEZQEN has not been legally cleared.
 
-## 8. Current Vercel status
+## 8. Current Vercel project evidence
 
-Vercel remains an approved hosting option; the temporary build-rate obstacle does not remove it from the architecture. The connected hezqen Next.js project produced a READY preview from PR #35 head `c56f59b16ae20f2625346c91de6239fc17b3f8da` at https://hezqen-ix8xrxv5s-lloydcoders-projects.vercel.app. The PR was merged as `3888d2ccb9d77c1398c39a53fd5f969f472025b1`. Preview SSO protection is enabled, so unauthenticated external browser QA could not be completed. The Vercel project domain inventory contains only hezqen.vercel.app; hezqen.tinlance.com is not attached. A direct lookup for the canonical custom domain returned not found.
+Read-only inspection on 2026-11-15 confirmed an existing Vercel project named `hezqen`, linked to `LloydCoder/hezqen`, using Next.js and Node.js 24.x. The project is on the Hobby plan with `live=false`. The project domain inventory contains only `hezqen.vercel.app`; `hezqen.tinlance.com` is not attached. Preview SSO protection is enabled.
 
-The package engine is pinned to Node 24.x, matching the Vercel project setting and GitHub Actions CI. The PR #35 preview build completed successfully with this pin, and the previous Node 26 fallback mismatch is removed. The build generated all sixteen Labs routes, the Infrastructure catalog, admin/API routes, robots.txt and sitemap.xml.
+The READY Preview from PR #35 head `c56f59b16ae20f2625346c91de6239fc17b3f8da` is available at https://hezqen-ix8xrxv5s-lloydcoders-projects.vercel.app. The PR merged as `3888d2ccb9d77c1398c39a53fd5f969f472025b1`. The package engine is pinned to Node 24.x, matching the Vercel project setting and GitHub Actions CI. The preview build completed successfully with this pin and generated the homepage, all four divisions, the Infrastructure catalog, Labs, all sixteen calculator routes, Payload admin/API routes, robots.txt and sitemap.xml.
 
-The vercel.json file continues to disable automatic Git-triggered deployments; use controlled deployments after GitHub CI is green. Do not treat a preview alias as a production domain.
+The Hobby plan has a documented limit of 100 deployments per 24 hours. `vercel.json` sets `git.deploymentEnabled` to false to conserve the allowance during iterative implementation. This is a temporary throttling control, not a decision to remove Vercel. Use controlled deployments after GitHub CI passes; do not upgrade the plan without cost approval.
+
+Do not treat a preview alias as a production domain. No custom-domain attachment, production deployment or DNS cutover has been made.
 
 ## 9. Explicit non-actions
 
