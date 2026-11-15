@@ -134,6 +134,33 @@ test("uses the canonical origin for Vercel Production", () => {
   );
 });
 
+test("requires a canonical site URL in production Preview deployments", () => {
+  assert.throws(
+    () =>
+      resolvePayloadServerUrl({
+        deploymentHostname: "hezqen-preview-123.vercel.app",
+        deploymentEnvironment: "preview",
+        allowedOrigins: ["https://hezqen-preview-123.vercel.app"],
+        nodeEnv: "production",
+      }),
+    /NEXT_PUBLIC_SITE_URL is required/,
+  );
+});
+
+test("requires the canonical site origin in the allowlist for Preview deployments", () => {
+  assert.throws(
+    () =>
+      resolvePayloadServerUrl({
+        configuredSiteUrl: "https://hezqen.tinlance.com",
+        deploymentHostname: "hezqen-preview-123.vercel.app",
+        deploymentEnvironment: "preview",
+        allowedOrigins: ["https://hezqen-preview-123.vercel.app"],
+        nodeEnv: "production",
+      }),
+    /canonical site origin must be allowed/,
+  );
+});
+
 test("rejects a server URL that is not in the explicit origin allowlist", () => {
   assert.throws(
     () =>
