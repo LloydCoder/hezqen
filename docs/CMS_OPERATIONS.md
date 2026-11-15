@@ -1,6 +1,6 @@
 # HEZQEN CMS Operations and Release Contract
 
-**Status:** PR #51 latest code head is `a006eb2bbfcb3387d341b24b331e517ff944628c`. Payload migration verification passed on the preceding code head. Cloudflare compatibility passed but its Worker build/smoke job was cancelled. HEZQEN CI reached tests and failed twice; the latest two origin-assertion fixes are committed but have not been rerun. The existing Vercel Preview is an older code-bearing baseline. Full staging acceptance remains PARTIAL; PR #51 remains draft.  
+**Status (2026-11-16):** PR #51 source head `f0b1ae4e4ca78b9d654630b1581e53880d4bb67a` passed all three required pull-request workflows: HEZQEN CI [43775481003](https://github.com/LloydCoder/hezqen/actions/runs/43775481003), Payload migration verification [43775481024](https://github.com/LloydCoder/hezqen/actions/runs/43775481024), and Cloudflare compatibility including Worker build and public-route/health smoke [43775481035](https://github.com/LloydCoder/hezqen/actions/runs/43775481035). Lint, format, 169 tests, audit, Next.js production build, runtime smoke and typecheck passed; both migrations plus guarded backup/restore passed against ephemeral PostgreSQL; Worker build and local public-route smoke passed. CMS staging acceptance remains PARTIAL because live authenticated, storage, email, scheduler and public correction UI checks remain outstanding. PR #51 remains draft; production remains NOT READY.  
 **Production:** not deployed. Do not run production migrations or attach production traffic.
 
 This document is the operational companion to docs/PHASE_STATUS.md. A source implementation or green unit test does not by itself prove live service readiness.
@@ -99,7 +99,7 @@ The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web a
 ## 8. Release acceptance checklist
 
 - [x] Latest Payload migration verification run [43774399391](https://github.com/LloydCoder/hezqen/actions/runs/43774399391) passed on code head `bc80495` and verified both migrations against ephemeral PostgreSQL.
-- [ ] Cloudflare compatibility, Worker build and public/CMS smoke workflows pass on the same source revision.
+- [x] Cloudflare vinext compatibility, Worker build and public-route/health smoke pass on source head `f0b1ae4e4ca78b9d654630b1581e53880d4bb67a` (run 43775481035).
 - [x] Both Payload migrations are applied and recorded on isolated Neon staging branch br-lucky-bird-bayxt3by; the scheduled/correction columns were verified read-only. This does not authorize or imply a production migration.
 - [ ] Staging app deploy is made on a commercially permitted host; Vercel Hobby is not an option for production.
 - [ ] Authenticated role matrix passes for administrator, editor, author, fact-checker, researcher and unauthenticated callers.
@@ -114,7 +114,7 @@ The separate hezqen-scheduler Worker is only a cron runner, not the HEZQEN web a
 - [ ] Backup/restore, monitoring, alerting, incident response and rollback are accepted.
 - [ ] Production database migration, production administrator bootstrap, production host and DNS cutover remain separate explicit release approvals.
 
-**Current verdict:** implementation and ephemeral database migration coverage are in progress; live staging acceptance and commercial production hosting are not complete.
+**Current verdict:** all required PR CI/CD workflows are green on source head `f0b1ae4e4ca78b9d654630b1581e53880d4bb67a`; live staging acceptance and commercial production hosting are not complete.
 
 ## 9. Verified staging baseline — 2026-11-15
 
@@ -140,4 +140,4 @@ These checks establish a deployed preview and unauthenticated route baseline onl
 7. The full authenticated role matrix, actual administrator login, real-Postgres transaction rollback on audit failure, and end-to-end authenticated Local API bypass acceptance remain open. Collection-hook unit tests now cover the protected write/delete boundaries.
 8. The Vercel Hobby plan cannot host this commercial publication in production. Cloudflare Workers Free/vinext is not accepted until CMS/admin compatibility and CPU budgets are measured on a deployed candidate.
 
-**Current verdict:** Latest PR #51 code head has not yet passed a complete CI/CD cycle. Migration verification passed on its immediate predecessor; Cloudflare compatibility passed but Worker build/smoke was cancelled; HEZQEN CI failed tests and the fixes remain unverified by a fresh run. The READY Vercel Preview is an older source revision. CMS staging acceptance is PARTIAL; production remains NOT READY. No production database migration, production deployment, production administrator bootstrap, production DNS cutover, paid-plan upgrade or scheduler activation has been performed.
+**Current verdict (superseded by the 2026-11-16 CI reconciliation at the top of this document):** the READY Vercel Preview remains an older source revision. CMS staging acceptance is PARTIAL; production remains NOT READY. No production database migration, production deployment, production administrator bootstrap, production DNS cutover, paid-plan upgrade or scheduler activation has been performed.
