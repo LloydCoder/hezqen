@@ -87,7 +87,7 @@ jobs:
             echo "Generated Cloudflare configuration:"
             sed -n '1,260p' cloudflare.config.ts
           fi
-      - name: Enable process.env access to Worker bindings
+      - name: Declare HEZQEN Worker bindings
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -105,27 +105,27 @@ jobs:
                   if date_match:
                       source = source[:date_match.end()] + "\n    " + flags + "," + source[date_match.end():]
                   else:
-                      worker_match = re.search(r'(worker\s*:\s*\{)', source)
+                      worker_match = re.search(r'(worker\s*:\s*(?:defineWorker\()?\\{)', source)
                       if not worker_match:
                           raise SystemExit("Generated cloudflare.config.ts has no worker config block")
                       source = source[:worker_match.end()] + '\n    compatibilityDate: "2026-11-15",\n    ' + flags + "," + source[worker_match.end():]
-          bindings = '''env: {
-                ASSETS: bindings.assets(),
-                DATABASE_URL: bindings.secret(),
-                PAYLOAD_SECRET: bindings.secret(),
-                NEXT_PUBLIC_SITE_URL: bindings.text(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001"),
-                HEZQEN_ALLOWED_ORIGINS: bindings.text(process.env.HEZQEN_ALLOWED_ORIGINS ?? "http://localhost:3001"),
-              }'''
-          env_match = re.search(r'env:\s*\{\s*ASSETS:\s*bindings\.assets\(\),\s*\}', source)
-          if env_match:
-              source = source[:env_match.start()] + bindings + source[env_match.end():]
-          elif "DATABASE_URL: bindings.secret()" not in source:
-              raise SystemExit("Could not add Payload environment bindings to generated Worker config")
+          env_match = re.search(r'(\s*env:\s*\{)', source)
+          if not env_match:
+              raise SystemExit("Generated cloudflare.config.ts has no worker env block")
+          required = {
+              "DATABASE_URL": "bindings.secret()",
+              "PAYLOAD_SECRET": "bindings.secret()",
+              "NEXT_PUBLIC_SITE_URL": 'bindings.text("http://localhost:3001")',
+              "HEZQEN_ALLOWED_ORIGINS": 'bindings.text("http://localhost:3001")',
+          }
+          for name, binding in required.items():
+              if f"{name}:" not in source:
+                  source = source[:env_match.end()] + f"\n      {name}: {binding}," + source[env_match.end():]
+                  env_match = re.search(r'(\s*env:\s*\{)', source)
           path.write_text(source)
-          required = ["nodejs_compat_populate_process_env", "DATABASE_URL: bindings.secret()", "PAYLOAD_SECRET: bindings.secret()", "NEXT_PUBLIC_SITE_URL: bindings.text(", "HEZQEN_ALLOWED_ORIGINS: bindings.text("]
-          missing = [item for item in required if item not in path.read_text()]
-          if missing:
-              raise SystemExit(f"Worker runtime bindings are incomplete: {missing}")
+          for name in required:
+              if f"{name}:" not in path.read_text():
+                  raise SystemExit(f"Missing required Worker binding: {name}")
           print(path.read_text())
           PY
       - name: Install generated Worker toolchain
@@ -145,8 +145,6 @@ jobs:
           cat > .env.production <<'EOF'
           DATABASE_URL=postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
           PAYLOAD_SECRET=ci-only-secret-never-use-outside-builds
-          NEXT_PUBLIC_SITE_URL=http://localhost:3001
-          HEZQEN_ALLOWED_ORIGINS=http://localhost:3001
           EOF
       - name: Build Cloudflare Worker
         run: pnpm run build:vinext
