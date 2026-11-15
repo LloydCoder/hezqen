@@ -41,8 +41,8 @@ export default function TermsPage() {
         <h2>Calculators and tools</h2>
         <p>
           Calculator outputs are estimates based on user inputs and disclosed assumptions. They are
-          not provider quotes, guarantees, security assessments, legal advice, investment advice or a
-          substitute for independent engineering validation. Verify material decisions against
+          not provider quotes, guarantees, security assessments, legal advice, investment advice or
+          a substitute for independent engineering validation. Verify material decisions against
           current primary documentation and your own environment.
         </p>
         <h2>Acceptable use</h2>
