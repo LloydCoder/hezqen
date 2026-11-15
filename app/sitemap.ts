@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { divisions, site } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/about", "/editorial-standards"].map((route) => ({
+  const staticRoutes = ["", "/about", "/editorial-standards", "/infrastructure"].map((route) => ({
     url: `${site.url}${route}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
