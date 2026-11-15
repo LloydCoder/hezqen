@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import type { Endpoint, PayloadRequest } from "payload";
 
 import {
+  ALLOWED_EVIDENCE_CONTENT_TYPES,
   deleteEvidenceObject,
   getPrivateEvidenceObject,
   MAX_EVIDENCE_BYTES,
@@ -110,19 +111,7 @@ export const evidenceUploadEndpoint: Endpoint = {
       return Response.json({ error: "Private evidence storage is not configured." }, { status: 503 });
     }
 
-    if (
-      ![
-        "application/pdf",
-        "application/json",
-        "application/xml",
-        "text/xml",
-        "text/plain",
-        "text/csv",
-        "image/png",
-        "image/jpeg",
-        "image/webp",
-      ].includes(contentType)
-    ) {
+    if (!ALLOWED_EVIDENCE_CONTENT_TYPES.has(contentType)) {
       return Response.json({ error: "This evidence content type is not allowed." }, { status: 415 });
     }
 
