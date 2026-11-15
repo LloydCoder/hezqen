@@ -22,6 +22,9 @@ const databaseUrl =
 const secret =
   process.env.PAYLOAD_SECRET ??
   (isProductionBuild ? "hezqen-build-only-secret-never-use-at-runtime" : undefined);
+const allowedOrigins =
+  process.env.HEZQEN_ALLOWED_ORIGINS?.split(",").map((origin) => origin.trim()).filter(Boolean) ??
+  (isProductionBuild ? ["https://hezqen.tinlance.com"] : ["http://localhost:3000"]);
 
 if (!databaseUrl) {
   throw new Error("DATABASE_URL is required to run the HEZQEN CMS.");
@@ -39,6 +42,16 @@ export default buildConfig({
   },
   collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents],
   editor: lexicalEditor(),
+  serverURL: process.env.NEXT_PUBLIC_SITE_URL ?? allowedOrigins[0],
+  csrf: allowedOrigins,
+  cors: allowedOrigins,
+  graphQL: {
+    disable: true,
+  },
+  telemetry: false,
+  debug: false,
+  defaultDepth: 1,
+  maxDepth: 3,
   secret,
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
