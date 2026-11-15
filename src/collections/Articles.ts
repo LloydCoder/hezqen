@@ -3,6 +3,18 @@ import { APIError, type Access, type CollectionConfig, type Where } from "payloa
 import { getActiveUserActor, hasActiveRole } from "../lib/access.ts";
 import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
+function slugifyArticleTitle(value: unknown): string {
+  if (typeof value !== "string") return "";
+  return value
+    .normalize("NFKD")
+    .replace(/\\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 120);
+}
+
 const publishedArticleFilter: Where = {
   and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
 };
@@ -71,6 +83,9 @@ export const Articles: CollectionConfig = {
         if (operation === "create" && req.user) {
           return {
             ...data,
+            slug: slugifyArticleTitle(
+              typeof data.slug === "string" && data.slug.trim() ? data.slug : data.title,
+            ),
             author: req.user.id,
             workflowStatus: "draft",
             revision: 1,
@@ -177,6 +192,14 @@ export const Articles: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
+      maxLength: 120,
+      access: {
+        update: () => false,
+      },
+      validate: (value) =>
+        typeof value === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)
+          ? true
+          : "Use lowercase letters, numbers, and single hyphens.",
     },
     {
       name: "excerpt",
