@@ -16,11 +16,6 @@ const canCreateClaims: Access = ({ req }) =>
     actorFromRequest(req.user)?.role ?? "",
   );
 
-const canUpdateClaims: Access = ({ req }) => {
-  const actor = actorFromRequest(req.user);
-  return actor && ["administrator", "editor", "fact_checker"].includes(actor.role ?? "");
-};
-
 export const Claims: CollectionConfig = {
   slug: "claims",
   admin: {
