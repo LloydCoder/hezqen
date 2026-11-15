@@ -18,6 +18,10 @@ export interface StoredEditorialArticle {
   publishedAt: string | null;
   correctionStatus: "none" | "open" | "resolved";
   correctionReason: string | null;
+  correctionPublicNote: string | null;
+  correctionRequestedAt: string | null;
+  correctionResolvedAt: string | null;
+  correctionResolvedById: string | null;
 }
 
 export interface EditorialAuditEvent {
@@ -95,6 +99,10 @@ function snapshot(article: StoredEditorialArticle): Record<string, unknown> {
     publishedAt: article.publishedAt,
     correctionStatus: article.correctionStatus,
     correctionReason: article.correctionReason,
+    correctionPublicNote: article.correctionPublicNote,
+    correctionRequestedAt: article.correctionRequestedAt,
+    correctionResolvedAt: article.correctionResolvedAt,
+    correctionResolvedById: article.correctionResolvedById,
   };
 }
 
@@ -233,6 +241,20 @@ export async function executeEditorialWorkflowCommand(
         next.status === "correction_required"
           ? (command.correctionReason?.trim() ?? null)
           : article.correctionReason,
+      correctionPublicNote:
+        next.status === "correction_required"
+          ? (command.correctionPublicNote?.trim() || null)
+          : article.correctionPublicNote,
+      correctionRequestedAt:
+        next.status === "correction_required" ? now : article.correctionRequestedAt,
+      correctionResolvedAt:
+        next.status === "published" && article.correctionStatus === "open"
+          ? now
+          : article.correctionResolvedAt,
+      correctionResolvedById:
+        next.status === "published" && article.correctionStatus === "open"
+          ? (actor.role === "service" ? article.approvedById : actor.id)
+          : article.correctionResolvedById,
     };
 
     await store.appendAuditEvent(
