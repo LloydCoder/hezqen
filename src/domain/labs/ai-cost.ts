@@ -40,9 +40,7 @@ function assertIntegerInRange(name: string, value: number, min: number, max: num
   }
 }
 
-export function calculateAiCostBreakEven(
-  input: AiCostBreakEvenInput,
-): AiCostBreakEvenResult {
+export function calculateAiCostBreakEven(input: AiCostBreakEvenInput): AiCostBreakEvenResult {
   assertFiniteNonNegative("monthlyRequests", input.monthlyRequests);
   assertFiniteNonNegative("inputTokensPerRequest", input.inputTokensPerRequest);
   assertFiniteNonNegative("outputTokensPerRequest", input.outputTokensPerRequest);
@@ -62,8 +60,7 @@ export function calculateAiCostBreakEven(
     input.gpuCount * input.gpuHourlyCost * input.gpuHoursPerMonth +
     input.monthlyInfrastructureOverhead;
   const monthlySavings = apiMonthlyCost - selfHostedMonthlyCost;
-  const savingsPercent =
-    apiMonthlyCost === 0 ? 0 : (monthlySavings / apiMonthlyCost) * 100;
+  const savingsPercent = apiMonthlyCost === 0 ? 0 : (monthlySavings / apiMonthlyCost) * 100;
   const breakEvenMonthlyRequests =
     apiCostPerRequest === 0
       ? Number.POSITIVE_INFINITY
