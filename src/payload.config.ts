@@ -11,35 +11,17 @@ import { Evidence } from "./collections/Evidence";
 import { Sources } from "./collections/Sources";
 import { Topics } from "./collections/Topics";
 import { Users } from "./collections/Users";
+import { resolveAllowedOrigins } from "./lib/origins.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 const databaseUrl = process.env.DATABASE_URL;
 const secret = process.env.PAYLOAD_SECRET;
-const originInputs =
-  process.env.HEZQEN_ALLOWED_ORIGINS?.split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean) ?? (process.env.NODE_ENV === "production" ? [] : ["http://localhost:3000"]);
-const allowedOrigins = [
-  ...new Set(
-    originInputs.map((origin) => {
-      const parsed = new URL(origin);
-      if (
-        parsed.username ||
-        parsed.password ||
-        parsed.pathname !== "/" ||
-        parsed.search ||
-        parsed.hash ||
-        (parsed.protocol !== "https:" && parsed.hostname !== "localhost")
-      ) {
-        throw new Error(
-          "HEZQEN_ALLOWED_ORIGINS must contain only HTTPS origins (localhost is allowed for development).",
-        );
-      }
-      return parsed.origin;
-    }),
-  ),
-];
+const allowedOrigins = resolveAllowedOrigins({
+  configuredOrigins: process.env.HEZQEN_ALLOWED_ORIGINS,
+  deploymentHostname: process.env.VERCEL_URL,
+  nodeEnv: process.env.NODE_ENV,
+});
 const serverURL = process.env.NEXT_PUBLIC_SITE_URL ?? allowedOrigins[0];
 
 if (
