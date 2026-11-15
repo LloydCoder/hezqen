@@ -96,7 +96,11 @@ export default function ArticleWorkflowControlsClient({ articleId }: { articleId
         throw new Error(`${body.error || body.code || "Workflow action failed."}${details}`);
       }
       setMessage("Workflow action completed.");
-      try {\n        await loadArticle();\n      } catch {\n        setMessage("Workflow action completed. Refresh the page to view the latest state.");\n      }
+      try {
+        await loadArticle();
+      } catch {
+        setMessage("Workflow action completed. Refresh the page to view the latest state.");
+      }
       setTargetStatus("");
       setScheduledFor("");
       setCorrectionReason("");
