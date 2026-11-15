@@ -120,7 +120,8 @@ These are example values, not production defaults. Production must use distinct 
 | Capability | Current implementation status |
 |---|---|
 | Public application shell | Homepage, About, editorial standards and four division routes exist |
-| HEZQEN Labs | VRAM sizing and API-versus-self-hosted AI cost calculators have deterministic domain logic and tests |
+| HEZQEN Labs | All sixteen calculators have deterministic domain logic and regression tests; the public sitemap and runtime smoke workflow cover their routes |
+| HEZQEN Infrastructure | Five HIES engineering-preview kits are discoverable from the public `/infrastructure` catalog; hardware, security, supply-chain and commercial-release gates remain open |
 | Payload CMS | Next.js admin/API integration and restricted collections are present; initial database migration and operational acceptance remain outstanding |
 | Editorial workflow | Human-controlled workflow state machine and publication-policy tests exist; persistent server-side workflow commands remain outstanding |
 | Research evidence | Source/evidence validation and guarded HTTPS acquisition logic exist; private object storage, persistence and production egress controls remain outstanding |
