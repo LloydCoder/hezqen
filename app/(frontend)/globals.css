@@ -754,6 +754,17 @@ a:focus-visible {
   .mobile-nav[hidden] {
     display: none;
   }
+  .mobile-nav-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .mobile-nav-list li {
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-nav-list li:last-child {
+    border-bottom: 0;
+  }
   .mobile-nav a {
     display: flex;
     min-height: 48px;
@@ -761,14 +772,10 @@ a:focus-visible {
     justify-content: space-between;
     gap: 16px;
     padding: 10px 13px;
-    border-bottom: 1px solid var(--line);
     color: var(--graphite);
     font-size: 13px;
     font-weight: 650;
     line-height: 1.4;
-  }
-  .mobile-nav a:last-child {
-    border-bottom: 0;
   }
   .mobile-nav a:hover,
   .mobile-nav a[aria-current="page"] {
