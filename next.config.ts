@@ -1,5 +1,10 @@
 import { withPayload } from "@payloadcms/next/withPayload";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
+
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -18,6 +23,9 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   typedRoutes: true,
+  turbopack: {
+    root: path.resolve(dirname),
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       ".cjs": [".cts", ".cjs"],
