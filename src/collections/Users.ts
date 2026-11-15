@@ -1,6 +1,7 @@
 import { APIError, type Access, type CollectionConfig } from "payload";
 
 import { getActiveUserActor, hasActiveRole } from "../lib/access.ts";
+
 const isAdministrator: Access = ({ req }) => hasActiveRole(req.user, ["administrator"]);
 
 export const Users: CollectionConfig = {
@@ -41,7 +42,7 @@ export const Users: CollectionConfig = {
         : { id: { equals: actor.id } };
     },
     update: ({ req }) => {
-      const actor = actorFromRequest(req.user);
+      const actor = getActiveUserActor(req.user);
       if (!actor) return false;
       return actor.role === "administrator" ? true : { id: { equals: actor.id } };
     },
@@ -54,7 +55,7 @@ export const Users: CollectionConfig = {
       required: true,
       access: {
         read: ({ req, id }) => {
-          const actor = actorFromRequest(req.user);
+          const actor = getActiveUserActor(req.user);
           return Boolean(actor && (["administrator", "editor"].includes(actor.role ?? "") || actor.id === id));
         },
         update: ({ req }) => hasActiveRole(req.user, ["administrator"]),
@@ -73,7 +74,7 @@ export const Users: CollectionConfig = {
       access: {
         read: ({ req }) =>
           hasActiveRole(req.user, ["administrator", "editor"]),
-        create: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
+        create: ({ req }) => hasActiveRole(req.user, ["administrator"]),
         update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
       },
       options: [
