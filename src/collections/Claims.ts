@@ -40,7 +40,7 @@ export const Claims: CollectionConfig = {
           if (context?.hezqenClaimVerification !== true) {
             throw new APIError("Claims are immutable outside the verification workflow.", 403);
           }
-          const allowedFields = ["verificationStatus", "reviewedBy", "reviewedAt"];
+          const allowedFields = ["verificationStatus", "reviewedBy", "reviewedAt", "updatedAt"];
           if (Object.keys(data ?? {}).some((field) => !allowedFields.includes(field))) {
             throw new APIError("Only claim verification metadata may be updated.", 403);
           }
