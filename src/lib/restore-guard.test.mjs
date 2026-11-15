@@ -80,7 +80,7 @@ test("restore refuses a non-empty target unless overwrite is explicitly approved
   mkdirSync(fakeBin);
   writeFileSync(backupFile, "backup-payload");
   const checksum = createHash("sha256").update("backup-payload").digest("hex");
-  writeFileSync(backupFile + ".sha256", checksum + "  " + backupFile + "\n");
+  writeFileSync(`${backupFile}.sha256`, `${checksum}  ${backupFile}\n`);
   const psql = join(fakeBin, "psql");
   writeFileSync(psql, "#!/bin/sh\nprintf '1\\n'\n");
   chmodSync(psql, 0o755);
@@ -109,7 +109,7 @@ test("restore refuses every non-empty target even when overwrite is requested", 
   mkdirSync(fakeBin);
   writeFileSync(backupFile, "backup-payload");
   const checksum = createHash("sha256").update("backup-payload").digest("hex");
-  writeFileSync(backupFile + ".sha256", checksum + "  " + backupFile + "\n");
+  writeFileSync(`${backupFile}.sha256`, `${checksum}  ${backupFile}\n`);
   const psql = join(fakeBin, "psql");
   writeFileSync(psql, "#!/bin/sh\nprintf '1\\n'\n");
   chmodSync(psql, 0o755);
