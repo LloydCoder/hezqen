@@ -51,7 +51,7 @@ test("increments article revision when editorial content changes", async () => {
 test("requires an explicit return-to-draft transition before editing reviewed or scheduled content", async () => {
   assert.ok(revisionHook);
   for (const workflowStatus of ["fact_check", "editorial_review", "approved", "scheduled"]) {
-    await assert.rejects(
+    assert.throws(
       () =>
         revisionHook({
           data: { body: { root: { children: [] } } },
