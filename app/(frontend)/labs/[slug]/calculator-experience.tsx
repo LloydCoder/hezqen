@@ -24,7 +24,7 @@ export default function CalculatorExperience({ calculator }: { calculator: LabCa
   }, [calculator.slug, values]);
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <div className={styles.wrap}>
         <a className={styles.back} href="/labs">← All HEZQEN Labs</a>
         <p className={styles.kicker}>HEZQEN LABS / {calculator.category.toUpperCase()}</p>
