@@ -77,7 +77,8 @@ const metric = (label: string, value: number, unit = "USD"): LabMetric => ({ lab
 function read(calculator: LabCalculator, values: Values, key: string): number {
   const value = values[key];
   if (typeof value !== "number" || !Number.isFinite(value)) throw new RangeError(`${key} must be a finite number`);
-  const definition = calculator.fields.find((item) => item.key === key)!;
+  const definition = calculator.fields.find((item) => item.key === key);
+  if (!definition) throw new RangeError(`Unknown input: ${key}`);
   if (value < definition.min || value > definition.max) throw new RangeError(`${key} must be between ${definition.min} and ${definition.max}`);
   if (definition.step >= 1 && !Number.isInteger(value)) throw new RangeError(`${key} must be a whole number`);
   return value;
