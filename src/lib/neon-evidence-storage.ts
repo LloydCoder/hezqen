@@ -78,9 +78,7 @@ function signingKey(secret: string, dateStamp: string, region: string): Buffer {
 
 function objectUrl(config: NeonEvidenceStorageConfig, key: string): URL {
   if (
-    !/^evidence\/[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
-      key,
-    )
+    !/^evidence\/[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(key)
   ) {
     throw new Error("NEON_EVIDENCE_OBJECT_KEY_INVALID");
   }
