@@ -54,7 +54,7 @@ test("restore rejects a confirmation target that differs from the selected envir
   assert.match(result.stderr, /confirmation target does not match/);
 });
 
-test("restore refuses a non-empty target unless overwrite is explicitly approved", (t) => {
+test("restore refuses a non-empty target", (t) => {
   const directory = mkdtempSync(join(tmpdir(), "hezqen-restore-guard-"));
   t.after(() => rmSync(directory, { recursive: true, force: true }));
 
