@@ -142,16 +142,8 @@ export default function VramCalculatorPage() {
                 options={formats}
                 onChange={setWeightFormat}
               />
-              <NumberField
-                label="Transformer layers"
-                value={layers}
-                onChange={setLayers}
-              />
-              <NumberField
-                label="KV heads (GQA/MQA)"
-                value={kvHeads}
-                onChange={setKvHeads}
-              />
+              <NumberField label="Transformer layers" value={layers} onChange={setLayers} />
+              <NumberField label="KV heads (GQA/MQA)" value={kvHeads} onChange={setKvHeads} />
               <NumberField
                 label="Head dimension"
                 value={headDimension}
