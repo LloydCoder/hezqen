@@ -36,9 +36,9 @@ export default function SecurityPage() {
         <div className="prose-rule" />
         <h2>Report a vulnerability</h2>
         <p>
-          Send a concise report to <a href="mailto:hello@tinlance.com">hello@tinlance.com</a> with the
-          affected URL, a description of the issue, its potential impact and safe reproduction steps.
-          Do not access, modify, delete or retain data that does not belong to you.
+          Send a concise report to <a href="mailto:hello@tinlance.com">hello@tinlance.com</a> with
+          the affected URL, a description of the issue, its potential impact and safe reproduction
+          steps. Do not access, modify, delete or retain data that does not belong to you.
         </p>
         <h2>Safe testing</h2>
         <p>
