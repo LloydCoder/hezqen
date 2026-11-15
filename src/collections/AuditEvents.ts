@@ -19,11 +19,12 @@ export const AuditEvents: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      ({ operation, req }) => {
+      ({ data, operation, req }) => {
         const context = req.context as Record<string, unknown> | undefined;
         if (operation !== "create" || context?.hezqenAuditWrite !== true) {
           throw new APIError("Audit events are append-only and server generated.", 403);
         }
+        return data;
       },
     ],
   },
