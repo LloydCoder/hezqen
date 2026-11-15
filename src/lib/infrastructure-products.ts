@@ -13,7 +13,8 @@ export const infrastructureProducts = [
       "Optional NVIDIA runtime configuration",
     ],
     platforms: ["Linux / amd64"],
-    networkMode: "Network access is required to acquire model images; inference runs locally after setup.",
+    networkMode:
+      "Network access is required to acquire model images; inference runs locally after setup.",
     validation:
       "Automated CPU runtime smoke tests pass in CI. The optional NVIDIA path has not been accepted on physical GPU hardware.",
     limitations:
