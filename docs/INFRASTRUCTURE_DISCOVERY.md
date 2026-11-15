@@ -76,7 +76,7 @@ A server-rendered CMS workload may exceed the Free CPU allowance; measure actual
 
 ## 4. Neon PostgreSQL inventory
 
-A dedicated Neon project named `hezqen-core` exists in `aws-eu-central-1` (Frankfurt), PostgreSQL 18, with 0.25 CU minimum/maximum compute. Branches named `main`, `staging` and `production` exist.
+A dedicated Neon project named `hezqen-core` (`old-bird-82399990`) exists on the Free v3 plan in `aws-eu-central-1` (Frankfurt), PostgreSQL 18, with 0.25 CU minimum/maximum compute. Branches named `main`, `staging` and `production` exist. Read-only inspection found all three unprotected. An attempt to protect a branch was rejected because the current plan has reached its protected-branch limit; no upgrade was made. Treat branch protection as an explicit platform-plan limitation, not as a completed control.
 
 Read-only inspection on 2026-11-15 returned:
 
@@ -139,11 +139,11 @@ The following are not yet evidenced as complete:
 
 ## 8. Current Vercel project evidence
 
-Read-only inspection on 2026-11-15 confirmed an existing Vercel project named `hezqen`, linked to `LloydCoder/hezqen`, using the Next.js framework and the Hobby plan. The project has the system aliases `hezqen.vercel.app`, `hezqen-lloydcoders-projects.vercel.app` and `hezqen-git-main-lloydcoders-projects.vercel.app`; only `hezqen.vercel.app` is listed as a verified project domain. `hezqen.tinlance.com` is not attached.
+Read-only inspection on 2026-11-15 confirmed an existing Vercel project named `hezqen`, linked to `LloydCoder/hezqen`, using the Next.js framework and Node.js 24.x. The project is on the Hobby plan, has `live: false`, and its latest deployment from main commit `b517e7077e304a4c3e2faf30d0ab594ca1b064d8` is READY. The project has the system aliases `hezqen.vercel.app`, `hezqen-lloydcoders-projects.vercel.app` and `hezqen-git-main-lloydcoders-projects.vercel.app`; only `hezqen.vercel.app` is listed as a verified project domain. SSO protection is enabled for all deployments except custom domains. `hezqen.tinlance.com` is not attached.
 
 `vercel.json` currently sets `git.deploymentEnabled` to `false` to conserve the Hobby plan's 100-deployments-per-24-hours allowance during active implementation. This is a temporary operational control. It does not remove Vercel from the architecture or prevent a controlled deployment after CI passes.
 
-A Vercel deployment from commit `9b0137c1842b27fd903057069434b0532939bc8c` failed during Payload config generation because `HEZQEN_ALLOWED_ORIGINS` was absent. This is distinct from the separate Vercel bot errors on the older PR #20, which reported the daily deployment limit. The follow-up implementation adds the exact `VERCEL_URL` deployment origin to Payload's allowlist and configures the canonical origin for Preview and Production. Re-run a controlled preview deployment after the branch is merged and the daily limit permits it; do not interpret either historical error as proof that Vercel is unsupported.
+A Vercel deployment from commit `9b0137c1842b27fd903057069434b0532939bc8c` failed during Payload config generation because `HEZQEN_ALLOWED_ORIGINS` was absent. This is distinct from the separate Vercel bot errors on the older PR #20, which reported the daily deployment limit. The consolidated PR #37 adds the exact `VERCEL_URL` deployment origin to Payload's allowlist and selects it for Preview `serverURL`, while keeping the canonical origin for Production and SEO. A forensic review found that Preview could previously pass with only the deployment origin when `NEXT_PUBLIC_SITE_URL` was absent or missing from the explicit allowlist. Two regression tests were added; both failed against the prior resolver, and the resolver was then corrected to require the canonical origin in production Preview and Production. Final CI verification on the latest PR head is required before merge. Re-run a controlled preview deployment after merge and when the daily limit permits it; do not interpret either historical error as proof that Vercel is unsupported.
 
 ## 9. Explicit non-actions
 
@@ -152,3 +152,12 @@ A Vercel deployment from commit `9b0137c1842b27fd903057069434b0532939bc8c` faile
 - The Tinlyt tunnel was not modified or repurposed.
 - No Neon migration was applied to staging or production.
 - No paid plan was enabled and no production deployment was made.
+
+
+## 10. Latest Phase 2 reconciliation — 2026-11-15
+
+- Consolidated remediation is tracked in [PR #37](https://github.com/LloydCoder/hezqen/pull/37); older PRs #35 and #36 were closed as superseded.
+- Current Vercel hosting choice is unchanged: Node.js on the existing `hezqen` project remains approved. The READY main deployment is an engineering preview, not production acceptance. The custom launch hostname is not attached, and SSO protection remains enabled.
+- The Neon project is on Free v3. Branch protection is unavailable at the current plan limit; the attempted change failed without modifying any branch. No paid upgrade was accepted.
+- Cloudflare API read-only inventory returned no HEZQEN DNS record and no Worker scripts. R2 bucket listing returned the account-level response that R2 must first be enabled in the dashboard. No account settings, DNS records or billable resources were changed.
+- PR #37's earlier complete validation set was green (HEZQEN CI, ephemeral PostgreSQL migration, vinext compatibility and local Worker route/CMS smoke). The additional canonical-origin tests exposed a real gap (two failing tests); the implementation and formatting were corrected. The latest-head rerun remains the acceptance gate.
