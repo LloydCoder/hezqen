@@ -833,7 +833,12 @@ a:focus-visible {
 .vram-breakdown div { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.2); color: #c4ceda; font-size: 12px; }
 .vram-breakdown strong { color: var(--white); font-variant-numeric: tabular-nums; }
 .vram-assumption { margin-top: 22px; color: #b7c1cf; }
-.vram-error { padding: 14px; background: #fff1e8; color: #8a2f00; font-size: 13px; }
+.vram-error {
+  padding: 14px;
+  background: #fff1e8;
+  color: #8a2f00;
+  font-size: 13px;
+}
 .vram-method { max-width: 850px; margin: 70px 0 0 auto; padding-top: 28px; border-top: 1px solid var(--line); }
 .vram-method p:not(.section-label) { color: var(--slate); font-size: 13px; line-height: 1.8; }
 @media (max-width: 800px) { .vram-layout { grid-template-columns: 1fr; } .vram-results { position: static; } }
