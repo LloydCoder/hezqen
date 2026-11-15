@@ -179,11 +179,8 @@ export const evidenceUploadEndpoint: Endpoint = {
     req.transactionID = transactionId;
 
     try {
-      const evidence = await withRequestContext(
-        req,
-        { hezqenEvidencePreservation: true },
-        () =>
-          req.payload.create({
+      const evidence = await withRequestContext(req, { hezqenEvidencePreservation: true }, () =>
+        req.payload.create({
             collection: "evidence",
             data: {
               evidenceId: randomUUID(),
@@ -197,8 +194,8 @@ export const evidenceUploadEndpoint: Endpoint = {
               verificationStatus: "preserved",
             },
             overrideAccess: true,
-            req,
-          }),
+          req,
+        }),
       );
       const evidenceId = String(evidence.id);
       await appendEvidenceAudit(
