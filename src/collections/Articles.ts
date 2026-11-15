@@ -76,14 +76,23 @@ export const Articles: CollectionConfig = {
     ],
     beforeDelete: [
       () => {
-        throw new APIError("Articles cannot be deleted; use the correction and archival workflow.", 403);
+        throw new APIError(
+          "Articles cannot be deleted; use the correction and archival workflow.",
+          403,
+        );
       },
     ],
     beforeChange: [
       ({ data, originalDoc, operation, req }) => {
         if (operation !== "update") return data;
-        const trustedWorkflowCommand = hasTrustedRequestContext(req.context, "hezqenWorkflowCommand");
-        const skipRevisionIncrement = hasTrustedRequestContext(req.context, "hezqenSkipArticleRevisionIncrement");
+        const trustedWorkflowCommand = hasTrustedRequestContext(
+          req.context,
+          "hezqenWorkflowCommand",
+        );
+        const skipRevisionIncrement = hasTrustedRequestContext(
+          req.context,
+          "hezqenSkipArticleRevisionIncrement",
+        );
         const workflowFields = [
           "author",
           "workflowStatus",
@@ -110,9 +119,7 @@ export const Articles: CollectionConfig = {
             403,
           );
         }
-        if (
-          trustedWorkflowCommand || skipRevisionIncrement
-        ) {
+        if (trustedWorkflowCommand || skipRevisionIncrement) {
           return data;
         }
 
