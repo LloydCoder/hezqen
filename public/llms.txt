@@ -6,6 +6,8 @@ Tagline: Research. Intelligence. Perspective.
 
 ## Publication
 - [Homepage](https://hezqen.tinlance.com/): global technology and business intelligence publication.
+- [Articles](https://hezqen.tinlance.com/articles): published reporting, investigations and analysis. Each article is available as a crawlable HTML page with canonical metadata and NewsArticle structured data.
+- [Corrections log](https://hezqen.tinlance.com/corrections): public correction notices and resolution history.
 - [About HEZQEN](https://hezqen.tinlance.com/about): mission, coverage and publisher.
 - [Editorial standards](https://hezqen.tinlance.com/editorial-standards): evidence, authorship, human review and corrections principles.
 - [Corrections policy](https://hezqen.tinlance.com/corrections): how to report and review factual concerns.
@@ -45,5 +47,5 @@ Tagline: Research. Intelligence. Perspective.
 - Human editors retain approval and publishing authority.
 - AI-generated or retrieved content is not verified evidence.
 - Reader accounts, premium subscriptions, production search and automated publishing are not claimed as available.
-- Payload CMS integration exists, but shared database migration and operational acceptance remain release gates.
+- Payload CMS is integrated and a staging database migration and initial administrator have been provisioned. Production database migration, authenticated acceptance and release approval remain outstanding.
 - Infrastructure kits are engineering previews; automated tests do not establish certification or physical hardware validation.
