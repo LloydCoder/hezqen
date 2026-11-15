@@ -8,6 +8,7 @@ export interface AllowedOriginsInput {
 
 export interface PayloadServerUrlInput {
   configuredSiteUrl?: string;
+  payloadServerUrl?: string;
   deploymentHostname?: string;
   deploymentEnvironment?: string;
   allowedOrigins: string[];
@@ -85,11 +86,21 @@ export function resolvePayloadServerUrl(input: PayloadServerUrlInput): string | 
     throw new Error("The canonical site origin must be allowed.");
   }
 
+  const explicitPayloadOrigin = input.payloadServerUrl
+    ? parseOrigin(
+        input.payloadServerUrl,
+        input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true,
+      )
+    : undefined;
+  if (explicitPayloadOrigin && !input.allowedOrigins.includes(explicitPayloadOrigin)) {
+    throw new Error("HEZQEN_PAYLOAD_SERVER_URL must be in the allowed origin list.");
+  }
+
   const previewOrigin =
     input.deploymentEnvironment === "preview" && input.deploymentHostname
       ? parseDeploymentOrigin(input.deploymentHostname)
       : undefined;
-  const candidate = previewOrigin ?? canonicalOrigin ?? input.allowedOrigins[0];
+  const candidate = explicitPayloadOrigin ?? previewOrigin ?? canonicalOrigin ?? input.allowedOrigins[0];
   if (!candidate) return undefined;
 
   const origin = parseOrigin(
