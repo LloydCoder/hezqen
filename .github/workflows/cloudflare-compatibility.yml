@@ -128,9 +128,19 @@ jobs:
                   raise SystemExit(f"Missing required Worker binding: {name}")
           print(path.read_text())
           PY
-      - name: Install generated Worker toolchain
-        # workerd is the Cloudflare Workers runtime; explicitly approve only this reviewed native build.
-        run: pnpm install --no-frozen-lockfile --allow-build=workerd
+      - name: Install pinned Worker toolchain
+        # Pin the beta adapter and its build stack; approve only the reviewed workerd runtime script.
+        run: |
+          pnpm add --save-dev --save-exact --allow-build=workerd \
+            vinext@1.4.5 \
+            @cloudflare/vite-plugin@2.0.0-beta.v.17 \
+            cf@1.0.0-beta.32 \
+            vite@8.3.0 \
+            @vitejs/plugin-react@6.3.0 \
+            @vitejs/plugin-rsc@0.5.39 \
+            vite-css-modules@1.16.1 \
+            postcss@8.5.33 \
+            react-server-dom-webpack@19.3.1
       - name: Apply Payload migrations to ephemeral PostgreSQL
         run: pnpm payload migrate
         env:
