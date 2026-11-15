@@ -68,19 +68,29 @@ export function resolveAllowedOrigins(input: AllowedOriginsInput): string[] {
 }
 
 export function resolvePayloadServerUrl(input: PayloadServerUrlInput): string | undefined {
+  const allowLocalhostHttp =
+    input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true;
+  const canonicalOrigin = input.configuredSiteUrl
+    ? parseOrigin(input.configuredSiteUrl, allowLocalhostHttp)
+    : undefined;
+
+  if (input.nodeEnv === "production" && !canonicalOrigin) {
+    throw new Error("NEXT_PUBLIC_SITE_URL is required in production.");
+  }
+  if (canonicalOrigin && !input.allowedOrigins.includes(canonicalOrigin)) {
+    throw new Error("The canonical site origin must be allowed by HEZQEN_ALLOWED_ORIGINS.");
+  }
+
   const previewOrigin =
     input.deploymentEnvironment === "preview" && input.deploymentHostname
       ? parseDeploymentOrigin(input.deploymentHostname)
       : undefined;
-  const candidate = previewOrigin ?? input.configuredSiteUrl ?? input.allowedOrigins[0];
+  const candidate = previewOrigin ?? canonicalOrigin ?? input.allowedOrigins[0];
   if (!candidate) return undefined;
 
-  const origin = parseOrigin(
-    candidate,
-    input.nodeEnv !== "production" || input.allowLocalRuntimeTest === true,
-  );
+  const origin = parseOrigin(candidate, allowLocalhostHttp);
   if (!input.allowedOrigins.includes(origin)) {
-    throw new Error("NEXT_PUBLIC_SITE_URL or the current Vercel preview origin must be allowed.");
+    throw new Error("Payload server URL must be allowed by HEZQEN_ALLOWED_ORIGINS.");
   }
   return origin;
 }
