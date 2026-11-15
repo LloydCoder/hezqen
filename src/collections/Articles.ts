@@ -13,11 +13,11 @@ const isEditor: Access = ({ req }) =>
 
 const canReadArticles: Access = ({ req }) => {
   const actor = actorFromRequest(req.user);
-  if (!actor) return { status: { equals: "published" } };
+  if (!actor) return { workflowStatus: { equals: "published" } };
   if (["administrator", "editor"].includes(actor.role ?? "")) return true;
   return {
     or: [
-      { status: { equals: "published" } },
+      { workflowStatus: { equals: "published" } },
       { author: { equals: actor.id } },
       { assignedEditor: { equals: actor.id } },
     ],
@@ -35,7 +35,7 @@ const canUpdateArticles: Access = ({ req }) => {
     return {
       and: [
         { author: { equals: actor.id } },
-        { status: { in: ["pitch", "research", "draft"] } },
+        { workflowStatus: { in: ["pitch", "research", "draft"] } },
       ],
     };
   }
@@ -68,7 +68,7 @@ export const Articles: CollectionConfig = {
           return {
             ...data,
             author: req.user.id,
-            status: "draft",
+            workflowStatus: "draft",
             revision: 1,
           };
         }
@@ -136,7 +136,7 @@ export const Articles: CollectionConfig = {
       },
     },
     {
-      name: "status",
+      name: "workflowStatus",
       type: "select",
       required: true,
       defaultValue: "draft",
