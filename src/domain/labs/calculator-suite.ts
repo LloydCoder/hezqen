@@ -74,19 +74,17 @@ export const LAB_CALCULATORS: LabCalculator[] = [
 ];
 const bySlug = new Map(LAB_CALCULATORS.map((calculator) => [calculator.slug, calculator]));
 const metric = (label: string, value: number, unit = "USD"): LabMetric => ({ label, value, unit });
-function read(values: Values, key: string): number {
+function read(calculator: LabCalculator, values: Values, key: string): number {
   const value = values[key];
   if (typeof value !== "number" || !Number.isFinite(value)) throw new RangeError(`${key} must be a finite number`);
-  const definition = current.fields.find((item) => item.key === key)!;
+  const definition = calculator.fields.find((item) => item.key === key)!;
   if (value < definition.min || value > definition.max) throw new RangeError(`${key} must be between ${definition.min} and ${definition.max}`);
   return value;
 }
-let current: LabCalculator;
 export function calculateLab(slug: string, values: Values): LabCalculation {
   const calculator = bySlug.get(slug);
   if (!calculator) throw new RangeError(`Unknown calculator: ${slug}`);
-  current = calculator;
-  for (const definition of calculator.fields) read(values, definition.key);
+  for (const definition of calculator.fields) read(calculator, values, definition.key);
   const v = (key: string) => values[key];
   let metrics: LabMetric[];
   switch (slug) {
