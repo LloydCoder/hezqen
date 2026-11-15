@@ -50,6 +50,7 @@ export default async function ArticlePage({
 
   const division = divisions.find((item) => item.slug === article.division);
   const authorName = article.authorName || "HEZQEN Editorial Desk";
+  const correctionNotice = article.correctionNotice ?? article.correctionHistory[0] ?? null;
 
   return (
     <article className="article-page">
@@ -82,10 +83,10 @@ export default async function ArticlePage({
             <span>Updated {formatDate(article.updatedAt)}</span>
           ) : null}
         </div>
-        {article.correctionNotice ? (
+        {correctionNotice ? (
           <aside className="correction-notice" aria-label="Correction notice">
-            <p className="correction-notice-label">CORRECTION / {formatDate(article.correctionNotice.correctedAt)}</p>
-            <p>{article.correctionNotice.note}</p>
+            <p className="correction-notice-label">CORRECTION / {formatDate(correctionNotice.correctedAt)}</p>
+            <p>{correctionNotice.note}</p>
             <Link href="/corrections">Read HEZQEN&apos;s corrections record ↗</Link>
           </aside>
         ) : null}
