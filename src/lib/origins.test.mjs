@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { resolveAllowedOrigins } from "./origins.ts";
+import { resolveAllowedOrigins, resolvePayloadServerUrl } from "./origins.ts";
 
 test("allows the configured canonical origin and exact Vercel deployment hostname", () => {
   assert.deepEqual(
@@ -61,4 +61,54 @@ test("rejects malformed Vercel deployment hostnames", () => {
 test("uses localhost only as the non-production default", () => {
   assert.deepEqual(resolveAllowedOrigins({ nodeEnv: "development" }), ["http://localhost:3000"]);
   assert.deepEqual(resolveAllowedOrigins({ nodeEnv: "production" }), []);
+});
+
+test("uses the exact Vercel deployment origin for Payload on Preview", () => {
+  const allowedOrigins = resolveAllowedOrigins({
+    configuredOrigins: "https://hezqen.tinlance.com",
+    deploymentHostname: "hezqen-preview-123.vercel.app",
+    nodeEnv: "production",
+  });
+
+  assert.equal(
+    resolvePayloadServerUrl({
+      configuredSiteUrl: "https://hezqen.tinlance.com",
+      deploymentHostname: "hezqen-preview-123.vercel.app",
+      deploymentEnvironment: "preview",
+      allowedOrigins,
+      nodeEnv: "production",
+    }),
+    "https://hezqen-preview-123.vercel.app",
+  );
+});
+
+test("uses the canonical origin for Vercel Production", () => {
+  const allowedOrigins = resolveAllowedOrigins({
+    configuredOrigins: "https://hezqen.tinlance.com",
+    deploymentHostname: "hezqen-prod-123.vercel.app",
+    nodeEnv: "production",
+  });
+
+  assert.equal(
+    resolvePayloadServerUrl({
+      configuredSiteUrl: "https://hezqen.tinlance.com",
+      deploymentHostname: "hezqen-prod-123.vercel.app",
+      deploymentEnvironment: "production",
+      allowedOrigins,
+      nodeEnv: "production",
+    }),
+    "https://hezqen.tinlance.com",
+  );
+});
+
+test("rejects a server URL that is not in the explicit origin allowlist", () => {
+  assert.throws(
+    () =>
+      resolvePayloadServerUrl({
+        configuredSiteUrl: "https://untrusted.example",
+        allowedOrigins: ["https://hezqen.tinlance.com"],
+        nodeEnv: "production",
+      }),
+    /must be allowed/,
+  );
 });
