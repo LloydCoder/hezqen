@@ -113,9 +113,7 @@ test("restore refuses every non-empty target even when overwrite is requested", 
   writeFileSync(psql, "#!/bin/sh\nprintf '1\\n'\n");
   chmodSync(psql, 0o755);
   const pgRestore = join(fakeBin, "pg_restore");
-  writeFileSync(pgRestore, '#!/bin/sh
-echo called > "$PG_RESTORE_MARKER"
-');
+  writeFileSync(pgRestore, '#!/bin/sh\necho called > "$PG_RESTORE_MARKER"\n');
   chmodSync(pgRestore, 0o755);
 
   const marker = join(directory, "pg_restore-called");
