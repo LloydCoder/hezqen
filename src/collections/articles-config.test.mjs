@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { Articles } from "./Articles.ts";
+import { withRequestContext } from "../lib/request-context.ts";
 
 test("Payload owns the draft _status field when version drafts are enabled", () => {
   assert.equal(Articles.versions?.drafts !== false, true);
@@ -107,25 +108,36 @@ test("blocks direct content edits to published and correction-required articles"
 test("does not double-increment revisions for the audited workflow command", async () => {
   assert.ok(revisionHook);
   const data = { title: "Workflow-owned update", revision: 9 };
-  const result = await revisionHook({
-    data,
-    originalDoc: { workflowStatus: "draft", revision: 9 },
-    operation: "update",
-    req: { context: { hezqenSkipArticleRevisionIncrement: true } },
-  });
+  const req = { context: {} };
+  const result = await withRequestContext(
+    req,
+    { hezqenSkipArticleRevisionIncrement: true },
+    async () =>
+      revisionHook({
+        data,
+        originalDoc: { workflowStatus: "draft", revision: 9 },
+        operation: "update",
+        req,
+      }),
+  );
   assert.equal(result, data);
 });
 
-test("rejects privileged Local API workflow mutations outside the editorial command service", () => {
+test("rejects spoofed Local API workflow capability flags", () => {
   assert.ok(revisionHook);
-  assert.throws(
-    () =>
-      revisionHook({
-        data: { workflowStatus: "published", revision: 99 },
-        originalDoc: { workflowStatus: "approved", revision: 3 },
-        operation: "update",
-        req: { context: { hezqenSkipArticleRevisionIncrement: true } },
-      }),
-    /editorial workflow command service/,
-  );
+  for (const context of [
+    { hezqenSkipArticleRevisionIncrement: true },
+    { hezqenWorkflowCommand: true, hezqenSkipArticleRevisionIncrement: true },
+  ]) {
+    assert.throws(
+      () =>
+        revisionHook({
+          data: { workflowStatus: "published", revision: 99 },
+          originalDoc: { workflowStatus: "approved", revision: 3 },
+          operation: "update",
+          req: { context },
+        }),
+      /editorial workflow command service/,
+    );
+  }
 });
