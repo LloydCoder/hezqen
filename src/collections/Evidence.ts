@@ -1,15 +1,9 @@
 import type { Access, CollectionConfig } from "payload";
 
-type Actor = { role?: string } | null;
-
-function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
-}
+import { hasActiveRole } from "../lib/access.ts";
 
 const canReadEvidence: Access = ({ req }) =>
-  ["administrator", "editor", "researcher", "fact_checker"].includes(
-    roleFromRequest(req.user) ?? "",
-  );
+  hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
 
 export const Evidence: CollectionConfig = {
   slug: "evidence",
