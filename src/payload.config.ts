@@ -19,8 +19,7 @@ const secret = process.env.PAYLOAD_SECRET;
 const originInputs =
   process.env.HEZQEN_ALLOWED_ORIGINS?.split(",")
     .map((origin) => origin.trim())
-    .filter(Boolean) ??
-  (process.env.NODE_ENV === "production" ? [] : ["http://localhost:3000"]);
+    .filter(Boolean) ?? (process.env.NODE_ENV === "production" ? [] : ["http://localhost:3000"]);
 const allowedOrigins = [
   ...new Set(
     originInputs.map((origin) => {
