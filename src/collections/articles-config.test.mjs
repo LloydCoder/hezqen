@@ -34,3 +34,69 @@ test("publication scheduling and correction metadata are server-managed", () => 
     assert.equal(field.access?.update?.(), false);
   }
 });
+
+const revisionHook = Articles.hooks?.beforeChange?.[0];
+
+test("increments article revision when editorial content changes", async () => {
+  assert.ok(revisionHook);
+  const result = await revisionHook({
+    data: { title: "Revised headline" },
+    originalDoc: { workflowStatus: "draft", revision: 7 },
+    operation: "update",
+    req: { context: {} },
+  });
+  assert.equal(result.revision, 8);
+});
+
+test("content edits invalidate fact-check and approval state before publication", async () => {
+  assert.ok(revisionHook);
+  const result = await revisionHook({
+    data: { body: { root: { children: [] } } },
+    originalDoc: {
+      workflowStatus: "scheduled",
+      revision: 3,
+      approvedBy: 12,
+      approvedAt: "2026-11-15T10:00:00.000Z",
+      scheduledFor: "2026-11-16T10:00:00.000Z",
+      factCheckComplete: true,
+      disclosuresReviewed: true,
+    },
+    operation: "update",
+    req: { context: {} },
+  });
+  assert.equal(result.workflowStatus, "draft");
+  assert.equal(result._status, "draft");
+  assert.equal(result.revision, 4);
+  assert.equal(result.approvedBy, null);
+  assert.equal(result.approvedAt, null);
+  assert.equal(result.scheduledFor, null);
+  assert.equal(result.factCheckComplete, false);
+  assert.equal(result.disclosuresReviewed, false);
+});
+
+test("blocks direct content edits to published and correction-required articles", async () => {
+  assert.ok(revisionHook);
+  for (const workflowStatus of ["published", "correction_required"]) {
+    await assert.rejects(
+      revisionHook({
+        data: { title: "Unapproved edit" },
+        originalDoc: { workflowStatus, revision: 2 },
+        operation: "update",
+        req: { context: {} },
+      }),
+      /correction workflow/,
+    );
+  }
+});
+
+test("does not double-increment revisions for the audited workflow command", async () => {
+  assert.ok(revisionHook);
+  const data = { title: "Workflow-owned update", revision: 9 };
+  const result = await revisionHook({
+    data,
+    originalDoc: { workflowStatus: "draft", revision: 9 },
+    operation: "update",
+    req: { context: { hezqenSkipArticleRevisionIncrement: true } },
+  });
+  assert.equal(result, data);
+});
