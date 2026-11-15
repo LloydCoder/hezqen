@@ -16,7 +16,7 @@ This file records evidence-backed progress. A phase is not complete merely becau
 | 9 | Newsletter/accounts | NOT STARTED | Reader identity, consent, preferences and delivery not implemented. |
 | 10 | HEZQEN Intelligence | NOT STARTED | Premium research, billing and server-side entitlements not implemented. |
 | 11 | Integrations | NOT STARTED | Tinlyt, Searqon and TAS adapters not implemented. |
-| 12 | Security/accessibility/performance | PARTIAL | Baseline response headers, dependency audit and initial publishing-policy tests exist. Threat model, ASVS mapping, CSP, authorization, upload controls, WCAG and performance verification remain. |
+| 12 | Security/accessibility/performance | PARTIAL | Baseline response headers, dependency audit, publishing workflow tests and SSRF-aware acquisition guard exist. Initial OWASP Top 10:2025 / ASVS 5.0.0 threat model is documented. CSP, full authorization, upload controls, ASVS evidence, WCAG and performance verification remain. |
 | 13 | Production operations | PARTIAL | Isolated Vercel production project and READY deployment exist. Domain validation, monitoring, alerting, backup/restore, incident response and tested rollback remain. |
 | 14 | Growth/continuous improvement | NOT STARTED | Analytics, newsletter growth loops, editorial distribution and revenue measurement not implemented. |
 
