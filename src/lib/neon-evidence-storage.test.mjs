@@ -87,3 +87,37 @@ test("rejects an expected digest that does not match the supplied bytes before u
     /EVIDENCE_CHECKSUM_MISMATCH/,
   );
 });
+
+test("rejects non-Neon HTTPS endpoints before signing requests", () => {
+  assert.throws(
+    () =>
+      readNeonEvidenceStorageConfig({
+        AWS_ENDPOINT_URL_S3: "https://storage.example.test",
+        AWS_REGION: "eu-central-1",
+        HEZQEN_EVIDENCE_BUCKET: "hezqen-evidence",
+        AWS_ACCESS_KEY_ID: "nak_test",
+        AWS_SECRET_ACCESS_KEY: "nsk_test",
+      }),
+    /NEON_EVIDENCE_STORAGE_ENDPOINT_INVALID/,
+  );
+});
+
+test("rejects object keys outside the generated evidence UUID namespace", async () => {
+  await assert.rejects(
+    putAndVerifyEvidenceObject(
+      {
+        endpoint: "https://br-example.storage.c-8.eu-central-1.aws.neon.tech",
+        region: "eu-central-1",
+        bucket: "hezqen-evidence",
+        accessKeyId: "nak_test",
+        secretAccessKey: "nsk_test",
+      },
+      {
+        key: "evidence/../../other-bucket",
+        bytes: new TextEncoder().encode("captured evidence"),
+        contentType: "text/plain",
+      },
+    ),
+    /NEON_EVIDENCE_OBJECT_KEY_INVALID/,
+  );
+});
