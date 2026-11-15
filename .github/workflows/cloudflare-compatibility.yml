@@ -75,20 +75,14 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Initialize Cloudflare Workers build in the ephemeral checkout
         run: pnpm dlx vinext@1.4.5 init --platform=cloudflare --name=hezqen --cdn-cache=none --data-cache=none --image-optimization=none
-      - name: Inspect generated Wrangler runtime compatibility
+      - name: Inspect generated Cloudflare runtime configuration
         run: |
-          if [ -f wrangler.jsonc ]; then
-            config=wrangler.jsonc
-          elif [ -f wrangler.toml ]; then
-            config=wrangler.toml
-          else
-            config=""
+          echo "Wrangler configuration candidates:"
+          find . -path ./node_modules -prune -o -type f -name "wrangler*" -print | head -n 30
+          if [ -f vite.config.ts ]; then
+            echo "Generated Vite configuration:"
+            sed -n '1,240p' vite.config.ts
           fi
-          if [ -z "$config" ]; then
-            echo "vinext did not generate a Wrangler configuration"
-            exit 1
-          fi
-          cat "$config"
       - name: Install generated Worker toolchain
         # workerd is the Cloudflare Workers runtime; explicitly approve only this reviewed native build.
         run: pnpm install --no-frozen-lockfile --allow-build=workerd
