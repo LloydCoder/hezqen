@@ -31,7 +31,7 @@ export const Claims: CollectionConfig = {
   access: {
     create: canCreateClaims,
     read: canReadClaims,
-    update: canUpdateClaims,
+    update: () => false,
     delete: () => false,
   },
   fields: [
