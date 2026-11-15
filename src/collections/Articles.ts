@@ -89,33 +89,35 @@ export const Articles: CollectionConfig = {
         );
         if (!changed) return data;
 
-        const currentStatus = originalDoc?.workflowStatus;
-        if (currentStatus === "published" || currentStatus === "correction_required") {
+        const currentStatus = String(originalDoc?.workflowStatus ?? "draft");
+        if (
+          [
+            "fact_check",
+            "editorial_review",
+            "approved",
+            "scheduled",
+            "published",
+            "correction_required",
+          ].includes(currentStatus)
+        ) {
           throw new APIError(
-            "Published or correction-required articles must enter the correction workflow before content edits.",
+            currentStatus === "published" || currentStatus === "correction_required"
+              ? "Published content must enter the correction workflow before edits."
+              : "Return the article to draft before editing its content.",
             409,
           );
         }
 
         const revision = Number(originalDoc?.revision ?? 1) + 1;
-        if (
-          ["fact_check", "editorial_review", "approved", "scheduled"].includes(
-            String(currentStatus),
-          )
-        ) {
-          return {
-            ...data,
-            workflowStatus: "draft",
-            _status: "draft",
-            revision,
-            approvedBy: null,
-            approvedAt: null,
-            scheduledFor: null,
-            factCheckComplete: false,
-            disclosuresReviewed: false,
-          };
-        }
-        return { ...data, revision };
+        return {
+          ...data,
+          revision,
+          approvedBy: null,
+          approvedAt: null,
+          scheduledFor: null,
+          factCheckComplete: false,
+          disclosuresReviewed: false,
+        };
       },
     ],
   },
