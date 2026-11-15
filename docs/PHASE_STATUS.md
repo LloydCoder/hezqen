@@ -212,7 +212,7 @@ This section supersedes earlier PR #51 head/count/check-status statements above.
 ### Repository inventory
 
 - HEZQEN (`LloydCoder/hezqen`): zero open issues; one open draft PR, #51. It remains unmerged and has no submitted reviews or inline review threads.
-- Current PR head and latest code-bearing head: `bc80495f5ae87e8e85f241d2db191b3a1f416fb2`. The PR has 49 changed files.
+- Latest code-bearing head: `bc80495f5ae87e8e85f241d2db191b3a1f416fb2`; the current PR branch head is a documentation-only follow-up after that code head. The PR has 49 changed files.
 - HIES (`LloydCoder/hezqen-infrastructure-standard`): zero open issues and zero open PRs at the latest inventory check.
 
 ### Latest code and CI evidence
