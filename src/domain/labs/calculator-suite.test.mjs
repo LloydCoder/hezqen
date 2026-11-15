@@ -13,6 +13,7 @@ test("calculates replicated RAG vector storage and monthly cost", () => {
     chunksPerDocument: 10,
     dimensions: 1536,
     bytesPerDimension: 4,
+    indexOverhead: 0.3,
     replicas: 2,
     metadataMbPerDocument: 1,
     pricePerGbMonth: 0.1,
