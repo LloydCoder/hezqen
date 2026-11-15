@@ -35,6 +35,17 @@ test("rejects insecure non-local origins", () => {
   );
 });
 
+test("rejects HTTP localhost origins in production", () => {
+  assert.throws(
+    () =>
+      resolveAllowedOrigins({
+        configuredOrigins: "http://localhost:3000",
+        nodeEnv: "production",
+      }),
+    /only HTTPS origins/,
+  );
+});
+
 test("rejects malformed Vercel deployment hostnames", () => {
   assert.throws(
     () =>
@@ -48,8 +59,6 @@ test("rejects malformed Vercel deployment hostnames", () => {
 });
 
 test("uses localhost only as the non-production default", () => {
-  assert.deepEqual(resolveAllowedOrigins({ nodeEnv: "development" }), [
-    "http://localhost:3000",
-  ]);
+  assert.deepEqual(resolveAllowedOrigins({ nodeEnv: "development" }), ["http://localhost:3000"]);
   assert.deepEqual(resolveAllowedOrigins({ nodeEnv: "production" }), []);
 });
