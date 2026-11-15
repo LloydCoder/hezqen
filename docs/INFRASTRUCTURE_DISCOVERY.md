@@ -76,7 +76,7 @@ A server-rendered CMS workload may exceed the Free CPU allowance; measure actual
 
 ## 4. Neon PostgreSQL inventory
 
-A dedicated Neon project named `hezqen-core` exists in `aws-eu-central-1` (Frankfurt), PostgreSQL 18, with 0.25 CU minimum/maximum compute. Branches named `main`, `staging` and `production` exist.
+A dedicated Neon project named `hezqen-core` (`old-bird-82399990`) exists on the Free v3 plan in `aws-eu-central-1` (Frankfurt), PostgreSQL 18, with 0.25 CU minimum/maximum compute and 21,600 seconds (6 hours) of reported history retention. Branches named `main`, `staging` and `production` exist. Read-only inspection found all three unprotected. An attempt to protect the production branch was rejected with the provider response that the current plan has reached its protected-branch limit. No branch protection changed and no paid upgrade was made; branch protection is an explicit control gap on this plan.
 
 Read-only inspection on 2026-11-15 returned:
 
@@ -87,7 +87,7 @@ Read-only inspection on 2026-11-15 returned:
 
 No schema migration has been applied to the shared staging or production branches. The initial Payload migration is checked into `src/migrations/` and is tested by GitHub Actions against ephemeral PostgreSQL. The CI database is not the shared Neon project.
 
-The configured branch-to-environment mapping must still be verified without exposing connection strings. Before staging migration:
+The Vercel environment inventory contains production and Preview `DATABASE_URL` secrets, with the Preview variable described as the staging Neon branch; the secret values were not decrypted or exposed, so the exact host-to-branch mapping remains unverified. The configured branch-to-environment mapping must still be verified without exposing connection strings. Before staging migration:
 1. Verify the Preview/staging `DATABASE_URL` points to the staging branch.
 2. Verify the production `DATABASE_URL` points to the production branch.
 3. Take a backup or Neon restore point and document recovery steps.
@@ -153,3 +153,8 @@ The vercel.json file continues to disable automatic Git-triggered deployments; u
 - The Tinlyt tunnel was not modified or repurposed.
 - No Neon migration was applied to staging or production.
 - No paid plan was enabled and no production deployment was made.
+
+
+## Neon Free-plan control limitation — 2026-11-15
+
+The connected Neon project is `hezqen-core` (`old-bird-82399990`) on Free v3. Its `main`, `staging` and `production` branches are all unprotected. The provider rejected a protection attempt because the plan has reached its protected-branch limit. No upgrade or other branch mutation was made. Until an approved plan change is available, enforce change control through migration PR review, explicit migration approval, backups/restore verification and restricted connector access. The project's reported history retention is six hours; this is not a substitute for an off-site backup and tested restore process.
