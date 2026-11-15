@@ -242,3 +242,31 @@ test("requires the assigned editor to review disclosures", async () => {
   assert.equal(store.article.disclosuresReviewed, true);
   assert.equal(store.auditEvents.length, 1);
 });
+
+test("includes the public correction note in the immutable after-state audit digest", async () => {
+  async function publishCorrection(publicNote) {
+    const store = new MemoryStore();
+    store.article = {
+      ...initialArticle,
+      workflowStatus: "published",
+      publishedAt: now,
+      correctionStatus: "none",
+    };
+    const result = await executeEditorialWorkflowCommand(store, editor, {
+      articleId: "article-1",
+      expectedRevision: 4,
+      targetStatus: "correction_required",
+      correctionReason: "A material figure was inaccurate.",
+      correctionPublicNote: publicNote,
+      now,
+    });
+    assert.equal(result.ok, true);
+    assert.equal(store.auditEvents.length, 1);
+    return { result, event: store.auditEvents[0] };
+  }
+
+  const first = await publishCorrection("We corrected the figure.");
+  const second = await publishCorrection("We corrected the date.");
+  assert.notEqual(first.event.afterDigest, second.event.afterDigest);
+  assert.equal(first.result.ok && first.result.article.correctionPublicNote, "We corrected the figure.");
+});
