@@ -48,24 +48,37 @@ test("increments article revision when editorial content changes", async () => {
   assert.equal(result.revision, 8);
 });
 
-test("content edits invalidate fact-check and approval state before publication", async () => {
+test("requires an explicit return-to-draft transition before editing reviewed or scheduled content", async () => {
+  assert.ok(revisionHook);
+  for (const workflowStatus of ["fact_check", "editorial_review", "approved", "scheduled"]) {
+    await assert.rejects(
+      revisionHook({
+        data: { body: { root: { children: [] } } },
+        originalDoc: { workflowStatus, revision: 3 },
+        operation: "update",
+        req: { context: {} },
+      }),
+      /Return the article to draft/,
+    );
+  }
+});
+
+test("draft content edits increment revision and invalidate prior review flags", async () => {
   assert.ok(revisionHook);
   const result = await revisionHook({
     data: { body: { root: { children: [] } } },
     originalDoc: {
-      workflowStatus: "scheduled",
+      workflowStatus: "draft",
       revision: 3,
+      factCheckComplete: true,
+      disclosuresReviewed: true,
       approvedBy: 12,
       approvedAt: "2026-11-15T10:00:00.000Z",
       scheduledFor: "2026-11-16T10:00:00.000Z",
-      factCheckComplete: true,
-      disclosuresReviewed: true,
     },
     operation: "update",
     req: { context: {} },
   });
-  assert.equal(result.workflowStatus, "draft");
-  assert.equal(result._status, "draft");
   assert.equal(result.revision, 4);
   assert.equal(result.approvedBy, null);
   assert.equal(result.approvedAt, null);
