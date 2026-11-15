@@ -8,18 +8,24 @@ import { divisions, site } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Articles",
-  description:
-    "Read HEZQEN's latest reporting, investigations and analysis across AI, cybersecurity, cloud engineering and business.",
-  alternates: { canonical: "/articles" },
-  openGraph: {
-    title: "Articles | HEZQEN",
-    description: "Evidence-led reporting and analysis from HEZQEN.",
-    url: "/articles",
-    type: "website",
-  },
-};
+export async function generateMetadata({ searchParams }: ArticlesPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const hasFilter = Boolean(params.division) || (typeof params.page === "string" && params.page !== "1");
+
+  return {
+    title: "Articles",
+    description:
+      "Read HEZQEN's latest reporting, investigations and analysis across AI, cybersecurity, cloud engineering and business.",
+    alternates: { canonical: "/articles" },
+    robots: hasFilter ? { index: false, follow: true } : undefined,
+    openGraph: {
+      title: "Articles | HEZQEN",
+      description: "Evidence-led reporting and analysis from HEZQEN.",
+      url: "/articles",
+      type: "website",
+    },
+  };
+}
 
 type ArticlesPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
