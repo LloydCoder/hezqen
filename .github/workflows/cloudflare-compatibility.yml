@@ -99,7 +99,7 @@ jobs:
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           ready=0
           for attempt in $(seq 1 45); do
-            if curl --fail --silent http://127.0.0.1:3001/ >/dev/null; then
+            if curl --max-time 2 --fail --silent http://127.0.0.1:3001/ >/dev/null; then
               ready=1
               break
             fi
@@ -110,7 +110,7 @@ jobs:
             exit 1
           fi
           for route in / /about /editorial-standards /labs /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /divisions/ai-technology /robots.txt /sitemap.xml /admin /api/articles; do
-            status=$(curl --silent --output /tmp/hezqen-vinext-response --write-out "%{http_code}" "http://127.0.0.1:3001$route")
+            echo "Checking $route"\n            status=$(curl --max-time 10 --silent --output /tmp/hezqen-vinext-response --write-out "%{http_code}" "http://127.0.0.1:3001$route")
             if [ "$status" != "200" ]; then
               echo "Unexpected HTTP $status for $route"
               cat /tmp/hezqen-vinext-response
