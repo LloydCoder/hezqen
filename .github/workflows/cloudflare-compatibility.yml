@@ -1,6 +1,16 @@
 name: HEZQEN Cloudflare Compatibility
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "src/**"
+      - "next.config.*"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "tsconfig.json"
+      - ".github/workflows/cloudflare-compatibility.yml"
   pull_request:
     branches: [main]
     paths:
