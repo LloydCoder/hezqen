@@ -106,7 +106,7 @@ export default function VramCalculatorPage() {
   const formatGiB = (value: number) => `${value.toFixed(2)} GiB`;
 
   return (
-    <main className="vram-page">
+    <section className="vram-page">
       <div className="container">
         <a className="back-link" href="/">
           ← HEZQEN home
@@ -237,6 +237,6 @@ export default function VramCalculatorPage() {
           </p>
         </section>
       </div>
-    </main>
+    </section>
   );
 }
