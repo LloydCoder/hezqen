@@ -48,6 +48,24 @@ export type PublicationBlocker =
   | "CLAIM_EVIDENCE_NOT_VERIFIED"
   | "CLAIM_EVIDENCE_SOURCE_MISMATCH";
 
+export function getClaimVerificationBlockers(claims: MaterialClaim[]): PublicationBlocker[] {
+  const blockers: PublicationBlocker[] = [];
+  for (const claim of claims) {
+    if (claim.sourceIds.length === 0) blockers.push("CLAIM_WITHOUT_SOURCE");
+    if (claim.verificationStatus !== "verified") blockers.push("CLAIM_NOT_VERIFIED");
+    if (claim.evidence.length === 0) blockers.push("CLAIM_EVIDENCE_REQUIRED");
+    for (const evidence of claim.evidence) {
+      if (evidence.verificationStatus !== "verified") {
+        blockers.push("CLAIM_EVIDENCE_NOT_VERIFIED");
+      }
+      if (!claim.sourceIds.includes(evidence.sourceId)) {
+        blockers.push("CLAIM_EVIDENCE_SOURCE_MISMATCH");
+      }
+    }
+  }
+  return blockers;
+}
+
 export function getPublicationBlockers(
   record: PublicationRecord,
   actor: PublishingActor,
@@ -69,19 +87,7 @@ export function getPublicationBlockers(
     blockers.push("APPROVAL_ACTOR_MISMATCH");
   if (!record.factCheckComplete) blockers.push("FACT_CHECK_INCOMPLETE");
   if (!record.disclosuresReviewed) blockers.push("DISCLOSURES_NOT_REVIEWED");
-  for (const claim of record.claims) {
-    if (claim.sourceIds.length === 0) blockers.push("CLAIM_WITHOUT_SOURCE");
-    if (claim.verificationStatus !== "verified") blockers.push("CLAIM_NOT_VERIFIED");
-    if (claim.evidence.length === 0) blockers.push("CLAIM_EVIDENCE_REQUIRED");
-    for (const evidence of claim.evidence) {
-      if (evidence.verificationStatus !== "verified") {
-        blockers.push("CLAIM_EVIDENCE_NOT_VERIFIED");
-      }
-      if (!claim.sourceIds.includes(evidence.sourceId)) {
-        blockers.push("CLAIM_EVIDENCE_SOURCE_MISMATCH");
-      }
-    }
-  }
+  blockers.push(...getClaimVerificationBlockers(record.claims));
   return blockers;
 }
 export function canPublish(record: PublicationRecord, actor: PublishingActor): boolean {
