@@ -1,7 +1,6 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "node:path";
-import sharp from "sharp";
 import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
 
@@ -68,7 +67,6 @@ export default buildConfig({
   },
   collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents],
   editor: lexicalEditor(),
-  sharp,
   serverURL,
   csrf: allowedOrigins,
   cors: allowedOrigins,
