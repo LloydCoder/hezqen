@@ -18,7 +18,7 @@ function formatDate(value?: string | null): string | null {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(date);
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function CorrectionsPage() {
   const notices = await getPublicCorrectionNotices();
