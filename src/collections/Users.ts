@@ -60,8 +60,7 @@ export const Users: CollectionConfig = {
         read: ({ req, id }) => {
           const actor = actorFromRequest(req.user);
           return Boolean(
-            actor &&
-              (["administrator", "editor"].includes(actor.role ?? "") || actor.id === id),
+            actor && (["administrator", "editor"].includes(actor.role ?? "") || actor.id === id),
           );
         },
         update: isAdministrator,
