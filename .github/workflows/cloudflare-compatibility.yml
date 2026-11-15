@@ -83,6 +83,27 @@ jobs:
             echo "Generated Vite configuration:"
             sed -n '1,240p' vite.config.ts
           fi
+      - name: Enable process.env access to Worker bindings
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path("cloudflare.config.ts")
+          source = path.read_text()
+          if "nodejs_compat_populate_process_env" not in source:
+              flags = 'compatibilityFlags: ["nodejs_compat", "nodejs_compat_populate_process_env"],'
+              date_match = re.search(r'(\\s*compatibilityDate:\\s*["\\'][^"\\']+["\\'],)', source)
+              if date_match:
+                  source = source[:date_match.end()] + "\\n    " + flags + source[date_match.end():]
+              else:
+                  worker_match = re.search(r'(worker\\s*:\\s*\\{)', source)
+                  if not worker_match:
+                      raise SystemExit("Generated cloudflare.config.ts has no worker config block")
+                  source = source[:worker_match.end()] + '\\n    compatibilityDate: "2026-11-15",\\n    ' + flags + source[worker_match.end():]
+              path.write_text(source)
+          print(path.read_text())
+          PY
       - name: Install generated Worker toolchain
         # workerd is the Cloudflare Workers runtime; explicitly approve only this reviewed native build.
         run: pnpm install --no-frozen-lockfile --allow-build=workerd
