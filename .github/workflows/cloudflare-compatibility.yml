@@ -74,7 +74,7 @@ jobs:
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - name: Initialize Cloudflare Workers build in the ephemeral checkout
-        run: pnpm dlx vinext@1.4.5 init --platform=cloudflare --name=hezqen --cdn-cache=none --data-cache=none --image-optimization=none
+        run: pnpm dlx vinext@1.4.5 init --platform=cloudflare --name=hezqen --cdn-cache=none --data-cache=none --image-optimization=none --no-prerender
       - name: Inspect generated Cloudflare runtime configuration
         run: |
           echo "Wrangler configuration candidates:"
