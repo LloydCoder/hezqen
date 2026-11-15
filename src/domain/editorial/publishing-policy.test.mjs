@@ -9,7 +9,14 @@ const approvedRecord = {
   editorId: "editor-1",
   approvedById: "editor-1",
   approvedAt: "2026-11-15T08:00:00.000Z",
-  claims: [{ id: "claim-1", sourceIds: ["source-1"] }],
+  claims: [
+    {
+      id: "claim-1",
+      sourceIds: ["source-1"],
+      verificationStatus: "verified",
+      evidence: [{ id: "evidence-1", sourceId: "source-1", verificationStatus: "verified" }],
+    },
+  ],
   factCheckComplete: true,
   disclosuresReviewed: true,
 };
@@ -52,3 +59,76 @@ test("requires fact-check and disclosure review", () =>
     canPublish({ ...approvedRecord, factCheckComplete: false, disclosuresReviewed: false }, editor),
     false,
   ));
+
+
+test("requires every material claim to be independently verified", () => {
+  const result = getPublicationBlockers(
+    {
+      ...approvedRecord,
+      claims: [
+        {
+          id: "claim-1",
+          sourceIds: ["source-1"],
+          verificationStatus: "unverified",
+          evidence: [{ id: "evidence-1", sourceId: "source-1", verificationStatus: "verified" }],
+        },
+      ],
+    },
+    editor,
+  );
+  assert.ok(result.includes("CLAIM_NOT_VERIFIED"));
+});
+
+test("requires preserved evidence for every material claim", () => {
+  const result = getPublicationBlockers(
+    {
+      ...approvedRecord,
+      claims: [
+        {
+          id: "claim-1",
+          sourceIds: ["source-1"],
+          verificationStatus: "verified",
+          evidence: [],
+        },
+      ],
+    },
+    editor,
+  );
+  assert.ok(result.includes("CLAIM_EVIDENCE_REQUIRED"));
+});
+
+test("rejects evidence that has not passed human verification", () => {
+  const result = getPublicationBlockers(
+    {
+      ...approvedRecord,
+      claims: [
+        {
+          id: "claim-1",
+          sourceIds: ["source-1"],
+          verificationStatus: "verified",
+          evidence: [{ id: "evidence-1", sourceId: "source-1", verificationStatus: "preserved" }],
+        },
+      ],
+    },
+    editor,
+  );
+  assert.ok(result.includes("CLAIM_EVIDENCE_NOT_VERIFIED"));
+});
+
+test("rejects evidence captured from a source not cited by its claim", () => {
+  const result = getPublicationBlockers(
+    {
+      ...approvedRecord,
+      claims: [
+        {
+          id: "claim-1",
+          sourceIds: ["source-1"],
+          verificationStatus: "verified",
+          evidence: [{ id: "evidence-1", sourceId: "source-2", verificationStatus: "verified" }],
+        },
+      ],
+    },
+    editor,
+  );
+  assert.ok(result.includes("CLAIM_EVIDENCE_SOURCE_MISMATCH"));
+});
