@@ -24,7 +24,7 @@ const canCreateArticles: Access = ({ req }) =>
   hasActiveRole(req.user, ["administrator", "editor", "author"]);
 
 const canUpdateArticles: Access = ({ req }) => {
-  const actor = actorFromRequest(req.user);
+  const actor = getActiveUserActor(req.user);
   if (!actor) return false;
   if (["administrator", "editor"].includes(actor.role ?? "")) return true;
   if (actor.role === "author") {
