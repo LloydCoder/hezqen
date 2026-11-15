@@ -1,6 +1,8 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { Endpoint, PayloadRequest } from "payload";
 
+import { withRequestContext } from "./request-context.ts";
+
 import {
   ALLOWED_EVIDENCE_CONTENT_TYPES,
   deleteEvidenceObject,
