@@ -19,6 +19,7 @@ import {
 } from "./lib/editorial-endpoints.ts";
 import { createResendEmailAdapter } from "./lib/resend-email-adapter.ts";
 import { evidenceDownloadEndpoint, evidenceUploadEndpoint } from "./lib/evidence-endpoints.ts";
+import { claimVerifyEndpoint, evidenceVerifyEndpoint } from "./lib/research-verification-endpoints.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -77,6 +78,8 @@ export default buildConfig({
     scheduledPublicationEndpoint,
     evidenceUploadEndpoint,
     evidenceDownloadEndpoint,
+    evidenceVerifyEndpoint,
+    claimVerifyEndpoint,
   ],
   email: process.env.RESEND_API_KEY
     ? createResendEmailAdapter({
