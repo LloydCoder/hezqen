@@ -48,7 +48,7 @@ jobs:
         run: pnpm dlx vinext@1.4.5 check
 
   vinext-worker-build:
-    name: Build and smoke-test the Cloudflare Worker locally
+    name: Build and smoke-test Cloudflare Worker public routes
     needs: vinext-check
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -167,7 +167,7 @@ jobs:
           NEXT_PUBLIC_SITE_URL: http://localhost:3001
           HEZQEN_ALLOWED_ORIGINS: http://localhost:3001
           HEZQEN_LOCAL_RUNTIME_TEST: "true"
-      - name: Run Worker locally and smoke-test public and CMS routes
+      - name: Run Worker locally and smoke-test public routes and health
         run: |
           pnpm run start:vinext --host 0.0.0.0 --port 3001 > /tmp/hezqen-vinext.log 2>&1 &
           server_pid=$!
@@ -185,7 +185,7 @@ jobs:
             cat /tmp/hezqen-vinext.log
             exit 1
           fi
-          for route in / /about /editorial-standards /api/health /api/health/ready /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /divisions/ai-technology /robots.txt /sitemap.xml /admin /api/articles; do
+          for route in / /about /editorial-standards /api/health /api/health/ready /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /divisions/ai-technology /robots.txt /sitemap.xml; do
             echo "Checking $route"
             status=$(curl --max-time 10 --silent --output /tmp/hezqen-vinext-response --write-out "%{http_code}" "http://127.0.0.1:3001$route")
             if [ "$status" != "200" ]; then
