@@ -2,7 +2,7 @@
 
 > HEZQEN is a global technology and business intelligence publication by Tinlance. It connects evidence-led reporting, original research and technical analysis across AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
 
-HEZQEN has three product surfaces: Media, Labs and Intelligence. The current public application includes the publication shell and two engineering calculators. CMS, research and premium capabilities remain subject to the implementation gates documented in the repository.
+HEZQEN has three product surfaces: Media, Labs and Intelligence. The Labs portfolio contains sixteen calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage, AI data-leakage scenario risk, hardware ROI, fine-tuning versus RAG, cloud migration, Kubernetes cost, database capacity, API pricing comparison, inference throughput, incident cost, SaaS margin, data-centre energy, storage growth and AI-agent operating cost. CMS, research and premium capabilities remain subject to the implementation gates documented in the repository.
 
 Important notes:
 - Human editors retain approval and publishing authority.
