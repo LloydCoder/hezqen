@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function LabsIndexPage() {
   const categories = [...new Set(LAB_CALCULATORS.map((item) => item.category))];
   return (
-    <main style={{ background: "#f4f5f7", minHeight: "65vh", padding: "3rem 1.25rem 5rem" }}>
+    <div style={{ background: "#f4f5f7", minHeight: "65vh", padding: "3rem 1.25rem 5rem" }}>
       <div style={{ maxWidth: 1180, margin: "0 auto" }}>
         <p style={{ color: "#a35f00", fontSize: ".75rem", fontWeight: 800, letterSpacing: ".14em" }}>HEZQEN / LABS</p>
         <h1 style={{ color: "#0b1b33", fontSize: "clamp(2.4rem, 5vw, 4rem)", letterSpacing: "-.04em", margin: ".5rem 0" }}>Engineering decisions, made measurable.</h1>
