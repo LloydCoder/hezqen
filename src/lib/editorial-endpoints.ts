@@ -57,7 +57,7 @@ function normalizeArticle(value: unknown): StoredEditorialArticle {
 class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
   constructor(private readonly req: PayloadRequest) {}
 
-  async beginTransaction(): Promise<string | null> {
+  async beginTransaction(): Promise<string | number | null> {
     const transactionId = await this.req.payload.db.beginTransaction();
     if (transactionId) this.req.transactionID = transactionId;
     return transactionId;
@@ -135,12 +135,12 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
     });
   }
 
-  async commitTransaction(transactionId: string): Promise<void> {
+  async commitTransaction(transactionId: string | number): Promise<void> {
     await this.req.payload.db.commitTransaction(transactionId);
     delete this.req.transactionID;
   }
 
-  async rollbackTransaction(transactionId: string): Promise<void> {
+  async rollbackTransaction(transactionId: string | number): Promise<void> {
     await this.req.payload.db.rollbackTransaction(transactionId);
     delete this.req.transactionID;
   }
