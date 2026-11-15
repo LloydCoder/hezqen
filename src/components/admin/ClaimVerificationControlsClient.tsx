@@ -32,7 +32,8 @@ export default function ClaimVerificationControlsClient({ claimId }: { claimId: 
         if (!cancelled) setClaim(body);
       })
       .catch((error: unknown) => {
-        if (!cancelled) setMessage(error instanceof Error ? error.message : "Unable to load claim.");
+        if (!cancelled)
+          setMessage(error instanceof Error ? error.message : "Unable to load claim.");
       });
     return () => {
       cancelled = true;
@@ -70,17 +71,33 @@ export default function ClaimVerificationControlsClient({ claimId }: { claimId: 
   return (
     <section
       aria-labelledby="hezqen-claim-verification-title"
-      style={{ border: "1px solid var(--theme-elevation-200)", borderRadius: 8, padding: 16, marginBottom: 16 }}
+      style={{
+        border: "1px solid var(--theme-elevation-200)",
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 16,
+      }}
     >
-      <h3 id="hezqen-claim-verification-title" style={{ marginTop: 0 }}>Claim verification</h3>
-      <p>Status: <strong>{claim?.verificationStatus ?? "Loading…"}</strong></p>
-      <p>Claims become publishable only after their cited sources and preserved evidence pass verification.</p>
+      <h3 id="hezqen-claim-verification-title" style={{ marginTop: 0 }}>
+        Claim verification
+      </h3>
+      <p>
+        Status: <strong>{claim?.verificationStatus ?? "Loading…"}</strong>
+      </p>
+      <p>
+        Claims become publishable only after their cited sources and preserved evidence pass
+        verification.
+      </p>
       {claim?.verificationStatus === "unverified" && claim.material !== false ? (
         <button type="button" onClick={() => void verify()} disabled={busy}>
           {busy ? "Verifying…" : "Verify claim and record review"}
         </button>
       ) : null}
-      {message ? <p role="status" aria-live="polite">{message}</p> : null}
+      {message ? (
+        <p role="status" aria-live="polite">
+          {message}
+        </p>
+      ) : null}
     </section>
   );
 }
