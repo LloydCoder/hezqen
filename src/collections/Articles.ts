@@ -6,9 +6,6 @@ function actorFromRequest(user: unknown): Actor {
   return user && typeof user === "object" && "id" in user ? (user as Actor) : null;
 }
 
-const isEditor: Access = ({ req }) =>
-  ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? "");
-
 const publishedArticleFilter: Where = {
   and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
 };
