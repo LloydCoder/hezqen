@@ -111,7 +111,10 @@ test("does not double-increment revisions for the audited workflow command", asy
   const req = { context: {} };
   const result = await withRequestContext(
     req,
-    { hezqenSkipArticleRevisionIncrement: true },
+    {
+      hezqenWorkflowCommand: true,
+      hezqenSkipArticleRevisionIncrement: true,
+    },
     async () =>
       revisionHook({
         data,
