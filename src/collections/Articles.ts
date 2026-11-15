@@ -9,22 +9,17 @@ function actorFromRequest(user: unknown): Actor {
 const isEditor: Access = ({ req }) =>
   ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? "");
 
+const publishedArticleFilter = {
+  and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
+};
+
 const canReadArticles: Access = ({ req }) => {
   const actor = actorFromRequest(req.user);
-  if (!actor) {
-    return {
-      and: [
-        { _status: { equals: "published" } },
-        {
-        and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
-      },
-      ],
-    };
-  }
+  if (!actor) return publishedArticleFilter;
   if (["administrator", "editor"].includes(actor.role ?? "")) return true;
   return {
     or: [
-      { workflowStatus: { equals: "published" } },
+      publishedArticleFilter,
       { author: { equals: actor.id } },
       { assignedEditor: { equals: actor.id } },
       { assignedFactChecker: { equals: actor.id } },
