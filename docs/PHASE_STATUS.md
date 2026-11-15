@@ -204,3 +204,53 @@ This section supersedes older, dated inventory statements above where they confl
 The implementation and CI are substantially advanced, but CMS staging acceptance is PARTIAL and public production is NOT READY. No production deployment, production migration, production admin bootstrap, production DNS cutover, paid-plan upgrade or scheduler activation has occurred.
 
 See CMS_OPERATIONS.md for detailed endpoint, storage, email, scheduler and acceptance procedures.
+
+## Latest CMS and repository reconciliation — 15 November 2026
+
+This section supersedes earlier PR #51 head/count/check-status statements above.
+
+### Repository inventory
+
+- HEZQEN (`LloydCoder/hezqen`): zero open issues; one open draft PR, #51. It remains unmerged and has no submitted reviews or inline review threads.
+- Current PR head after documentation reconciliation: `1310f5cd423a5d07ee210f2476dc7e963bd8771e` (documentation-only follow-up). Latest code-bearing head: `b6d8d55e22d4d3938d637ecd28cea34abeab2c1c`. The PR has 49 changed files.
+- HIES (`LloydCoder/hezqen-infrastructure-standard`): zero open issues and zero open PRs at the latest inventory check.
+
+### Latest code and CI evidence
+
+- Payload migration verification run [43773856489](https://github.com/LloydCoder/hezqen/actions/runs/43773856489) passed on the latest code-bearing head; the workflow verified both migrations against ephemeral PostgreSQL.
+- Cloudflare compatibility run [43773856483](https://github.com/LloydCoder/hezqen/actions/runs/43773856483) passed, including the pinned vinext compatibility check, Cloudflare Worker build, and local public-route/health smoke tests.
+- HEZQEN CI run [43773856462](https://github.com/LloydCoder/hezqen/actions/runs/43773856462) remains pending with no jobs reported. Do not report the latest code as fully green until lint, format, tests, audit, build, typecheck and runtime smoke complete on the current PR head.
+- The previous green CI result on code-bearing head `dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40` predates the current editorial/research verification implementation and is not evidence for the latest code.
+
+### Implementation reconciliation
+
+- Persistent editorial workflow commands, transactional article/audit writes, optimistic concurrency, correction metadata and scheduled publishing fields are implemented.
+- Material claims now require verified evidence. Separate evidence-preservation/evidence-verification and claim-verification endpoints are registered; claim verification is restricted to an assigned reviewer during the fact-check stage. Fact-check completion is blocked until all material claims and attached evidence are verified.
+- Protected CMS writes use module-private request-context capabilities. Collection hooks and tests cover protected workflow, evidence, claim and audit writes, plus deletion guards for core content, users, sources, claims, evidence and audit records.
+- The staging database has both migrations applied: `20261115_155359_initial` (batch 1) and `20261116_000000_editorial_scheduling_corrections` (batch 2). The pre-migration recovery branch exists; production remains untouched.
+- One active staging administrator exists (`hello@tinlance.com`); interactive login has not been independently tested. Staging currently has zero articles, zero sources and zero audit events.
+- Neon private bucket `hezqen-evidence` exists and remains empty. Application-side write/read-back SHA-256 verification is implemented but no live upload/download round-trip has been accepted. Resend adapter/configuration exists but no real password-reset delivery/receipt test has been accepted.
+- The scheduler endpoint and secret configuration exist, but the Worker has no Cron Trigger and no verified secret binding. The public correction policy page exists, but public article rendering and reader-visible correction notices remain unaccepted.
+
+### Hosting, cost and production boundary
+
+- The existing READY Vercel Preview `dpl_96t5ckCEdTevrih3Nf3HwSikg76Q` points to the older commit `dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40`; it is not the current code head. No new Vercel deployment was created.
+- Vercel Hobby is documented as personal/non-commercial only. It is not an acceptable production host for this commercial publication. No Pro upgrade was authorized.
+- Cloudflare Workers Free provides 10 ms CPU per request and 100,000 requests/day. Cloudflare notes SSR/auth-heavy workloads commonly require 10–20 ms; the CI build/smoke result does not prove the full CMS/admin runtime fits. No production Worker deployment or DNS cutover exists.
+- The `hezqen_cms` database role still has broader table-level DELETE privileges than the immutable-record policy requires. Tightening database grants is a remaining defense-in-depth gate and must be applied only after explicit approval.
+- No production migration, production admin bootstrap, production deployment, production DNS cutover, paid-plan upgrade or scheduler activation has occurred.
+
+### Remaining release blockers
+
+1. Latest HEZQEN CI must finish green on the current PR head.
+2. Full authenticated role-matrix and deployed REST/Local API acceptance, including actual administrator login.
+3. Real PostgreSQL transaction rollback test when audit insertion fails.
+4. Database-level privilege hardening for immutable sources, claims, evidence and audit records; explicit approval is required before applying the staging SQL change.
+5. Live private evidence upload/read-back/download/checksum/audit round-trip.
+6. Real Resend password-reset email acceptance and mailbox receipt.
+7. Scheduler secret binding, Cron Trigger and due-only publication test.
+8. Public article pages and reader-visible correction notice/history.
+9. Commercially permitted production hosting decision and measured CMS/admin runtime suitability.
+10. Production backup/restore, monitoring, alerting, incident response, rollback and launch approval.
+
+**Current verdict:** code implementation is substantially advanced; latest Payload migration and Cloudflare workflows are green, HEZQEN CI is still pending. CMS staging acceptance remains PARTIAL and production is NOT READY.
