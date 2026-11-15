@@ -1,6 +1,7 @@
 import { APIError, type Access, type CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
+import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
 const canReadAudit: Access = ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]);
 
@@ -25,8 +26,7 @@ export const AuditEvents: CollectionConfig = {
     ],
     beforeChange: [
       ({ data, operation, req }) => {
-        const context = req.context as Record<string, unknown> | undefined;
-        if (operation !== "create" || context?.hezqenAuditWrite !== true) {
+        if (operation !== "create" || !hasTrustedRequestContext(req.context, "hezqenAuditWrite")) {
           throw new APIError("Audit events are append-only and server generated.", 403);
         }
         return data;
