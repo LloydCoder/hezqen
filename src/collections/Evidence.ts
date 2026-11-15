@@ -19,6 +19,11 @@ export const Evidence: CollectionConfig = {
     delete: () => false,
   },
   hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("Evidence records cannot be deleted.", 403);
+      },
+    ],
     beforeChange: [
       ({ data, operation, req }) => {
         const context = req.context as Record<string, unknown> | undefined;
