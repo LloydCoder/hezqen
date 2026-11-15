@@ -7,7 +7,10 @@ import { StructuredData, publisherGraph } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: "HEZQEN — Global Technology & Business Intelligence", template: "%s | HEZQEN" },
+  title: {
+    default: "HEZQEN — Global Technology & Business Intelligence",
+    template: "%s | HEZQEN",
+  },
   description: site.description,
   applicationName: site.name,
   alternates: { canonical: "/" },
@@ -111,7 +114,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 {footerLinks.map((item) => (
                   <Link href={item.href} key={item.href}>{item.label}</Link>
                 ))}
-                <a href="https://tinlance.com" rel="noopener noreferrer">Tinlance</a>
+                <a href="https://tinlance.com" rel="noopener noreferrer">
+                  Tinlance
+                </a>
               </nav>
             </div>
             <div className="container footer-bottom">
