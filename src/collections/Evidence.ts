@@ -12,6 +12,11 @@ export const Evidence: CollectionConfig = {
     useAsTitle: "evidenceId",
     defaultColumns: ["evidenceId", "source", "verificationStatus", "retrievedAt"],
     group: "Research",
+    components: {
+      edit: {
+        beforeDocumentControls: ["/src/components/admin/EvidenceVerificationControlsServer"],
+      },
+    },
   },
   access: {
     create: () => false,
