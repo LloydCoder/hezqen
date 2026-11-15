@@ -51,6 +51,13 @@ function normalizeArticle(value: unknown): StoredEditorialArticle {
         ? doc.correctionStatus
         : "none",
     correctionReason: typeof doc.correctionReason === "string" ? doc.correctionReason : null,
+    correctionPublicNote:
+      typeof doc.correctionPublicNote === "string" ? doc.correctionPublicNote : null,
+    correctionRequestedAt:
+      typeof doc.correctionRequestedAt === "string" ? doc.correctionRequestedAt : null,
+    correctionResolvedAt:
+      typeof doc.correctionResolvedAt === "string" ? doc.correctionResolvedAt : null,
+    correctionResolvedById: relationshipId(doc.correctionResolvedBy),
   };
 }
 
