@@ -4,6 +4,7 @@ import Link from "next/link";
 import "./globals.css";
 import { site } from "@/lib/site";
 import { StructuredData, publisherGraph } from "@/components/StructuredData";
+import { MobileNavigation } from "@/components/MobileNavigation";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -33,6 +34,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   themeColor: "#0B1B33",
   colorScheme: "light",
 };
@@ -44,6 +46,13 @@ const navItems = [
   { href: "/divisions/business-startups", label: "Business & Startups" },
   { href: "/labs", label: "Labs" },
   { href: "/infrastructure", label: "Infrastructure" },
+] as const;
+
+const mobileNavItems = [
+  ...navItems,
+  { href: "/about", label: "About HEZQEN" },
+  { href: "/contact", label: "Contact" },
+  { href: "/editorial-standards", label: "Editorial standards" },
 ] as const;
 
 const footerLinks = [
@@ -95,6 +104,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   </Link>
                 ))}
               </nav>
+              <MobileNavigation items={mobileNavItems} />
               <Link className="header-link" href="/about">
                 About HEZQEN <span aria-hidden="true">↗</span>
               </Link>
