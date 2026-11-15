@@ -60,7 +60,6 @@ test("requires fact-check and disclosure review", () =>
     false,
   ));
 
-
 test("requires every material claim to be independently verified", () => {
   const result = getPublicationBlockers(
     {
