@@ -4,12 +4,9 @@ import test from "node:test";
 import {
   executeEditorialReviewAction,
   executeEditorialWorkflowCommand,
-  type EditorialAuditEvent,
-  type EditorialWorkflowStore,
-  type StoredEditorialArticle,
 } from "./persisted-workflow.ts";
 
-const initialArticle: StoredEditorialArticle = {
+const initialArticle = {
   id: "article-1",
   workflowStatus: "approved",
   revision: 4,
@@ -26,11 +23,11 @@ const initialArticle: StoredEditorialArticle = {
   correctionReason: null,
 };
 
-class MemoryStore implements EditorialWorkflowStore {
+class MemoryStore {
   article = { ...initialArticle };
   claims = [{ id: "claim-1", sourceIds: ["source-1"] }];
-  auditEvents: EditorialAuditEvent[] = [];
-  snapshot: { article: StoredEditorialArticle; auditEvents: EditorialAuditEvent[] } | null = null;
+  auditEvents = [];
+  snapshot = null;
   failAudit = false;
   committed = false;
   rolledBack = false;
@@ -43,7 +40,7 @@ class MemoryStore implements EditorialWorkflowStore {
     return "transaction-1";
   }
 
-  async getArticle(id: string) {
+  async getArticle(id) {
     return id === this.article.id ? { ...this.article } : null;
   }
 
@@ -52,13 +49,13 @@ class MemoryStore implements EditorialWorkflowStore {
   }
 
   async compareAndSwapArticle(
-    id: string,
-    expectedRevision: number,
-    expectedStatus: StoredEditorialArticle["workflowStatus"],
-    expectedAuthorId: string | null,
-    expectedEditorId: string | null,
-    expectedFactCheckerId: string | null,
-    changes: Record<string, unknown>,
+    id,
+    expectedRevision,
+    expectedStatus,
+    expectedAuthorId,
+    expectedEditorId,
+    expectedFactCheckerId,
+    changes,
   ) {
     if (
       id !== this.article.id ||
@@ -70,11 +67,11 @@ class MemoryStore implements EditorialWorkflowStore {
     ) {
       return false;
     }
-    this.article = { ...this.article, ...changes } as StoredEditorialArticle;
+    this.article = { ...this.article, ...changes };
     return true;
   }
 
-  async appendAuditEvent(event: EditorialAuditEvent) {
+  async appendAuditEvent(event) {
     if (this.failAudit) throw new Error("audit storage unavailable");
     this.auditEvents.push(event);
   }
@@ -94,8 +91,8 @@ class MemoryStore implements EditorialWorkflowStore {
   }
 }
 
-const editor = { id: "editor-1", role: "editor" as const, isHuman: true, active: true };
-const scheduler = { id: "system:scheduler", role: "service" as const, isHuman: false, active: true };
+const editor = { id: "editor-1", role: "editor", isHuman: true, active: true };
+const scheduler = { id: "system:scheduler", role: "service", isHuman: false, active: true };
 const now = "2026-11-15T12:00:00.000Z";
 
 test("commits article transition and immutable audit event in the same transaction", async () => {
