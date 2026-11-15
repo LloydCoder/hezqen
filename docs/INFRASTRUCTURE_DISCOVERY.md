@@ -43,7 +43,7 @@ Cloudflare's current Next.js guidance recommends vinext for new Next.js-on-Worke
 
 The HEZQEN repository has a pinned, non-deploying compatibility workflow. It reported 86% compatibility, with 10 supported features, 4 partial-support findings and no hard issues. The partial findings include Turbopack/webpack loader behavior, typed-route generation and React Strict Mode behavior. A compatibility score is not proof of runtime acceptance.
 
-The mainline Cloudflare workflow runs a compatibility check and a separate local Worker build/HTTP smoke job using ephemeral PostgreSQL. At main commit `5877dac0424fe5d25a4c36fd94140e4406d693ae`, both the compatibility-check job and the Worker build/smoke job passed, including ephemeral Payload migration and public/CMS route smoke tests. This validates the isolated Worker candidate only; Cloudflare Workers + vinext remains a beta alternative, not an automatic replacement for Vercel.
+The mainline Cloudflare workflow runs a compatibility check and a separate local Worker build/HTTP smoke job using ephemeral PostgreSQL. At main commit `5877dac0424fe5d25a4c36fd94140e4406d693ae`, both the compatibility-check job and the Worker build/smoke job passed, including ephemeral Payload migration and public/CMS route smoke tests. This validates the isolated Worker candidate only. The CI harness explicitly injects `CI=true` and `HEZQEN_LOCAL_RUNTIME_TEST=true` to permit only the local HTTP smoke-test origin; production and Vercel do not set this flag. Cloudflare Workers + vinext remains a beta alternative, not an automatic replacement for Vercel.
 
 ### Application dependencies and known gates
 
