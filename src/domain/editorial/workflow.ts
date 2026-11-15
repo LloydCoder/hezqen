@@ -15,6 +15,7 @@ export interface EditorialWorkflowRecord extends Omit<PublicationRecord, "status
 export interface WorkflowOptions {
   now?: string;
   scheduledFor?: string;
+  correctionReason?: string;
 }
 
 export type WorkflowBlocker =
@@ -25,7 +26,8 @@ export type WorkflowBlocker =
   | "PUBLICATION_BLOCKED"
   | "SCHEDULE_TIME_REQUIRED"
   | "SCHEDULE_TIME_INVALID"
-  | "SCHEDULE_TIME_NOT_REACHED";
+  | "SCHEDULE_TIME_NOT_REACHED"
+  | "CORRECTION_REASON_REQUIRED";
 
 export type WorkflowTransitionResult =
   | { ok: true; record: EditorialWorkflowRecord }
@@ -47,6 +49,32 @@ function resultWithBlockers(...blockers: WorkflowBlocker[]): WorkflowTransitionR
   return { ok: false, blockers };
 }
 
+function publishScheduledRecord(
+  record: EditorialWorkflowRecord,
+  nowMs: number,
+): WorkflowTransitionResult {
+  if (record.status !== "scheduled" || !record.scheduledFor) {
+    return resultWithBlockers("INVALID_TRANSITION");
+  }
+  const scheduledMs = Date.parse(record.scheduledFor);
+  if (Number.isNaN(scheduledMs)) return resultWithBlockers("SCHEDULE_TIME_INVALID");
+  if (scheduledMs > nowMs) return resultWithBlockers("SCHEDULE_TIME_NOT_REACHED");
+  if (!record.editorId || record.approvedById !== record.editorId) {
+    return resultWithBlockers("PUBLICATION_BLOCKED");
+  }
+
+  const approvalActor: PublishingActor = {
+    id: record.editorId,
+    role: "editor",
+    isHuman: true,
+  };
+  const approvedRecord: PublicationRecord = { ...record, status: "approved" };
+  if (!canPublish(approvedRecord, approvalActor)) {
+    return resultWithBlockers("PUBLICATION_BLOCKED");
+  }
+  return { ok: true, record: { ...record, status: "published" } };
+}
+
 export function transitionPublication(
   record: EditorialWorkflowRecord,
   actor: PublishingActor,
@@ -55,49 +83,42 @@ export function transitionPublication(
 ): WorkflowTransitionResult {
   const now = options.now ?? new Date().toISOString();
   const nowMs = Date.parse(now);
-  if (Number.isNaN(nowMs)) {
-    return resultWithBlockers("SCHEDULE_TIME_INVALID");
+  if (Number.isNaN(nowMs)) return resultWithBlockers("SCHEDULE_TIME_INVALID");
+
+  if (
+    actor.role === "service" &&
+    !actor.isHuman &&
+    record.status === "scheduled" &&
+    targetStatus === "published"
+  ) {
+    return publishScheduledRecord(record, nowMs);
   }
 
-  if (record.status === targetStatus) {
-    return resultWithBlockers("INVALID_TRANSITION");
-  }
+  if (record.status === targetStatus) return resultWithBlockers("INVALID_TRANSITION");
 
   if (
     (record.status === "pitch" && targetStatus === "research") ||
     (record.status === "research" && targetStatus === "draft") ||
     (record.status === "draft" && targetStatus === "fact_check")
   ) {
-    if (!isAssignedContributor(record, actor)) {
-      return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    }
+    if (!isAssignedContributor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     return { ok: true, record: { ...record, status: targetStatus } };
   }
 
   if (record.status === "fact_check" && targetStatus === "editorial_review") {
-    if (!isHumanAssignedEditor(record, actor)) {
-      return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    }
-    if (!record.factCheckComplete) {
-      return resultWithBlockers("FACT_CHECK_INCOMPLETE");
-    }
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
+    if (!record.factCheckComplete) return resultWithBlockers("FACT_CHECK_INCOMPLETE");
     return { ok: true, record: { ...record, status: "editorial_review" } };
   }
 
   if (record.status === "editorial_review" && targetStatus === "draft") {
-    if (!isHumanAssignedEditor(record, actor)) {
-      return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    }
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     return { ok: true, record: { ...record, status: "draft" } };
   }
 
   if (record.status === "editorial_review" && targetStatus === "approved") {
-    if (record.authorId === record.editorId) {
-      return resultWithBlockers("AUTHOR_EDITOR_CONFLICT");
-    }
-    if (!isHumanAssignedEditor(record, actor)) {
-      return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    }
+    if (record.authorId === record.editorId) return resultWithBlockers("AUTHOR_EDITOR_CONFLICT");
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     const candidate: EditorialWorkflowRecord = {
       ...record,
       status: "approved",
@@ -105,24 +126,15 @@ export function transitionPublication(
       approvedAt: now,
     };
     const policyRecord: PublicationRecord = { ...candidate, status: "approved" };
-    if (!canPublish(policyRecord, actor)) {
-      return resultWithBlockers("PUBLICATION_BLOCKED");
-    }
+    if (!canPublish(policyRecord, actor)) return resultWithBlockers("PUBLICATION_BLOCKED");
     return { ok: true, record: candidate };
   }
 
   if (record.status === "approved" && targetStatus === "scheduled") {
-    if (!isHumanAssignedEditor(record, actor)) {
-      return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    }
-    if (!options.scheduledFor) {
-      return resultWithBlockers("SCHEDULE_TIME_REQUIRED");
-    }
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
+    if (!options.scheduledFor) return resultWithBlockers("SCHEDULE_TIME_REQUIRED");
     const scheduledMs = Date.parse(options.scheduledFor);
-    if (Number.isNaN(scheduledMs)) {
-      return resultWithBlockers("SCHEDULE_TIME_INVALID");
-    }
-    if (scheduledMs <= nowMs) {
+    if (Number.isNaN(scheduledMs) || scheduledMs <= nowMs) {
       return resultWithBlockers("SCHEDULE_TIME_INVALID");
     }
     return {
@@ -135,9 +147,7 @@ export function transitionPublication(
     (record.status === "approved" || record.status === "scheduled") &&
     targetStatus === "published"
   ) {
-    if (!isHumanAssignedEditor(record, actor)) {
-      return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    }
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     if (record.status === "scheduled") {
       if (!record.scheduledFor || Number.isNaN(Date.parse(record.scheduledFor))) {
         return resultWithBlockers("SCHEDULE_TIME_INVALID");
@@ -147,9 +157,7 @@ export function transitionPublication(
       }
     }
     const approvedRecord: PublicationRecord = { ...record, status: "approved" };
-    if (!canPublish(approvedRecord, actor)) {
-      return resultWithBlockers("PUBLICATION_BLOCKED");
-    }
+    if (!canPublish(approvedRecord, actor)) return resultWithBlockers("PUBLICATION_BLOCKED");
     return { ok: true, record: { ...record, status: "published" } };
   }
 
@@ -157,16 +165,15 @@ export function transitionPublication(
     record.status === "published" &&
     (targetStatus === "correction_required" || targetStatus === "archived")
   ) {
-    if (!isHumanAssignedEditor(record, actor)) {
-      return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
+    if (targetStatus === "correction_required" && !options.correctionReason?.trim()) {
+      return resultWithBlockers("CORRECTION_REASON_REQUIRED");
     }
     return { ok: true, record: { ...record, status: targetStatus } };
   }
 
   if (record.status === "correction_required" && targetStatus === "draft") {
-    if (!isHumanAssignedEditor(record, actor)) {
-      return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    }
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     return {
       ok: true,
       record: {
