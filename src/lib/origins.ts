@@ -4,7 +4,7 @@ export interface AllowedOriginsInput {
   nodeEnv?: string;
 }
 
-function parseOrigin(value: string): string {
+function parseOrigin(value: string, allowLocalhostHttp: boolean): string {
   const parsed = new URL(value);
   if (
     parsed.username ||
@@ -12,7 +12,7 @@ function parseOrigin(value: string): string {
     parsed.pathname !== "/" ||
     parsed.search ||
     parsed.hash ||
-    (parsed.protocol !== "https:" && parsed.hostname !== "localhost")
+    (parsed.protocol !== "https:" && !(allowLocalhostHttp && parsed.protocol === "http:" && parsed.hostname === "localhost"))
   ) {
     throw new Error(
       "Allowed origins must contain only HTTPS origins (localhost is allowed for development).",
@@ -36,23 +36,20 @@ function parseDeploymentOrigin(hostname: string): string {
 }
 
 export function resolveAllowedOrigins(input: AllowedOriginsInput): string[] {
-  const configured = input.configuredOrigins
-    ?.split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean) ?? [];
+  const configured =
+    input.configuredOrigins
+      ?.split(",")
+      .map((origin) => origin.trim())
+      .filter(Boolean) ?? [];
   const deploymentOrigin = input.deploymentHostname
     ? parseDeploymentOrigin(input.deploymentHostname)
     : null;
   const defaults =
-    configured.length === 0 && input.nodeEnv !== "production"
-      ? ["http://localhost:3000"]
-      : [];
+    configured.length === 0 && input.nodeEnv !== "production" ? ["http://localhost:3000"] : [];
 
   return [
     ...new Set(
-      [...configured, ...(deploymentOrigin ? [deploymentOrigin] : []), ...defaults].map(
-        parseOrigin,
-      ),
+      [...configured, ...(deploymentOrigin ? [deploymentOrigin] : []), ...defaults].map((origin) => parseOrigin(origin, input.nodeEnv !== "production")),
     ),
   ];
 }
