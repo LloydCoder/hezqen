@@ -1,4 +1,4 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
 
@@ -20,6 +20,34 @@ export const Claims: CollectionConfig = {
     read: canReadClaims,
     update: () => false,
     delete: () => false,
+  },
+  hooks: {
+    beforeChange: [
+      ({ data, operation, req }) => {
+        const context = req.context as Record<string, unknown> | undefined;
+        if (operation === "create") {
+          if (
+            data?.verificationStatus !== undefined &&
+            data.verificationStatus !== "unverified"
+          ) {
+            throw new APIError("New claims must begin as unverified.", 403);
+          }
+          if (data?.material === false || data?.reviewedBy != null || data?.reviewedAt != null) {
+            throw new APIError("Claim verification metadata is server managed.", 403);
+          }
+        }
+        if (operation === "update") {
+          if (context?.hezqenClaimVerification !== true) {
+            throw new APIError("Claims are immutable outside the verification workflow.", 403);
+          }
+          const allowedFields = ["verificationStatus", "reviewedBy", "reviewedAt"];
+          if (Object.keys(data ?? {}).some((field) => !allowedFields.includes(field))) {
+            throw new APIError("Only claim verification metadata may be updated.", 403);
+          }
+        }
+        return data;
+      },
+    ],
   },
   fields: [
     { name: "claimText", type: "textarea", required: true },
@@ -60,14 +88,14 @@ export const Claims: CollectionConfig = {
         { label: "Corrected", value: "corrected" },
       ],
     },
-    { name: "material", type: "checkbox", defaultValue: true },
+    { name: "material", type: "checkbox", defaultValue: true, access: { create: () => false, update: () => false } },
     {
       name: "reviewedBy",
       type: "relationship",
       relationTo: "users",
       access: { create: () => false, update: () => false },
     },
-    { name: "reviewedAt", type: "date", access: { update: () => false } },
+    { name: "reviewedAt", type: "date", access: { create: () => false, update: () => false } },
   ],
   timestamps: true,
 };
