@@ -30,7 +30,7 @@ const field = (key: string, label: string, defaultValue: number, unit = "", min 
 const f = field;
 export const LAB_CALCULATORS: LabCalculator[] = [
   { slug: "rag-storage", title: "Local RAG Storage & Vector Database Sizing", category: "Private AI & RAG", description: "Estimate embedding payload, metadata, replication and monthly storage cost for a retrieval corpus.", fields: [
-    f("documents","Documents",100000,"documents",1,1e10), f("chunksPerDocument","Chunks per document",8,"chunks",1,1e6), f("dimensions","Embedding dimensions",1536,"dimensions",1,65536), f("bytesPerDimension","Bytes per dimension",4,"bytes",1,16,1,"Use 4 for float32, 2 for float16, or 1 for int8 payload estimates."), f("replicas","Copies including primary",2,"copies",1,20), f("metadataMbPerDocument","Metadata per document",0.02,"MB",0,1e6,0.01), f("pricePerGbMonth","Storage price",0.1,"USD/GB-month",0,1e6,0.01)
+    f("documents","Documents",100000,"documents",1,1e10), f("chunksPerDocument","Chunks per document",8,"chunks",1,1e6), f("dimensions","Embedding dimensions",1536,"dimensions",1,65536), f("bytesPerDimension","Bytes per dimension",4,"bytes",1,16,1,"Use 4 for float32, 2 for float16, or 1 for int8 payload estimates."), f("indexOverhead","Vector index overhead",0.3,"fraction of vector payload",0,10,0.01), f("replicas","Copies including primary",2,"copies",1,20), f("metadataMbPerDocument","Metadata per document",0.02,"MB",0,1e6,0.01), f("pricePerGbMonth","Storage price",0.1,"USD/GB-month",0,1e6,0.01)
   ]},
   { slug: "ai-data-risk", title: "AI Data-Leakage & Compliance Risk Estimator", category: "Business & Cybersecurity Economics", description: "Model a scenario-based expected-loss estimate from data sensitivity, exposure and control maturity.", fields: [
     f("records","Potentially exposed records",10000,"records",0,1e12), f("sensitivity","Data sensitivity",3,"score / 1–5",1,5), f("exposure","Exposure likelihood factor",3,"score / 1–5",1,5), f("controlMaturity","Control maturity",3,"score / 1–5",1,5), f("lossPerRecord","Estimated loss per record",5,"USD / record",0,1e9,0.01)
@@ -90,10 +90,12 @@ export function calculateLab(slug: string, values: Values): LabCalculation {
   let metrics: LabMetric[];
   switch (slug) {
     case "rag-storage": {
-      const vectorsGb = v("documents") * v("chunksPerDocument") * v("dimensions") * v("bytesPerDimension") / 1e9;
+      const vectorCount = v("documents") * v("chunksPerDocument");
+      const vectorsGb = vectorCount * (v("dimensions") * v("bytesPerDimension") + 8) / 1e9;
+      const indexGb = vectorsGb * v("indexOverhead");
       const metadataGb = v("documents") * v("metadataMbPerDocument") / 1000;
-      const physicalGb = (vectorsGb + metadataGb) * v("replicas");
-      metrics = [metric("Vector payload", vectorsGb, "GB"), metric("Metadata", metadataGb, "GB"), metric("Replicated capacity", physicalGb, "GB"), metric("Monthly storage cost", physicalGb * v("pricePerGbMonth"))]; break;
+      const physicalGb = (vectorsGb + indexGb + metadataGb) * v("replicas");
+      metrics = [metric("Vector payload", vectorsGb, "GB"), metric("Estimated index overhead", indexGb, "GB"), metric("Metadata", metadataGb, "GB"), metric("Replicated capacity", physicalGb, "GB"), metric("Monthly storage cost", physicalGb * v("pricePerGbMonth"))]; break;
     }
     case "ai-data-risk": {
       const likelihood = Math.min(1, v("sensitivity") * v("exposure") * (6 - v("controlMaturity")) / 125);
