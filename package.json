@@ -2,9 +2,9 @@
   "name": "hezqen",
   "version": "0.1.0",
   "private": true,
-  "description": "HEZQEN — Global Technology & Business Intelligence",
+  "description": "HEZQEN \u2014 Global Technology & Business Intelligence",
   "engines": {
-    "node": ">=22.12.0"
+    "node": "24.x || 22.x"
   },
   "scripts": {
     "dev": "next dev",
