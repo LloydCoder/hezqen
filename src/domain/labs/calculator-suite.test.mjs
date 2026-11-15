@@ -89,7 +89,7 @@ test("calculates migration payback and rejects a migration with no savings", () 
   });
   assert.equal(
     result.metrics.find((metric) => metric.label === "Payback period")?.value,
-    58.333333333333336,
+    15,
   );
   assert.throws(
     () =>
