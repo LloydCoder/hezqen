@@ -172,9 +172,9 @@ This section supersedes older, dated inventory statements above where they confl
 ### Repository and PR inventory
 
 - HEZQEN LloydCoder/hezqen: zero open GitHub issues; one open PR, #51, feat(cms): complete transactional editorial and evidence workflows.
-- PR #51 is still draft, unmerged, with no submitted reviews or inline review threads. Its head is dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40; the PR contains 25 changed files.
-- The exact PR head passed all three required workflows: HEZQEN CI (https://github.com/LloydCoder/hezqen/actions/runs/43771124102), Payload migration verification (https://github.com/LloydCoder/hezqen/actions/runs/43771124059), and Cloudflare compatibility (https://github.com/LloydCoder/hezqen/actions/runs/43771124064).
-- The connected Vercel Preview deployment dpl_96t5ckCEdTevrih3Nf3HwSikg76Q is READY on that same commit. This is not a production deployment.
+- PR #51 is still draft, unmerged, with no submitted reviews or inline review threads. The code-bearing head is dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40; two later commits (f32f9a69949b99d13aa6b0073092229e357e912f and bd4d677102e39499c365e6877e5e6b59fcc171b0) changed documentation only. The current PR head is bd4d677102e39499c365e6877e5e6b59fcc171b0 and the PR contains 32 changed files.
+- The code-bearing PR head passed all three required workflows: HEZQEN CI (https://github.com/LloydCoder/hezqen/actions/runs/43771124102), Payload migration verification (https://github.com/LloydCoder/hezqen/actions/runs/43771124059), and Cloudflare compatibility (https://github.com/LloydCoder/hezqen/actions/runs/43771124064).
+- The connected Vercel Preview deployment dpl_96t5ckCEdTevrih3Nf3HwSikg76Q is READY on the code-bearing commit dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40. The later documentation-only commits were not redeployed; they do not alter application runtime. This is not a production deployment.
 - HIES LloydCoder/hezqen-infrastructure-standard: zero open issues and zero open PRs at the latest inventory check. Its main branch remains separate from the HEZQEN publication runtime.
 
 ### Staging database, CMS and runtime
