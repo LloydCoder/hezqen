@@ -43,6 +43,11 @@ Cloudflare's current Next.js guidance recommends vinext for new Next.js-on-Worke
 
 The HEZQEN repository has a pinned, non-deploying compatibility workflow. It reported 86% compatibility, with 10 supported features, 4 partial-support findings and no hard issues. The partial findings include Turbopack/webpack loader behavior, typed-route generation and React Strict Mode behavior. A compatibility score is not proof of runtime acceptance.
 
+
+### Latest isolated runtime evidence (2026-11-15)
+
+The PR #42 compatibility run built the Worker successfully and served the public page, Labs, infrastructure catalogue, sitemap/robots, and liveness/readiness endpoints. The Payload REST collection endpoint `GET /api/articles` returned HTTP 500; the local Workers runtime reported that it cancelled the request after detecting a hung Worker. This is a real unresolved CMS API compatibility failure, not a passing CMS test. The CMS/admin workflow has therefore **not** been accepted on Workers. The compatibility workflow's smoke-test scope is limited to the public routes and health contract that passed; it must not be interpreted as CMS compatibility. Vercel remains the approved production host. Keep Workers/vinext as a beta alternative until the Payload REST API, admin interactions, authentication, database connectivity and representative write operations pass isolated runtime tests. Do not deploy a Worker or change DNS on the basis of the public-route smoke test.
+
 A separate pull request adds a local Worker build and HTTP smoke test using an ephemeral PostgreSQL service. It also verifies the Payload migration in ephemeral PostgreSQL. The evaluation must pass all build and route checks before Cloudflare is selected. The Worker must be exercised for public routes, Labs, robots/sitemap, Payload admin, authentication and CMS APIs. Do not merge a failed or incomplete hosting evaluation.
 
 ### Application dependencies and known gates
