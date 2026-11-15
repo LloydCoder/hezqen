@@ -155,6 +155,15 @@ export async function executeEditorialWorkflowCommand(
 
     if (next.approvedById !== article.approvedById) changes.approvedBy = next.approvedById;
     if (next.approvedAt !== article.approvedAt) changes.approvedAt = next.approvedAt;
+    if (next.factCheckComplete !== article.factCheckComplete) {
+      changes.factCheckComplete = next.factCheckComplete;
+    }
+    if (next.disclosuresReviewed !== article.disclosuresReviewed) {
+      changes.disclosuresReviewed = next.disclosuresReviewed;
+    }
+    if (next.status === "draft" && article.workflowStatus === "correction_required") {
+      changes._status = "draft";
+    }
     if (next.status === "published") {
       changes.publishedAt = now;
       changes._status = "published";
@@ -169,7 +178,7 @@ export async function executeEditorialWorkflowCommand(
     } else if (next.status === "published" && article.correctionStatus === "open") {
       changes.correctionStatus = "resolved";
       changes.correctionResolvedAt = now;
-      changes.correctionResolvedBy = actor.id;
+      changes.correctionResolvedBy = actor.role === "service" ? article.approvedById : actor.id;
     }
 
     if (!(await store.compareAndSwapArticle(article.id, command.expectedRevision, article.workflowStatus, article.authorId, article.editorId, article.factCheckerId, changes, transactionId))) {
