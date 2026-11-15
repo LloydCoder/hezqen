@@ -26,9 +26,9 @@ jobs:
         shell: bash
         run: |
           git fetch origin "${{ github.event.pull_request.base.ref }}"
-          files="$(git diff --name-only "origin/${{ github.event.pull_request.base.ref }}"...HEAD | grep -E '\\.(ts|tsx|js|mjs|json|jsonc)$' || true)"
+          files="$(git diff --name-only "origin/${{ github.event.pull_request.base.ref }}"...HEAD | grep -E '\.(ts|tsx|js|mjs|json|jsonc)$' || true)"
           if [ -n "$files" ]; then
-            printf '%s\\n' "$files" | xargs -r pnpm dlx @biomejs/biome@2.6.7 format --write
+            printf '%s\n' "$files" | xargs -r pnpm dlx @biomejs/biome@2.6.7 format --write
           fi
       - name: Commit formatting changes
         shell: bash
