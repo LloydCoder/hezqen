@@ -4,6 +4,14 @@ export interface AllowedOriginsInput {
   nodeEnv?: string;
 }
 
+export interface PayloadServerUrlInput {
+  configuredSiteUrl?: string;
+  deploymentHostname?: string;
+  deploymentEnvironment?: string;
+  allowedOrigins: string[];
+  nodeEnv?: string;
+}
+
 function parseOrigin(value: string, allowLocalhostHttp: boolean): string {
   const parsed = new URL(value);
   if (
@@ -12,7 +20,8 @@ function parseOrigin(value: string, allowLocalhostHttp: boolean): string {
     parsed.pathname !== "/" ||
     parsed.search ||
     parsed.hash ||
-    (parsed.protocol !== "https:" && !(allowLocalhostHttp && parsed.protocol === "http:" && parsed.hostname === "localhost"))
+    (parsed.protocol !== "https:" &&
+      !(allowLocalhostHttp && parsed.protocol === "http:" && parsed.hostname === "localhost"))
   ) {
     throw new Error(
       "Allowed origins must contain only HTTPS origins (localhost is allowed for development).",
@@ -49,7 +58,24 @@ export function resolveAllowedOrigins(input: AllowedOriginsInput): string[] {
 
   return [
     ...new Set(
-      [...configured, ...(deploymentOrigin ? [deploymentOrigin] : []), ...defaults].map((origin) => parseOrigin(origin, input.nodeEnv !== "production")),
+      [...configured, ...(deploymentOrigin ? [deploymentOrigin] : []), ...defaults].map(
+        (origin) => parseOrigin(origin, input.nodeEnv !== "production"),
+      ),
     ),
   ];
+}
+
+export function resolvePayloadServerUrl(input: PayloadServerUrlInput): string | undefined {
+  const previewOrigin =
+    input.deploymentEnvironment === "preview" && input.deploymentHostname
+      ? parseDeploymentOrigin(input.deploymentHostname)
+      : undefined;
+  const candidate = previewOrigin ?? input.configuredSiteUrl ?? input.allowedOrigins[0];
+  if (!candidate) return undefined;
+
+  const origin = parseOrigin(candidate, input.nodeEnv !== "production");
+  if (!input.allowedOrigins.includes(origin)) {
+    throw new Error("NEXT_PUBLIC_SITE_URL or the current Vercel preview origin must be allowed.");
+  }
+  return origin;
 }
