@@ -89,4 +89,5 @@ test("rejects unknown calculators and negative, non-finite or out-of-range input
   assert.throws(() => calculateLab("not-a-calculator", {}), /Unknown calculator/);
   assert.throws(() => calculateLab("rag-storage", { documents: -1, chunksPerDocument: 1, dimensions: 1, bytesPerDimension: 4, replicas: 1, metadataMbPerDocument: 0, pricePerGbMonth: 1 }), /documents/);
   assert.throws(() => calculateLab("ai-data-risk", { records: 1, sensitivity: 9, exposure: 1, controlMaturity: 1, lossPerRecord: 1 }), /sensitivity/);
+  assert.throws(() => calculateLab("kubernetes-cost", { nodeCount: 1.5, nodeHourly: 1, hours: 1, controlPlane: 0, storageGb: 0, storageRate: 0, loadBalancers: 0, loadBalancerRate: 0, egressGb: 0, egressRate: 0 }), /whole number/);
 });
