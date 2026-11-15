@@ -17,6 +17,8 @@ test("mobile navigation exposes a real accessible disclosure and keyboard dismis
   assert.match(component, /triggerRef\.current\?\.focus/);
   assert.match(component, /usePathname/);
   assert.match(component, /aria-current/);
+  assert.match(component, /<ul className="mobile-nav-list">/);
+  assert.match(component, /<li key=\{item\.href\}>/);
 });
 
 test("the shared header uses the mobile navigation and preserves all primary destinations", () => {
