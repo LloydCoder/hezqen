@@ -52,7 +52,10 @@ export function readNeonEvidenceStorageConfig(
     parsed.username ||
     parsed.password ||
     parsed.search ||
-    parsed.hash
+    parsed.hash ||
+    !/^[a-z0-9-]+\.storage\.c-\d+\.[a-z0-9-]+\.aws\.neon\.tech$/.test(parsed.hostname) ||
+    !/^[a-z]{2}-[a-z]+-\d$/.test(region) ||
+    !parsed.hostname.includes(`.${region}.aws.neon.tech`)
   ) {
     throw new Error("NEON_EVIDENCE_STORAGE_ENDPOINT_INVALID");
   }
@@ -74,6 +77,13 @@ function signingKey(secret: string, dateStamp: string, region: string): Buffer {
 }
 
 function objectUrl(config: NeonEvidenceStorageConfig, key: string): URL {
+  if (
+    !/^evidence\/[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+      key,
+    )
+  ) {
+    throw new Error("NEON_EVIDENCE_OBJECT_KEY_INVALID");
+  }
   const encodedKey = key
     .split("/")
     .map((segment) => encodeURIComponent(segment))
