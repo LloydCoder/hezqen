@@ -140,11 +140,11 @@ The following are not yet evidenced as complete:
 
 ## 8. Current Vercel status
 
-Vercel remains an approved hosting option; the temporary build-rate obstacle does not remove it from the architecture. The connected hezqen Next.js project produced a READY preview from main commit 55f8e7125ccc22ede4ceafd02b609ef8ac7c802e at https://hezqen-5ror02wa7-lloydcoders-projects.vercel.app. Preview SSO protection is enabled, so unauthenticated external browser QA could not be completed. The Vercel project domain inventory contains only hezqen.vercel.app; hezqen.tinlance.com is not attached. A direct lookup for the canonical custom domain returned not found.
+Vercel remains an approved hosting option; the temporary build-rate obstacle does not remove it from the architecture. The connected hezqen Next.js project produced a READY preview from PR #35 head `c56f59b16ae20f2625346c91de6239fc17b3f8da` at https://hezqen-ix8xrxv5s-lloydcoders-projects.vercel.app. The PR was merged as `3888d2ccb9d77c1398c39a53fd5f969f472025b1`. Preview SSO protection is enabled, so unauthenticated external browser QA could not be completed. The Vercel project domain inventory contains only hezqen.vercel.app; hezqen.tinlance.com is not attached. A direct lookup for the canonical custom domain returned not found.
 
-Recent historical Vercel deployments for older commits failed during pnpm run build; the current main preview reached READY. Build logs show Vercel selected Node.js 26.x because package.json allowed >=26.13.1, while GitHub CI uses Node 24.22.3 and the Vercel project setting is Node 24.x. This runtime-selection mismatch is removed by pinning the package engine to 24.x and must be verified by a fresh preview.
+The package engine is pinned to Node 24.x, matching the Vercel project setting and GitHub Actions CI. The PR #35 preview build completed successfully with this pin, and the previous Node 26 fallback mismatch is removed. The build generated all sixteen Labs routes, the Infrastructure catalog, admin/API routes, robots.txt and sitemap.xml.
 
-The vercel.json file continues to disable automatic Git-triggered deployments; do not treat a preview alias as a production domain.
+The vercel.json file continues to disable automatic Git-triggered deployments; use controlled deployments after GitHub CI is green. Do not treat a preview alias as a production domain.
 
 ## 9. Explicit non-actions
 

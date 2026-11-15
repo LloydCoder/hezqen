@@ -1,6 +1,6 @@
 # HEZQEN Implementation Phase Status
 
-**Last reconciled:** 2026-11-15 (post-PR #32 integration)  
+**Last reconciled:** 2026-11-15 (post-PR #35 integration)  
 **Canonical launch target:** `https://hezqen.tinlance.com`  
 **Release state:** NOT READY FOR PUBLIC PRODUCTION
 
@@ -23,8 +23,8 @@ The six phases are sequential macro-gates. A later macro-phase cannot be called 
 
 | Phase | Scope | Status | Verified evidence | Remaining acceptance gates |
 |---|---|---|---|---|
-| 0 | Infrastructure discovery and isolation | PARTIAL | Dedicated HEZQEN Neon project and main/staging/production branches exist. Read-only Cloudflare inspection on 2026-11-15 confirmed the tinlance.com zone is active, no hezqen.tinlance.com DNS record exists, no Worker scripts are deployed, and R2 is not enabled (Cloudflare API returned 403 requiring dashboard enablement). Vercel remains approved; a current-main preview deployment is READY but SSO-protected. | Select and accept hosting; dedicated object storage; backup/restore drill; monitoring/alerting; email sender; verify environment-to-branch mapping; no cross-product resource reuse. |
-| 1 | Application foundation | CI GREEN; PRODUCT PARTIAL | Main commit 55f8e7125ccc22ede4ceafd02b609ef8ac7c802e passed HEZQEN CI (lint, format, tests, audit, Next build, route smoke and typecheck). Mainline code commit 5877dac0424fe5d25a4c36fd94140e4406d693ae passed Cloudflare compatibility including Worker build and public/CMS route smoke. PR #32 migration verification passed against ephemeral PostgreSQL only. A Vercel preview from the final main commit reached READY; it remains SSO-protected and has not received external browser QA. | Browser-based QA on real devices; accepted production runtime; error/latency telemetry; deployment and rollback exercise. |
+| 0 | Infrastructure discovery and isolation | PARTIAL | Dedicated HEZQEN Neon project and main/staging/production branches exist. Read-only Cloudflare inspection confirmed the tinlance.com zone is active, no hezqen.tinlance.com DNS record exists, no Worker scripts are deployed, and R2 is not enabled (403 requires dashboard enablement). Vercel remains approved; a PR #35 Preview built successfully with the hardened Payload origin resolver and is READY but SSO-protected. | Select and accept hosting; dedicated object storage; backup/restore drill; monitoring/alerting; email sender; verify environment-to-branch mapping; no cross-product resource reuse. |
+| 1 | Application foundation | CI GREEN; PRODUCT PARTIAL | Main commit 3888d2ccb9d77c1398c39a53fd5f969f472025b1 passed HEZQEN CI and Cloudflare compatibility (including vinext check, Worker build, ephemeral PostgreSQL migration and public/CMS route smoke). PR #35 head also passed all three workflows before merge. A Vercel Preview from PR #35 head c56f59b16ae20f2625346c91de6239fc17b3f8da reached READY under the pinned Node 24 runtime; it remains SSO-protected and has not received external browser QA. | Browser-based QA on real devices; accepted production runtime; error/latency telemetry; deployment and rollback exercise. |
 | 2 | Brand and design system | PARTIAL | Supplied horizontal color/reversed SVGs and favicon SVG are integrated unchanged; brand tokens and usage rules are documented in `docs/BRAND_SYSTEM.md`. | Complete app-icon/social/OG asset integration; locally packaged Inter fonts; reusable component states; responsive and WCAG 2.2 AA verification; visual regression evidence. |
 | 3 | Database and content architecture | MIGRATION VERIFIED; SHARED DATABASES NOT MIGRATED | Initial Payload migration and snapshot are checked in under `src/migrations/`. The migration-verification workflow has applied the migration to ephemeral PostgreSQL and checked migration status. Read-only inspection found zero public application tables on the shared HEZQEN staging and production branches. | Review schema/constraints/indexes against the data model; obtain explicit release approval; back up staging; apply to staging only; verify schema and restore; production migration remains a separate approved release operation. |
 | 4 | CMS and editorial workflow | PARTIAL | Payload CMS 3.93.0, PostgreSQL adapter, admin/API integration, role-scoped collections, draft versions and bootstrap command exist. Exact-origin resolver tests cover canonical origins, Vercel Preview host handling, production allowlist minimization, malformed host rejection and the CI-only local Worker exception. | Persistent server-side workflow commands; transactionally coupled audit writes; direct REST/Local API bypass tests; role matrix tests; staging login/admin acceptance; first admin bootstrap under controlled procedure. |
@@ -36,18 +36,25 @@ The six phases are sequential macro-gates. A later macro-phase cannot be called 
 | 10 | HEZQEN Intelligence | NOT STARTED | No production premium research, billing or entitlement system is evidenced. | Product definition, secure billing integration, server-side entitlements, pricing/legal terms, support and refund operations. |
 | 11 | Integrations | NOT STARTED | No production Tinlyt, Searqon or TAS integration is evidenced. | Scoped credentials, explicit authorization, auditability, rate limits, failure isolation and human approval boundaries. |
 | 12 | Security, privacy, accessibility and performance | PARTIAL | Baseline security headers, dependency audit, access policies, SSRF-aware acquisition, editorial authority tests and OWASP Top 10:2025 / ASVS 5.0 threat-model documentation exist. | CSP strategy; complete ASVS control evidence; authorization and abuse testing; privacy/retention review; WCAG 2.2 AA; Core Web Vitals; independent security review and remediation. |
-| 13 | Production operations | PARTIAL | Vercel project hezqen produced a READY preview from main commit 55f8e7125ccc22ede4ceafd02b609ef8ac7c802e at https://hezqen-5ror02wa7-lloydcoders-projects.vercel.app (SSO-protected). The only verified project domain is hezqen.vercel.app; hezqen.tinlance.com is not attached. Cloudflare's active zone has no HEZQEN DNS record. No production deployment or DNS cutover has been made. | Host acceptance; secrets/environment validation; backup and restore drill; uptime/error/latency monitoring; incident response; rollback; domain/TLS verification; launch checklist. |
+| 13 | Production operations | PARTIAL | Vercel project hezqen produced a READY preview from PR #35 head at https://hezqen-ix8xrxv5s-lloydcoders-projects.vercel.app (SSO-protected). The only verified project domain is hezqen.vercel.app; hezqen.tinlance.com is not attached. Cloudflare's active zone has no HEZQEN DNS record. No production deployment or DNS cutover has been made. | Host acceptance; secrets/environment validation; backup and restore drill; uptime/error/latency monitoring; incident response; rollback; domain/TLS verification; launch checklist. |
 | 14 | Growth and continuous improvement | NOT STARTED | No production acquisition, newsletter growth or revenue measurement loop is evidenced. | Analytics with consent/privacy controls; editorial distribution; newsletter acquisition; attribution; conversion measurement; partnership/sponsorship governance. |
 
 ## CI and deployment evidence
 
-The final documentation-integrated main commit 55f8e7125ccc22ede4ceafd02b609ef8ac7c802e passed [HEZQEN CI](https://github.com/LloydCoder/hezqen/actions/runs/43738060423). This run completed lint, formatting, the full Node test suite, moderate dependency audit, production build, runtime HTTP smoke tests and TypeScript typecheck.
+PR #35 head commit `c56f59b16ae20f2625346c91de6239fc17b3f8da` passed all required checks before merge:
+- [HEZQEN CI](https://github.com/LloydCoder/hezqen/actions/runs/43739429853)
+- [Cloudflare compatibility, Worker build and public/CMS route smoke](https://github.com/LloydCoder/hezqen/actions/runs/43739429950)
+- [Ephemeral PostgreSQL migration verification](https://github.com/LloydCoder/hezqen/actions/runs/43739429891)
 
-The code integration commit 5877dac0424fe5d25a4c36fd94140e4406d693ae passed [HEZQEN Cloudflare Compatibility](https://github.com/LloydCoder/hezqen/actions/runs/43737940403), including pinned vinext compatibility, Cloudflare Worker build, ephemeral PostgreSQL migration application and public/CMS route smoke. PR-head migration verification also passed against ephemeral PostgreSQL only: [migration verification](https://github.com/LloydCoder/hezqen/actions/runs/43737731861).
+PR #35 merged as `3888d2ccb9d77c1398c39a53fd5f969f472025b1`. Post-merge main workflows also passed on that exact commit:
+- [HEZQEN CI](https://github.com/LloydCoder/hezqen/actions/runs/43739705611)
+- [HEZQEN Cloudflare Compatibility](https://github.com/LloydCoder/hezqen/actions/runs/43739705626)
 
-A Vercel preview deployment from the final main commit reached READY: [preview](https://hezqen-5ror02wa7-lloydcoders-projects.vercel.app). Vercel SSO protection is enabled for preview deployments, so external browser QA has not yet been completed. This is not a production deployment and does not attach the canonical custom domain.
+The Vercel Preview from PR #35 head reached READY at [hezqen-ix8xrxv5s-lloydcoders-projects.vercel.app](https://hezqen-ix8xrxv5s-lloydcoders-projects.vercel.app). The project has Preview SSO protection enabled; external unauthenticated browser QA is therefore not complete. This is a preview deployment only, not a production deployment or canonical custom-domain attachment.
 
-vercel.json continues to disable automatic Git-triggered deployments. Vercel remains an approved hosting option; Cloudflare is complementary. The isolated Cloudflare Worker acceptance path is evidence of compatibility, not a decision to replace Vercel.
+The package engine is pinned to Node `24.x`, matching the Vercel project setting and CI runtime. The preview build completed successfully with this pin; the prior Node 26 selection mismatch is removed.
+
+Vercel remains an approved hosting option; `vercel.json` continues to disable automatic Git-triggered deployments while controlled previews are used. Cloudflare remains complementary. The isolated Worker build/smoke workflow is compatibility evidence, not a decision to replace Vercel.
 
 ## Shared database safety
 
@@ -101,3 +108,11 @@ The PR-head validation evidence for commit `76d8fab78179dee80cef4aa657d4830be8b9
 ## Vercel Payload origin hardening
 
 PR #35 adds a pure, regression-tested origin resolver. It uses the exact `VERCEL_URL` hostname only when `VERCEL_ENV=preview`, keeps the canonical `NEXT_PUBLIC_SITE_URL` in Production, rejects insecure/non-local HTTP origins, rejects malformed deployment hostnames and does not trust forwarded host headers. The Cloudflare Worker CI harness may opt into its local HTTP origin only when both `CI=true` and `HEZQEN_LOCAL_RUNTIME_TEST=true` are present; neither flag is configured in Vercel or Production. The existing Vercel project has `HEZQEN_ALLOWED_ORIGINS=https://hezqen.tinlance.com` for Preview and Production, with no wildcard.
+
+## Final PR and issue inventory — 2026-11-15
+
+- PR #35 merged as `3888d2ccb9d77c1398c39a53fd5f969f472025b1` after CI, migration and Worker acceptance passed.
+- PR #37 was closed as a duplicate/superseded implementation; its production-wide Vercel origin expansion was not accepted. PR #34 was also closed as superseded.
+- PR #18 and PR #32 remain merged; stale PRs #20 and #29 were closed after their relevant changes were reconciled into main.
+- The post-merge repository inventory reported zero open pull requests and zero open GitHub issues.
+- No production deployment, DNS change, shared Neon migration, R2 enablement, production administrator bootstrap or paid-plan change was performed.
