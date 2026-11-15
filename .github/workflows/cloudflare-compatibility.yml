@@ -77,7 +77,13 @@ jobs:
         run: pnpm dlx vinext@1.4.5 init --platform=cloudflare --name=hezqen --cdn-cache=none --data-cache=none --image-optimization=none
       - name: Inspect generated Wrangler runtime compatibility
         run: |
-          config=$(find . -maxdepth 2 -type f \\( -name "wrangler.jsonc" -o -name "wrangler.toml" \\) | head -n 1)
+          if [ -f wrangler.jsonc ]; then
+            config=wrangler.jsonc
+          elif [ -f wrangler.toml ]; then
+            config=wrangler.toml
+          else
+            config=""
+          fi
           if [ -z "$config" ]; then
             echo "vinext did not generate a Wrangler configuration"
             exit 1
