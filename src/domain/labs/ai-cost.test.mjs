@@ -9,7 +9,7 @@ const baseline = {
   apiInputPricePerMillion: 2,
   apiOutputPricePerMillion: 8,
   gpuCount: 1,
-  gpuHourlyCost: 1.5,
+  gpuHourlyCost: 0.5,
   gpuHoursPerMonth: 730,
   monthlyInfrastructureOverhead: 100,
 };
