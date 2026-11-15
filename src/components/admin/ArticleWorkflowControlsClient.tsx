@@ -71,7 +71,8 @@ export default function ArticleWorkflowControlsClient({ articleId }: { articleId
         if (!cancelled) setArticle(body);
       })
       .catch((error: unknown) => {
-        if (!cancelled) setMessage(error instanceof Error ? error.message : "Unable to load article.");
+        if (!cancelled)
+          setMessage(error instanceof Error ? error.message : "Unable to load article.");
       });
     return () => {
       cancelled = true;
@@ -151,18 +152,30 @@ export default function ArticleWorkflowControlsClient({ articleId }: { articleId
   return (
     <section
       aria-labelledby="hezqen-workflow-title"
-      style={{ border: "1px solid var(--theme-elevation-200)", borderRadius: 8, padding: 16, marginBottom: 16 }}
+      style={{
+        border: "1px solid var(--theme-elevation-200)",
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 16,
+      }}
     >
-      <h3 id="hezqen-workflow-title" style={{ marginTop: 0 }}>HEZQEN editorial workflow</h3>
+      <h3 id="hezqen-workflow-title" style={{ marginTop: 0 }}>
+        HEZQEN editorial workflow
+      </h3>
       {article ? (
         <p>
-          Current state: <strong>{statusLabels[article.workflowStatus ?? ""] ?? article.workflowStatus ?? "Unknown"}</strong>
+          Current state:{" "}
+          <strong>
+            {statusLabels[article.workflowStatus ?? ""] ?? article.workflowStatus ?? "Unknown"}
+          </strong>
           {" · "}Revision {article.revision ?? "—"}
         </p>
       ) : (
         <p>Loading the saved article state…</p>
       )}
-      <p>Save article edits before running a workflow action. Actions apply to the saved revision.</p>
+      <p>
+        Save article edits before running a workflow action. Actions apply to the saved revision.
+      </p>
       {availableTransitions.length > 0 ? (
         <form onSubmit={transition} style={{ display: "grid", gap: 10, maxWidth: 560 }}>
           <label>
@@ -175,7 +188,9 @@ export default function ArticleWorkflowControlsClient({ articleId }: { articleId
             >
               <option value="">Choose a transition</option>
               {availableTransitions.map((status) => (
-                <option key={status} value={status}>{statusLabels[status] ?? status}</option>
+                <option key={status} value={status}>
+                  {statusLabels[status] ?? status}
+                </option>
               ))}
             </select>
           </label>
@@ -221,16 +236,30 @@ export default function ArticleWorkflowControlsClient({ articleId }: { articleId
         </form>
       ) : null}
       {article?.workflowStatus === "fact_check" ? (
-        <button type="button" disabled={busy} onClick={() => void review("complete_fact_check")} style={{ marginTop: 12 }}>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void review("complete_fact_check")}
+          style={{ marginTop: 12 }}
+        >
           Mark fact-check complete
         </button>
       ) : null}
       {article?.workflowStatus === "editorial_review" ? (
-        <button type="button" disabled={busy} onClick={() => void review("review_disclosures")} style={{ marginTop: 12 }}>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void review("review_disclosures")}
+          style={{ marginTop: 12 }}
+        >
           Confirm disclosure review
         </button>
       ) : null}
-      {message ? <p role="status" aria-live="polite">{message}</p> : null}
+      {message ? (
+        <p role="status" aria-live="polite">
+          {message}
+        </p>
+      ) : null}
     </section>
   );
 }
