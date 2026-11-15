@@ -22,6 +22,8 @@ Choose the section that matches what you need.
 - [Platform acceptance criteria](PLATFORM_ACCEPTANCE_CRITERIA.md): implementation and release gates.
 - [AI cost calculator methodology](AI_COST_CALCULATOR_METHODOLOGY.md): formulas, assumptions and exclusions.
 - [VRAM calculator methodology](LABS_METHODOLOGY.md): memory calculations and limitations.
+- [Fourteen-calculator suite methodology](LABS_CALCULATOR_SUITE.md): formulas, units, assumptions and limitations for the additional fourteen Labs calculators.
+- [HEZQEN Labs index](/labs): public directory of all sixteen calculator tools.
 - [ADR-0001](adr/0001-editorial-cms-and-postgres.md): accepted CMS and PostgreSQL decision.
 
 ## Explanation — understand the system
