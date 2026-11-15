@@ -42,12 +42,9 @@ try {
     },
   });
 
-  await new Promise<void>((resolve) => {
-    process.stdout.write(
-      "Initial HEZQEN administrator created. Remove bootstrap credentials from the environment.\n",
-      resolve,
-    );
-  });
+  process.stdout.write(
+    "Initial HEZQEN administrator created. Remove bootstrap credentials from the environment.\n",
+  );
 } catch (error) {
   exitCode = 1;
   const message = error instanceof Error ? error.message : "HEZQEN administrator bootstrap failed.";
@@ -58,9 +55,7 @@ try {
       await payload.destroy();
     } catch {
       exitCode = 1;
-      await new Promise<void>((resolve) =>
-        process.stderr.write("Payload shutdown failed after bootstrap.\n", resolve),
-      );
+      process.stderr.write("Payload shutdown failed after bootstrap.\n");
     }
   }
 }
