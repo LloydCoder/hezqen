@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { LAB_CALCULATORS } from "../src/domain/labs/calculator-suite";
-import { divisions, site } from "../src/lib/site";
+import { LAB_CALCULATORS } from "../src/domain/labs/calculator-suite.ts";
+import { divisions, site } from "../src/lib/site.ts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = ["", "/about", "/editorial-standards", "/labs", "/infrastructure"].map(
