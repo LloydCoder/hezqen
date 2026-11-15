@@ -1,5 +1,4 @@
-import type { Access, CollectionConfig } from "payload";
-
+import { APIError, type Access, type CollectionConfig } from "payload";
 type Actor = { id: string | number; role?: string } | null;
 
 function actorFromRequest(user: unknown): Actor {
@@ -15,10 +14,24 @@ export const Users: CollectionConfig = {
     maxLoginAttempts: 5,
     lockTime: 600_000,
     useSessions: true,
+    cookies: {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
+    },
   },
   admin: {
     useAsTitle: "email",
     defaultColumns: ["email", "name", "role", "updatedAt"],
+  },
+  hooks: {
+    beforeLogin: [
+      ({ user }) => {
+        if ((user as { active?: boolean }).active === false) {
+          throw new APIError("This account is disabled.", 403);
+        }
+        return user;
+      },
+    ],
   },
   access: {
     admin: ({ req }) =>
@@ -37,6 +50,14 @@ export const Users: CollectionConfig = {
     delete: isAdministrator,
   },
   fields: [
+    {
+      name: "email",
+      type: "email",
+      required: true,
+      access: {
+        update: isAdministrator,
+      },
+    },
     {
       name: "name",
       type: "text",
