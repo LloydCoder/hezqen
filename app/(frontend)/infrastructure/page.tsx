@@ -28,8 +28,8 @@ export default function InfrastructurePage() {
             Infrastructure for <em>local, private and resilient AI.</em>
           </h1>
           <p className="infrastructure-lede">
-            Practical, inspectable engineering kits for teams building local inference,
-            privacy controls, multi-GPU deployments and disconnected retrieval systems.
+            Practical, inspectable engineering kits for teams building local inference, privacy
+            controls, multi-GPU deployments and disconnected retrieval systems.
           </p>
           <div className="infrastructure-disclosure" role="note">
             <strong>Engineering preview — not production certification.</strong>
