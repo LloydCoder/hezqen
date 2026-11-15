@@ -1,4 +1,4 @@
-import type { Access, CollectionConfig, Where } from "payload";
+import { APIError, type Access, type CollectionConfig, type Where } from "payload";
 
 type Actor = { id: string | number; role?: string } | null;
 
@@ -75,6 +75,47 @@ export const Articles: CollectionConfig = {
           };
         }
         return data;
+      },
+    ],
+    beforeChange: [
+      ({ data, originalDoc, operation, req }) => {
+        if (operation !== "update") return data;
+        const context = req.context as Record<string, unknown> | undefined;
+        if (context?.hezqenSkipArticleRevisionIncrement === true) return data;
+
+        const contentFields = ["title", "slug", "excerpt", "body", "division", "topics"];
+        const changed = contentFields.some((field) =>
+          Object.prototype.hasOwnProperty.call(data ?? {}, field),
+        );
+        if (!changed) return data;
+
+        const currentStatus = originalDoc?.workflowStatus;
+        if (currentStatus === "published" || currentStatus === "correction_required") {
+          throw new APIError(
+            "Published or correction-required articles must enter the correction workflow before content edits.",
+            409,
+          );
+        }
+
+        const revision = Number(originalDoc?.revision ?? 1) + 1;
+        if (
+          ["fact_check", "editorial_review", "approved", "scheduled"].includes(
+            String(currentStatus),
+          )
+        ) {
+          return {
+            ...data,
+            workflowStatus: "draft",
+            _status: "draft",
+            revision,
+            approvedBy: null,
+            approvedAt: null,
+            scheduledFor: null,
+            factCheckComplete: false,
+            disclosuresReviewed: false,
+          };
+        }
+        return { ...data, revision };
       },
     ],
   },
