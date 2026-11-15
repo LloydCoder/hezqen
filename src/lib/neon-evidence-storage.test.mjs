@@ -13,7 +13,7 @@ test("computes a stable SHA-256 digest for the exact evidence bytes", () => {
   const bytes = new TextEncoder().encode("HEZQEN evidence integrity");
   assert.equal(
     sha256Hex(bytes),
-    "3e32b99eabf7b2cfb0a0a2e4e1c4a4d73a4f5b57c4ed5e4f2d0f2d2f5d45e35f",
+    "cd4a9348a9698cf4763eca3e527a88866c8d11b859e9283942d5a11f02e15eb4",
   );
 });
 
