@@ -82,13 +82,14 @@ test("claims cannot be created pre-verified or marked non-material by a caller",
       }),
     /verification metadata is server managed/,
   );
+  const data = { verificationStatus: "unverified", material: true };
   assert.equal(
     claimHook({
-      data: { verificationStatus: "unverified", material: true },
+      data,
       operation: "create",
       req: { context: {} },
     }),
-    undefined,
+    data,
   );
 });
 
