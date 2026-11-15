@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 type ArticleDocument = {
   workflowStatus?: string;
@@ -96,7 +96,7 @@ export default function ArticleWorkflowControlsClient({ articleId }: { articleId
         throw new Error(`${body.error || body.code || "Workflow action failed."}${details}`);
       }
       setMessage("Workflow action completed.");
-      await loadArticle();
+      try {\n        await loadArticle();\n      } catch {\n        setMessage("Workflow action completed. Refresh the page to view the latest state.");\n      }
       setTargetStatus("");
       setScheduledFor("");
       setCorrectionReason("");
@@ -108,7 +108,7 @@ export default function ArticleWorkflowControlsClient({ articleId }: { articleId
     }
   }
 
-  async function transition(event: React.FormEvent<HTMLFormElement>) {
+  async function transition(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!article || !targetStatus) return;
     const payload: Record<string, unknown> = {
