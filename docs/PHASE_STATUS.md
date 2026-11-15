@@ -4,30 +4,30 @@ This file records evidence-backed progress. A phase is not complete merely becau
 
 | Phase | Scope | Status | Evidence / remaining gate |
 |---|---|---|---|
-| 0 | Infrastructure discovery and isolation | PARTIAL | Inventory recorded in INFRASTRUCTURE_DISCOVERY.md; dedicated DB, object storage, domain and monitoring remain unprovisioned |
-| 1 | Application foundation | PARTIAL | Next.js app shell, strict TypeScript, design tokens, base routes, publishing-policy unit tests and CI workflow implemented; remote GitHub CI and runtime deployment still need verification |
-| 2 | Brand/design system | PARTIAL | Supplied logo assets and initial CSS tokens integrated; component coverage, font packaging and accessibility audit remain |
-| 3 | Database/content architecture | NOT STARTED | Dedicated database and versioned schema required |
-| 4 | CMS/editorial workflow | NOT STARTED | Server-enforced roles, workflow, approval, revision and correction persistence required |
-| 5 | Evidence/research | NOT STARTED | Source, claim, evidence and provenance persistence required |
-| 6 | Public website | PARTIAL | Homepage, division pages, About and editorial standards routes exist; article, author, investigation, research and policy surfaces remain |
-| 7 | Search/SEO | PARTIAL | Metadata, canonical routes, robots and sitemap exist; search, structured data validation and indexing review remain |
-| 8 | HEZQEN Labs | NOT STARTED | Calculators and reproducible methodology not implemented |
-| 9 | Newsletter/accounts | NOT STARTED | Consent, preferences, identity and delivery not implemented |
-| 10 | HEZQEN Intelligence | NOT STARTED | Premium research, billing and server-side entitlements not implemented |
-| 11 | Integrations | NOT STARTED | Tinlyt, Searqon and TAS adapters not implemented |
-| 12 | Security/accessibility/performance | PARTIAL | Baseline headers and dependency audit in CI; threat model, ASVS mapping, CSP, authorization tests, WCAG and performance verification remain |
-| 13 | Production operations | NOT STARTED | Production deployment, monitoring, backup/restore, incident response and rollback not implemented |
-| 14 | Growth/continuous improvement | NOT STARTED | Analytics, distribution and editorial growth loops not implemented |
+| 0 | Infrastructure discovery and isolation | PARTIAL | Dedicated Vercel project and Neon PostgreSQL 18 project with main/staging/production branches exist. Preview secrets point to staging. Object storage, production DB environment wiring, backups/restore, branded domain, email and monitoring remain. |
+| 1 | Application foundation | PARTIAL | Next.js 16 / React 19 / strict TypeScript foundation is on main; GitHub Actions passed for main commit `58f6ceed82c44a97ef98c4443b4cbabc931569b7`; Vercel production deployment reached READY. Route-level browser smoke tests, complete application runtime validation and production operations remain. |
+| 2 | Brand/design system | PARTIAL | Supplied logo SVGs integrated unchanged and initial CSS tokens exist. Full reusable component system, font packaging, responsive visual QA and WCAG 2.2 AA audit remain. |
+| 3 | Database/content architecture | PARTIAL | Dedicated Neon PostgreSQL 18 project and isolated branches exist. No versioned HEZQEN schema, migration history or validated backup/restore process is yet evidenced. |
+| 4 | CMS/editorial workflow | NOT STARTED | No production CMS, server-enforced roles, persistent workflow, revisions, corrections or direct-API authorization tests. |
+| 5 | Evidence/research | NOT STARTED | Source, claim, evidence, provenance and research-methodology persistence not implemented. |
+| 6 | Public website | PARTIAL | Homepage, four division routes, About and Editorial Standards exist. Article, author, investigation, research, policy and CMS-backed content surfaces remain. |
+| 7 | Search/SEO | PARTIAL | Metadata, canonical URLs, robots and sitemap exist. Search, structured-data validation, article indexing and search QA remain. |
+| 8 | HEZQEN Labs | NOT STARTED | Calculators, reproducible formulas, assumptions and methodology tests not implemented. |
+| 9 | Newsletter/accounts | NOT STARTED | Reader identity, consent, preferences and delivery not implemented. |
+| 10 | HEZQEN Intelligence | NOT STARTED | Premium research, billing and server-side entitlements not implemented. |
+| 11 | Integrations | NOT STARTED | Tinlyt, Searqon and TAS adapters not implemented. |
+| 12 | Security/accessibility/performance | PARTIAL | Baseline response headers, dependency audit and initial publishing-policy tests exist. Threat model, ASVS mapping, CSP, authorization, upload controls, WCAG and performance verification remain. |
+| 13 | Production operations | PARTIAL | Isolated Vercel production project and READY deployment exist. Domain validation, monitoring, alerting, backup/restore, incident response and tested rollback remain. |
+| 14 | Growth/continuous improvement | NOT STARTED | Analytics, newsletter growth loops, editorial distribution and revenue measurement not implemented. |
 
-## Current verification commands
+## Current CI verification commands
 
-- pnpm install --frozen-lockfile
-- pnpm lint
-- pnpm format:check
-- pnpm typecheck
-- pnpm test
-- pnpm audit --audit-level moderate
-- pnpm build
+- `pnpm install --frozen-lockfile`
+- `pnpm run lint`
+- `pnpm run format:check`
+- `pnpm test`
+- `pnpm audit --audit-level moderate`
+- `pnpm run build`
+- `pnpm run typecheck`
 
-Local sandbox results do not substitute for a successful GitHub Actions run or production deployment verification.
+The GitHub Actions workflow is green for the recorded main commit. A green CI workflow is not equivalent to completion of the product roadmap or production readiness.
