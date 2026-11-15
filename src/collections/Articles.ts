@@ -1,17 +1,13 @@
 import { APIError, type Access, type CollectionConfig, type Where } from "payload";
 
-type Actor = { id: string | number; role?: string } | null;
-
-function actorFromRequest(user: unknown): Actor {
-  return user && typeof user === "object" && "id" in user ? (user as Actor) : null;
-}
+import { getActiveUserActor, hasActiveRole } from "../lib/access.ts";
 
 const publishedArticleFilter: Where = {
   and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
 };
 
 const canReadArticles: Access = ({ req }) => {
-  const actor = actorFromRequest(req.user);
+  const actor = getActiveUserActor(req.user);
   if (!actor) return publishedArticleFilter;
   if (["administrator", "editor"].includes(actor.role ?? "")) return true;
   return {
@@ -25,7 +21,7 @@ const canReadArticles: Access = ({ req }) => {
 };
 
 const canCreateArticles: Access = ({ req }) =>
-  ["administrator", "editor", "author"].includes(actorFromRequest(req.user)?.role ?? "");
+  hasActiveRole(req.user, ["administrator", "editor", "author"]);
 
 const canUpdateArticles: Access = ({ req }) => {
   const actor = actorFromRequest(req.user);
@@ -176,7 +172,7 @@ export const Articles: CollectionConfig = {
       access: {
         create: () => false,
         update: ({ req }) =>
-          ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
+          hasActiveRole(req.user, ["administrator", "editor"]),
       },
     },
     {
