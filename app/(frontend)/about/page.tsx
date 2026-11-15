@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "About HEZQEN, a global technology and business intelligence publication by Tinlance.",
+  alternates: { canonical: "/about" },
 };
 export default function AboutPage() {
   return (
