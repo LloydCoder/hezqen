@@ -56,8 +56,9 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: https://hezqen.tinlance.com
           HEZQEN_ALLOWED_ORIGINS: https://hezqen.tinlance.com
+      - name: Format generated migrations
+        run: pnpm dlx @biomejs/biome@2.6.7 format --write src/migrations
       - name: Commit generated migration
-        if: steps.migration-state.outputs.exists == 'false'
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
@@ -70,8 +71,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/migrations
           if git diff --cached --quiet; then
-            echo "No migration changes were generated."
-            exit 1
+            echo "No migration changes to commit."
+          else
+            git commit -m "chore(db): generate initial Payload migration"
+            git push origin "HEAD:$BRANCH"
           fi
-          git commit -m "chore(db): generate initial Payload migration"
-          git push origin "HEAD:$BRANCH"
