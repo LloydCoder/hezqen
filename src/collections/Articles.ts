@@ -18,6 +18,7 @@ const canReadArticles: Access = ({ req }) => {
       { workflowStatus: { equals: "published" } },
       { author: { equals: actor.id } },
       { assignedEditor: { equals: actor.id } },
+      { assignedFactChecker: { equals: actor.id } },
     ],
   };
 };
@@ -126,6 +127,15 @@ export const Articles: CollectionConfig = {
     },
     {
       name: "assignedEditor",
+      type: "relationship",
+      relationTo: "users",
+      access: {
+        create: () => false,
+        update: isEditor,
+      },
+    },
+    {
+      name: "assignedFactChecker",
       type: "relationship",
       relationTo: "users",
       access: {
