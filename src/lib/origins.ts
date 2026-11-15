@@ -100,7 +100,8 @@ export function resolvePayloadServerUrl(input: PayloadServerUrlInput): string | 
     input.deploymentEnvironment === "preview" && input.deploymentHostname
       ? parseDeploymentOrigin(input.deploymentHostname)
       : undefined;
-  const candidate =\n    explicitPayloadOrigin ?? previewOrigin ?? canonicalOrigin ?? input.allowedOrigins[0];
+  const candidate =
+    explicitPayloadOrigin ?? previewOrigin ?? canonicalOrigin ?? input.allowedOrigins[0];
   if (!candidate) return undefined;
 
   const origin = parseOrigin(
