@@ -845,7 +845,7 @@ a:focus-visible {
   }
   .hero-aside {
     min-height: 250px;
-    padding: 24px;
+    padding: 24px 24px 48px;
   }
   .aside-statement {
     margin: 34px 0 24px;
@@ -969,7 +969,7 @@ a:focus-visible {
   }
   .hero-aside {
     min-height: 0;
-    padding: 20px;
+    padding: 20px 20px 44px;
   }
   .aside-index {
     right: 20px;
