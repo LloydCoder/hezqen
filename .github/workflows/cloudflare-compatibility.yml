@@ -93,14 +93,14 @@ jobs:
           source = path.read_text()
           if "nodejs_compat_populate_process_env" not in source:
               flags = 'compatibilityFlags: ["nodejs_compat", "nodejs_compat_populate_process_env"],'
-              date_match = re.search(r'(\\s*compatibilityDate:\\s*["\\'][^"\\']+["\\'],)', source)
+              date_match = re.search(r'(\s*compatibilityDate:\s*["\'][^"\']+["\'],)', source)
               if date_match:
-                  source = source[:date_match.end()] + "\\n    " + flags + source[date_match.end():]
+                  source = source[:date_match.end()] + "\n    " + flags + source[date_match.end():]
               else:
-                  worker_match = re.search(r'(worker\\s*:\\s*\\{)', source)
+                  worker_match = re.search(r'(worker\s*:\s*\\{)', source)
                   if not worker_match:
                       raise SystemExit("Generated cloudflare.config.ts has no worker config block")
-                  source = source[:worker_match.end()] + '\\n    compatibilityDate: "2026-11-15",\\n    ' + flags + source[worker_match.end():]
+                  source = source[:worker_match.end()] + '\n    compatibilityDate: "2026-11-15",\n    ' + flags + source[worker_match.end():]
               path.write_text(source)
           print(path.read_text())
           PY
