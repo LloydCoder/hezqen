@@ -21,6 +21,7 @@ Choose the section that matches what you need.
 - [Data model](DATA_MODEL.md): entities, relationships and integrity requirements.
 - [Platform acceptance criteria](PLATFORM_ACCEPTANCE_CRITERIA.md): implementation and release gates.
 - [AI cost calculator methodology](AI_COST_CALCULATOR_METHODOLOGY.md): formulas, assumptions and exclusions.
+- [Complete Labs calculator portfolio](LABS_CALCULATOR_PORTFOLIO.md): formulas, units, assumptions, limitations and verification for the fourteen added calculators.
 - [VRAM calculator methodology](LABS_METHODOLOGY.md): memory calculations and limitations.
 - [ADR-0001](adr/0001-editorial-cms-and-postgres.md): accepted CMS and PostgreSQL decision.
 
