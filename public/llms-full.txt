@@ -18,7 +18,7 @@ The application uses Next.js App Router 16, React 19, strict TypeScript, Node.js
 
 ## Current implementation
 
-The public application shell includes the homepage, About, Editorial Standards, four division routes, and two Labs calculators: VRAM sizing and API-versus-self-hosted AI cost. The calculators have deterministic domain logic and tests.
+The public application shell includes the homepage, About, Editorial Standards, four division routes, and sixteen Labs calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage, AI data-leakage scenario risk, hardware ROI, fine-tuning versus RAG, cloud migration, Kubernetes cost, database capacity, API pricing comparison, inference throughput, cybersecurity incident cost, SaaS margin, data-centre energy, storage growth and AI-agent operating cost. The original calculators and additional suite have deterministic domain logic and regression tests. See docs/LABS_CALCULATOR_SUITE.md for formulas and limitations.
 
 Payload CMS is integrated with the Next.js App Router, admin/API route mounting and restricted collections for users, articles, topics, sources, evidence, claims and audit events. Initial database migrations, staging validation and production CMS acceptance remain outstanding.
 
