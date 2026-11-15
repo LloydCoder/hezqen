@@ -74,12 +74,8 @@
           "name": "users_sessions_parent_id_fk",
           "tableFrom": "users_sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -525,12 +521,8 @@
           "name": "articles_author_id_users_id_fk",
           "tableFrom": "articles",
           "tableTo": "users",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -538,12 +530,8 @@
           "name": "articles_assigned_editor_id_users_id_fk",
           "tableFrom": "articles",
           "tableTo": "users",
-          "columnsFrom": [
-            "assigned_editor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_editor_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -551,12 +539,8 @@
           "name": "articles_assigned_fact_checker_id_users_id_fk",
           "tableFrom": "articles",
           "tableTo": "users",
-          "columnsFrom": [
-            "assigned_fact_checker_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_fact_checker_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -564,12 +548,8 @@
           "name": "articles_approved_by_id_users_id_fk",
           "tableFrom": "articles",
           "tableTo": "users",
-          "columnsFrom": [
-            "approved_by_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["approved_by_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -682,12 +662,8 @@
           "name": "articles_rels_parent_fk",
           "tableFrom": "articles_rels",
           "tableTo": "articles",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -695,12 +671,8 @@
           "name": "articles_rels_topics_fk",
           "tableFrom": "articles_rels",
           "tableTo": "topics",
-          "columnsFrom": [
-            "topics_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["topics_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1081,12 +1053,8 @@
           "name": "_articles_v_parent_id_articles_id_fk",
           "tableFrom": "_articles_v",
           "tableTo": "articles",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1094,12 +1062,8 @@
           "name": "_articles_v_version_author_id_users_id_fk",
           "tableFrom": "_articles_v",
           "tableTo": "users",
-          "columnsFrom": [
-            "version_author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_author_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1107,12 +1071,8 @@
           "name": "_articles_v_version_assigned_editor_id_users_id_fk",
           "tableFrom": "_articles_v",
           "tableTo": "users",
-          "columnsFrom": [
-            "version_assigned_editor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_assigned_editor_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1120,12 +1080,8 @@
           "name": "_articles_v_version_assigned_fact_checker_id_users_id_fk",
           "tableFrom": "_articles_v",
           "tableTo": "users",
-          "columnsFrom": [
-            "version_assigned_fact_checker_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_assigned_fact_checker_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1133,12 +1089,8 @@
           "name": "_articles_v_version_approved_by_id_users_id_fk",
           "tableFrom": "_articles_v",
           "tableTo": "users",
-          "columnsFrom": [
-            "version_approved_by_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_approved_by_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1251,12 +1203,8 @@
           "name": "_articles_v_rels_parent_fk",
           "tableFrom": "_articles_v_rels",
           "tableTo": "_articles_v",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1264,12 +1212,8 @@
           "name": "_articles_v_rels_topics_fk",
           "tableFrom": "_articles_v_rels",
           "tableTo": "topics",
-          "columnsFrom": [
-            "topics_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["topics_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1659,12 +1603,8 @@
           "name": "evidence_source_id_sources_id_fk",
           "tableFrom": "evidence",
           "tableTo": "sources",
-          "columnsFrom": [
-            "source_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["source_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1806,12 +1746,8 @@
           "name": "claims_article_id_articles_id_fk",
           "tableFrom": "claims",
           "tableTo": "articles",
-          "columnsFrom": [
-            "article_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["article_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1819,12 +1755,8 @@
           "name": "claims_reviewed_by_id_users_id_fk",
           "tableFrom": "claims",
           "tableTo": "users",
-          "columnsFrom": [
-            "reviewed_by_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reviewed_by_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1958,12 +1890,8 @@
           "name": "claims_rels_parent_fk",
           "tableFrom": "claims_rels",
           "tableTo": "claims",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1971,12 +1899,8 @@
           "name": "claims_rels_sources_fk",
           "tableFrom": "claims_rels",
           "tableTo": "sources",
-          "columnsFrom": [
-            "sources_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["sources_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1984,12 +1908,8 @@
           "name": "claims_rels_evidence_fk",
           "tableFrom": "claims_rels",
           "tableTo": "evidence",
-          "columnsFrom": [
-            "evidence_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["evidence_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2515,12 +2435,8 @@
           "name": "payload_locked_documents_rels_parent_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "payload_locked_documents",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2528,12 +2444,8 @@
           "name": "payload_locked_documents_rels_users_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "users",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2541,12 +2453,8 @@
           "name": "payload_locked_documents_rels_articles_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "articles",
-          "columnsFrom": [
-            "articles_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["articles_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2554,12 +2462,8 @@
           "name": "payload_locked_documents_rels_topics_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "topics",
-          "columnsFrom": [
-            "topics_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["topics_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2567,12 +2471,8 @@
           "name": "payload_locked_documents_rels_sources_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "sources",
-          "columnsFrom": [
-            "sources_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["sources_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2580,12 +2480,8 @@
           "name": "payload_locked_documents_rels_evidence_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "evidence",
-          "columnsFrom": [
-            "evidence_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["evidence_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2593,12 +2489,8 @@
           "name": "payload_locked_documents_rels_claims_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "claims",
-          "columnsFrom": [
-            "claims_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["claims_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2606,12 +2498,8 @@
           "name": "payload_locked_documents_rels_audit_events_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "audit_events",
-          "columnsFrom": [
-            "audit_events_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["audit_events_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2815,12 +2703,8 @@
           "name": "payload_preferences_rels_parent_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "payload_preferences",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2828,12 +2712,8 @@
           "name": "payload_preferences_rels_users_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "users",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2925,24 +2805,12 @@
     "public.enum_users_role": {
       "name": "enum_users_role",
       "schema": "public",
-      "values": [
-        "reader",
-        "author",
-        "researcher",
-        "fact_checker",
-        "editor",
-        "administrator"
-      ]
+      "values": ["reader", "author", "researcher", "fact_checker", "editor", "administrator"]
     },
     "public.enum_articles_division": {
       "name": "enum_articles_division",
       "schema": "public",
-      "values": [
-        "ai-technology",
-        "cybersecurity",
-        "cloud-engineering",
-        "business-startups"
-      ]
+      "values": ["ai-technology", "cybersecurity", "cloud-engineering", "business-startups"]
     },
     "public.enum_articles_workflow_status": {
       "name": "enum_articles_workflow_status",
@@ -2963,20 +2831,12 @@
     "public.enum_articles_status": {
       "name": "enum_articles_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.enum__articles_v_version_division": {
       "name": "enum__articles_v_version_division",
       "schema": "public",
-      "values": [
-        "ai-technology",
-        "cybersecurity",
-        "cloud-engineering",
-        "business-startups"
-      ]
+      "values": ["ai-technology", "cybersecurity", "cloud-engineering", "business-startups"]
     },
     "public.enum__articles_v_version_workflow_status": {
       "name": "enum__articles_v_version_workflow_status",
@@ -2997,51 +2857,27 @@
     "public.enum__articles_v_version_status": {
       "name": "enum__articles_v_version_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.enum_sources_source_type": {
       "name": "enum_sources_source_type",
       "schema": "public",
-      "values": [
-        "primary",
-        "secondary",
-        "dataset",
-        "official_documentation"
-      ]
+      "values": ["primary", "secondary", "dataset", "official_documentation"]
     },
     "public.enum_evidence_verification_status": {
       "name": "enum_evidence_verification_status",
       "schema": "public",
-      "values": [
-        "captured",
-        "preserved",
-        "verified",
-        "rejected"
-      ]
+      "values": ["captured", "preserved", "verified", "rejected"]
     },
     "public.enum_claims_verification_status": {
       "name": "enum_claims_verification_status",
       "schema": "public",
-      "values": [
-        "verified",
-        "corroborated",
-        "attributed",
-        "disputed",
-        "unverified",
-        "corrected"
-      ]
+      "values": ["verified", "corroborated", "attributed", "disputed", "unverified", "corrected"]
     },
     "public.enum_audit_events_outcome": {
       "name": "enum_audit_events_outcome",
       "schema": "public",
-      "values": [
-        "success",
-        "rejected",
-        "failure"
-      ]
+      "values": ["success", "rejected", "failure"]
     }
   },
   "schemas": {},
