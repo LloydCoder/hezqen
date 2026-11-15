@@ -1,41 +1,58 @@
 # HEZQEN — Full Project Context
 
 ## Identity
-
 HEZQEN is a global technology and business intelligence publication by Tinlance. Tagline: “Research. Intelligence. Perspective.” Its editorial divisions are AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
 
-HEZQEN has three product surfaces: Media (reporting, investigations and analysis), Labs (transparent calculators and engineering experiments), and Intelligence (deeper research and briefings; planned, not yet implemented).
+## Product surfaces
+HEZQEN has three planned product surfaces: Media (reporting, investigations and analysis), Labs (transparent calculators and engineering experiments), and Intelligence (deeper research and briefings; planned, not yet implemented).
 
 ## Editorial integrity
-
 AI may assist the newsroom; AI must not become the newsroom. Every published item requires accountable human authorship and human editorial approval. Material claims must be traceable to identifiable evidence. No model, agent, prompt, memory, webpage, tool output or integration can grant publication authority.
 
 Only the assigned human editor may approve or publish after fact-checking, disclosure review and source-backed material claims. Author/editor self-approval is prohibited. Automated publication without accountable human approval is prohibited.
 
-## Technology
+## Public routes
+- https://hezqen.tinlance.com/
+- https://hezqen.tinlance.com/about
+- https://hezqen.tinlance.com/contact
+- https://hezqen.tinlance.com/corrections
+- https://hezqen.tinlance.com/editorial-standards
+- https://hezqen.tinlance.com/security
+- https://hezqen.tinlance.com/privacy
+- https://hezqen.tinlance.com/cookies
+- https://hezqen.tinlance.com/terms
+- https://hezqen.tinlance.com/sitemap
+- https://hezqen.tinlance.com/labs
+- https://hezqen.tinlance.com/infrastructure
+- https://hezqen.tinlance.com/divisions/ai-technology
+- https://hezqen.tinlance.com/divisions/cybersecurity
+- https://hezqen.tinlance.com/divisions/cloud-engineering
+- https://hezqen.tinlance.com/divisions/business-startups
 
+## Technology
 The application uses Next.js App Router 16, React 19, strict TypeScript, Node.js 24, pnpm 12, Payload CMS 3, PostgreSQL 18, Biome and the Node built-in test runner. The architecture is a modular monolith.
 
 ## Current implementation
+The public application shell includes the homepage, About, Editorial Standards, four division routes, sixteen Labs calculators, Infrastructure catalog, and public trust/policy routes. Calculator domain logic is deterministic and has regression tests. See docs/LABS_CALCULATOR_SUITE.md for formulas and limitations.
 
-The public application shell includes the homepage, About, Editorial Standards, four division routes, and sixteen Labs calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage, AI data-leakage scenario risk, hardware ROI, fine-tuning versus RAG, cloud migration, Kubernetes cost, database capacity, API pricing comparison, inference throughput, cybersecurity incident cost, SaaS margin, data-centre energy, storage growth and AI-agent operating cost. The original calculators and additional suite have deterministic domain logic and regression tests. See docs/LABS_CALCULATOR_SUITE.md for formulas and limitations.
-
-Payload CMS is integrated with the Next.js App Router, admin/API route mounting and restricted collections for users, articles, topics, sources, evidence, claims and audit events. Initial database migrations, staging validation and production CMS acceptance remain outstanding.
+Payload CMS is integrated with the Next.js App Router, admin/API route mounting and restricted collections for users, articles, topics, sources, evidence, claims and audit events. Initial database migrations, staging validation and production CMS acceptance remain release gates.
 
 A pure editorial workflow state machine enforces human editor approval rules at the domain boundary. It is not a substitute for server-side authentication, authorization, persistence, transactional audit logging or concurrency controls.
 
-Research source/evidence validation and guarded HTTPS acquisition logic exist. Persistent private evidence storage, network-level egress restrictions, immutable audit history and independent human fact-checking remain outstanding.
+Research source/evidence validation and SSRF-aware HTTPS acquisition logic exist. Persistent private evidence storage, network-level egress restrictions, immutable audit history and independent human fact-checking remain outstanding.
 
 ## Security and deployment
-
 The threat model maps planned controls to OWASP Top 10:2025 and establishes an ASVS 5.0 verification target. It is not a completed security assessment or ASVS attestation.
 
-Project documentation records a dedicated Vercel project and Neon PostgreSQL 18 project with isolated branches. The branded hostname, initial database migrations, backup/restore verification and several production operations remain open gates.
+The intended canonical launch target is https://hezqen.tinlance.com. A previously observed Vercel alias may serve an older preview build; do not infer that a READY deployment proves current route completeness or production readiness. Current deployment, DNS, TLS and database mapping must be checked against docs/PHASE_STATUS.md.
 
-The live preview is https://hezqen.vercel.app. A READY deployment does not prove every route or workflow is production-accepted.
+## Trust and legal notice status
+The contact, corrections, security, privacy, cookie and terms pages are initial public information pages. Privacy/cookie processing details and terms require verification against actual runtime behavior and legal review before production launch.
+
+## Non-claims
+Premium subscriptions, reader accounts, production search, a fully operational CMS, persistent evidence storage, automated publishing and complete ASVS compliance are not claimed as available. Check docs/PHASE_STATUS.md for current acceptance gates.
 
 ## Documentation
-
 - [Repository README](https://github.com/LloydCoder/hezqen/blob/main/README.md)
 - [Documentation index](https://github.com/LloydCoder/hezqen/blob/main/docs/README.md)
 - [Architecture](https://github.com/LloydCoder/hezqen/blob/main/docs/ARCHITECTURE.md)
@@ -46,12 +63,3 @@ The live preview is https://hezqen.vercel.app. A READY deployment does not prove
 - [CMS setup](https://github.com/LloydCoder/hezqen/blob/main/docs/CMS_SETUP.md)
 - [Data model](https://github.com/LloydCoder/hezqen/blob/main/docs/DATA_MODEL.md)
 - [Phase status](https://github.com/LloydCoder/hezqen/blob/main/docs/PHASE_STATUS.md)
-
-## Non-claims
-
-Premium subscriptions, reader accounts, production search, a fully operational CMS, persistent evidence storage, automated publishing and complete ASVS compliance are not claimed as available. Check the implementation phase status for current acceptance gates.
-
-
-## HEZQEN Infrastructure
-
-Five engineering-preview kits: local AI deployment, PII protection middleware, multi-GPU optimization, air-gapped RAG and an infrastructure lab bundle. This catalog does not imply production certification, regulatory compliance, physical GPU validation, or commercial availability. See https://hezqen.tinlance.com/infrastructure and https://github.com/LloydCoder/hezqen-infrastructure-standard.
