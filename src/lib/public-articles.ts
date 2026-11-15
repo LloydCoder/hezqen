@@ -50,8 +50,7 @@ export function toPublicCorrectionHistory(
     const notice = getPublicCorrectionNotice({
       correctionStatus: version.correctionStatus,
       correctionPublicNote: version.correctionPublicNote,
-      correctionResolvedAt:
-        version.correctionResolvedAt ?? record.updatedAt ?? record.createdAt,
+      correctionResolvedAt: version.correctionResolvedAt ?? record.updatedAt ?? record.createdAt,
     });
     return notice ? [notice] : [];
   });
