@@ -48,7 +48,8 @@ function actorForVerification(req: PayloadRequest): { id: number; role: string }
     !["editor", "fact_checker"].includes(role) ||
     !Number.isSafeInteger(id) ||
     id <= 0
-  ) return null;
+  )
+    return null;
   return { id, role };
 }
 
