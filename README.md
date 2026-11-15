@@ -63,3 +63,5 @@ The supplied HEZQEN logo kit and usage guidelines are the source of truth for lo
 Apache License 2.0. See [LICENSE](LICENSE).
 
 - [AI Cost Calculator Methodology](docs/AI_COST_CALCULATOR_METHODOLOGY.md)
+
+- [Security Threat Model](docs/THREAT_MODEL.md)
