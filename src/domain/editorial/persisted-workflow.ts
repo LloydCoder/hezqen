@@ -163,7 +163,7 @@ export async function executeEditorialWorkflowCommand(
       changes.correctionResolvedBy = actor.id;
     }
 
-    if (!(await store.compareAndSwapArticle(article.id, command.expectedRevision, article.workflowStatus, changes, transactionId))) {
+    if (!(await store.compareAndSwapArticle(article.id, command.expectedRevision, article.workflowStatus, article.authorId, article.editorId, article.factCheckerId, changes, transactionId))) {
       return await rollbackResult(store, transactionId, 409, "REVISION_CONFLICT");
     }
 
@@ -245,7 +245,7 @@ export async function executeEditorialReviewAction(
       input.action === "complete_fact_check"
         ? { factCheckComplete: true, revision: article.revision + 1 }
         : { disclosuresReviewed: true, revision: article.revision + 1 };
-    if (!(await store.compareAndSwapArticle(article.id, input.expectedRevision, article.workflowStatus, changes, transactionId))) {
+    if (!(await store.compareAndSwapArticle(article.id, input.expectedRevision, article.workflowStatus, article.authorId, article.editorId, article.factCheckerId, changes, transactionId))) {
       return await rollbackResult(store, transactionId, 409, "REVISION_CONFLICT");
     }
 
