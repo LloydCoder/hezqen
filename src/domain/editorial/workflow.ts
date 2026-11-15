@@ -105,6 +105,38 @@ export function transitionPublication(
     return { ok: true, record: { ...record, status: targetStatus } };
   }
 
+  if (record.status === "fact_check" && targetStatus === "draft") {
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
+    return {
+      ok: true,
+      record: {
+        ...record,
+        status: "draft",
+        factCheckComplete: false,
+        disclosuresReviewed: false,
+      },
+    };
+  }
+
+  if (
+    (record.status === "approved" || record.status === "scheduled") &&
+    targetStatus === "draft"
+  ) {
+    if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
+    return {
+      ok: true,
+      record: {
+        ...record,
+        status: "draft",
+        approvedById: null,
+        approvedAt: null,
+        scheduledFor: null,
+        factCheckComplete: false,
+        disclosuresReviewed: false,
+      },
+    };
+  }
+
   if (record.status === "fact_check" && targetStatus === "editorial_review") {
     if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
     if (!record.factCheckComplete) return resultWithBlockers("FACT_CHECK_INCOMPLETE");
@@ -113,7 +145,10 @@ export function transitionPublication(
 
   if (record.status === "editorial_review" && targetStatus === "draft") {
     if (!isHumanAssignedEditor(record, actor)) return resultWithBlockers("ACTOR_NOT_AUTHORIZED");
-    return { ok: true, record: { ...record, status: "draft" } };
+    return {
+      ok: true,
+      record: { ...record, status: "draft", disclosuresReviewed: false },
+    };
   }
 
   if (record.status === "editorial_review" && targetStatus === "approved") {
