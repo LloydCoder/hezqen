@@ -49,7 +49,9 @@ test("sitemap includes only supplied published article projections with content 
     updatedAt: "2026-11-16T08:00:00.000Z",
     correctionNotice: null,
   };
-  const entry = createSitemap([article]).find((item) => item.url.endsWith("/articles/verified-report"));
+  const entry = createSitemap([article]).find((item) =>
+    item.url.endsWith("/articles/verified-report"),
+  );
   assert.ok(entry);
   assert.equal(entry?.lastModified?.toISOString(), "2026-11-16T08:00:00.000Z");
 });
