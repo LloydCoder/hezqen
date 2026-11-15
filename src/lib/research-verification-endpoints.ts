@@ -308,6 +308,33 @@ export const claimVerifyEndpoint: Endpoint = {
         { status: 409 },
       );
     }
+    const articleId = relationshipId(claim.article);
+    if (articleId) {
+      let article: RecordValue;
+      try {
+        article = asRecord(
+          await req.payload.findByID({
+            collection: "articles",
+            id: articleId,
+            depth: 1,
+            overrideAccess: true,
+            req,
+          }),
+        );
+      } catch {
+        return Response.json({ error: "The linked article no longer exists." }, { status: 409 });
+      }
+      const assignedReviewer =
+        actor.role === "editor"
+          ? relationshipId(article.assignedEditor)
+          : relationshipId(article.assignedFactChecker);
+      if (assignedReviewer !== actor.id) {
+        return Response.json(
+          { error: "Only the assigned editor or fact-checker may verify this article claim." },
+          { status: 403 },
+        );
+      }
+    }
     if (typeof claim.updatedAt !== "string" || claim.updatedAt !== expectedUpdatedAt) {
       return Response.json({ error: "Claim changed before verification." }, { status: 409 });
     }
