@@ -4,9 +4,16 @@ export interface PublishingActor {
   role: EditorialRole;
   isHuman: boolean;
 }
+export interface MaterialEvidence {
+  id: string;
+  sourceId: string;
+  verificationStatus: string;
+}
 export interface MaterialClaim {
   id: string;
   sourceIds: string[];
+  verificationStatus: string;
+  evidence: MaterialEvidence[];
 }
 export interface PublicationRecord {
   status:
@@ -35,7 +42,31 @@ export type PublicationBlocker =
   | "APPROVAL_ACTOR_MISMATCH"
   | "FACT_CHECK_INCOMPLETE"
   | "DISCLOSURES_NOT_REVIEWED"
-  | "CLAIM_WITHOUT_SOURCE";
+  | "CLAIM_WITHOUT_SOURCE"
+  | "CLAIM_NOT_VERIFIED"
+  | "CLAIM_EVIDENCE_REQUIRED"
+  | "CLAIM_EVIDENCE_NOT_VERIFIED"
+  | "CLAIM_EVIDENCE_SOURCE_MISMATCH";
+
+export function getClaimVerificationBlockers(claims: MaterialClaim[]): PublicationBlocker[] {
+  const blockers: PublicationBlocker[] = [];
+  for (const claim of claims) {
+    const sourceIds = Array.isArray(claim.sourceIds) ? claim.sourceIds : [];
+    const evidenceItems = Array.isArray(claim.evidence) ? claim.evidence : [];
+    if (sourceIds.length === 0) blockers.push("CLAIM_WITHOUT_SOURCE");
+    if (claim.verificationStatus !== "verified") blockers.push("CLAIM_NOT_VERIFIED");
+    if (evidenceItems.length === 0) blockers.push("CLAIM_EVIDENCE_REQUIRED");
+    for (const evidence of evidenceItems) {
+      if (evidence.verificationStatus !== "verified") {
+        blockers.push("CLAIM_EVIDENCE_NOT_VERIFIED");
+      }
+      if (!sourceIds.includes(evidence.sourceId)) {
+        blockers.push("CLAIM_EVIDENCE_SOURCE_MISMATCH");
+      }
+    }
+  }
+  return blockers;
+}
 
 export function getPublicationBlockers(
   record: PublicationRecord,
@@ -58,8 +89,7 @@ export function getPublicationBlockers(
     blockers.push("APPROVAL_ACTOR_MISMATCH");
   if (!record.factCheckComplete) blockers.push("FACT_CHECK_INCOMPLETE");
   if (!record.disclosuresReviewed) blockers.push("DISCLOSURES_NOT_REVIEWED");
-  if (record.claims.some((claim) => claim.sourceIds.length === 0))
-    blockers.push("CLAIM_WITHOUT_SOURCE");
+  blockers.push(...getClaimVerificationBlockers(record.claims));
   return blockers;
 }
 export function canPublish(record: PublicationRecord, actor: PublishingActor): boolean {

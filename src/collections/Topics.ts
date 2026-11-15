@@ -1,13 +1,8 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
-type Actor = { role?: string } | null;
+import { hasActiveRole } from "../lib/access.ts";
 
-function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
-}
-
-const canManageTopics: Access = ({ req }) =>
-  ["administrator", "editor"].includes(roleFromRequest(req.user) ?? "");
+const canManageTopics: Access = ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]);
 
 export const Topics: CollectionConfig = {
   slug: "topics",
@@ -21,6 +16,13 @@ export const Topics: CollectionConfig = {
     read: () => true,
     update: canManageTopics,
     delete: () => false,
+  },
+  hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("Topics cannot be deleted; update or retire the topic instead.", 403);
+      },
+    ],
   },
   fields: [
     { name: "name", type: "text", required: true },

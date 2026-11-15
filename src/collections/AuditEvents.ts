@@ -1,13 +1,9 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
-type Actor = { role?: string } | null;
+import { hasActiveRole } from "../lib/access.ts";
+import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
-function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
-}
-
-const canReadAudit: Access = ({ req }) =>
-  ["administrator", "editor"].includes(roleFromRequest(req.user) ?? "");
+const canReadAudit: Access = ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]);
 
 export const AuditEvents: CollectionConfig = {
   slug: "audit-events",
@@ -21,6 +17,21 @@ export const AuditEvents: CollectionConfig = {
     read: canReadAudit,
     update: () => false,
     delete: () => false,
+  },
+  hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("Audit events are append-only and cannot be deleted.", 403);
+      },
+    ],
+    beforeChange: [
+      ({ data, operation, req }) => {
+        if (operation !== "create" || !hasTrustedRequestContext(req.context, "hezqenAuditWrite")) {
+          throw new APIError("Audit events are append-only and server generated.", 403);
+        }
+        return data;
+      },
+    ],
   },
   fields: [
     { name: "eventId", type: "text", required: true, unique: true },

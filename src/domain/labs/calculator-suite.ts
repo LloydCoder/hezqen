@@ -383,7 +383,7 @@ export function calculateLab(slug: string, values: Values): LabCalculation {
       const projectedGb =
         tableGb *
         (1 + v("indexOverhead")) *
-        Math.pow(1 + v("monthlyGrowth"), v("months")) *
+        (1 + v("monthlyGrowth")) ** v("months") *
         v("replicas");
       metrics = [
         metric("Current table payload", tableGb, "GB"),
@@ -454,8 +454,7 @@ export function calculateLab(slug: string, values: Values): LabCalculation {
       break;
     }
     case "storage-growth": {
-      const capacity =
-        v("initialGb") * Math.pow(1 + v("monthlyGrowthRate"), v("months")) * v("replicas");
+      const capacity = v("initialGb") * (1 + v("monthlyGrowthRate")) ** v("months") * v("replicas");
       metrics = [
         metric("Retained capacity", capacity, "GB"),
         metric("Monthly run-rate storage cost", capacity * v("pricePerGbMonth")),

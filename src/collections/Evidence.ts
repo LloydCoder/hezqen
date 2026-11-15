@@ -1,15 +1,10 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
-type Actor = { role?: string } | null;
-
-function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
-}
+import { hasActiveRole } from "../lib/access.ts";
+import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
 const canReadEvidence: Access = ({ req }) =>
-  ["administrator", "editor", "researcher", "fact_checker"].includes(
-    roleFromRequest(req.user) ?? "",
-  );
+  hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
 
 export const Evidence: CollectionConfig = {
   slug: "evidence",
@@ -17,12 +12,47 @@ export const Evidence: CollectionConfig = {
     useAsTitle: "evidenceId",
     defaultColumns: ["evidenceId", "source", "verificationStatus", "retrievedAt"],
     group: "Research",
+    components: {
+      edit: {
+        beforeDocumentControls: ["/src/components/admin/EvidenceVerificationControlsServer"],
+      },
+    },
   },
   access: {
     create: () => false,
     read: canReadEvidence,
     update: () => false,
     delete: () => false,
+  },
+  hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("Evidence records cannot be deleted.", 403);
+      },
+    ],
+    beforeChange: [
+      ({ data, operation, req }) => {
+        if (
+          operation === "create" &&
+          !hasTrustedRequestContext(req.context, "hezqenEvidencePreservation")
+        ) {
+          throw new APIError(
+            "Evidence can only be created through the preservation endpoint.",
+            403,
+          );
+        }
+        if (operation === "update") {
+          if (!hasTrustedRequestContext(req.context, "hezqenEvidenceVerification")) {
+            throw new APIError("Evidence metadata is immutable outside human verification.", 403);
+          }
+          const allowedFields = ["verificationStatus", "updatedAt"];
+          if (Object.keys(data ?? {}).some((field) => !allowedFields.includes(field))) {
+            throw new APIError("Only evidence verification status may be updated.", 403);
+          }
+        }
+        return data;
+      },
+    ],
   },
   fields: [
     { name: "evidenceId", type: "text", required: true, unique: true, index: true },

@@ -13,7 +13,14 @@ const record = {
   editorId: "editor-1",
   approvedById: null,
   approvedAt: null,
-  claims: [{ id: "claim-1", sourceIds: ["source-1"] }],
+  claims: [
+    {
+      id: "claim-1",
+      sourceIds: ["source-1"],
+      verificationStatus: "verified",
+      evidence: [{ id: "evidence-1", sourceId: "source-1", verificationStatus: "verified" }],
+    },
+  ],
   factCheckComplete: false,
   disclosuresReviewed: false,
   revision: 1,
@@ -165,7 +172,10 @@ test("correction workflow reopens a new revision and clears prior approval", () 
     factCheckComplete: true,
     disclosuresReviewed: true,
   };
-  const reopened = transitionPublication(published, editor, "correction_required", { now });
+  const reopened = transitionPublication(published, editor, "correction_required", {
+    now,
+    correctionReason: "A material figure was misstated.",
+  });
   assert.equal(reopened.ok, true);
   if (reopened.ok) {
     const revised = transitionPublication(reopened.record, editor, "draft", { now });
@@ -176,4 +186,98 @@ test("correction workflow reopens a new revision and clears prior approval", () 
       assert.equal(revised.record.status, "draft");
     }
   }
+});
+
+test("requires a documented reason before opening a published-article correction", () => {
+  const published = {
+    ...record,
+    status: "published",
+    approvedById: "editor-1",
+    approvedAt: now,
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
+  const result = transitionPublication(published, editor, "correction_required", { now });
+  assert.equal(result.ok, false);
+  if (!result.ok) assert.ok(result.blockers.includes("CORRECTION_REASON_REQUIRED"));
+});
+
+test("allows the scheduler to publish only due articles with prior assigned-editor approval", () => {
+  const scheduled = {
+    ...record,
+    status: "scheduled",
+    approvedById: "editor-1",
+    approvedAt: now,
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+    scheduledFor: "2026-11-15T11:00:00.000Z",
+  };
+  const result = transitionPublication(scheduled, agent, "published", {
+    now: "2026-11-15T12:00:00.000Z",
+  });
+  assert.equal(result.ok, true);
+  if (result.ok) assert.equal(result.record.status, "published");
+  assert.equal(
+    transitionPublication({ ...scheduled, approvedById: "other-editor" }, agent, "published", {
+      now: "2026-11-15T12:00:00.000Z",
+    }).ok,
+    false,
+  );
+});
+
+test("requires the assigned editor to return approved and scheduled articles to draft before edits", () => {
+  const approved = {
+    ...record,
+    status: "approved",
+    approvedById: "editor-1",
+    approvedAt: now,
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
+  const scheduled = {
+    ...approved,
+    status: "scheduled",
+    scheduledFor: "2026-11-16T10:00:00.000Z",
+  };
+
+  for (const current of [approved, scheduled]) {
+    const result = transitionPublication(current, editor, "draft", { now });
+    assert.equal(result.ok, true);
+    if (result.ok) {
+      assert.equal(result.record.status, "draft");
+      assert.equal(result.record.approvedById, null);
+      assert.equal(result.record.approvedAt, null);
+      assert.equal(result.record.scheduledFor, null);
+      assert.equal(result.record.factCheckComplete, false);
+      assert.equal(result.record.disclosuresReviewed, false);
+    }
+  }
+});
+
+test("allows an assigned editor to return fact-check work to draft", () => {
+  const result = transitionPublication(
+    { ...record, status: "fact_check", factCheckComplete: true },
+    editor,
+    "draft",
+    { now },
+  );
+  assert.equal(result.ok, true);
+  if (result.ok) assert.equal(result.record.factCheckComplete, false);
+});
+
+test("rejects scheduled timestamps without an explicit timezone", () => {
+  const approved = {
+    ...record,
+    status: "approved",
+    approvedById: "editor-1",
+    approvedAt: now,
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
+  const result = transitionPublication(approved, editor, "scheduled", {
+    now,
+    scheduledFor: "2026-11-16T10:00:00",
+  });
+  assert.equal(result.ok, false);
+  if (!result.ok) assert.ok(result.blockers.includes("SCHEDULE_TIME_INVALID"));
 });

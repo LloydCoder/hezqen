@@ -1,21 +1,12 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
-type Actor = { role?: string } | null;
-
-function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
-}
+import { hasActiveRole } from "../lib/access.ts";
 
 const canResearch: Access = ({ req }) =>
-  ["administrator", "editor", "researcher", "fact_checker"].includes(
-    roleFromRequest(req.user) ?? "",
-  );
+  hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
 
 const canRead: Access = ({ req }) =>
-  Boolean(req.user) &&
-  ["administrator", "editor", "researcher", "fact_checker"].includes(
-    roleFromRequest(req.user) ?? "",
-  );
+  hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
 
 export const Sources: CollectionConfig = {
   slug: "sources",
@@ -29,6 +20,21 @@ export const Sources: CollectionConfig = {
     read: canRead,
     update: () => false,
     delete: () => false,
+  },
+  hooks: {
+    beforeChange: [
+      ({ data, operation }) => {
+        if (operation === "update") {
+          throw new APIError("Source records are immutable; add a new source record instead.", 403);
+        }
+        return data;
+      },
+    ],
+    beforeDelete: [
+      () => {
+        throw new APIError("Source records cannot be deleted; preserve provenance history.", 403);
+      },
+    ],
   },
   fields: [
     { name: "title", type: "text", required: true },
@@ -53,9 +59,7 @@ export const Sources: CollectionConfig = {
       type: "textarea",
       access: {
         read: ({ req }) =>
-          ["administrator", "editor", "researcher", "fact_checker"].includes(
-            roleFromRequest(req.user) ?? "",
-          ),
+          hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]),
       },
     },
   ],

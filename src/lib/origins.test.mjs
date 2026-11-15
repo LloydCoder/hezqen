@@ -171,6 +171,40 @@ test("rejects a server URL that is not in the explicit origin allowlist", () => 
         allowedOrigins: ["https://hezqen.tinlance.com"],
         nodeEnv: "production",
       }),
-    /must be allowed/,
+    /canonical site origin must be allowed/,
+  );
+});
+
+test("uses an explicit allowed Payload server origin for a custom staging hostname", () => {
+  const allowedOrigins = resolveAllowedOrigins({
+    configuredOrigins: "https://hezqen.tinlance.com,https://staging.hezqen.tinlance.com",
+    deploymentHostname: "hezqen-preview-123.vercel.app",
+    deploymentEnvironment: "preview",
+    nodeEnv: "production",
+  });
+
+  assert.equal(
+    resolvePayloadServerUrl({
+      configuredSiteUrl: "https://hezqen.tinlance.com",
+      payloadServerUrl: "https://staging.hezqen.tinlance.com",
+      deploymentHostname: "hezqen-preview-123.vercel.app",
+      deploymentEnvironment: "preview",
+      allowedOrigins,
+      nodeEnv: "production",
+    }),
+    "https://staging.hezqen.tinlance.com",
+  );
+});
+
+test("rejects an explicit Payload server origin outside the allowed origin list", () => {
+  assert.throws(
+    () =>
+      resolvePayloadServerUrl({
+        configuredSiteUrl: "https://hezqen.tinlance.com",
+        payloadServerUrl: "https://untrusted.example",
+        allowedOrigins: ["https://hezqen.tinlance.com"],
+        nodeEnv: "production",
+      }),
+    /allowed origin list/,
   );
 });

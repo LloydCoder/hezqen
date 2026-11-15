@@ -1,17 +1,14 @@
-import type { Access, CollectionConfig, Where } from "payload";
+import { APIError, type Access, type CollectionConfig, type Where } from "payload";
 
-type Actor = { id: string | number; role?: string } | null;
-
-function actorFromRequest(user: unknown): Actor {
-  return user && typeof user === "object" && "id" in user ? (user as Actor) : null;
-}
+import { getActiveUserActor, hasActiveRole } from "../lib/access.ts";
+import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
 const publishedArticleFilter: Where = {
   and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
 };
 
 const canReadArticles: Access = ({ req }) => {
-  const actor = actorFromRequest(req.user);
+  const actor = getActiveUserActor(req.user);
   if (!actor) return publishedArticleFilter;
   if (["administrator", "editor"].includes(actor.role ?? "")) return true;
   return {
@@ -25,10 +22,10 @@ const canReadArticles: Access = ({ req }) => {
 };
 
 const canCreateArticles: Access = ({ req }) =>
-  ["administrator", "editor", "author"].includes(actorFromRequest(req.user)?.role ?? "");
+  hasActiveRole(req.user, ["administrator", "editor", "author"]);
 
 const canUpdateArticles: Access = ({ req }) => {
-  const actor = actorFromRequest(req.user);
+  const actor = getActiveUserActor(req.user);
   if (!actor) return false;
   if (["administrator", "editor"].includes(actor.role ?? "")) return true;
   if (actor.role === "author") {
@@ -49,6 +46,11 @@ export const Articles: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ["title", "division", "workflowStatus", "author", "updatedAt"],
     group: "Editorial",
+    components: {
+      edit: {
+        beforeDocumentControls: ["/src/components/admin/ArticleWorkflowControlsServer"],
+      },
+    },
   },
   versions: {
     drafts: {
@@ -75,6 +77,90 @@ export const Articles: CollectionConfig = {
           };
         }
         return data;
+      },
+    ],
+    beforeDelete: [
+      () => {
+        throw new APIError(
+          "Articles cannot be deleted; use the correction and archival workflow.",
+          403,
+        );
+      },
+    ],
+    beforeChange: [
+      ({ data, originalDoc, operation, req }) => {
+        if (operation !== "update") return data;
+        const trustedWorkflowCommand = hasTrustedRequestContext(
+          req.context,
+          "hezqenWorkflowCommand",
+        );
+        const skipRevisionIncrement = hasTrustedRequestContext(
+          req.context,
+          "hezqenSkipArticleRevisionIncrement",
+        );
+        const workflowFields = [
+          "author",
+          "workflowStatus",
+          "factCheckComplete",
+          "disclosuresReviewed",
+          "approvedBy",
+          "approvedAt",
+          "publishedAt",
+          "scheduledFor",
+          "correctionStatus",
+          "correctionReason",
+          "correctionPublicNote",
+          "correctionRequestedAt",
+          "correctionResolvedAt",
+          "correctionResolvedBy",
+          "revision",
+        ];
+        const hasWorkflowMutation = workflowFields.some((field) =>
+          Object.hasOwn(data ?? {}, field),
+        );
+        if (hasWorkflowMutation && !trustedWorkflowCommand) {
+          throw new APIError(
+            "Editorial workflow fields must be changed through the editorial workflow command service.",
+            403,
+          );
+        }
+        if (trustedWorkflowCommand || skipRevisionIncrement) {
+          return data;
+        }
+
+        const contentFields = ["title", "slug", "excerpt", "body", "division", "topics"];
+        const changed = contentFields.some((field) => Object.hasOwn(data ?? {}, field));
+        if (!changed) return data;
+
+        const currentStatus = String(originalDoc?.workflowStatus ?? "draft");
+        if (
+          [
+            "fact_check",
+            "editorial_review",
+            "approved",
+            "scheduled",
+            "published",
+            "correction_required",
+          ].includes(currentStatus)
+        ) {
+          throw new APIError(
+            currentStatus === "published" || currentStatus === "correction_required"
+              ? "Published content must enter the correction workflow before edits."
+              : "Return the article to draft before editing its content.",
+            409,
+          );
+        }
+
+        const revision = Number(originalDoc?.revision ?? 1) + 1;
+        return {
+          ...data,
+          revision,
+          approvedBy: null,
+          approvedAt: null,
+          scheduledFor: null,
+          factCheckComplete: false,
+          disclosuresReviewed: false,
+        };
       },
     ],
   },
@@ -134,8 +220,7 @@ export const Articles: CollectionConfig = {
       relationTo: "users",
       access: {
         create: () => false,
-        update: ({ req }) =>
-          ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
+        update: ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]),
       },
     },
     {
@@ -144,8 +229,7 @@ export const Articles: CollectionConfig = {
       relationTo: "users",
       access: {
         create: () => false,
-        update: ({ req }) =>
-          ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
+        update: ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]),
       },
     },
     {
@@ -210,6 +294,71 @@ export const Articles: CollectionConfig = {
       name: "publishedAt",
       type: "date",
       index: true,
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "scheduledFor",
+      type: "date",
+      index: true,
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionStatus",
+      type: "select",
+      defaultValue: "none",
+      required: true,
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+      options: [
+        { label: "None", value: "none" },
+        { label: "Open", value: "open" },
+        { label: "Resolved", value: "resolved" },
+      ],
+    },
+    {
+      name: "correctionReason",
+      type: "textarea",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionPublicNote",
+      type: "textarea",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionRequestedAt",
+      type: "date",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionResolvedAt",
+      type: "date",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "correctionResolvedBy",
+      type: "relationship",
+      relationTo: "users",
       access: {
         create: () => false,
         update: () => false,

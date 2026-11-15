@@ -1,11 +1,8 @@
 import { APIError, type Access, type CollectionConfig } from "payload";
-type Actor = { id: string | number; role?: string } | null;
 
-function actorFromRequest(user: unknown): Actor {
-  return user && typeof user === "object" && "id" in user ? (user as Actor) : null;
-}
+import { getActiveUserActor, hasActiveRole } from "../lib/access.ts";
 
-const isAdministrator: Access = ({ req }) => actorFromRequest(req.user)?.role === "administrator";
+const isAdministrator: Access = ({ req }) => hasActiveRole(req.user, ["administrator"]);
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -24,6 +21,11 @@ export const Users: CollectionConfig = {
     defaultColumns: ["email", "name", "role", "updatedAt"],
   },
   hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("User accounts cannot be deleted; deactivate the account instead.", 403);
+      },
+    ],
     beforeLogin: [
       ({ user }) => {
         if ((user as { active?: boolean }).active === false) {
@@ -35,19 +37,17 @@ export const Users: CollectionConfig = {
   },
   access: {
     admin: ({ req }) =>
-      ["administrator", "editor", "author", "researcher", "fact_checker"].includes(
-        actorFromRequest(req.user)?.role ?? "",
-      ),
+      hasActiveRole(req.user, ["administrator", "editor", "author", "researcher", "fact_checker"]),
     create: isAdministrator,
     read: ({ req }) => {
-      const actor = actorFromRequest(req.user);
+      const actor = getActiveUserActor(req.user);
       if (!actor) return false;
       return ["administrator", "editor"].includes(actor.role ?? "")
         ? true
         : { id: { equals: actor.id } };
     },
     update: ({ req }) => {
-      const actor = actorFromRequest(req.user);
+      const actor = getActiveUserActor(req.user);
       if (!actor) return false;
       return actor.role === "administrator" ? true : { id: { equals: actor.id } };
     },
@@ -60,12 +60,12 @@ export const Users: CollectionConfig = {
       required: true,
       access: {
         read: ({ req, id }) => {
-          const actor = actorFromRequest(req.user);
+          const actor = getActiveUserActor(req.user);
           return Boolean(
             actor && (["administrator", "editor"].includes(actor.role ?? "") || actor.id === id),
           );
         },
-        update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
+        update: ({ req }) => hasActiveRole(req.user, ["administrator"]),
       },
     },
     {
@@ -79,10 +79,9 @@ export const Users: CollectionConfig = {
       required: true,
       defaultValue: "author",
       access: {
-        read: ({ req }) =>
-          ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
-        create: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
-        update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
+        read: ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]),
+        create: ({ req }) => hasActiveRole(req.user, ["administrator"]),
+        update: ({ req }) => hasActiveRole(req.user, ["administrator"]),
       },
       options: [
         { label: "Reader", value: "reader" },
@@ -98,8 +97,8 @@ export const Users: CollectionConfig = {
       type: "checkbox",
       defaultValue: true,
       access: {
-        read: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
-        update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
+        read: ({ req }) => hasActiveRole(req.user, ["administrator"]),
+        update: ({ req }) => hasActiveRole(req.user, ["administrator"]),
       },
     },
   ],

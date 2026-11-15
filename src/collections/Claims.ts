@@ -1,20 +1,13 @@
-import type { Access, CollectionConfig } from "payload";
+import { APIError, type Access, type CollectionConfig } from "payload";
 
-type Actor = { id: string | number; role?: string } | null;
-
-function actorFromRequest(user: unknown): Actor {
-  return user && typeof user === "object" && "id" in user ? (user as Actor) : null;
-}
+import { hasActiveRole } from "../lib/access.ts";
+import { hasTrustedRequestContext } from "../lib/request-context.ts";
 
 const canReadClaims: Access = ({ req }) =>
-  ["administrator", "editor", "researcher", "fact_checker"].includes(
-    actorFromRequest(req.user)?.role ?? "",
-  );
+  hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
 
 const canCreateClaims: Access = ({ req }) =>
-  ["administrator", "editor", "researcher", "fact_checker"].includes(
-    actorFromRequest(req.user)?.role ?? "",
-  );
+  hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]);
 
 export const Claims: CollectionConfig = {
   slug: "claims",
@@ -22,12 +15,46 @@ export const Claims: CollectionConfig = {
     useAsTitle: "claimText",
     defaultColumns: ["claimText", "verificationStatus", "updatedAt"],
     group: "Research",
+    components: {
+      edit: {
+        beforeDocumentControls: ["/src/components/admin/ClaimVerificationControlsServer"],
+      },
+    },
   },
   access: {
     create: canCreateClaims,
     read: canReadClaims,
     update: () => false,
     delete: () => false,
+  },
+  hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("Claims cannot be deleted; preserve their verification history.", 403);
+      },
+    ],
+    beforeChange: [
+      ({ data, operation, req }) => {
+        if (operation === "create") {
+          if (data?.verificationStatus !== undefined && data.verificationStatus !== "unverified") {
+            throw new APIError("New claims must begin as unverified.", 403);
+          }
+          if (data?.material === false || data?.reviewedBy != null || data?.reviewedAt != null) {
+            throw new APIError("Claim verification metadata is server managed.", 403);
+          }
+        }
+        if (operation === "update") {
+          if (!hasTrustedRequestContext(req.context, "hezqenClaimVerification")) {
+            throw new APIError("Claims are immutable outside the verification workflow.", 403);
+          }
+          const allowedFields = ["verificationStatus", "reviewedBy", "reviewedAt", "updatedAt"];
+          if (Object.keys(data ?? {}).some((field) => !allowedFields.includes(field))) {
+            throw new APIError("Only claim verification metadata may be updated.", 403);
+          }
+        }
+        return data;
+      },
+    ],
   },
   fields: [
     { name: "claimText", type: "textarea", required: true },
@@ -68,14 +95,19 @@ export const Claims: CollectionConfig = {
         { label: "Corrected", value: "corrected" },
       ],
     },
-    { name: "material", type: "checkbox", defaultValue: true },
+    {
+      name: "material",
+      type: "checkbox",
+      defaultValue: true,
+      access: { create: () => false, update: () => false },
+    },
     {
       name: "reviewedBy",
       type: "relationship",
       relationTo: "users",
       access: { create: () => false, update: () => false },
     },
-    { name: "reviewedAt", type: "date", access: { update: () => false } },
+    { name: "reviewedAt", type: "date", access: { create: () => false, update: () => false } },
   ],
   timestamps: true,
 };
