@@ -34,7 +34,12 @@ test("requires the assigned human editor to move fact-checked work to editorial 
 });
 
 test("requires source-backed claims, completed fact-check and disclosure review before approval", () => {
-  const review = { ...record, status: "editorial_review", factCheckComplete: true, disclosuresReviewed: true };
+  const review = {
+    ...record,
+    status: "editorial_review",
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
   const result = transitionPublication(review, editor, "approved", { now });
   assert.equal(result.ok, true);
   if (result.ok) {
@@ -43,7 +48,12 @@ test("requires source-backed claims, completed fact-check and disclosure review 
     assert.equal(result.record.approvedAt, now);
   }
   assert.equal(
-    transitionPublication({ ...review, claims: [{ id: "claim-2", sourceIds: [] }] }, editor, "approved", { now }).ok,
+    transitionPublication(
+      { ...review, claims: [{ id: "claim-2", sourceIds: [] }] },
+      editor,
+      "approved",
+      { now },
+    ).ok,
     false,
   );
   assert.equal(
@@ -51,13 +61,20 @@ test("requires source-backed claims, completed fact-check and disclosure review 
     false,
   );
   assert.equal(
-    transitionPublication({ ...review, disclosuresReviewed: false }, editor, "approved", { now }).ok,
+    transitionPublication({ ...review, disclosuresReviewed: false }, editor, "approved", { now })
+      .ok,
     false,
   );
 });
 
 test("prevents authors from approving their own work", () => {
-  const selfAssigned = { ...record, status: "editorial_review", editorId: "author-1", factCheckComplete: true, disclosuresReviewed: true };
+  const selfAssigned = {
+    ...record,
+    status: "editorial_review",
+    editorId: "author-1",
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
   const result = transitionPublication(selfAssigned, author, "approved", { now });
   assert.equal(result.ok, false);
   if (!result.ok) assert.ok(result.blockers.includes("AUTHOR_EDITOR_CONFLICT"));
