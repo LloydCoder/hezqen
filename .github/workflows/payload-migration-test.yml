@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 15
     services:
       postgres:
-        image: postgres:18-alpine
+        image: postgres:18.7-alpine
         env:
           POSTGRES_USER: hezqen_ci
           POSTGRES_PASSWORD: hezqen_ci
@@ -44,6 +44,27 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: https://hezqen.tinlance.com
           HEZQEN_ALLOWED_ORIGINS: https://hezqen.tinlance.com
+      - name: Verify guarded backup and restore on ephemeral PostgreSQL
+        env:
+          DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
+          RESTORE_DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_restore_smoke
+          BACKUP_FILE: /backup/hezqen.dump
+          HEZQEN_RESTORE_ENV: ci
+          HEZQEN_RESTORE_APPROVED: "true"
+          HEZQEN_RESTORE_CONFIRM_TARGET: ci
+        run: |
+          mkdir -p "$RUNNER_TEMP/hezqen-backup"
+          docker run --rm --network host \
+            --env DATABASE_URL \
+            --env RESTORE_DATABASE_URL \
+            --env BACKUP_FILE \
+            --env HEZQEN_RESTORE_ENV \
+            --env HEZQEN_RESTORE_APPROVED \
+            --env HEZQEN_RESTORE_CONFIRM_TARGET \
+            --volume "$GITHUB_WORKSPACE:/workspace" \
+            --volume "$RUNNER_TEMP/hezqen-backup:/backup" \
+            --workdir /workspace \
+            postgres:18.7-alpine sh scripts/db/backup-restore-smoke.sh
       - name: Verify migration status
         run: pnpm payload migrate:status
         env:

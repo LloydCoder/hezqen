@@ -48,3 +48,5 @@ Choose the section that matches what you need.
 - Update this index whenever a document is added, renamed or removed.
 
 - [Infrastructure product catalog](/infrastructure): five engineering-preview kits and their release limitations.
+
+- [Operational readiness](./OPERATIONS.md): liveness/readiness, guarded PostgreSQL backup/restore, CI restore drill and dormant uptime monitoring.

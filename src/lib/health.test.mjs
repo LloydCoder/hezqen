@@ -29,6 +29,7 @@ test("readiness returns a generic 503 without leaking dependency errors", async 
 
   assert.equal(response.status, 503);
   assert.equal(response.headers.get("cache-control"), "no-store");
-  assert.deepEqual(await response.json(), { status: "not_ready" });
-  assert.equal(JSON.stringify(await response.json()).includes("password"), false);
+  const body = await response.json();
+  assert.deepEqual(body, { status: "not_ready" });
+  assert.equal(JSON.stringify(body).includes("password"), false);
 });
