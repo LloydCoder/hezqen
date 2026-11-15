@@ -734,7 +734,6 @@ a:focus-visible {
     right: 0;
     width: min(360px, calc(100vw - 32px));
     max-height: min(72vh, 560px);
-    max-height: min(72dvh, 560px);
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: 8px;
@@ -742,6 +741,11 @@ a:focus-visible {
     border-radius: 8px;
     background: var(--white);
     box-shadow: 0 18px 48px rgb(11 27 51 / 18%);
+  }
+  @supports (height: 100dvh) {
+    .mobile-nav {
+      max-height: min(72dvh, 560px);
+    }
   }
   .mobile-nav[hidden] {
     display: none;
