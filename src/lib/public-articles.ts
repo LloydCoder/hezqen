@@ -157,6 +157,7 @@ export async function getPublicCorrectionNoticeBySlug(
     where: {
       and: [
         { slug: { equals: slug } },
+        { _status: { equals: "published" } },
         { workflowStatus: { equals: "correction_required" } },
         { correctionStatus: { equals: "open" } },
         { correctionPublicNote: { exists: true } },
@@ -189,7 +190,22 @@ export async function getPublicCorrectionNotices(): Promise<PublicCorrectionNoti
   const result = await payload.find({
     collection: "articles",
     where: {
-      correctionStatus: { in: ["open", "resolved"] },
+      or: [
+        {
+          and: [
+            { _status: { equals: "published" } },
+            { workflowStatus: { equals: "correction_required" } },
+            { correctionStatus: { equals: "open" } },
+          ],
+        },
+        {
+          and: [
+            { _status: { equals: "published" } },
+            { workflowStatus: { equals: "published" } },
+            { correctionStatus: { equals: "resolved" } },
+          ],
+        },
+      ],
     },
     select: {
       title: true,
