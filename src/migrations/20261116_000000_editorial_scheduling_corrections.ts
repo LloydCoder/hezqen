@@ -35,8 +35,8 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 
     CREATE INDEX "articles_scheduled_for_idx" ON "articles" USING btree ("scheduled_for");
     CREATE INDEX "articles_correction_status_idx" ON "articles" USING btree ("correction_status");
-    CREATE INDEX "_articles_v_version_scheduled_for_idx" ON "_articles_v" USING btree ("version_scheduled_for");
-    CREATE INDEX "_articles_v_version_correction_status_idx" ON "_articles_v" USING btree ("version_correction_status");
+    CREATE INDEX "_articles_v_version_version_scheduled_for_idx" ON "_articles_v" USING btree ("version_scheduled_for");
+    CREATE INDEX "_articles_v_version_version_correction_status_idx" ON "_articles_v" USING btree ("version_correction_status");
   \`);
 }
 
@@ -44,8 +44,8 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql\`
     DROP INDEX IF EXISTS "articles_scheduled_for_idx";
     DROP INDEX IF EXISTS "articles_correction_status_idx";
-    DROP INDEX IF EXISTS "_articles_v_version_scheduled_for_idx";
-    DROP INDEX IF EXISTS "_articles_v_version_correction_status_idx";
+    DROP INDEX IF EXISTS "_articles_v_version_version_scheduled_for_idx";
+    DROP INDEX IF EXISTS "_articles_v_version_version_correction_status_idx";
 
     ALTER TABLE "articles"
       DROP CONSTRAINT IF EXISTS "articles_correction_resolved_by_id_users_id_fk";
