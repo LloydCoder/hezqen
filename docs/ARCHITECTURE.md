@@ -47,6 +47,10 @@ Existing Tinlyt, Kalevio, ThreatFade, Hezqara and shared Tinlance databases/serv
 
 Tinlyt, Searqon and TAS integrations are optional adapters over authenticated APIs or signed webhooks. They must not share database tables or become runtime prerequisites for public reading. Each adapter must be independently disableable.
 
+## Data model and CMS decision
+
+The logical relational model and migration policy are documented in [DATA_MODEL.md](DATA_MODEL.md). Payload CMS 3.93.0 with its official PostgreSQL adapter is the selected target in [ADR-0001](adr/0001-editorial-cms-and-postgres.md). Implementation is gated on upgrading the runtime/toolchain to the current Payload compatibility requirements and regenerating the lockfile. No Payload schema has been applied to Neon.
+
 ## Editorial authority
 
 The editorial domain includes a tested publication policy and a tested workflow state machine. The state machine models pitch, research, draft, fact-check, editorial review, approval, scheduling, publication, correction and archive transitions. Approval and publication require the assigned human editor, separation of author/editor duties, completed fact-check, disclosure review and source-backed material claims.

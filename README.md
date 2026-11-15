@@ -65,3 +65,6 @@ Apache License 2.0. See [LICENSE](LICENSE).
 - [AI Cost Calculator Methodology](docs/AI_COST_CALCULATOR_METHODOLOGY.md)
 
 - [Security Threat Model](docs/THREAT_MODEL.md)
+
+- [Logical Data Model](docs/DATA_MODEL.md)
+- [CMS and PostgreSQL Architecture Decision](docs/adr/0001-editorial-cms-and-postgres.md)
