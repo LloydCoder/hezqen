@@ -43,7 +43,7 @@ test("accounts for quantization metadata with conservative effective bytes per p
 test("rejects non-positive, non-finite and non-integer architecture inputs", () => {
   assert.throws(() => estimateVram({ parametersB: 0, weightFormat: "fp16", layers: 1, kvHeads: 1, headDimension: 1, contextLength: 1, batchSize: 1 }), /parametersB/);
   assert.throws(() => estimateVram({ parametersB: 7, weightFormat: "fp16", layers: 1.5, kvHeads: 1, headDimension: 1, contextLength: 1, batchSize: 1 }), /layers/);
-  assert.throws(() => estimateVram({ parametersB: 7, weightFormat: "unknown", layers: 1, kvHeads: 1, headDimension: 1, contextLength: 1, batchSize: 1 } as never), /weightFormat/);
+  assert.throws(() => estimateVram({ parametersB: 7, weightFormat: "unknown", layers: 1, kvHeads: 1, headDimension: 1, contextLength: 1, batchSize: 1 }), /weightFormat/);
 });
 
 test("rejects excessive reserve percentages", () => {
