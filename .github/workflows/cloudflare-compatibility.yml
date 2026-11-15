@@ -117,6 +117,8 @@ jobs:
               "PAYLOAD_SECRET": "bindings.secret()",
               "NEXT_PUBLIC_SITE_URL": 'bindings.text("http://localhost:3001")',
               "HEZQEN_ALLOWED_ORIGINS": 'bindings.text("http://localhost:3001")',
+              "CI": 'bindings.text("true")',
+              "HEZQEN_LOCAL_RUNTIME_TEST": 'bindings.text("true")',
           }
           for name, binding in required.items():
               if f"{name}:" not in source:
@@ -148,6 +150,8 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: http://localhost:3001
           HEZQEN_ALLOWED_ORIGINS: http://localhost:3001
+          HEZQEN_LOCAL_RUNTIME_TEST: "true"
+          HEZQEN_LOCAL_RUNTIME_TEST: "true"
       - name: Provide isolated production-mode Worker preview bindings
         # Vite plugin v2 preview reuses the mode recorded at build time; use a temporary production-mode env file.
         run: |
@@ -163,6 +167,7 @@ jobs:
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: http://localhost:3001
           HEZQEN_ALLOWED_ORIGINS: http://localhost:3001
+          HEZQEN_LOCAL_RUNTIME_TEST: "true"
       - name: Run Worker locally and smoke-test public and CMS routes
         run: |
           pnpm run start:vinext --host 0.0.0.0 --port 3001 > /tmp/hezqen-vinext.log 2>&1 &
