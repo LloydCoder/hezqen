@@ -15,6 +15,8 @@ Only the assigned human editor may approve or publish after fact-checking, discl
 - https://hezqen.tinlance.com/
 - https://hezqen.tinlance.com/about
 - https://hezqen.tinlance.com/contact
+- https://hezqen.tinlance.com/articles
+- https://hezqen.tinlance.com/articles/{slug}
 - https://hezqen.tinlance.com/corrections
 - https://hezqen.tinlance.com/editorial-standards
 - https://hezqen.tinlance.com/security
@@ -33,13 +35,13 @@ Only the assigned human editor may approve or publish after fact-checking, discl
 The application uses Next.js App Router 16, React 19, strict TypeScript, Node.js 24, pnpm 12, Payload CMS 3, PostgreSQL 18, Biome and the Node built-in test runner. The architecture is a modular monolith.
 
 ## Current implementation
-The public application shell includes the homepage, About, Editorial Standards, four division routes, sixteen Labs calculators, Infrastructure catalog, and public trust/policy routes. Calculator domain logic is deterministic and has regression tests. See docs/LABS_CALCULATOR_SUITE.md for formulas and limitations.
+The public application shell includes the homepage, an article index and server-rendered article detail routes, four division hubs with published-story feeds, a public correction log, About, Editorial Standards, sixteen Labs calculators, Infrastructure catalog, and public trust/policy routes. Article pages expose canonical metadata, NewsArticle JSON-LD, and sitemap entries. Calculator domain logic is deterministic and has regression tests. See docs/LABS_CALCULATOR_SUITE.md for formulas and limitations.
 
-Payload CMS is integrated with the Next.js App Router, admin/API route mounting and restricted collections for users, articles, topics, sources, evidence, claims and audit events. Initial database migrations, staging validation and production CMS acceptance remain release gates.
+Payload CMS is integrated with the Next.js App Router, admin/API route mounting and restricted collections for users, articles, topics, sources, evidence, claims and audit events. The initial Payload migration and first administrator are provisioned in the staging database. Staging login, real object-storage round-trip, email delivery and scheduler invocation acceptance remain outstanding. Production database migration and production CMS activation remain explicit release gates.
 
 A pure editorial workflow state machine enforces human editor approval rules at the domain boundary. It is not a substitute for server-side authentication, authorization, persistence, transactional audit logging or concurrency controls.
 
-Research source/evidence validation and SSRF-aware HTTPS acquisition logic exist. Persistent private evidence storage, network-level egress restrictions, immutable audit history and independent human fact-checking remain outstanding.
+Research source/evidence validation and SSRF-aware HTTPS acquisition logic exist. A private evidence-storage adapter and bucket are configured, but a live upload/read-back/integrity acceptance test remains outstanding. Network-level egress restrictions and independent human fact-checking remain operational gates. Audit-event append-only privileges are enforced at the database role level; transactional persistence acceptance remains a release gate.
 
 ## Security and deployment
 The threat model maps planned controls to OWASP Top 10:2025 and establishes an ASVS 5.0 verification target. It is not a completed security assessment or ASVS attestation.
@@ -50,7 +52,7 @@ The intended canonical launch target is https://hezqen.tinlance.com. A previousl
 The contact, corrections, security, privacy, cookie and terms pages are initial public information pages. Privacy/cookie processing details and terms require verification against actual runtime behavior and legal review before production launch.
 
 ## Non-claims
-Premium subscriptions, reader accounts, production search, a fully operational CMS, persistent evidence storage, automated publishing and complete ASVS compliance are not claimed as available. Check docs/PHASE_STATUS.md for current acceptance gates.
+Premium subscriptions, reader accounts, production search, production CMS activation, verified evidence-object round trips, automated publication without human approval, and complete ASVS compliance are not claimed as available. The article index may be empty until the newsroom publishes its first approved article. Check docs/PHASE_STATUS.md for current acceptance gates.
 
 ## Documentation
 - [Repository README](https://github.com/LloydCoder/hezqen/blob/main/README.md)
