@@ -42,6 +42,21 @@ a:focus-visible {
   outline: 3px solid var(--amber-deep);
   outline-offset: 4px;
 }
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  transform: translateY(-150%);
+  border-radius: 4px;
+  background: var(--navy);
+  color: var(--white);
+  padding: 10px 16px;
+  transition: transform 0.15s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
 ::selection {
   background: var(--amber);
   color: var(--navy);
