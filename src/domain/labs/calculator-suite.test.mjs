@@ -18,7 +18,7 @@ for(const definition of calculators){
  test(definition.title+" rejects missing and out-of-range inputs",()=>{
   const values=inputFor(definition.slug);
   const key=definition.fields[0].key;
-  assert.throws(()=>calculateLab(definition.slug,{...values,[key]:Number.NaN}),RangeError);
+  const { [key]: omitted, ...missing } = values;\n  assert.throws(()=>calculateLab(definition.slug,missing),RangeError);\n  assert.throws(()=>calculateLab(definition.slug,{...values,[key]:Number.NaN}),RangeError);
   assert.throws(()=>calculateLab(definition.slug,{...values,[key]:(definition.fields[0].max??1e12)+1}),RangeError);
  });
 }
