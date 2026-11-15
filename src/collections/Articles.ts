@@ -73,6 +73,11 @@ export const Articles: CollectionConfig = {
         return data;
       },
     ],
+    beforeDelete: [
+      () => {
+        throw new APIError("Articles cannot be deleted; use the correction and archival workflow.", 403);
+      },
+    ],
     beforeChange: [
       ({ data, originalDoc, operation, req }) => {
         if (operation !== "update") return data;
