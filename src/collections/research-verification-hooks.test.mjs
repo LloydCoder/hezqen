@@ -1,0 +1,141 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { AuditEvents } from "./AuditEvents.ts";
+import { Claims } from "./Claims.ts";
+import { Evidence } from "./Evidence.ts";
+
+const evidenceHook = Evidence.hooks?.beforeChange?.[0];
+const claimHook = Claims.hooks?.beforeChange?.[0];
+const auditHook = AuditEvents.hooks?.beforeChange?.[0];
+
+test("evidence cannot be created outside the preservation endpoint", () => {
+  assert.ok(evidenceHook);
+  assert.throws(
+    () =>
+      evidenceHook({
+        data: { verificationStatus: "verified" },
+        operation: "create",
+        req: { context: {} },
+      }),
+    /preservation endpoint/,
+  );
+  const data = { verificationStatus: "preserved" };
+  assert.equal(
+    evidenceHook({
+      data,
+      operation: "create",
+      req: { context: { hezqenEvidencePreservation: true } },
+    }),
+    data,
+  );
+});
+
+test("evidence verification cannot mutate immutable provenance fields", () => {
+  assert.ok(evidenceHook);
+  assert.throws(
+    () =>
+      evidenceHook({
+        data: { verificationStatus: "verified" },
+        operation: "update",
+        req: { context: {} },
+      }),
+    /immutable outside human verification/,
+  );
+  const data = { verificationStatus: "verified" };
+  assert.equal(
+    evidenceHook({
+      data,
+      operation: "update",
+      req: { context: { hezqenEvidenceVerification: true } },
+    }),
+    data,
+  );
+  assert.throws(
+    () =>
+      evidenceHook({
+        data: { storageRef: "evidence/replaced" },
+        operation: "update",
+        req: { context: { hezqenEvidenceVerification: true } },
+      }),
+    /Only evidence verification status/,
+  );
+});
+
+test("claims cannot be created pre-verified or marked non-material by a caller", () => {
+  assert.ok(claimHook);
+  assert.throws(
+    () =>
+      claimHook({
+        data: { verificationStatus: "verified" },
+        operation: "create",
+        req: { context: {} },
+      }),
+    /begin as unverified/,
+  );
+  assert.throws(
+    () =>
+      claimHook({
+        data: { material: false },
+        operation: "create",
+        req: { context: {} },
+      }),
+    /verification metadata is server managed/,
+  );
+  assert.equal(
+    claimHook({
+      data: { verificationStatus: "unverified", material: true },
+      operation: "create",
+      req: { context: {} },
+    }),
+    undefined,
+  );
+});
+
+test("claim updates are limited to the human verification endpoint", () => {
+  assert.ok(claimHook);
+  assert.throws(
+    () =>
+      claimHook({
+        data: { verificationStatus: "verified" },
+        operation: "update",
+        req: { context: {} },
+      }),
+    /immutable outside the verification workflow/,
+  );
+  const data = { verificationStatus: "verified", reviewedBy: 12, reviewedAt: "2026-11-15T12:00:00.000Z" };
+  assert.equal(
+    claimHook({
+      data,
+      operation: "update",
+      req: { context: { hezqenClaimVerification: true } },
+    }),
+    data,
+  );
+});
+
+test("audit events can only be appended by trusted server operations", () => {
+  assert.ok(auditHook);
+  assert.throws(
+    () => auditHook({ data: {}, operation: "create", req: { context: {} } }),
+    /append-only and server generated/,
+  );
+  const data = { eventId: "event-1" };
+  assert.equal(
+    auditHook({
+      data,
+      operation: "create",
+      req: { context: { hezqenAuditWrite: true } },
+    }),
+    data,
+  );
+  assert.throws(
+    () =>
+      auditHook({
+        data,
+        operation: "update",
+        req: { context: { hezqenAuditWrite: true } },
+      }),
+    /append-only and server generated/,
+  );
+});
