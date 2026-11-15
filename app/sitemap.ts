@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 
 import { LAB_CALCULATORS } from "../src/domain/labs/calculator-suite.ts";
-import { findPublicArticles } from "../src/lib/public-content";
 import type { PublicArticle } from "../src/lib/public-articles.ts";
 import { divisions, site } from "../src/lib/site.ts";
 
@@ -57,6 +56,7 @@ export function createSitemap(articles: PublicArticle[] = []): MetadataRoute.Sit
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { findPublicArticles } = await import("../src/lib/public-content.ts");
   const articles = await findPublicArticles({ limit: 50 });
   return createSitemap(articles);
 }
