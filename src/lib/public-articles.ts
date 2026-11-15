@@ -215,6 +215,32 @@ export async function getPublicCorrectionNotices(): Promise<PublicCorrectionNoti
   );
 }
 
+export async function getPublicArticlesForSitemap(): Promise<
+  Array<Pick<PublicArticle, "slug" | "publishedAt" | "updatedAt">>
+> {
+  if (!publicCMSIsEnabled()) return [];
+
+  const payload = await getCMS();
+  const result = await payload.find({
+    collection: "articles",
+    where: {
+      and: [
+        { _status: { equals: "published" } },
+        { workflowStatus: { equals: "published" } },
+      ],
+    },
+    select: { slug: true, publishedAt: true, updatedAt: true },
+    sort: "-publishedAt",
+    limit: 1000,
+    depth: 0,
+    overrideAccess: false,
+  });
+
+  return result.docs as unknown as Array<
+    Pick<PublicArticle, "slug" | "publishedAt" | "updatedAt">
+  >;
+}
+
 export function getArticleWordCount(body: SerializedEditorState | null | undefined): number {
   if (!body || typeof body !== "object") return 0;
 
