@@ -1,6 +1,6 @@
 # HEZQEN Implementation Phase Status
 
-**Last reconciled:** 2026-11-15 (HEZQEN operational readiness merged; HIES Python build-tool CVE remediation merged)  
+**Last reconciled:** 2026-11-15 (HEZQEN/HIES operational and security changes merged; both CI systems migrated to Node 24 actions)  
 **Canonical launch target:** `https://hezqen.tinlance.com`  
 **Release state:** NOT READY FOR PUBLIC PRODUCTION
 
@@ -77,7 +77,7 @@ The infrastructure product line is implemented in [LloydCoder/hezqen-infrastruct
 4. **IK-04 — Air-Gapped RAG Kit**
 5. **IK-05 — Complete Infrastructure Lab Bundle**
 
-At current main commit `bcb71131fb63b0eedb4311e83d3d87a82ef5104c`, PR #11 added a pinned Python dependency audit (`pip-audit==2.10.1`), and PR #12 remediated CVE-2025-47273 by upgrading the two product build backends from `setuptools==75.8.0` to `84.2.1`. The monorepo validator now requires product build-system pins to match the audited requirements inventory.
+At current main commit `e2aacfd4117f41c77cdc349961422d6358fd8c11`, PR #11 added a pinned Python dependency audit (`pip-audit==2.10.1`), and PR #12 remediated CVE-2025-47273 by upgrading the two product build backends from `setuptools==75.8.0` to `84.2.1`. The monorepo validator now requires product build-system pins to match the audited requirements inventory.
 
 The final PR #12 head `c1db7b3c3b0b3cc2faea7ca47b0b28add37dcff7` passed:
 - [HIES CI](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740739)
@@ -85,10 +85,10 @@ The final PR #12 head `c1db7b3c3b0b3cc2faea7ca47b0b28add37dcff7` passed:
 - [IK-01 CPU Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740723)
 - [IK-02 PII Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740691)
 - [IK-03 Multi-GPU Planner](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740794)
+- [IK-04 Disconnected RAG Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743742560)
 - [IK-05 Offline Bundle Acceptance](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43743740795)
 
-The prior [IK-04 Disconnected RAG Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43726371365) acceptance remains the latest recorded run for that unchanged product. IK-01 now also validates that Open WebUI static assets are served from a bounded writable tmpfs while the container root remains read-only, and that the stack completes CPU inference, embeddings, backup/restore and egress-isolation checks. These are CI/runtime acceptance checks, not physical hardware certification or commercial release approval.
-
+The previously recorded IK-04 acceptance was unchanged at the time of PR #12; a fresh IK-04 run passed on the later Node 24 action-migration PR, as recorded below. IK-01 now also validates that Open WebUI static assets are served from a bounded writable tmpfs while the container root remains read-only, and that the stack completes CPU inference, embeddings, backup/restore and egress-isolation checks. These are CI/runtime acceptance checks, not physical hardware certification or commercial release approval.
 
 
 ### HIES security-audit scope and remaining limits
@@ -151,3 +151,11 @@ The Cloudflare Worker compatibility workflow is intentionally scoped to public r
 - Vercel environment metadata confirms Preview and Production entries for `DATABASE_URL` and `PAYLOAD_SECRET`, plus canonical `NEXT_PUBLIC_SITE_URL` and `HEZQEN_ALLOWED_ORIGINS`. Sensitive values were not decrypted. The environment-variable comments express intended staging/production targets, but they do not prove the underlying Neon branch IDs. Do not claim the mapping verified until a non-secret endpoint/branch check proves it.
 - Neon project `hezqen-core` has ready `main`, `staging` and `production` branches; all remain unprotected on the current plan. The read-only branch descriptions show only the `public` schema and no application tables. No shared migration was applied. History retention remains six hours, with no snapshots or automatic schedules observed.
 - No DNS, custom-domain attachment, shared database migration, R2 enablement, paid-plan change, production deployment or production admin bootstrap was performed.
+
+## CI action-runtime modernization — 2026-11-15
+
+The Node 20 action-runtime deprecation has been removed from both repositories' active workflows. HEZQEN PR #46 merged as `e8a8e4be2d7ee4d976a417db5d97fd87bac116c5`; its final head `f590fe54b0cd50612e973552d45470e5ddfdf808` passed [HEZQEN CI](https://github.com/LloydCoder/hezqen/actions/runs/43744409790) and [Cloudflare compatibility](https://github.com/LloydCoder/hezqen/actions/runs/43744409764). The run logs contained no Node 20 action-runtime deprecation warnings.
+
+HIES PR #13 merged as `e2aacfd4117f41c77cdc349961422d6358fd8c11`; its final head `1da78e5b2f1309b5b01d0cd4f326452e65d023af` passed [HIES CI](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43744342470), [HIES Security Hygiene](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43744342534), [IK-01](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43744342440), [IK-02](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43744342473), [IK-03](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43744342501), [IK-04](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43744342560) and [IK-05](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43744342527). The updated workflows use immutable full-SHA pins for checkout v7.0.1, setup-node v7.1.0, setup-python v7.1.0 and upload-artifact v7.0.2. HIES CI and IK-01 logs also contained no Node 20 runtime deprecation warnings.
+
+These changes modernize CI execution runtimes; they do not change the Node.js 24 application runtime or establish production launch readiness. The Cloudflare Worker CMS API compatibility limitation and the infrastructure/production acceptance gates above remain open.
