@@ -1,6 +1,7 @@
 export interface AllowedOriginsInput {
   configuredOrigins?: string;
   deploymentHostname?: string;
+  deploymentEnvironment?: string;
   nodeEnv?: string;
   allowLocalRuntimeTest?: boolean;
 }
@@ -52,9 +53,10 @@ export function resolveAllowedOrigins(input: AllowedOriginsInput): string[] {
       ?.split(",")
       .map((origin) => origin.trim())
       .filter(Boolean) ?? [];
-  const deploymentOrigin = input.deploymentHostname
-    ? parseDeploymentOrigin(input.deploymentHostname)
-    : null;
+  const deploymentOrigin =
+    input.deploymentEnvironment === "preview" && input.deploymentHostname
+      ? parseDeploymentOrigin(input.deploymentHostname)
+      : null;
   const defaults =
     configured.length === 0 && input.nodeEnv !== "production" ? ["http://localhost:3000"] : [];
 

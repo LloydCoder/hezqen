@@ -20,6 +20,7 @@ const secret = process.env.PAYLOAD_SECRET;
 const allowedOrigins = resolveAllowedOrigins({
   configuredOrigins: process.env.HEZQEN_ALLOWED_ORIGINS,
   deploymentHostname: process.env.VERCEL_URL,
+  deploymentEnvironment: process.env.VERCEL_ENV,
   nodeEnv: process.env.NODE_ENV,
   allowLocalRuntimeTest:
     process.env.CI === "true" && process.env.HEZQEN_LOCAL_RUNTIME_TEST === "true",
