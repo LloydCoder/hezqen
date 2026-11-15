@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-import type { PublishingActor } from "./publishing-policy.ts";
+import type { MaterialClaim, PublishingActor } from "./publishing-policy.ts";
 import { transitionPublication, type WorkflowStatus } from "./workflow.ts";
 
 export interface StoredEditorialArticle {
@@ -43,7 +43,7 @@ export interface EditorialWorkflowStore {
   getMaterialClaims(
     articleId: string,
     transactionId: string | number,
-  ): Promise<Array<{ id: string; sourceIds: string[] }>>;
+  ): Promise<MaterialClaim[]>;
   compareAndSwapArticle(
     id: string,
     expectedRevision: number,
