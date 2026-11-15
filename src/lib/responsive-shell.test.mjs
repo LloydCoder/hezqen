@@ -45,7 +45,7 @@ test("mobile layout collapses navigation and content without horizontal nav scro
   assert.doesNotMatch(css, /\.primary-nav\s*\{[^}]*overflow-x:\s*auto/s);
   assert.match(css, /min-height:\s*48px/);
   assert.match(css, /env\(safe-area-inset/);
-  assert.match(css, /@media\\s*\\(max-width:\\s*380px\\)[\\s\\S]*?width:\\s*calc\\(100%\\s*-\\s*32px\\)/);
+  assert.match(css, /@media\s*\(max-width:\s*380px\)[\s\S]*?width:\s*calc\(100%\s*-\s*32px\)/);
 });
 
 test("calculator pages do not introduce nested main landmarks inside the shared layout", () => {
