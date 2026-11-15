@@ -28,7 +28,7 @@ export const Sources: CollectionConfig = {
     create: canResearch,
     read: canRead,
     update: () => false,
-    delete: ({ req }) => roleFromRequest(req.user) === "administrator",
+    delete: () => false,
   },
   fields: [
     { name: "title", type: "text", required: true },
