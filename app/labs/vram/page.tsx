@@ -87,20 +87,36 @@ export default function VramCalculatorPage() {
       };
     } catch (error) {
       return {
-          value: null,
+        value: null,
         error: error instanceof Error ? error.message : "Invalid calculator input.",
       };
     }
-  }, [parametersB, weightFormat, layers, kvHeads, headDimension, contextLength, batchSize, kvCacheFormat, runtimeReservePercent]);
+  }, [
+    parametersB,
+    weightFormat,
+    layers,
+    kvHeads,
+    headDimension,
+    contextLength,
+    batchSize,
+    kvCacheFormat,
+    runtimeReservePercent,
+  ]);
 
   const formatGiB = (value: number) => `${value.toFixed(2)} GiB`;
 
   return (
     <main className="vram-page">
       <div className="container">
-        <a className="back-link" href="/">← HEZQEN home</a>
-        <p className="eyebrow"><span className="eyebrow-line" /> HEZQEN LABS / MODEL INFRASTRUCTURE</p>
-        <h1>LLM VRAM <em>sizing calculator</em></h1>
+        <a className="back-link" href="/">
+          ← HEZQEN home
+        </a>
+        <p className="eyebrow">
+          <span className="eyebrow-line" /> HEZQEN LABS / MODEL INFRASTRUCTURE
+        </p>
+        <h1>
+          LLM VRAM <em>sizing calculator</em>
+        </h1>
         <p className="vram-lede">
           Estimate model-weight memory, key-value cache and runtime headroom before choosing a GPU.
           Adjust the architecture and serving assumptions to model your workload.
