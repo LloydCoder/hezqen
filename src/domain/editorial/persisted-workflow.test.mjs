@@ -55,12 +55,18 @@ class MemoryStore implements EditorialWorkflowStore {
     id: string,
     expectedRevision: number,
     expectedStatus: StoredEditorialArticle["workflowStatus"],
+    expectedAuthorId: string | null,
+    expectedEditorId: string | null,
+    expectedFactCheckerId: string | null,
     changes: Record<string, unknown>,
   ) {
     if (
       id !== this.article.id ||
       expectedRevision !== this.article.revision ||
-      expectedStatus !== this.article.workflowStatus
+      expectedStatus !== this.article.workflowStatus ||
+      expectedAuthorId !== this.article.authorId ||
+      expectedEditorId !== this.article.editorId ||
+      expectedFactCheckerId !== this.article.factCheckerId
     ) {
       return false;
     }
