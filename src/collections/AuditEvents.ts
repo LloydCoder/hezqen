@@ -18,6 +18,11 @@ export const AuditEvents: CollectionConfig = {
     delete: () => false,
   },
   hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("Audit events are append-only and cannot be deleted.", 403);
+      },
+    ],
     beforeChange: [
       ({ data, operation, req }) => {
         const context = req.context as Record<string, unknown> | undefined;
