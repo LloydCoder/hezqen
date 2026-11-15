@@ -30,7 +30,8 @@ export default function EvidenceVerificationControlsClient({ evidenceId }: { evi
         if (!cancelled) setEvidence(body);
       })
       .catch((error: unknown) => {
-        if (!cancelled) setMessage(error instanceof Error ? error.message : "Unable to load evidence.");
+        if (!cancelled)
+          setMessage(error instanceof Error ? error.message : "Unable to load evidence.");
       });
     return () => {
       cancelled = true;
@@ -67,17 +68,34 @@ export default function EvidenceVerificationControlsClient({ evidenceId }: { evi
   return (
     <section
       aria-labelledby="hezqen-evidence-verification-title"
-      style={{ border: "1px solid var(--theme-elevation-200)", borderRadius: 8, padding: 16, marginBottom: 16 }}
+      style={{
+        border: "1px solid var(--theme-elevation-200)",
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 16,
+      }}
     >
-      <h3 id="hezqen-evidence-verification-title" style={{ marginTop: 0 }}>Evidence integrity verification</h3>
-      <p>Status: <strong>{evidence?.verificationStatus ?? "Loading…"}</strong></p>
-      {evidence?.sha256 ? <p>SHA-256: <code>{evidence.sha256}</code></p> : null}
+      <h3 id="hezqen-evidence-verification-title" style={{ marginTop: 0 }}>
+        Evidence integrity verification
+      </h3>
+      <p>
+        Status: <strong>{evidence?.verificationStatus ?? "Loading…"}</strong>
+      </p>
+      {evidence?.sha256 ? (
+        <p>
+          SHA-256: <code>{evidence.sha256}</code>
+        </p>
+      ) : null}
       {evidence?.verificationStatus === "preserved" ? (
         <button type="button" onClick={() => void verify()} disabled={busy}>
           {busy ? "Checking bytes…" : "Verify private evidence object"}
         </button>
       ) : null}
-      {message ? <p role="status" aria-live="polite">{message}</p> : null}
+      {message ? (
+        <p role="status" aria-live="polite">
+          {message}
+        </p>
+      ) : null}
     </section>
   );
 }
