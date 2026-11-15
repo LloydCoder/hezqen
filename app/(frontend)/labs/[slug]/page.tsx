@@ -31,5 +31,5 @@ export default async function LabCalculatorPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   const calculator = LAB_CALCULATORS.find((item) => item.slug === slug);
   if (!calculator) notFound();
-  return <CalculatorExperience calculator={calculator} />;
+  return <CalculatorExperience key={calculator.slug} calculator={calculator} />;
 }
