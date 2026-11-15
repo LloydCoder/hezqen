@@ -36,6 +36,7 @@ export type PublicCorrectionNotice = {
   slug: string;
   division: string;
   correctionStatus: "open" | "resolved";
+  workflowStatus?: string;
   correctionPublicNote: string;
   correctionRequestedAt?: string | null;
   correctionResolvedAt?: string | null;
@@ -166,6 +167,7 @@ export async function getPublicCorrectionNoticeBySlug(
       slug: true,
       division: true,
       correctionStatus: true,
+      workflowStatus: true,
       correctionPublicNote: true,
       correctionRequestedAt: true,
       correctionResolvedAt: true,
@@ -205,7 +207,10 @@ export async function getPublicCorrectionNotices(): Promise<PublicCorrectionNoti
   });
 
   return (result.docs as unknown as PublicCorrectionNotice[]).filter(
-    (notice) => Boolean(notice.correctionPublicNote?.trim()),
+    (notice) =>
+      Boolean(notice.correctionPublicNote?.trim()) &&
+      ((notice.correctionStatus === "open" && notice.workflowStatus === "correction_required") ||
+        (notice.correctionStatus === "resolved" && notice.workflowStatus === "published")),
   );
 }
 
