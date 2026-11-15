@@ -62,6 +62,10 @@ export const Claims: CollectionConfig = {
       type: "select",
       required: true,
       defaultValue: "unverified",
+      access: {
+        create: () => false,
+        update: () => false,
+      },
       options: [
         { label: "Verified", value: "verified" },
         { label: "Corroborated", value: "corroborated" },
