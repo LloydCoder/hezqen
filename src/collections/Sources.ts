@@ -29,7 +29,7 @@ export const Sources: CollectionConfig = {
   access: {
     create: canResearch,
     read: canRead,
-    update: canResearch,
+    update: () => false,
     delete: ({ req }) => roleFromRequest(req.user) === "administrator",
   },
   fields: [
