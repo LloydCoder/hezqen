@@ -26,10 +26,7 @@ export const Claims: CollectionConfig = {
       ({ data, operation, req }) => {
         const context = req.context as Record<string, unknown> | undefined;
         if (operation === "create") {
-          if (
-            data?.verificationStatus !== undefined &&
-            data.verificationStatus !== "unverified"
-          ) {
+          if (data?.verificationStatus !== undefined && data.verificationStatus !== "unverified") {
             throw new APIError("New claims must begin as unverified.", 403);
           }
           if (data?.material === false || data?.reviewedBy != null || data?.reviewedAt != null) {
@@ -88,7 +85,12 @@ export const Claims: CollectionConfig = {
         { label: "Corrected", value: "corrected" },
       ],
     },
-    { name: "material", type: "checkbox", defaultValue: true, access: { create: () => false, update: () => false } },
+    {
+      name: "material",
+      type: "checkbox",
+      defaultValue: true,
+      access: { create: () => false, update: () => false },
+    },
     {
       name: "reviewedBy",
       type: "relationship",
