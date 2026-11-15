@@ -79,6 +79,7 @@ function read(calculator: LabCalculator, values: Values, key: string): number {
   if (typeof value !== "number" || !Number.isFinite(value)) throw new RangeError(`${key} must be a finite number`);
   const definition = calculator.fields.find((item) => item.key === key)!;
   if (value < definition.min || value > definition.max) throw new RangeError(`${key} must be between ${definition.min} and ${definition.max}`);
+  if (definition.step >= 1 && !Number.isInteger(value)) throw new RangeError(`${key} must be a whole number`);
   return value;
 }
 export function calculateLab(slug: string, values: Values): LabCalculation {
