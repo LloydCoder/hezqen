@@ -55,7 +55,7 @@ export const LAB_CALCULATORS: LabCalculator[] = [
         1,
         16,
         1,
-        "Use 4 for float32, 2 for float16, or 1 for int8 payload estimates.",
+        "Use 4 for float32, 2 for float16, or 1 for a generic INT8 estimate. Per-vector overhead is an approximation based on pgvector; engines differ.",
       ),
       f("indexOverhead", "Vector index overhead", 0.3, "fraction of vector payload", 0, 10, 0.01),
       f("replicas", "Copies including primary", 2, "copies", 1, 20),
@@ -491,7 +491,7 @@ export function calculateLab(slug: string, values: Values): LabCalculation {
     slug === "ai-data-risk"
       ? "Scenario estimate only. It is not a legal conclusion, actuarial model, compliance assessment or prediction of breach probability."
       : slug === "inference-throughput"
-        ? "Planning estimate only. Actual throughput depends on model, hardware, batching, context, kernels, memory bandwidth and serving stack; no benchmark is implied."
+        ? "Planning estimate only and assumes linear GPU scaling. Actual throughput depends on model, hardware, parallelism overhead, batching, context, kernels, memory bandwidth and serving stack; no benchmark is implied."
         : slug === "finetune-vs-rag"
           ? "Costs and latency use only the supplied assumptions. This model does not claim equivalent answer quality, accuracy, freshness or suitability."
           : "Planning estimate based on user-supplied inputs. Excluded costs, taxes, discounts, utilization limits and provider-specific billing rules may materially change actual results.";
