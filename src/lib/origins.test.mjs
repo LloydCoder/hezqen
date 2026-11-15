@@ -8,9 +8,22 @@ test("allows the configured canonical origin and exact Vercel deployment hostnam
     resolveAllowedOrigins({
       configuredOrigins: "https://hezqen.tinlance.com",
       deploymentHostname: "hezqen-preview-123.vercel.app",
+      deploymentEnvironment: "preview",
       nodeEnv: "production",
     }),
     ["https://hezqen.tinlance.com", "https://hezqen-preview-123.vercel.app"],
+  );
+});
+
+test("does not add a Vercel production deployment hostname to the origin allowlist", () => {
+  assert.deepEqual(
+    resolveAllowedOrigins({
+      configuredOrigins: "https://hezqen.tinlance.com",
+      deploymentHostname: "hezqen-production-123.vercel.app",
+      deploymentEnvironment: "production",
+      nodeEnv: "production",
+    }),
+    ["https://hezqen.tinlance.com"],
   );
 });
 
