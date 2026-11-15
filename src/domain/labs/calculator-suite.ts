@@ -72,7 +72,7 @@ export const LAB_CALCULATORS: LabCalculator[] = [
     f("runs","Agent runs",10000,"runs/month",0,1e13), f("stepsPerRun","Average steps per run",5,"steps",0,1e6,1), f("inputTokensPerStep","Input tokens per step",500,"tokens",0,1e9), f("outputTokensPerStep","Output tokens per step",200,"tokens",0,1e9), f("inputPricePerMillion","Input token price",1,"USD/million tokens",0,1e9,0.001), f("outputPricePerMillion","Output token price",4,"USD/million tokens",0,1e9,0.001), f("toolCostPerRun","Tool/API cost per run",0.01,"USD/run",0,1e9,0.001), f("monthlyPlatformCost","Platform and orchestration",200,"USD/month",0,1e12)
   ]}
 ];
-const bySlug = new Map(LAB_CALCULATORS.map((calculator) => [calculator.slug, calculator]));
+const bySlug = new Map<string, LabCalculator>(LAB_CALCULATORS.map((calculator) => [calculator.slug, calculator] as const));
 const metric = (label: string, value: number, unit = "USD"): LabMetric => ({ label, value, unit });
 function read(calculator: LabCalculator, values: Values, key: string): number {
   const value = values[key];
