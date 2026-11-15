@@ -8,7 +8,7 @@
 <h1 align="center">HEZQEN</h1>
 <p align="center"><strong>Global Technology &amp; Business Intelligence</strong><br>Research. Intelligence. Perspective.</p>
 
-HEZQEN is a global technology and business intelligence publication for people building, governing and investing in technology. It connects evidence-led reporting, original research and technical analysis across AI, cybersecurity, cloud engineering, and business.
+HEZQEN is a global technology and business intelligence publication and engineering-product portfolio for people building, governing and investing in technology. It connects evidence-led reporting, original research, technical analysis, transparent Labs tools and practical infrastructure kits across AI, cybersecurity, cloud engineering, and business.
 
 <p align="center">
   <a href="https://github.com/LloydCoder/hezqen/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/LloydCoder/hezqen/ci.yml?branch=main&label=CI" alt="CI status"></a>
@@ -36,6 +36,7 @@ HEZQEN is designed as an editorial and intelligence platform, not a high-volume 
 | **HEZQEN Media** | Reporting, investigations, analysis and explainers |
 | **HEZQEN Labs** | Transparent calculators, benchmarks and engineering experiments |
 | **HEZQEN Intelligence** | Research and briefings for consequential technology and business decisions |
+| **HEZQEN Infrastructure** | Reusable local-AI, privacy, multi-GPU and air-gapped RAG engineering kits ([product repository](https://github.com/LloydCoder/hezqen-infrastructure-standard)) |
 
 The four editorial divisions are AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups. Our editorial principle is simple: **AI may assist the newsroom; AI must not become the newsroom.** Every published item requires accountable human authorship and human editorial approval. Material claims must be traceable to evidence.
 
