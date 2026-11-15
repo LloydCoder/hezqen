@@ -131,7 +131,7 @@ These checks establish a deployed preview and unauthenticated route baseline onl
 
 ### Remaining security and operational blockers
 
-1. The hezqen_cms database role is non-superuser and cannot create databases, roles or the public schema, and it does not bypass RLS. However, it still has table-level DELETE privileges across content, evidence and audit tables. Payload collection access denies these operations, but the database credential itself is not least-privilege for immutable records. Revoke unnecessary UPDATE/DELETE privileges at the database layer and verify the resulting runtime before production.
+1. The hezqen_cms database role is non-superuser, cannot create databases/roles/the public schema, and does not bypass RLS. Read-only privilege inspection confirms no UPDATE/DELETE grants on audit_events, evidence, claims or sources, and no DELETE on articles, topics or users. Remaining DELETE grants are confined to Payload internals/version/relationship/session/preferences tables (`_articles_v`, `_articles_v_rels`, `articles_rels`, `payload_kv`, `payload_locked_documents*`, `payload_preferences*`, `users_sessions`). Review `_articles_v` retention and the necessity of those internal grants before production; do not revoke them blindly because Payload may need them for version/session/relationship housekeeping.
 2. The Neon staging branch is unprotected on the current Free plan. Keep migrations isolated and explicitly approved; do not upgrade the plan without approval.
 3. No live object-storage upload/read-back/download test has been completed; the bucket is empty.
 4. No real Payload password-reset email has been accepted and received by a controlled mailbox.
