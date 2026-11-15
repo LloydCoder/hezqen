@@ -234,6 +234,30 @@ test("calculates AI agent operating costs from model tokens, tools and platform 
   );
 });
 
+test("does not invent unit ratios when revenue or agent-run denominators are zero", () => {
+  const saas = calculateLab("saas-margin", {
+    mrr: 0,
+    infrastructure: 10,
+    ai: 5,
+    paymentRate: 0.03,
+    support: 2,
+  });
+  assert.equal(saas.metrics.some((metric) => metric.label === "Gross margin"), false);
+
+  const agent = calculateLab("agent-cost", {
+    runs: 0,
+    stepsPerRun: 5,
+    inputTokensPerStep: 500,
+    outputTokensPerStep: 200,
+    inputPricePerMillion: 1,
+    outputPricePerMillion: 4,
+    toolCostPerRun: 0.01,
+    monthlyPlatformCost: 200,
+  });
+  assert.equal(agent.metrics.some((metric) => metric.label === "Cost per agent run"), false);
+  assert.equal(agent.metrics.find((metric) => metric.label === "Monthly total")?.value, 200);
+});
+
 test("rejects unknown calculators and negative, non-finite or out-of-range inputs", () => {
   assert.throws(() => calculateLab("not-a-calculator", {}), /Unknown calculator/);
   assert.throws(
