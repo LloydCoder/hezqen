@@ -3,9 +3,7 @@ import type { Access, CollectionConfig } from "payload";
 type Actor = { role?: string } | null;
 
 function roleFromRequest(user: unknown): string | undefined {
-  return user && typeof user === "object" && "role" in user
-    ? (user as Actor)?.role
-    : undefined;
+  return user && typeof user === "object" && "role" in user ? (user as Actor)?.role : undefined;
 }
 
 const canReadAudit: Access = ({ req }) =>
@@ -34,11 +32,16 @@ export const AuditEvents: CollectionConfig = {
     { name: "beforeDigest", type: "text" },
     { name: "afterDigest", type: "text" },
     { name: "correlationId", type: "text", index: true },
-    { name: "outcome", type: "select", required: true, options: [
-      { label: "Success", value: "success" },
-      { label: "Rejected", value: "rejected" },
-      { label: "Failure", value: "failure" },
-    ] },
+    {
+      name: "outcome",
+      type: "select",
+      required: true,
+      options: [
+        { label: "Success", value: "success" },
+        { label: "Rejected", value: "rejected" },
+        { label: "Failure", value: "failure" },
+      ],
+    },
   ],
   timestamps: true,
 };
