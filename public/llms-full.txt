@@ -18,7 +18,7 @@ The application uses Next.js App Router 16, React 19, strict TypeScript, Node.js
 
 ## Current implementation
 
-The public application shell includes the homepage, About, Editorial Standards, four division routes, and two Labs calculators: VRAM sizing and API-versus-self-hosted AI cost. The calculators have deterministic domain logic and tests.
+The public application shell includes the homepage, About, Editorial Standards, four division routes, and a sixteen-calculator Labs portfolio: VRAM sizing, AI cost break-even, RAG storage, AI data-leakage risk, hardware ROI, fine-tuning-vs-RAG, cloud migration, Kubernetes cost, database capacity, API pricing comparison, inference throughput, incident cost, SaaS margin, data-centre energy, storage growth and agent operating cost. The calculators have deterministic domain logic and tests.
 
 Payload CMS is integrated with the Next.js App Router, admin/API route mounting and restricted collections for users, articles, topics, sources, evidence, claims and audit events. Initial database migrations, staging validation and production CMS acceptance remain outstanding.
 
@@ -26,7 +26,7 @@ A pure editorial workflow state machine enforces human editor approval rules at 
 
 Research source/evidence validation and guarded HTTPS acquisition logic exist. Persistent private evidence storage, network-level egress restrictions, immutable audit history and independent human fact-checking remain outstanding.
 
-## Security and deployment
+## HEZQEN Labs\n\nThe Labs catalog is available at `/labs`. Fourteen additional calculators are generated from a deterministic TypeScript domain engine, with bounded numeric inputs, explicit assumptions and per-tool limitations. The methodology is documented in `docs/LABS_CALCULATOR_PORTFOLIO.md`. The inference throughput tool is a roofline-style theoretical estimate, not a benchmark; the compliance and incident tools are scenario models, not legal or actuarial determinations.\n\n## Security and deployment
 
 The threat model maps planned controls to OWASP Top 10:2025 and establishes an ASVS 5.0 verification target. It is not a completed security assessment or ASVS attestation.
 
