@@ -50,15 +50,31 @@ test("calculator pages do not introduce nested main landmarks inside the shared 
     "app/(frontend)/labs/vram/vram-calculator.tsx",
     "app/(frontend)/labs/ai-cost/ai-cost-calculator.tsx",
   ]) {
-    assert.doesNotMatch(read(path), /<main\b/, `${path} must use a section or div inside the shared main landmark`);
+    assert.doesNotMatch(
+      read(path),
+      /<main\b/,
+      `${path} must use a section or div inside the shared main landmark`,
+    );
   }
 });
 
 test("calculator grids and result panels reflow on narrow screens", () => {
   const css = read("app/(frontend)/globals.css");
   const calculatorCss = read("app/(frontend)/labs/[slug]/calculator.module.css");
-  assert.match(css, /@media\s*\(max-width:\s*800px\)[\s\S]*?\.vram-layout\s*\{\s*grid-template-columns:\s*1fr;/);
-  assert.match(css, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vram-fields\s*\{\s*grid-template-columns:\s*1fr;/);
-  assert.match(calculatorCss, /@media\s*\(max-width:\s*800px\)[\s\S]*?\.layout\s*\{\s*grid-template-columns:\s*1fr;/);
-  assert.match(calculatorCss, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.fields\s*\{\s*grid-template-columns:\s*1fr;/);
+  assert.match(
+    css,
+    /@media\s*\(max-width:\s*800px\)[\s\S]*?\.vram-layout\s*\{\s*grid-template-columns:\s*1fr;/,
+  );
+  assert.match(
+    css,
+    /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vram-fields\s*\{\s*grid-template-columns:\s*1fr;/,
+  );
+  assert.match(
+    calculatorCss,
+    /@media\s*\(max-width:\s*800px\)[\s\S]*?\.layout\s*\{\s*grid-template-columns:\s*1fr;/,
+  );
+  assert.match(
+    calculatorCss,
+    /@media\s*\(max-width:\s*560px\)[\s\S]*?\.fields\s*\{\s*grid-template-columns:\s*1fr;/,
+  );
 });
