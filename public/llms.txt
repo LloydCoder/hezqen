@@ -23,7 +23,7 @@ Important notes:
 - [VRAM sizing calculator](https://hezqen.vercel.app/labs/vram): first-pass model memory estimate.
 - [AI cost calculator](https://hezqen.vercel.app/labs/ai-cost): API and self-hosted monthly cost comparison.
 - [VRAM methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_METHODOLOGY.md): formulas and limitations.
-- [AI cost methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/AI_COST_CALCULATOR_METHODOLOGY.md): cost model assumptions and exclusions.
+- [AI cost methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/AI_COST_CALCULATOR_METHODOLOGY.md): cost model assumptions and exclusions.\n- [All Labs calculators](https://hezqen.vercel.app/labs): categorized index of sixteen calculators.\n- [Fourteen-calculator suite methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_CALCULATOR_SUITE.md): formulas, assumptions and limitations.
 
 ## Editorial, architecture and security
 
