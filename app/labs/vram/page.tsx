@@ -76,7 +76,10 @@ export default function VramCalculatorPage() {
         error: null,
       };
     } catch (error) {
-      return { value: null, error: error instanceof Error ? error.message : "Invalid calculator input." };
+      return {
+          value: null,
+          error: error instanceof Error ? error.message : "Invalid calculator input.",
+        };
     }
   }, [parametersB, weightFormat, layers, kvHeads, headDimension, contextLength, batchSize, kvCacheFormat, runtimeReservePercent]);
 
@@ -117,7 +120,9 @@ export default function VramCalculatorPage() {
             <p className="section-label">ESTIMATED MEMORY FOOTPRINT</p>
             <h2 id="vram-results-heading">GPU memory requirement</h2>
             {result.error ? (
-              <p className="vram-error" role="alert">{result.error}</p>
+              <p className="vram-error" role="alert">
+                {result.error}
+              </p>
             ) : result.value ? (
               <>
                 <p className="vram-total">{formatGiB(result.value.totalMemoryGiB)}</p>
