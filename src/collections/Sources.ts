@@ -48,7 +48,16 @@ export const Sources: CollectionConfig = {
         { label: "Official Documentation", value: "official_documentation" },
       ],
     },
-    { name: "notes", type: "textarea", access: { read: canResearch } },
+    {
+      name: "notes",
+      type: "textarea",
+      access: {
+        read: ({ req }) =>
+          ["administrator", "editor", "researcher", "fact_checker"].includes(
+            roleFromRequest(req.user) ?? "",
+          ),
+      },
+    },
   ],
   timestamps: true,
 };
