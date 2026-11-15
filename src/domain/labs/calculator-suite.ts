@@ -439,9 +439,7 @@ export function calculateLab(slug: string, values: Values): LabCalculation {
       metrics = [
         metric("Direct cost of revenue", cogs),
         metric("Gross profit", v("mrr") - cogs),
-        ...(v("mrr") > 0
-          ? [metric("Gross margin", (v("mrr") - cogs) / v("mrr"), "fraction")]
-          : []),
+        ...(v("mrr") > 0 ? [metric("Gross margin", (v("mrr") - cogs) / v("mrr"), "fraction")] : []),
         metric("Payment processing", fees),
       ];
       break;
