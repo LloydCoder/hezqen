@@ -46,6 +46,26 @@ test("rejects HTTP localhost origins in production", () => {
   );
 });
 
+test("allows localhost HTTP only with the explicit local CI runtime-test flag", () => {
+  assert.deepEqual(
+    resolveAllowedOrigins({
+      configuredOrigins: "http://localhost:3001",
+      nodeEnv: "production",
+      allowLocalRuntimeTest: true,
+    }),
+    ["http://localhost:3001"],
+  );
+  assert.throws(
+    () =>
+      resolveAllowedOrigins({
+        configuredOrigins: "http://remote.example",
+        nodeEnv: "production",
+        allowLocalRuntimeTest: true,
+      }),
+    /only HTTPS origins/,
+  );
+});
+
 test("rejects malformed Vercel deployment hostnames", () => {
   assert.throws(
     () =>
