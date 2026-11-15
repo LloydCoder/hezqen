@@ -165,7 +165,7 @@ test("correction workflow reopens a new revision and clears prior approval", () 
     factCheckComplete: true,
     disclosuresReviewed: true,
   };
-  const reopened = transitionPublication(published, editor, "correction_required", { now });
+  const reopened = transitionPublication(published, editor, "correction_required", { now, correctionReason: "A material figure was misstated." });
   assert.equal(reopened.ok, true);
   if (reopened.ok) {
     const revised = transitionPublication(reopened.record, editor, "draft", { now });
@@ -176,4 +176,44 @@ test("correction workflow reopens a new revision and clears prior approval", () 
       assert.equal(revised.record.status, "draft");
     }
   }
+});
+
+test("requires a documented reason before opening a published-article correction", () => {
+  const published = {
+    ...record,
+    status: "published",
+    approvedById: "editor-1",
+    approvedAt: now,
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
+  const result = transitionPublication(published, editor, "correction_required", { now });
+  assert.equal(result.ok, false);
+  if (!result.ok) assert.ok(result.blockers.includes("CORRECTION_REASON_REQUIRED"));
+});
+
+test("allows the scheduler to publish only due articles with prior assigned-editor approval", () => {
+  const scheduled = {
+    ...record,
+    status: "scheduled",
+    approvedById: "editor-1",
+    approvedAt: now,
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+    scheduledFor: "2026-11-15T11:00:00.000Z",
+  };
+  const result = transitionPublication(scheduled, agent, "published", {
+    now: "2026-11-15T12:00:00.000Z",
+  });
+  assert.equal(result.ok, true);
+  if (result.ok) assert.equal(result.record.status, "published");
+  assert.equal(
+    transitionPublication(
+      { ...scheduled, approvedById: "other-editor" },
+      agent,
+      "published",
+      { now: "2026-11-15T12:00:00.000Z" },
+    ).ok,
+    false,
+  );
 });
