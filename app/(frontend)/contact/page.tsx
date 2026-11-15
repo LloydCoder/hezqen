@@ -41,7 +41,8 @@ export default function ContactPage() {
         <h2>Corrections and factual concerns</h2>
         <p>
           Identify the article or page, the specific claim, and any supporting source material. We
-          review substantive corrections under our <Link href="/corrections">corrections policy</Link>.
+          review substantive corrections under our{" "}
+            <Link href="/corrections">corrections policy</Link>.
         </p>
         <h2>Editorial independence</h2>
         <p>
