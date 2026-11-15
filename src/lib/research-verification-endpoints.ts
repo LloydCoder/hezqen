@@ -4,6 +4,7 @@ import type { Endpoint, PayloadRequest } from "payload";
 import { assessClaim, validateSourceRecord } from "../domain/research/evidence.ts";
 import type { ResearchEvidence, ResearchSource } from "../domain/research/evidence.ts";
 import type { NeonEvidenceStorageConfig } from "./neon-evidence-storage.ts";
+import { withRequestContext } from "./request-context.ts";
 import {
   getPrivateEvidenceObject,
   readNeonEvidenceStorageConfig,
@@ -33,9 +34,7 @@ function relationIds(value: unknown): string[] {
 
 function relationRecords(value: unknown): RecordValue[] {
   return Array.isArray(value)
-    ? value
-        .filter((item) => item && typeof item === "object" && "id" in item)
-        .map(asRecord)
+    ? value.filter((item) => item && typeof item === "object" && "id" in item).map(asRecord)
     : [];
 }
 
@@ -185,18 +184,24 @@ export const evidenceVerifyEndpoint: Endpoint = {
     }
     const sourceIssues = validateSourceRecord(sourceRecord(source));
     if (sourceIssues.length > 0) {
-      return Response.json({ error: "Evidence source metadata is invalid.", blockers: sourceIssues }, { status: 422 });
+      return Response.json(
+        { error: "Evidence source metadata is invalid.", blockers: sourceIssues },
+        { status: 422 },
+      );
     }
 
     let storageConfig: NeonEvidenceStorageConfig;
     try {
       storageConfig = readNeonEvidenceStorageConfig();
     } catch {
-      return Response.json({ error: "Private evidence storage is not configured." }, { status: 503 });
+      return Response.json(
+        { error: "Private evidence storage is not configured." },
+        { status: 503 },
+      );
     }
 
     const storageRef = typeof evidence.storageRef === "string" ? evidence.storageRef : "";
-    const expectedContentType = typeof evidence.contentType === "string" ? evidence.contentType : "";
+    const expectedContentType =\n      typeof evidence.contentType === "string" ? evidence.contentType : "";
     try {
       const stored = await getPrivateEvidenceObject(storageConfig, storageRef);
       const actualSha256 = sha256Hex(stored.bytes);
@@ -205,10 +210,16 @@ export const evidenceVerifyEndpoint: Endpoint = {
         stored.bytes.byteLength !== Number(evidence.byteSize) ||
         stored.contentType !== expectedContentType
       ) {
-        return Response.json({ error: "Evidence failed byte-integrity verification." }, { status: 409 });
+        return Response.json(
+          { error: "Evidence failed byte-integrity verification." },
+          { status: 409 },
+        );
       }
     } catch {
-      return Response.json({ error: "Evidence object could not be read from private storage." }, { status: 502 });
+      return Response.json(
+        { error: "Evidence object could not be read from private storage." },
+        { status: 502 },
+      );
     }
 
     const transactionId = await req.payload.db.beginTransaction();
@@ -217,11 +228,8 @@ export const evidenceVerifyEndpoint: Endpoint = {
     }
     req.transactionID = transactionId;
     try {
-      const result = await withRequestContext(
-        req,
-        { hezqenEvidenceVerification: true },
-        () =>
-          req.payload.update({
+      const result = await withRequestContext(req, { hezqenEvidenceVerification: true }, () =>
+        req.payload.update({
             collection: "evidence",
             where: {
               and: [
@@ -233,8 +241,8 @@ export const evidenceVerifyEndpoint: Endpoint = {
             data: { verificationStatus: "verified" },
             limit: 1,
             overrideAccess: true,
-            req,
-          }),
+          req,
+        }),
       );
       const updated = result.docs[0];
       if (!updated) {
@@ -281,7 +289,11 @@ export const claimVerifyEndpoint: Endpoint = {
         : "";
     const expectedUpdatedAt =
       typeof body.expectedUpdatedAt === "string" ? body.expectedUpdatedAt : "";
-    if (!claimId.trim() || !expectedUpdatedAt.trim() || Number.isNaN(Date.parse(expectedUpdatedAt))) {
+    if (
+      !claimId.trim() ||
+      !expectedUpdatedAt.trim() ||
+      Number.isNaN(Date.parse(expectedUpdatedAt))
+    ) {
       return Response.json(
         { error: "claimId and expectedUpdatedAt are required." },
         { status: 400 },
@@ -367,7 +379,10 @@ export const claimVerifyEndpoint: Endpoint = {
     );
     if (!assessment.allowed) {
       return Response.json(
-        { error: "Claim does not meet the evidence verification policy.", blockers: assessment.blockers },
+        {
+          error: "Claim does not meet the evidence verification policy.",
+          blockers: assessment.blockers,
+        },
         { status: 422 },
       );
     }
@@ -394,11 +409,8 @@ export const claimVerifyEndpoint: Endpoint = {
     }
     req.transactionID = transactionId;
     try {
-      const result = await withRequestContext(
-        req,
-        { hezqenClaimVerification: true },
-        () =>
-          req.payload.update({
+      const result = await withRequestContext(req, { hezqenClaimVerification: true }, () =>
+        req.payload.update({
             collection: "claims",
             where: {
               and: [
@@ -414,8 +426,8 @@ export const claimVerifyEndpoint: Endpoint = {
             },
             limit: 1,
             overrideAccess: true,
-            req,
-          }),
+          req,
+        }),
       );
       if (!result.docs[0]) {
         await req.payload.db.rollbackTransaction(transactionId);
