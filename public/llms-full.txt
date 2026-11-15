@@ -1,0 +1,52 @@
+# HEZQEN — Full Project Context
+
+## Identity
+
+HEZQEN is a global technology and business intelligence publication by Tinlance. Tagline: “Research. Intelligence. Perspective.” Its editorial divisions are AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
+
+HEZQEN has three product surfaces: Media (reporting, investigations and analysis), Labs (transparent calculators and engineering experiments), and Intelligence (deeper research and briefings; planned, not yet implemented).
+
+## Editorial integrity
+
+AI may assist the newsroom; AI must not become the newsroom. Every published item requires accountable human authorship and human editorial approval. Material claims must be traceable to identifiable evidence. No model, agent, prompt, memory, webpage, tool output or integration can grant publication authority.
+
+Only the assigned human editor may approve or publish after fact-checking, disclosure review and source-backed material claims. Author/editor self-approval is prohibited. Automated publication without accountable human approval is prohibited.
+
+## Technology
+
+The application uses Next.js App Router 16, React 19, strict TypeScript, Node.js 24, pnpm 12, Payload CMS 3, PostgreSQL 18, Biome and the Node built-in test runner. The architecture is a modular monolith.
+
+## Current implementation
+
+The public application shell includes the homepage, About, Editorial Standards, four division routes, and two Labs calculators: VRAM sizing and API-versus-self-hosted AI cost. The calculators have deterministic domain logic and tests.
+
+Payload CMS is integrated with the Next.js App Router, admin/API route mounting and restricted collections for users, articles, topics, sources, evidence, claims and audit events. Initial database migrations, staging validation and production CMS acceptance remain outstanding.
+
+A pure editorial workflow state machine enforces human editor approval rules at the domain boundary. It is not a substitute for server-side authentication, authorization, persistence, transactional audit logging or concurrency controls.
+
+Research source/evidence validation and guarded HTTPS acquisition logic exist. Persistent private evidence storage, network-level egress restrictions, immutable audit history and independent human fact-checking remain outstanding.
+
+## Security and deployment
+
+The threat model maps planned controls to OWASP Top 10:2025 and establishes an ASVS 5.0 verification target. It is not a completed security assessment or ASVS attestation.
+
+Project documentation records a dedicated Vercel project and Neon PostgreSQL 18 project with isolated branches. The branded hostname, initial database migrations, backup/restore verification and several production operations remain open gates.
+
+The live preview is https://hezqen.vercel.app. A READY deployment does not prove every route or workflow is production-accepted.
+
+## Documentation
+
+- [Repository README](https://github.com/LloydCoder/hezqen/blob/main/README.md)
+- [Documentation index](https://github.com/LloydCoder/hezqen/blob/main/docs/README.md)
+- [Architecture](https://github.com/LloydCoder/hezqen/blob/main/docs/ARCHITECTURE.md)
+- [Editorial standards](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_STANDARDS.md)
+- [Editorial workflow](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_WORKFLOW.md)
+- [Research evidence](https://github.com/LloydCoder/hezqen/blob/main/docs/RESEARCH_EVIDENCE.md)
+- [Threat model](https://github.com/LloydCoder/hezqen/blob/main/docs/THREAT_MODEL.md)
+- [CMS setup](https://github.com/LloydCoder/hezqen/blob/main/docs/CMS_SETUP.md)
+- [Data model](https://github.com/LloydCoder/hezqen/blob/main/docs/DATA_MODEL.md)
+- [Phase status](https://github.com/LloydCoder/hezqen/blob/main/docs/PHASE_STATUS.md)
+
+## Non-claims
+
+Premium subscriptions, reader accounts, production search, a fully operational CMS, persistent evidence storage, automated publishing and complete ASVS compliance are not claimed as available. Check the implementation phase status for current acceptance gates.

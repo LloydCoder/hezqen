@@ -1,0 +1,41 @@
+# HEZQEN
+
+> HEZQEN is a global technology and business intelligence publication by Tinlance. It connects evidence-led reporting, original research and technical analysis across AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
+
+HEZQEN has three product surfaces: Media, Labs and Intelligence. The current public application includes the publication shell and two engineering calculators. CMS, research and premium capabilities remain subject to the implementation gates documented in the repository.
+
+Important notes:
+- Human editors retain approval and publishing authority.
+- AI-generated or retrieved content is not verified evidence.
+- Payload CMS integration exists, but initial database migration and operational acceptance remain incomplete.
+- Do not infer that planned capabilities are available merely because they appear in architecture documents.
+
+## Overview
+
+- [Homepage](https://hezqen.vercel.app/): public application.
+- [About](https://hezqen.vercel.app/about): publication mission and publisher.
+- [Editorial standards](https://hezqen.vercel.app/editorial-standards): public editorial principles.
+- [Repository README](https://github.com/LloydCoder/hezqen/blob/main/README.md): source, setup and implementation status.
+- [Documentation index](https://github.com/LloydCoder/hezqen/blob/main/docs/README.md): tutorials, how-to guides, explanation and reference.
+
+## Labs
+
+- [VRAM sizing calculator](https://hezqen.vercel.app/labs/vram): first-pass model memory estimate.
+- [AI cost calculator](https://hezqen.vercel.app/labs/ai-cost): API and self-hosted monthly cost comparison.
+- [VRAM methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_METHODOLOGY.md): formulas and limitations.
+- [AI cost methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/AI_COST_CALCULATOR_METHODOLOGY.md): cost model assumptions and exclusions.
+
+## Editorial, architecture and security
+
+- [Editorial standards](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_STANDARDS.md)
+- [Editorial workflow](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_WORKFLOW.md)
+- [Research evidence](https://github.com/LloydCoder/hezqen/blob/main/docs/RESEARCH_EVIDENCE.md)
+- [Threat model](https://github.com/LloydCoder/hezqen/blob/main/docs/THREAT_MODEL.md)
+- [Architecture](https://github.com/LloydCoder/hezqen/blob/main/docs/ARCHITECTURE.md)
+- [CMS setup](https://github.com/LloydCoder/hezqen/blob/main/docs/CMS_SETUP.md)
+- [Phase status](https://github.com/LloydCoder/hezqen/blob/main/docs/PHASE_STATUS.md)
+- [Security policy](https://github.com/LloydCoder/hezqen/blob/main/SECURITY.md)
+
+## Full context
+
+- [llms-full.txt](https://hezqen.vercel.app/llms-full.txt): consolidated product, architecture, editorial and implementation context.

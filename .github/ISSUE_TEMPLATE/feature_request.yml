@@ -1,0 +1,63 @@
+name: Feature request
+description: Propose a capability or improvement.
+title: "feature: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Explain the user problem and the outcome you want. Large changes should be discussed before implementation.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Product area
+      options:
+        - AI & Technology
+        - Cybersecurity
+        - Cloud & Engineering
+        - Business & Startups
+        - HEZQEN Labs
+        - Editorial platform
+        - Research and evidence
+        - Developer experience
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Who experiences the problem, and why does it matter?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the capability or change you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and trade-offs
+      description: Other approaches, constraints or risks considered.
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What observable result would make this useful?
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and documentation.
+          required: true
+        - label: I understand this request may be discussed or declined.
+          required: true
