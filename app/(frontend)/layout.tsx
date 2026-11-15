@@ -64,6 +64,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
         <StructuredData data={publisherGraph} />
         <div className="site-shell">
           <div className="topline">
