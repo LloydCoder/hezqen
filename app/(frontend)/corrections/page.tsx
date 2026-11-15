@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { StructuredData } from "@/components/StructuredData";
 import { getPublicCorrectionNotices } from "@/lib/public-articles";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Corrections Policy",
@@ -30,9 +31,18 @@ export default async function CorrectionsPage() {
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "HEZQEN Corrections Policy",
-          url: "https://hezqen.tinlance.com/corrections",
-          isPartOf: { "@id": "https://hezqen.tinlance.com/#website" },
-          about: { "@id": "https://hezqen.tinlance.com/#organization" },
+          url: `${site.url}/corrections`,
+          isPartOf: { "@id": `${site.url}/#website` },
+          about: { "@id": `${site.url}/#organization` },
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: notices.map((notice, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: notice.title,
+              url: `${site.url}/articles/${notice.slug}`,
+            })),
+          },
         }}
       />
       <div className="container prose-container">
@@ -89,9 +99,9 @@ export default async function CorrectionsPage() {
                     <span className={notice.correctionStatus === "open" ? "correction-state is-open" : "correction-state"}>
                       {notice.correctionStatus === "open" ? "Under review" : "Resolved"}
                     </span>
-                    {formatDate(notice.correctionRequestedAt) ? (
-                      <time dateTime={notice.correctionRequestedAt ?? undefined}>
-                        {formatDate(notice.correctionRequestedAt)}
+                    {formatDate(notice.correctionRequestedAt ?? notice.correctionResolvedAt) ? (
+                      <time dateTime={notice.correctionRequestedAt ?? notice.correctionResolvedAt ?? undefined}>
+                        {formatDate(notice.correctionRequestedAt ?? notice.correctionResolvedAt)}
                       </time>
                     ) : null}
                   </div>
