@@ -82,7 +82,7 @@ export const Users: CollectionConfig = {
         read: ({ req }) =>
           ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
         create: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
-        update: isAdministrator,
+        update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
       },
       options: [
         { label: "Reader", value: "reader" },
@@ -99,7 +99,7 @@ export const Users: CollectionConfig = {
       defaultValue: true,
       access: {
         read: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
-        update: isAdministrator,
+        update: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
       },
     },
   ],
