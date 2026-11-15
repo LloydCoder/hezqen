@@ -2,46 +2,48 @@
 
 > HEZQEN is a global technology and business intelligence publication by Tinlance. It connects evidence-led reporting, original research and technical analysis across AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups.
 
-HEZQEN has three product surfaces: Media, Labs and Intelligence. The Labs portfolio contains sixteen calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage, AI data-leakage scenario risk, hardware ROI, fine-tuning versus RAG, cloud migration, Kubernetes cost, database capacity, API pricing comparison, inference throughput, incident cost, SaaS margin, data-centre energy, storage growth and AI-agent operating cost. CMS, research and premium capabilities remain subject to the implementation gates documented in the repository.
+Tagline: Research. Intelligence. Perspective.
 
-Important notes:
-- Human editors retain approval and publishing authority.
-- AI-generated or retrieved content is not verified evidence.
-- Payload CMS integration exists, but initial database migration and operational acceptance remain incomplete.
-- Do not infer that planned capabilities are available merely because they appear in architecture documents.
+## Publication
+- [Homepage](https://hezqen.tinlance.com/): global technology and business intelligence publication.
+- [About HEZQEN](https://hezqen.tinlance.com/about): mission, coverage and publisher.
+- [Editorial standards](https://hezqen.tinlance.com/editorial-standards): evidence, authorship, human review and corrections principles.
+- [Corrections policy](https://hezqen.tinlance.com/corrections): how to report and review factual concerns.
+- [Contact](https://hezqen.tinlance.com/contact): editorial and general enquiries.
+- [HTML sitemap](https://hezqen.tinlance.com/sitemap): directory of public pages.
 
-## Overview
+## Editorial divisions
+- [AI & Technology](https://hezqen.tinlance.com/divisions/ai-technology)
+- [Cybersecurity](https://hezqen.tinlance.com/divisions/cybersecurity)
+- [Cloud & Engineering](https://hezqen.tinlance.com/divisions/cloud-engineering)
+- [Business & Startups](https://hezqen.tinlance.com/divisions/business-startups)
 
-- [Homepage](https://hezqen.vercel.app/): public application.
-- [About](https://hezqen.vercel.app/about): publication mission and publisher.
-- [Editorial standards](https://hezqen.vercel.app/editorial-standards): public editorial principles.
-- [Repository README](https://github.com/LloydCoder/hezqen/blob/main/README.md): source, setup and implementation status.
-- [Documentation index](https://github.com/LloydCoder/hezqen/blob/main/docs/README.md): tutorials, how-to guides, explanation and reference.
+## Labs and infrastructure
+- [HEZQEN Labs](https://hezqen.tinlance.com/labs): sixteen planning calculators with visible assumptions and deterministic formulas.
+- [VRAM sizing calculator](https://hezqen.tinlance.com/labs/vram)
+- [AI API vs self-hosted cost calculator](https://hezqen.tinlance.com/labs/ai-cost)
+- [HEZQEN Infrastructure](https://hezqen.tinlance.com/infrastructure): five engineering-preview kits, not production-certified or commercially released.
 
-## Labs
+## Trust, policies and technical discovery
+- [Security and responsible disclosure](https://hezqen.tinlance.com/security)
+- [Privacy notice](https://hezqen.tinlance.com/privacy)
+- [Cookie notice](https://hezqen.tinlance.com/cookies)
+- [Terms of use](https://hezqen.tinlance.com/terms)
+- [robots.txt](https://hezqen.tinlance.com/robots.txt)
+- [XML sitemap](https://hezqen.tinlance.com/sitemap.xml)
+- [Full project context](https://hezqen.tinlance.com/llms-full.txt)
 
-- [VRAM sizing calculator](https://hezqen.vercel.app/labs/vram): first-pass model memory estimate.
-- [AI cost calculator](https://hezqen.vercel.app/labs/ai-cost): API and self-hosted monthly cost comparison.
-- [VRAM methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_METHODOLOGY.md): formulas and limitations.
-- [AI cost methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/AI_COST_CALCULATOR_METHODOLOGY.md): cost model assumptions and exclusions.\n- [All Labs calculators](https://hezqen.vercel.app/labs): categorized index of sixteen calculators.\n- [Fourteen-calculator suite methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_CALCULATOR_SUITE.md): formulas, assumptions and limitations.
-
-## Editorial, architecture and security
-
-- [Editorial standards](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_STANDARDS.md)
+## Source and documentation
+- [HEZQEN source repository](https://github.com/LloydCoder/hezqen)
+- [Infrastructure Standard repository](https://github.com/LloydCoder/hezqen-infrastructure-standard)
+- [Architecture](https://github.com/LloydCoder/hezqen/blob/main/docs/ARCHITECTURE.md)
 - [Editorial workflow](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_WORKFLOW.md)
 - [Research evidence](https://github.com/LloydCoder/hezqen/blob/main/docs/RESEARCH_EVIDENCE.md)
-- [Threat model](https://github.com/LloydCoder/hezqen/blob/main/docs/THREAT_MODEL.md)
-- [Architecture](https://github.com/LloydCoder/hezqen/blob/main/docs/ARCHITECTURE.md)
-- [CMS setup](https://github.com/LloydCoder/hezqen/blob/main/docs/CMS_SETUP.md)
-- [Phase status](https://github.com/LloydCoder/hezqen/blob/main/docs/PHASE_STATUS.md)
-- [Security policy](https://github.com/LloydCoder/hezqen/blob/main/SECURITY.md)
+- [Implementation phase status](https://github.com/LloydCoder/hezqen/blob/main/docs/PHASE_STATUS.md)
 
-## Full context
-
-- [llms-full.txt](https://hezqen.vercel.app/llms-full.txt): consolidated product, architecture, editorial and implementation context.
-
-
-## Infrastructure
-
-- [HEZQEN Infrastructure kits](https://hezqen.tinlance.com/infrastructure): five open engineering-preview kits, not production-certified or commercially released.
-- Product source and technical manifests: https://github.com/LloydCoder/hezqen-infrastructure-standard
+## Important status qualifications
+- Human editors retain approval and publishing authority.
+- AI-generated or retrieved content is not verified evidence.
+- Reader accounts, premium subscriptions, production search and automated publishing are not claimed as available.
+- Payload CMS integration exists, but shared database migration and operational acceptance remain release gates.
+- Infrastructure kits are engineering previews; automated tests do not establish certification or physical hardware validation.
