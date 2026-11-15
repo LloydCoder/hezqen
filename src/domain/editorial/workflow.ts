@@ -104,7 +104,8 @@ export function transitionPublication(
       approvedById: actor.id,
       approvedAt: now,
     };
-    if (!canPublish(candidate, actor)) {
+    const policyRecord: PublicationRecord = { ...candidate, status: "approved" };
+    if (!canPublish(policyRecord, actor)) {
       return resultWithBlockers("PUBLICATION_BLOCKED");
     }
     return { ok: true, record: candidate };
