@@ -22,7 +22,13 @@ function NumberField({
   return (
     <label className="vram-field">
       <span>{label}</span>
-      <input type="number" min={min} step={step} value={value} onChange={(event) => onChange(event.target.value)} />
+      <input
+        type="number"
+        min={min}
+        step={step}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
     </label>
   );
 }
@@ -42,7 +48,11 @@ function SelectField<T extends string>({
     <label className="vram-field">
       <span>{label}</span>
       <select value={value} onChange={(event) => onChange(event.target.value as T)}>
-        {options.map((option) => <option key={option} value={option}>{option.toUpperCase()}</option>)}
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option.toUpperCase()}
+          </option>
+        ))}
       </select>
     </label>
   );
