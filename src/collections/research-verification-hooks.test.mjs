@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { Articles } from "./Articles.ts";
 import { AuditEvents } from "./AuditEvents.ts";
 import { Claims } from "./Claims.ts";
 import { Evidence } from "./Evidence.ts";
 import { Sources } from "./Sources.ts";
+import { Topics } from "./Topics.ts";
+import { Users } from "./Users.ts";
 
 const evidenceHook = Evidence.hooks?.beforeChange?.[0];
 const claimHook = Claims.hooks?.beforeChange?.[0];
@@ -166,4 +169,16 @@ test("source provenance cannot be edited through the Local API", () => {
     () => hook({ data: { canonicalUrl: "https://example.com/changed" }, operation: "update", req: { context: {} } }),
     /Source records are immutable/ ,
   );
+});
+
+test("core CMS records cannot be deleted through overrideAccess Local API calls", () => {
+  for (const [collection, pattern] of [
+    [Articles, /cannot be deleted/],
+    [Topics, /cannot be deleted/],
+    [Users, /cannot be deleted/],
+  ]) {
+    const hook = collection.hooks?.beforeDelete?.[0];
+    assert.ok(hook);
+    assert.throws(() => hook({ id: 1, req: { context: {} } }), pattern);
+  }
 });
