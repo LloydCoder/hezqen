@@ -149,18 +149,6 @@ export const Articles: CollectionConfig = {
       },
     },
     {
-      name: "_status",
-      type: "select",
-      options: [
-        { label: "Draft", value: "draft" },
-        { label: "Published", value: "published" },
-      ],
-      access: {
-        create: () => false,
-        update: () => false,
-      },
-    },
-    {
       name: "workflowStatus",
       type: "select",
       required: true,
