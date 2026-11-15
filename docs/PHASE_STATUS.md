@@ -6,6 +6,19 @@
 
 This register is evidence-based. A phase is not complete because documentation or source files exist. A green CI run proves only the checks that workflow actually executes; it does not prove live service operation, production security, editorial readiness, legal clearance or business readiness.
 
+## Six-phase execution sequence
+
+The detailed phase register below maps to the agreed launch sequence:
+
+1. **Final product audit and foundation** — detailed phases 1, 2, 6, 7, 8 and 12; review the publication, Labs and infrastructure products before release.
+2. **Production infrastructure** — detailed phases 0, 3 and 13; isolate hosting, databases, storage, secrets, backups, monitoring and rollback.
+3. **Editorial operations** — detailed phases 4, 5, 6 and 7; operational CMS, human approval, research provenance, corrections and publication controls.
+4. **Commercial products** — detailed phases 8 and 10 plus the separate HIES product repository; product documentation, release artifacts, licensing, pricing, support and entitlements.
+5. **Audience acquisition** — detailed phases 7, 9 and 14; search discovery, newsletter, distribution, partnerships and measured conversion.
+6. **Global launch** — a final cross-phase release gate; production deployment, domain/TLS verification, launch campaign, operational coverage and rollback readiness.
+
+The six phases are sequential macro-gates. A later macro-phase cannot be called complete while any prerequisite detailed phase remains blocked.
+
 ## Phase register
 
 | Phase | Scope | Status | Verified evidence | Remaining acceptance gates |
@@ -18,7 +31,7 @@ This register is evidence-based. A phase is not complete because documentation o
 | 5 | Evidence and research | PARTIAL | Source/evidence/claim domain validation and SSRF-aware HTTPS acquisition logic exist, including redirect revalidation, content limits and SHA-256 calculation. | Private object storage; durable evidence capture/retrieval; immutable/versioned retention; network egress enforcement; claim-to-evidence UI and transactional audit; independent fact-check operations. |
 | 6 | Public publication website | PARTIAL | Homepage, About, Editorial Standards and four division routes exist. | CMS-backed article pages, author/editor profiles, investigations/research pages, correction notices, disclosure surfaces, pagination and verified empty/error states. |
 | 7 | Search, SEO and structured discovery | PARTIAL | Canonical metadata, robots.txt, sitemap.xml, llms.txt and llms-full.txt exist. Default canonical host is `hezqen.tinlance.com`. | Structured data and validation; published-content sitemap integration; internal search; indexation/privacy checks; Search Console and live crawl QA after launch. |
-| 8 | HEZQEN Labs | PORTFOLIO COMPLETE; PRODUCTION ACCEPTANCE PARTIAL | Sixteen deterministic calculators, centralized catalog, methodology docs and regression tests exist. Main CI production build and HTTP route smoke cover the calculator portfolio. | Independent formula review; accessibility and browser QA; real-world validation of assumptions; measurement disclaimers; production analytics and telemetry. |
+| 8 | HEZQEN Labs and Infrastructure products | CALCULATORS IMPLEMENTED; KITS ENGINEERING PREVIEW | Sixteen deterministic calculators exist in this repository. Five reusable infrastructure products are maintained separately in `LloydCoder/hezqen-infrastructure-standard`; its latest main commit is `639afb9867c69d025e3d637195cf4436e2711e31`. | Independent calculator formula review; browser/accessibility QA; physical GPU validation; PII performance validation; transitive SBOM and signed provenance; model/third-party license review; commercial documentation, support and release artifacts. |
 | 9 | Newsletter and reader accounts | NOT STARTED | No accepted reader-account or newsletter workflow is evidenced. | Consent, double opt-in, preferences, unsubscribe, data export/deletion, secure authentication and deliverability controls. |
 | 10 | HEZQEN Intelligence | NOT STARTED | No production premium research, billing or entitlement system is evidenced. | Product definition, secure billing integration, server-side entitlements, pricing/legal terms, support and refund operations. |
 | 11 | Integrations | NOT STARTED | No production Tinlyt, Searqon or TAS integration is evidenced. | Scoped credentials, explicit authorization, auditability, rate limits, failure isolation and human approval boundaries. |
@@ -44,3 +57,24 @@ The Neon connector explicitly requires user approval before shared-database migr
 ## Release decision
 
 HEZQEN is an engineering preview, not a production-ready publication service. Do not attach `hezqen.tinlance.com`, publish a production deployment, accept paid hosting upgrades, or bootstrap a production administrator until the relevant gates have passed and the required approvals have been obtained.
+
+
+## Cross-repository HEZQEN Infrastructure products
+
+The infrastructure product line is implemented in [LloydCoder/hezqen-infrastructure-standard](https://github.com/LloydCoder/hezqen-infrastructure-standard), not inside the publication application's runtime. The repository uses a shared HIES standard with four product directories and an aggregate offline bundle:
+
+1. **IK-01 — Local AI Deployment Kit**
+2. **IK-02 — PII Protection Middleware Kit**
+3. **IK-03 — Multi-GPU Optimization Kit**
+4. **IK-04 — Air-Gapped RAG Kit**
+5. **IK-05 — Complete Infrastructure Lab Bundle**
+
+At main commit `639afb9867c69d025e3d637195cf4436e2711e31`, the following checks are green:
+
+- [HIES CI](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729698285)
+- [HIES Security Hygiene](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729698293)
+- [IK-05 Offline Bundle Acceptance](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729698296)
+
+Product-specific runtime/acceptance workflows have also passed on the latest commits that touched each product: [IK-01 CPU Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43726371376), [IK-02 PII Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43724537149), [IK-03 Multi-GPU Planner](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43729614141), and [IK-04 Disconnected RAG Runtime](https://github.com/LloydCoder/hezqen-infrastructure-standard/actions/runs/43726371365). These are CI/runtime acceptance checks, not physical hardware certification or commercial release approval.
+
+The kits remain engineering previews. Outstanding commercial-release gates include physical GPU testing on supported hardware, PII precision/recall and throughput validation, a transitive SBOM, signed build provenance, model and third-party license review, versioned release artifacts, customer documentation, support policy and pricing. Do not advertise the kits as fully production-certified or commercially released until those gates are complete.
