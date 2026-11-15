@@ -1,13 +1,8 @@
 export type CalculatorField = { key: string; label: string; unit: string; min?: number; max?: number; step?: number; initial: number; help?: string };
 export type CalculatorDefinition = { slug: string; title: string; category: string; description: string; purpose: string; fields: readonly CalculatorField[] };
-export type CalculatorResult = { headline: string; unit: string; metrics: { label: string; value: number; unit: string; precision?: number }[]; notes: string[] };
+export type CalculatorResult = { headline: string; headlineValue: number; unit: string; metrics: { label: string; value: number; unit: string; precision?: number }[]; notes: string[] };
 type Values = Record<string, number>;
 const f = (key: string, label: string, unit: string, initial: number, min = 0, max = 1e12, step = 1, help?: string): CalculatorField => ({key,label,unit,initial,min,max,step,help});
-const common = {
-  money: (v:number) => Math.round(v*100)/100,
-  finite: (v:number) => Number.isFinite(v) ? v : 0,
-  ceilGiB: (v:number) => Math.ceil(v*100)/100,
-};
 export const calculators: readonly CalculatorDefinition[] = [
  {slug:"rag-storage",title:"Local RAG Storage & Vector Database Sizing",category:"Private AI & RAG Engineering",description:"Estimate chunk count, vector payload, source corpus, metadata, replicas and storage headroom.",purpose:"Capacity planning for a local or self-hosted retrieval-augmented generation stack.",fields:[
  f("documents","Documents in corpus","documents",100000,1,1e10),f("tokensPerDocument","Average tokens per document","tokens",2000,1,1e8),f("chunkTokens","Chunk size","tokens",512,1,1e6),f("overlapPercent","Chunk overlap","%",10,0,90,1),f("embeddingDimensions","Embedding dimensions","dimensions",1536,1,65536),f("bytesPerDimension","Bytes per vector dimension","bytes",4,1,16),f("metadataKB","Metadata per chunk","KB",2,0,1e6,0.1),f("replicas","Storage copies / replicas","copies",2,1,20),f("headroomPercent","Capacity headroom","%",25,0,300)
@@ -79,5 +74,5 @@ export function calculateLab(slug:string,raw:Values):CalculatorResult {
  case "agent-cost": {const runs=v.agents*v.runsPerAgentDay*v.days;const tokens=runs*(v.inputTokensPerRun*v.inputPrice+v.outputTokensPerRun*v.outputPrice)/1e6;const tools=runs*v.toolCallsPerRun*v.toolCostPerCall;const base=tokens+tools+v.computeMonthly+v.observabilityMonthly;const total=base*(1+v.retryPercent/100);headline="Estimated monthly agent operating cost";headlineValue=total;metrics=[metric("Agent runs per month",runs,"runs",0),metric("Model token spend",tokens,"USD"),metric("Tool spend",tools,"USD"),metric("Compute",v.computeMonthly,"USD"),metric("Observability and storage",v.observabilityMonthly,"USD"),metric("Retry overhead",total-base,"USD"),metric("Total",total,"USD"),metric("Cost per run",total/Math.max(1,runs),"USD / run",6)];notes=["Retry percentage is applied to the combined model, tool, compute and observability estimate.","Human review, failed-task remediation, evaluation, data licensing, platform fees and idle capacity should be added where relevant."];break;}
  default: throw new RangeError("Unknown calculator.");
  }
- return {headline,unit,metrics,notes};
+ return {headline,headlineValue,unit,metrics,notes};
 }
