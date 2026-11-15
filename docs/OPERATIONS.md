@@ -34,7 +34,7 @@ The restore script refuses every non-empty target, even when an overwrite flag i
 
 ## CI backup/restore drill
 
-The Payload migration verification workflow applies migrations to ephemeral PostgreSQL, creates a custom-format backup, restores it into a second ephemeral database, and compares schema-table and migration counts. It also proves the restore guard blocks unapproved and unapproved-production restores. This validates the tooling; it is not a production backup schedule or restore drill.
+The Payload migration verification workflow applies migrations to ephemeral PostgreSQL, creates a custom-format backup, restores it into a second ephemeral database, and compares schema-table counts, migration counts, and a sentinel data row. It also proves the restore guard blocks unapproved and unapproved-production restores. This validates the tooling; it is not a production backup schedule or restore drill.
 
 ## Current provider constraints
 
