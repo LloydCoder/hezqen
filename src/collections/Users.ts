@@ -74,8 +74,7 @@ export const Users: CollectionConfig = {
       required: true,
       defaultValue: "author",
       access: {
-        read: ({ req }) =>
-          hasActiveRole(req.user, ["administrator", "editor"]),
+        read: ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]),
         create: ({ req }) => hasActiveRole(req.user, ["administrator"]),
         update: ({ req }) => hasActiveRole(req.user, ["administrator"]),
       },
