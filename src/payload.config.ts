@@ -87,6 +87,7 @@ export default buildConfig({
     pool: {
       connectionString: databaseUrl,
     },
+    migrationDir: path.resolve(dirname, "migrations"),
     push: false,
   }),
 });
