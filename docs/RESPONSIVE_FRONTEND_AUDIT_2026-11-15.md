@@ -72,6 +72,14 @@ The public article query must not trust a frontend-supplied status filter. Enfor
 
 ## Verification status
 
-The repository includes `src/lib/responsive-shell.test.mjs` in the standard `pnpm test` command. It checks mobile disclosure semantics, all navigation destinations, focus dismissal, route state, responsive breakpoints, 320px gutter rules, calculator reflow and main-landmark uniqueness.
+The final source revision passed:
+- HEZQEN CI: lint, format check, all 112 tests, dependency audit, production build, runtime smoke test and TypeScript.
+- Cloudflare compatibility: Next.js/vinext compatibility and Worker public-route smoke tests.
+- Payload migration verification: ephemeral PostgreSQL migration workflow.
+- Vercel preview: successful production build and READY deployment.
 
-CI and preview checks are still required after the final source revision. Automated source tests do not replace manual VoiceOver/TalkBack checks, physical-device testing, screenshot comparisons, or a full WCAG 2.2 AA assessment.
+Preview HTTP/SSR checks returned 200 for the homepage, one editorial division, Labs, VRAM calculator, AI-cost calculator, RAG storage calculator, Infrastructure, About, Contact and Editorial Standards. Each response included the mobile navigation with all nine links, a matching `aria-controls` / panel ID, the viewport-fit setting and exactly one main landmark.
+
+Interactive browser viewport emulation and screenshots at 320px through desktop widths were not completed because the browser automation wallet had an insufficient balance. No wallet top-up or automatic reload was performed. Therefore, this is not a physical-device test or a WCAG 2.2 AA certification. Manual VoiceOver/TalkBack checks, physical-device testing, screenshot comparisons and a full accessibility assessment remain release validation tasks.
+
+The repository includes `src/lib/responsive-shell.test.mjs` in the standard `pnpm test` command. It checks mobile disclosure semantics, all navigation destinations, focus dismissal, route state, responsive breakpoints, 320px gutter rules, calculator reflow and main-landmark uniqueness.
