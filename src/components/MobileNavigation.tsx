@@ -70,22 +70,25 @@ export function MobileNavigation({ items }: { items: readonly NavigationItem[] }
         <span>{open ? "Close" : "Menu"}</span>
       </button>
       <nav className="mobile-nav" id={panelId} aria-label="Mobile navigation" hidden={!open}>
-        {items.map((item) => {
-          const current = pathname === item.href || pathname.startsWith(`${item.href}/`);
-          return (
-            <Link
-              href={item.href}
-              key={item.href}
-              aria-current={current ? "page" : undefined}
-              onClick={() => setOpen(false)}
-            >
-              <span>{item.label}</span>
-              <span className="mobile-nav-arrow" aria-hidden="true">
-                ↗
-              </span>
-            </Link>
-          );
-        })}
+        <ul className="mobile-nav-list">
+          {items.map((item) => {
+            const current = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={current ? "page" : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  <span>{item.label}</span>
+                  <span className="mobile-nav-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
     </div>
   );
