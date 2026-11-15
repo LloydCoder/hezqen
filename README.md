@@ -8,7 +8,7 @@
 <h1 align="center">HEZQEN</h1>
 <p align="center"><strong>Global Technology &amp; Business Intelligence</strong><br>Research. Intelligence. Perspective.</p>
 
-HEZQEN is a global technology and business intelligence publication for people building, governing and investing in technology. It connects evidence-led reporting, original research and technical analysis across AI, cybersecurity, cloud engineering, and business.
+HEZQEN is a global technology and business intelligence publication and engineering-product portfolio for people building, governing and investing in technology. It connects evidence-led reporting, original research, technical analysis, transparent Labs tools and practical infrastructure kits across AI, cybersecurity, cloud engineering, and business.
 
 <p align="center">
   <a href="https://github.com/LloydCoder/hezqen/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/LloydCoder/hezqen/ci.yml?branch=main&label=CI" alt="CI status"></a>
@@ -17,13 +17,17 @@ HEZQEN is a global technology and business intelligence publication for people b
   <img src="https://img.shields.io/badge/pnpm-12.x-F69220?logo=pnpm&logoColor=white" alt="pnpm 12">
 </p>
 
-## Visual proof
+## Preview and release status
 
-**[Open the HEZQEN live preview](https://hezqen.vercel.app)** · [Try the VRAM sizing calculator](https://hezqen.vercel.app/labs/vram) · [Try the AI cost calculator](https://hezqen.vercel.app/labs/ai-cost)
+The intended public hostname is **https://hezqen.tinlance.com**. It is not yet a production service and must not be treated as live until the hosting, database, security, browser QA, monitoring, backup/restore and rollback gates are accepted. The repository intentionally does not trigger Vercel Git deployments. Cloudflare Workers is under isolated compatibility evaluation; no Cloudflare deployment or DNS change has been made.
 
-The live preview demonstrates the current public application shell and Labs tools. A recorded product walkthrough is not yet included; screenshots and demo recordings will be added after the public routes receive visual QA.
+The public application shell and sixteen HEZQEN Labs calculators can be exercised locally using the Quick Start instructions below.
 
-## HEZQEN Labs\n\nThe Labs portfolio contains sixteen calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage sizing, AI data-leakage scenario risk, local hardware ROI, fine-tuning versus RAG, cloud migration cost, Kubernetes infrastructure cost, database capacity, AI API pricing comparison, LLM inference throughput, cybersecurity incident cost, SaaS gross margin, data-centre energy, storage growth and AI-agent operating cost. See the [calculator methodology and limitations](docs/LABS_CALCULATOR_SUITE.md) for formulas, assumptions, units and exclusions. The sixteen-calculator portfolio is implemented and covered by deterministic regression tests, production-build validation and runtime HTTP smoke tests. Production browser QA and deployment telemetry remain separate release checks.\n\n## Why HEZQEN
+## HEZQEN Labs
+
+The Labs portfolio contains sixteen calculators: VRAM sizing, API-versus-self-hosted AI cost, RAG storage sizing, AI data-leakage scenario risk, local hardware ROI, fine-tuning versus RAG, cloud migration cost, Kubernetes infrastructure cost, database capacity, AI API pricing comparison, LLM inference throughput, cybersecurity incident cost, SaaS gross margin, data-centre energy, storage growth and AI-agent operating cost. See the [calculator methodology and limitations](docs/LABS_CALCULATOR_SUITE.md) for formulas, assumptions, units and exclusions. The sixteen-calculator portfolio is implemented on `main` and covered by deterministic regression tests, production-build validation and runtime HTTP smoke tests. Production browser QA, live deployment telemetry and public-hostname verification remain separate release checks.
+
+## Why HEZQEN
 
 HEZQEN is designed as an editorial and intelligence platform, not a high-volume content blog.
 
@@ -32,6 +36,7 @@ HEZQEN is designed as an editorial and intelligence platform, not a high-volume 
 | **HEZQEN Media** | Reporting, investigations, analysis and explainers |
 | **HEZQEN Labs** | Transparent calculators, benchmarks and engineering experiments |
 | **HEZQEN Intelligence** | Research and briefings for consequential technology and business decisions |
+| **HEZQEN Infrastructure** | Reusable local-AI, privacy, multi-GPU and air-gapped RAG engineering kits ([product repository](https://github.com/LloydCoder/hezqen-infrastructure-standard)) |
 
 The four editorial divisions are AI & Technology, Cybersecurity, Cloud & Engineering, and Business & Startups. Our editorial principle is simple: **AI may assist the newsroom; AI must not become the newsroom.** Every published item requires accountable human authorship and human editorial approval. Material claims must be traceable to evidence.
 
@@ -48,7 +53,7 @@ pnpm dev
 
 Before starting the server, edit `.env`: set `DATABASE_URL` to your local HEZQEN database and replace `PAYLOAD_SECRET` with a unique secret of at least 32 random bytes. Keep local development isolated from staging and production. The first dependency installation depends on your network and may take longer than 30 seconds.
 
-Open [http://localhost:3000](http://localhost:3000). The public application shell and Labs pages are available independently of the unfinished production CMS rollout. The admin interface requires the reviewed database migration and administrator bootstrap described in [CMS setup](docs/CMS_SETUP.md).
+Open [http://localhost:3000](http://localhost:3000). The public application shell and Labs pages are available independently of the unfinished CMS rollout and are intended to run on the selected hosting target once it passes acceptance. The admin interface requires the reviewed database migration and administrator bootstrap described in [CMS setup](docs/CMS_SETUP.md).
 
 ## Installation
 

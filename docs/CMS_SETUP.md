@@ -37,11 +37,12 @@ It refuses to proceed if any user already exists. Run it once against a newly mi
 The Payload admin panel and REST routes are integrated in the application source. Collections define restricted access for users, articles, topics, sources, evidence, claims and audit events. Workflow state, approval, publication, evidence creation, claim verification and audit writes are not directly editable through normal collection APIs.
 
 The CMS is not operational until:
-1. A reviewed initial migration is generated.
-2. The migration is approved and applied to an isolated staging branch.
-3. An initial administrator is bootstrapped.
-4. Authenticated access and direct REST/Local API denial tests pass.
-5. A server-only editorial command invokes the existing workflow state machine and writes state plus audit events transactionally.
-6. Private object storage is provisioned and evidence integrity is verified after upload.
+1. The checked-in initial migration is reviewed against the current collections and data model.
+2. A backup/restore point is verified and the migration is explicitly approved and applied to the isolated staging branch; shared staging has not yet been migrated.
+3. An initial administrator is bootstrapped in staging using one-time credentials and a controlled procedure.
+4. Authenticated access and direct REST/Local API denial tests pass for every role and sensitive field.
+5. A server-only editorial command invokes the existing workflow state machine and writes the state change plus immutable audit event in one PostgreSQL transaction, with optimistic concurrency checks.
+6. Private object storage is provisioned and exact-byte evidence integrity is verified after upload.
+7. Staging login, admin, public article reads, correction flow, error handling and rollback are accepted.
 
-Initial migration generation is isolated in a dedicated GitHub Actions workflow using an ephemeral PostgreSQL 18 service. Generated migration files are committed to a review branch; a separate PR workflow applies them only to an ephemeral PostgreSQL service and verifies migration status. Neither workflow connects to Neon or applies migrations to any shared database. No database migration is applied by the application build.
+Initial migration generation is isolated in a dedicated GitHub Actions workflow using an ephemeral PostgreSQL 18 service. The generated migration is checked into `src/migrations/20261115_155359_initial.ts` with its snapshot. A separate PR workflow applies it only to an ephemeral PostgreSQL service and verifies migration status. Neither workflow connects to Neon or applies migrations to any shared database. No database migration is applied by the application build.
