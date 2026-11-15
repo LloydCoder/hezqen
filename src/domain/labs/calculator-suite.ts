@@ -53,7 +53,10 @@ function requireValues(definition:CalculatorDefinition, values:Values):Values {
  for(const field of definition.fields){const value=values[field.key]; if(typeof value!=="number"||!Number.isFinite(value)||value<(field.min??0)||value>(field.max??1e12)) throw new RangeError(field.label+" must be between "+(field.min??0)+" and "+(field.max??1e12)+" "+field.unit); result[field.key]=value;}
  return result;
 }
-const metric=(label:string,value:number,unit:string,precision=2)=>({label,value:common.finite(value),unit,precision});
+const metric = (label: string, value: number, unit: string, precision = 2) => {
+  if (!Number.isFinite(value)) throw new RangeError("The calculation exceeded the supported numeric range.");
+  return { label, value, unit, precision };
+};
 export function calculateLab(slug:string,raw:Values):CalculatorResult {
  const def=getCalculator(slug); if(!def) throw new RangeError("Unknown calculator.");
  const v=requireValues(def,raw); let metrics:CalculatorResult["metrics"]=[]; let headline="Estimated result"; let headlineValue=0; let unit="USD"; let notes:string[]=[];
