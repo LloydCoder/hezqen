@@ -19,7 +19,10 @@ import {
 } from "./lib/editorial-endpoints.ts";
 import { createResendEmailAdapter } from "./lib/resend-email-adapter.ts";
 import { evidenceDownloadEndpoint, evidenceUploadEndpoint } from "./lib/evidence-endpoints.ts";
-import {\n  claimVerifyEndpoint,\n  evidenceVerifyEndpoint,\n} from "./lib/research-verification-endpoints.ts";
+import {
+  claimVerifyEndpoint,
+  evidenceVerifyEndpoint,
+} from "./lib/research-verification-endpoints.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
