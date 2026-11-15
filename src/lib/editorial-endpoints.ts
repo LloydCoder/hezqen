@@ -119,6 +119,7 @@ class PayloadEditorialWorkflowStore implements EditorialWorkflowStore {
     mutableRequest.context = {
       ...(previousContext ?? {}),
       hezqenSkipArticleRevisionIncrement: true,
+      hezqenWorkflowCommand: true,
     };
     try {
       const result = await this.req.payload.update({
