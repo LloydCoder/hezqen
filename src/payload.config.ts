@@ -11,43 +11,35 @@ import { Evidence } from "./collections/Evidence";
 import { Sources } from "./collections/Sources";
 import { Topics } from "./collections/Topics";
 import { Users } from "./collections/Users";
+import { resolveAllowedOrigins, resolvePayloadServerUrl } from "./lib/origins.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 const databaseUrl = process.env.DATABASE_URL;
 const secret = process.env.PAYLOAD_SECRET;
-const originInputs =
-  process.env.HEZQEN_ALLOWED_ORIGINS?.split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean) ?? (process.env.NODE_ENV === "production" ? [] : ["http://localhost:3000"]);
-const allowedOrigins = [
-  ...new Set(
-    originInputs.map((origin) => {
-      const parsed = new URL(origin);
-      if (
-        parsed.username ||
-        parsed.password ||
-        parsed.pathname !== "/" ||
-        parsed.search ||
-        parsed.hash ||
-        (parsed.protocol !== "https:" && parsed.hostname !== "localhost")
-      ) {
-        throw new Error(
-          "HEZQEN_ALLOWED_ORIGINS must contain only HTTPS origins (localhost is allowed for development).",
-        );
-      }
-      return parsed.origin;
-    }),
-  ),
-];
-const serverURL = process.env.NEXT_PUBLIC_SITE_URL ?? allowedOrigins[0];
+const allowedOrigins = resolveAllowedOrigins({
+  configuredOrigins: process.env.HEZQEN_ALLOWED_ORIGINS,
+  deploymentHostname: process.env.VERCEL_URL,
+  nodeEnv: process.env.NODE_ENV,
+  allowLocalRuntimeTest:
+    process.env.CI === "true" && process.env.HEZQEN_LOCAL_RUNTIME_TEST === "true",
+});
+const serverURL = resolvePayloadServerUrl({
+  configuredSiteUrl: process.env.NEXT_PUBLIC_SITE_URL,
+  deploymentHostname: process.env.VERCEL_URL,
+  deploymentEnvironment: process.env.VERCEL_ENV,
+  allowedOrigins,
+  nodeEnv: process.env.NODE_ENV,
+  allowLocalRuntimeTest:
+    process.env.CI === "true" && process.env.HEZQEN_LOCAL_RUNTIME_TEST === "true",
+});
 
 if (
   allowedOrigins.length === 0 ||
   !serverURL ||
   !allowedOrigins.includes(new URL(serverURL).origin)
 ) {
-  throw new Error("NEXT_PUBLIC_SITE_URL must match one of HEZQEN_ALLOWED_ORIGINS.");
+  throw new Error("Payload server URL must match one of HEZQEN_ALLOWED_ORIGINS.");
 }
 
 if (!databaseUrl) {
