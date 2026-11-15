@@ -36,8 +36,8 @@ export default function CorrectionsPage() {
         <h2>How to report a concern</h2>
         <p>
           Email <a href="mailto:hello@tinlance.com">hello@tinlance.com</a> with the page or article
-          URL, the passage in question, an explanation of the issue and links or documents supporting
-          the concern.
+          URL, the passage in question, an explanation of the issue and links or documents
+          supporting the concern.
         </p>
         <h2>How we review reports</h2>
         <p>
