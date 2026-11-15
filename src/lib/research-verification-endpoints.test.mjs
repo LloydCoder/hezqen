@@ -102,3 +102,25 @@ test("claim verification rejects non-material claims", async () => {
   assert.equal(response.status, 409);
   assert.match((await response.json()).error, /material claims/);
 });
+
+test("claim verification rejects an actor with a non-numeric user ID", async () => {
+  const response = await claimVerifyEndpoint.handler(
+    makeRequest({
+      user: { id: "not-a-database-id", role: "fact_checker", active: true },
+      claim: {
+        id: 1,
+        article: 7,
+        material: true,
+        verificationStatus: "unverified",
+        updatedAt: expectedUpdatedAt,
+      },
+      article: {
+        id: 7,
+        workflowStatus: "fact_check",
+        assignedFactChecker: "not-a-database-id",
+      },
+    }),
+  );
+  assert.equal(response.status, 403);
+  assert.match((await response.json()).error, /assigned editor or fact-checker/);
+});
