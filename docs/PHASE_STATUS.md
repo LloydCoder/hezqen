@@ -237,7 +237,7 @@ This section supersedes earlier PR #51 head/count/check-status statements above.
 - The existing READY Vercel Preview `dpl_96t5ckCEdTevrih3Nf3HwSikg76Q` points to the older commit `dfa9a6808d7a45f096b5afb2b39d1fdbe6f16e40`; it is not the current code head. No new Vercel deployment was created.
 - Vercel Hobby is documented as personal/non-commercial only. It is not an acceptable production host for this commercial publication. No Pro upgrade was authorized.
 - Cloudflare Workers Free provides 10 ms CPU per request and 100,000 requests/day. Cloudflare notes SSR/auth-heavy workloads commonly require 10–20 ms; the CI build/smoke result does not prove the full CMS/admin runtime fits. No production Worker deployment or DNS cutover exists.
-- The `hezqen_cms` database role still has broader table-level DELETE privileges than the immutable-record policy requires. Tightening database grants is a remaining defense-in-depth gate and must be applied only after explicit approval.
+- Read-only `information_schema.role_table_grants` inspection confirms no UPDATE/DELETE on `audit_events`, `evidence`, `claims` or `sources`, and no DELETE on `articles`, `topics` or `users`. Remaining DELETE grants are confined to Payload internal/version/relationship/session/preferences tables; review `_articles_v` retention before production.
 - No production migration, production admin bootstrap, production deployment, production DNS cutover, paid-plan upgrade or scheduler activation has occurred.
 
 ### Remaining release blockers
@@ -245,7 +245,7 @@ This section supersedes earlier PR #51 head/count/check-status statements above.
 1. Latest HEZQEN CI must finish green on the current PR head.
 2. Full authenticated role-matrix and deployed REST/Local API acceptance, including actual administrator login.
 3. Real PostgreSQL transaction rollback test when audit insertion fails.
-4. Database-level privilege hardening for immutable sources, claims, evidence and audit records; explicit approval is required before applying the staging SQL change.
+4. Review Payload internal/version/session/relationship DELETE grants and `_articles_v` retention; the primary immutable source/claim/evidence/audit tables are already protected at the database privilege layer.
 5. Live private evidence upload/read-back/download/checksum/audit round-trip.
 6. Real Resend password-reset email acceptance and mailbox receipt.
 7. Scheduler secret binding, Cron Trigger and due-only publication test.
