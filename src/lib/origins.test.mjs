@@ -171,7 +171,7 @@ test("rejects a server URL that is not in the explicit origin allowlist", () => 
         allowedOrigins: ["https://hezqen.tinlance.com"],
         nodeEnv: "production",
       }),
-    /allowed origin list/,
+    /canonical site origin must be allowed/,
   );
 });
 
@@ -205,6 +205,6 @@ test("rejects an explicit Payload server origin outside the allowed origin list"
         allowedOrigins: ["https://hezqen.tinlance.com"],
         nodeEnv: "production",
       }),
-    /must be allowed/,
+    /allowed origin list/,
   );
 });
