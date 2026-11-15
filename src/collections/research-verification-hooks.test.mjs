@@ -36,7 +36,12 @@ test("evidence cannot be created outside the preservation endpoint", async () =>
 test("evidence verification cannot mutate immutable provenance fields", async () => {
   assert.ok(evidenceHook);
   assert.throws(
-    () => evidenceHook({ data: { verificationStatus: "verified" }, operation: "update", req: { context: {} } }),
+    () =>
+      evidenceHook({
+        data: { verificationStatus: "verified" },
+        operation: "update",
+        req: { context: {} },
+      }),
     /immutable outside human verification/,
   );
   const req = { context: {} };
@@ -59,7 +64,12 @@ test("evidence verification cannot mutate immutable provenance fields", async ()
 test("claims cannot be created pre-verified or marked non-material by a caller", () => {
   assert.ok(claimHook);
   assert.throws(
-    () => claimHook({ data: { verificationStatus: "verified" }, operation: "create", req: { context: {} } }),
+    () =>
+      claimHook({
+        data: { verificationStatus: "verified" },
+        operation: "create",
+        req: { context: {} },
+      }),
     /begin as unverified/,
   );
   assert.throws(
@@ -73,7 +83,12 @@ test("claims cannot be created pre-verified or marked non-material by a caller",
 test("claim updates are limited to the human verification endpoint", async () => {
   assert.ok(claimHook);
   assert.throws(
-    () => claimHook({ data: { verificationStatus: "verified" }, operation: "update", req: { context: {} } }),
+    () =>
+      claimHook({
+        data: { verificationStatus: "verified" },
+        operation: "update",
+        req: { context: {} },
+      }),
     /immutable outside the verification workflow/,
   );
   const req = { context: {} };
