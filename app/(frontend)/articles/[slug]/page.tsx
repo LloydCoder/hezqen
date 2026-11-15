@@ -18,7 +18,7 @@ type ArticlePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const openGraphImage = "/brand/hezqen-open-graph-1200x630.png";
+const openGraphImage = "/opengraph-image";
 
 function formatDate(value?: string | null): string | null {
   if (!value) return null;
