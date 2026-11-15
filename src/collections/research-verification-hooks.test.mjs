@@ -4,6 +4,7 @@ import test from "node:test";
 import { AuditEvents } from "./AuditEvents.ts";
 import { Claims } from "./Claims.ts";
 import { Evidence } from "./Evidence.ts";
+import { Sources } from "./Sources.ts";
 
 const evidenceHook = Evidence.hooks?.beforeChange?.[0];
 const claimHook = Claims.hooks?.beforeChange?.[0];
@@ -142,5 +143,27 @@ test("audit events can only be appended by trusted server operations", () => {
         req: { context: { hezqenAuditWrite: true } },
       }),
     /append-only and server generated/,
+  );
+});
+
+test("immutable research records cannot be deleted through the Local API", () => {
+  for (const [collection, pattern] of [
+    [AuditEvents, /append-only and cannot be deleted/],
+    [Evidence, /cannot be deleted/],
+    [Claims, /cannot be deleted/],
+    [Sources, /cannot be deleted/],
+  ]) {
+    const hook = collection.hooks?.beforeDelete?.[0];
+    assert.ok(hook);
+    assert.throws(() => hook({ id: 1, req: { context: {} } }), pattern);
+  }
+});
+
+test("source provenance cannot be edited through the Local API", () => {
+  const hook = Sources.hooks?.beforeChange?.[0];
+  assert.ok(hook);
+  assert.throws(
+    () => hook({ data: { canonicalUrl: "https://example.com/changed" }, operation: "update", req: { context: {} } }),
+    /Source records are immutable/ ,
   );
 });
