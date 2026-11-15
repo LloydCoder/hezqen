@@ -46,23 +46,25 @@ async function appendEvidenceAudit(
   resourceId: string,
   afterDigest: string,
 ): Promise<void> {
-  await req.payload.create({
-    collection: "audit-events",
-    data: {
-      eventId: randomUUID(),
-      actorId: actor.id,
-      actorRole: actor.role,
-      action,
-      resource: "evidence",
-      resourceId,
-      beforeDigest: null,
-      afterDigest,
-      correlationId: correlationId(req),
-      outcome: "success",
-    },
-    overrideAccess: true,
-    req,
-  });
+  await withRequestContext(req, { hezqenAuditWrite: true }, () =>
+    req.payload.create({
+      collection: "audit-events",
+      data: {
+        eventId: randomUUID(),
+        actorId: actor.id,
+        actorRole: actor.role,
+        action,
+        resource: "evidence",
+        resourceId,
+        beforeDigest: null,
+        afterDigest,
+        correlationId: correlationId(req),
+        outcome: "success",
+      },
+      overrideAccess: true,
+      req,
+    }),
+  );
 }
 
 export const evidenceUploadEndpoint: Endpoint = {
@@ -177,22 +179,27 @@ export const evidenceUploadEndpoint: Endpoint = {
     req.transactionID = transactionId;
 
     try {
-      const evidence = await req.payload.create({
-        collection: "evidence",
-        data: {
-          evidenceId: randomUUID(),
-          source: Number(sourceId),
-          collectionMethod: collectionMethod.trim(),
-          retrievedAt: new Date().toISOString(),
-          contentType: verifiedObject.contentType,
-          byteSize: verifiedObject.byteSize,
-          sha256: verifiedObject.sha256,
-          storageRef: verifiedObject.key,
-          verificationStatus: "preserved",
-        },
-        overrideAccess: true,
+      const evidence = await withRequestContext(
         req,
-      });
+        { hezqenEvidencePreservation: true },
+        () =>
+          req.payload.create({
+            collection: "evidence",
+            data: {
+              evidenceId: randomUUID(),
+              source: Number(sourceId),
+              collectionMethod: collectionMethod.trim(),
+              retrievedAt: new Date().toISOString(),
+              contentType: verifiedObject.contentType,
+              byteSize: verifiedObject.byteSize,
+              sha256: verifiedObject.sha256,
+              storageRef: verifiedObject.key,
+              verificationStatus: "preserved",
+            },
+            overrideAccess: true,
+            req,
+          }),
+      );
       const evidenceId = String(evidence.id);
       await appendEvidenceAudit(
         req,
