@@ -40,7 +40,10 @@ export function MobileNavigation({ items }: { items: readonly NavigationItem[] }
     };
   }, [open]);
 
+  const previousPathname = useRef(pathname);
   useEffect(() => {
+    if (previousPathname.current === pathname) return;
+    previousPathname.current = pathname;
     setOpen(false);
   }, [pathname]);
 
