@@ -29,11 +29,6 @@ if [ "$HEZQEN_RESTORE_ENV" = "production" ] && [ "${HEZQEN_PRODUCTION_RESTORE_AP
   exit 64
 fi
 
-if [ "$HEZQEN_RESTORE_ENV" = "production" ] && [ "${HEZQEN_RESTORE_ALLOW_OVERWRITE:-}" != "true" ]; then
-  echo "Production restore refused: HEZQEN_RESTORE_ALLOW_OVERWRITE=true is required." >&2
-  exit 64
-fi
-
 if [ ! -f "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE.sha256" ]; then
   echo "Restore refused: backup archive or checksum is missing." >&2
   exit 66
@@ -47,10 +42,10 @@ case "$existing_objects" in
     exit 1
     ;;
 esac
-if [ "$existing_objects" -gt 0 ] && [ "${HEZQEN_RESTORE_ALLOW_OVERWRITE:-}" != "true" ]; then
-  echo "Restore refused: target is not empty; set HEZQEN_RESTORE_ALLOW_OVERWRITE=true after review." >&2
+if [ "$existing_objects" -gt 0 ]; then
+  echo "Restore refused: target database must be empty. Provision a fresh target and validate it before cutover." >&2
   exit 64
 fi
-pg_restore --clean --if-exists --no-owner --no-privileges --dbname="$RESTORE_DATABASE_URL" "$BACKUP_FILE"
+pg_restore --no-owner --no-privileges --dbname="$RESTORE_DATABASE_URL" "$BACKUP_FILE"
 
 echo "HEZQEN database restore completed for the explicitly confirmed target."
