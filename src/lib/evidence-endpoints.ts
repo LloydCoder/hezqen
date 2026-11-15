@@ -75,7 +75,9 @@ export const evidenceUploadEndpoint: Endpoint = {
 
     let form: FormData;
     try {
-      form = await req.formData();
+      const parsedForm = await req.formData?.();
+      if (!parsedForm) throw new Error("Multipart form parser is unavailable.");
+      form = parsedForm;
     } catch {
       return Response.json({ error: "Expected a multipart form upload." }, { status: 400 });
     }
@@ -92,6 +94,7 @@ export const evidenceUploadEndpoint: Endpoint = {
       typeof sourceId !== "string" ||
       !sourceId.trim() ||
       sourceId.length > 128 ||
+      !/^\\d+$/.test(sourceId) ||
       typeof collectionMethod !== "string" ||
       !collectionMethod.trim() ||
       collectionMethod.trim().length > 100
@@ -133,7 +136,7 @@ export const evidenceUploadEndpoint: Endpoint = {
     try {
       await req.payload.findByID({
         collection: "sources",
-        id: sourceId,
+        id: Number(sourceId),
         depth: 0,
         overrideAccess: true,
         req,
@@ -178,7 +181,7 @@ export const evidenceUploadEndpoint: Endpoint = {
         collection: "evidence",
         data: {
           evidenceId: randomUUID(),
-          source: sourceId,
+          source: Number(sourceId),
           collectionMethod: collectionMethod.trim(),
           retrievedAt: new Date().toISOString(),
           contentType: verifiedObject.contentType,
@@ -228,7 +231,7 @@ export const evidenceDownloadEndpoint: Endpoint = {
     if (!actor)
       return Response.json({ error: "Authenticated research access required." }, { status: 403 });
 
-    const body = asRecord(await req.json().catch(() => null));
+    const body = asRecord(await req.json?.().catch(() => null));
     if (typeof body.evidenceId !== "string" || !body.evidenceId.trim()) {
       return Response.json({ error: "evidenceId is required." }, { status: 400 });
     }
