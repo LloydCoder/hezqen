@@ -9,10 +9,10 @@ This file records evidence-backed progress. A phase is not complete merely becau
 | 2 | Brand/design system | PARTIAL | Supplied logo SVGs integrated unchanged and initial CSS tokens exist. Full reusable component system, font packaging, responsive visual QA and WCAG 2.2 AA audit remain. |
 | 3 | Database/content architecture | PARTIAL | Dedicated Neon PostgreSQL 18 project and isolated branches exist. No versioned HEZQEN schema, migration history or validated backup/restore process is yet evidenced. |
 | 4 | CMS/editorial workflow | PARTIAL | Human-controlled editorial state machine, separation-of-duties rule, approval/publishing gates, scheduling and correction revision tests implemented on the feature branch. CMS, persistence, authenticated server authorization, audit transactions and direct-API bypass tests remain. |
-| 5 | Evidence/research | NOT STARTED | Source, claim, evidence, provenance and research-methodology persistence not implemented. |
+| 5 | Evidence/research | PARTIAL | Pure TypeScript source/evidence provenance validators and claim verification gate added on the feature branch with unit tests and methodology documentation. Persistent records, acquisition, exact-byte storage, cryptographic digest calculation, independent fact-checking and audit history remain. |
 | 6 | Public website | PARTIAL | Homepage, four division routes, About and Editorial Standards exist. Article, author, investigation, research, policy and CMS-backed content surfaces remain. |
 | 7 | Search/SEO | PARTIAL | Metadata, canonical URLs, robots and sitemap exist. Search, structured-data validation, article indexing and search QA remain. |
-| 8 | HEZQEN Labs | PARTIAL | First interactive LLM VRAM sizing calculator and pure calculation engine implemented on the feature branch; tests and public methodology added. CI and browser verification remain release gates; additional calculators are not started. |
+| 8 | HEZQEN Labs | PARTIAL | First interactive LLM VRAM sizing calculator, pure calculation engine, tests and public methodology merged in PR #6. Browser verification remains; additional calculators are not started. |
 | 9 | Newsletter/accounts | NOT STARTED | Reader identity, consent, preferences and delivery not implemented. |
 | 10 | HEZQEN Intelligence | NOT STARTED | Premium research, billing and server-side entitlements not implemented. |
 | 11 | Integrations | NOT STARTED | Tinlyt, Searqon and TAS adapters not implemented. |
