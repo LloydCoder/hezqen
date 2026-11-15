@@ -22,6 +22,11 @@ export const Claims: CollectionConfig = {
     delete: () => false,
   },
   hooks: {
+    beforeDelete: [
+      () => {
+        throw new APIError("Claims cannot be deleted; preserve their verification history.", 403);
+      },
+    ],
     beforeChange: [
       ({ data, operation, req }) => {
         const context = req.context as Record<string, unknown> | undefined;
