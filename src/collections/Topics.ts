@@ -2,8 +2,7 @@ import type { Access, CollectionConfig } from "payload";
 
 import { hasActiveRole } from "../lib/access.ts";
 
-const canManageTopics: Access = ({ req }) =>
-  hasActiveRole(req.user, ["administrator", "editor"]);
+const canManageTopics: Access = ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]);
 
 export const Topics: CollectionConfig = {
   slug: "topics",
