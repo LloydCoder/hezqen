@@ -17,3 +17,20 @@ test("workflow state remains server-managed", () => {
   assert.equal(field.access?.create?.(), false);
   assert.equal(field.access?.update?.(), false);
 });
+
+test("publication scheduling and correction metadata are server-managed", () => {
+  for (const name of [
+    "scheduledFor",
+    "correctionStatus",
+    "correctionReason",
+    "correctionPublicNote",
+    "correctionRequestedAt",
+    "correctionResolvedAt",
+    "correctionResolvedBy",
+  ]) {
+    const field = Articles.fields?.find((item) => item.name === name);
+    assert.ok(field, `Expected ${name} field to exist`);
+    assert.equal(field.access?.create?.(), false);
+    assert.equal(field.access?.update?.(), false);
+  }
+});
