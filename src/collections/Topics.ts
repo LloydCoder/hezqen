@@ -20,7 +20,7 @@ export const Topics: CollectionConfig = {
     create: canManageTopics,
     read: () => true,
     update: canManageTopics,
-    delete: ({ req }) => roleFromRequest(req.user) === "administrator",
+    delete: () => false,
   },
   fields: [
     { name: "name", type: "text", required: true },
