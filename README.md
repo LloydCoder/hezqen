@@ -38,6 +38,7 @@ Before opening a pull request, run pnpm lint, pnpm format:check, pnpm typecheck,
 ## Project documentation
 
 - [Editorial Standards](docs/EDITORIAL_STANDARDS.md)
+- [Editorial Workflow](docs/EDITORIAL_WORKFLOW.md)
 - [Platform Acceptance Criteria](docs/PLATFORM_ACCEPTANCE_CRITERIA.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Brand System](docs/BRAND_SYSTEM.md)
