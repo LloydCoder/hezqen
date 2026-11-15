@@ -20,6 +20,8 @@ if HEZQEN_RESTORE_ENV=production \
 fi
 
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "CREATE DATABASE hezqen_restore_smoke"
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "CREATE TABLE public.hezqen_backup_restore_probe (id integer PRIMARY KEY, marker text NOT NULL)"
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "INSERT INTO public.hezqen_backup_restore_probe (id, marker) VALUES (1, 'hezqen-backup-restore-ok')"
 sh scripts/db/backup.sh
 sh scripts/db/restore.sh
 
@@ -27,9 +29,11 @@ source_tables=$(psql "$DATABASE_URL" -Atqc "SELECT count(*) FROM information_sch
 restored_tables=$(psql "$RESTORE_DATABASE_URL" -Atqc "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public'")
 source_migrations=$(psql "$DATABASE_URL" -Atqc "SELECT count(*) FROM payload_migrations")
 restored_migrations=$(psql "$RESTORE_DATABASE_URL" -Atqc "SELECT count(*) FROM payload_migrations")
+source_probe=$(psql "$DATABASE_URL" -Atqc "SELECT marker FROM public.hezqen_backup_restore_probe WHERE id = 1")
+restored_probe=$(psql "$RESTORE_DATABASE_URL" -Atqc "SELECT marker FROM public.hezqen_backup_restore_probe WHERE id = 1")
 
-if [ "$source_tables" != "$restored_tables" ] || [ "$source_migrations" != "$restored_migrations" ]; then
-  echo "Backup/restore verification failed: restored schema or migration count differs." >&2
+if [ "$source_tables" != "$restored_tables" ] || [ "$source_migrations" != "$restored_migrations" ] || [ "$source_probe" != "hezqen-backup-restore-ok" ] || [ "$restored_probe" != "$source_probe" ]; then
+  echo "Backup/restore verification failed: restored schema, migration count, or sentinel row differs." >&2
   exit 1
 fi
 
