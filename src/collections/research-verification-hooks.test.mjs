@@ -104,7 +104,11 @@ test("claim updates are limited to the human verification endpoint", () => {
       }),
     /immutable outside the verification workflow/,
   );
-  const data = { verificationStatus: "verified", reviewedBy: 12, reviewedAt: "2026-11-15T12:00:00.000Z" };
+  const data = {
+    verificationStatus: "verified",
+    reviewedBy: 12,
+    reviewedAt: "2026-11-15T12:00:00.000Z",
+  };
   assert.equal(
     claimHook({
       data,
