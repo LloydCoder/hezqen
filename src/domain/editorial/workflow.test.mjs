@@ -217,3 +217,43 @@ test("allows the scheduler to publish only due articles with prior assigned-edit
     false,
   );
 });
+
+test("requires the assigned editor to return approved and scheduled articles to draft before edits", () => {
+  const approved = {
+    ...record,
+    status: "approved",
+    approvedById: "editor-1",
+    approvedAt: now,
+    factCheckComplete: true,
+    disclosuresReviewed: true,
+  };
+  const scheduled = {
+    ...approved,
+    status: "scheduled",
+    scheduledFor: "2026-11-16T10:00:00.000Z",
+  };
+
+  for (const current of [approved, scheduled]) {
+    const result = transitionPublication(current, editor, "draft", { now });
+    assert.equal(result.ok, true);
+    if (result.ok) {
+      assert.equal(result.record.status, "draft");
+      assert.equal(result.record.approvedById, null);
+      assert.equal(result.record.approvedAt, null);
+      assert.equal(result.record.scheduledFor, null);
+      assert.equal(result.record.factCheckComplete, false);
+      assert.equal(result.record.disclosuresReviewed, false);
+    }
+  }
+});
+
+test("allows an assigned editor to return fact-check work to draft", () => {
+  const result = transitionPublication(
+    { ...record, status: "fact_check", factCheckComplete: true },
+    editor,
+    "draft",
+    { now },
+  );
+  assert.equal(result.ok, true);
+  if (result.ok) assert.equal(result.record.factCheckComplete, false);
+});
