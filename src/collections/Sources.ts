@@ -44,9 +44,7 @@ export const Sources: CollectionConfig = {
       type: "textarea",
       access: {
         read: ({ req }) =>
-          ["administrator", "editor", "researcher", "fact_checker"].includes(
-            (req.user && typeof req.user === "object" && "active" in req.user && (req.user as {active?:boolean}).active === false) ? "" : (req.user && typeof req.user === "object" && "role" in req.user ? String((req.user as {role?:unknown}).role ?? "") : ""),
-          ),
+          hasActiveRole(req.user, ["administrator", "editor", "researcher", "fact_checker"]),
       },
     },
   ],
