@@ -1,4 +1,4 @@
-import type { Access, CollectionConfig } from "payload";
+import type { Access, CollectionConfig, Where } from "payload";
 
 type Actor = { id: string | number; role?: string } | null;
 
@@ -9,7 +9,7 @@ function actorFromRequest(user: unknown): Actor {
 const isEditor: Access = ({ req }) =>
   ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? "");
 
-const publishedArticleFilter = {
+const publishedArticleFilter: Where = {
   and: [{ _status: { equals: "published" } }, { workflowStatus: { equals: "published" } }],
 };
 
@@ -35,12 +35,13 @@ const canUpdateArticles: Access = ({ req }) => {
   if (!actor) return false;
   if (["administrator", "editor"].includes(actor.role ?? "")) return true;
   if (actor.role === "author") {
-    return {
+    const authorDraftScope: Where = {
       and: [
         { author: { equals: actor.id } },
         { workflowStatus: { in: ["pitch", "research", "draft"] } },
       ],
     };
+    return authorDraftScope;
   }
   return false;
 };
@@ -136,7 +137,8 @@ export const Articles: CollectionConfig = {
       relationTo: "users",
       access: {
         create: () => false,
-        update: isEditor,
+        update: ({ req }) =>
+          ["administrator", "editor"].includes(actorFromRequest(req.user)?.role ?? ""),
       },
     },
     {
@@ -151,6 +153,10 @@ export const Articles: CollectionConfig = {
     {
       name: "_status",
       type: "select",
+      options: [
+        { label: "Draft", value: "draft" },
+        { label: "Published", value: "published" },
+      ],
       access: {
         create: () => false,
         update: () => false,
