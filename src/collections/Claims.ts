@@ -32,7 +32,7 @@ export const Claims: CollectionConfig = {
     create: canCreateClaims,
     read: canReadClaims,
     update: canUpdateClaims,
-    delete: ({ req }) => actorFromRequest(req.user)?.role === "administrator",
+    delete: () => false,
   },
   fields: [
     { name: "claimText", type: "textarea", required: true },
@@ -78,7 +78,7 @@ export const Claims: CollectionConfig = {
       name: "reviewedBy",
       type: "relationship",
       relationTo: "users",
-      access: { update: () => false },
+      access: { create: () => false, update: () => false },
     },
     { name: "reviewedAt", type: "date", access: { update: () => false } },
   ],
