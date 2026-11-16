@@ -194,3 +194,14 @@ This section supersedes the older 2026-11-15 inventory statements above where th
 ### Release decision
 
 No production database migration, production deployment, production DNS cutover, paid-plan upgrade, production administrator bootstrap or scheduler activation has occurred. Select a commercially permitted host, complete staging operational acceptance, prove least-privilege runtime DB credentials, and pass backup/restore, security, accessibility, monitoring and rollback gates before any production cutover.
+
+
+## 11. Commercial hosting decision research — 2026-11-16
+
+Official provider documentation was rechecked before selecting a production path:
+
+- Vercel states Hobby is for personal/non-commercial use; Pro is designed for professional and business use. Current listed Pro base price is USD $20/month with USD $20 included usage credit; additional usage may be charged. Sources: [Vercel pricing](https://vercel.com/pricing), [Vercel Terms of Service — Hobby Plan](https://vercel.com/legal/terms), [Vercel fair-use guidelines](https://vercel.com/docs/limits/fair-use-guidelines).
+- Cloudflare Workers Free currently has a 10 ms CPU limit per invocation and 100,000 requests/day. Cloudflare documents that SSR/auth-heavy workloads typically use 10–20 ms. Workers Paid has a USD $5/month account minimum and substantially higher CPU limits. Sources: [Workers limits](https://developers.cloudflare.com/workers/platform/limits/), [Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/).
+- Cloudflare recommends vinext for Next.js on Workers but explicitly labels vinext beta and instructs teams to run compatibility checks before production adoption. Source: [Cloudflare Next.js on Workers](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/).
+
+**Engineering recommendation:** Vercel Pro is the lowest-migration-risk production candidate because HEZQEN is already a Next.js + Payload application and the current project has a READY Vercel Preview for the merged code. It is not approved or activated because no recurring billing authorization has been given. Cloudflare Workers Paid is a viable cost-comparison candidate only after full Payload/admin/auth/database integration tests and a measured runtime benchmark; Workers Free should not be assumed suitable for the full CMS workload under its 10 ms CPU ceiling. No provider plan was upgraded and no billable resource was created.
