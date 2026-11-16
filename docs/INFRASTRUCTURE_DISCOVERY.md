@@ -160,3 +160,37 @@ Do not treat a preview alias as a production domain. No custom-domain attachment
 - The Tinlyt tunnel was not modified or repurposed.
 - No Neon migration was applied to staging or production.
 - No paid plan was enabled and no production deployment was made.
+
+
+## 10. Authoritative infrastructure reconciliation — 2026-11-16
+
+This section supersedes the older 2026-11-15 inventory statements above where they conflict with current provider state.
+
+### Vercel
+
+- Project `hezqen` is Node 24.x on the Hobby plan; project metadata reports `live=false`.
+- The custom domains `hezqen.tinlance.com`, `admin.hezqen.tinlance.com`, `staging.hezqen.tinlance.com` and `www.hezqen.tinlance.com` are attached and verified.
+- READY Preview deployment `dpl_26VkrhKLuH93iMBxpEEczkQZimVk` points to PR #52 merge commit `c71e6b7d1bffcf677b73454f959b99a593c269f0`. It is not a Production-target deployment.
+- The staging hostname has an explicit alias assignment to that Preview deployment. Vercel SSO still redirects external staging fetches to login; a temporary 10-minute bypass was ineffective and revoked.
+- The newest Production-target deployment points to old commit `1ab4076cbf76bd505f53ffd319711bf68d2e7b46`; the public main hostname serves the earlier shell, not the CMS/public-reader release.
+- Vercel Hobby is not an acceptable commercial production host. No Pro upgrade or recurring paid plan is approved.
+
+### Cloudflare
+
+- Zone `tinlance.com` remains active. The staging DNS record is a DNS-only CNAME to Vercel target `2f37e089d5bcfcf5.vercel-dns-017.com`.
+- Worker `hezqen-scheduler` exists and exports a `scheduled` handler, but its Cron Trigger schedule list is empty. Do not enable it until staging authentication and due-only publication acceptance pass.
+- The scheduler Worker is not the HEZQEN web application. No Cloudflare production web Worker deployment was created.
+- The isolated vinext compatibility/build workflow is not proof of Payload CMS, admin, authentication, Hyperdrive or production database connectivity.
+
+### Neon
+
+- Project `old-bird-82399990` has isolated `staging` branch `br-lucky-bird-bayxt3by` and `production` branch `br-aged-surf-bavls0wu`; both are unprotected on the current plan.
+- Staging has 18 public tables and two recorded Payload migrations. It contains one active administrator and no articles, audit events, evidence or claims.
+- The private `hezqen-evidence` bucket exists and contains no objects.
+- Production has zero public application tables and remains unmigrated.
+- The staging `hezqen_cms` role is restricted and does not have role/database creation, replication or RLS bypass attributes. The separate `hezqen_app` role has elevated owner-like privileges and must not be used by the application runtime.
+- Vercel Preview `DATABASE_URL` metadata is sensitive and its value was not decrypted; the intended runtime role/endpoint mapping remains unverified. Production `DATABASE_URL` mapping is likewise unverified.
+
+### Release decision
+
+No production database migration, production deployment, production DNS cutover, paid-plan upgrade, production administrator bootstrap or scheduler activation has occurred. Select a commercially permitted host, complete staging operational acceptance, prove least-privilege runtime DB credentials, and pass backup/restore, security, accessibility, monitoring and rollback gates before any production cutover.
