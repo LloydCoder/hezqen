@@ -1,6 +1,6 @@
 # HEZQEN Implementation Phase Status
 
-**Last reconciled:** 2026-11-16 (PR #51 latest source, all required CI/CD workflows and staging database controls re-verified)  
+**Last reconciled:** 2026-11-16 (PR #52 merged; post-merge deployment and release state re-audited)  
 **Canonical launch target:** `https://hezqen.tinlance.com`  
 **Release state:** NOT READY FOR PUBLIC PRODUCTION
 
@@ -302,3 +302,39 @@ This section supersedes earlier PR #51 head/count/check-status statements above.
 - Neon Free does not provide the required branch-protection control. Production remains on its separate, unmigrated branch; no production migration, deployment, DNS cutover, paid upgrade or administrator bootstrap occurred.
 
 **Current verdict:** required CI/CD workflows are green on the current PR #52 head, and PR #51 is merged. HEZQEN's public editorial surface is still pending merge/deployed acceptance; live staging operations and commercial production readiness remain PARTIAL. Production is NOT READY.
+
+
+## Authoritative reconciliation after PR #52 merge — 2026-11-16
+
+This section supersedes every earlier statement in this file that describes PR #52 as open, draft, or unmerged.
+
+### Repository and CI evidence
+
+- PR #52, `feat(public): publish editorial articles and correction notices`, is merged into `main`.
+- Merge commit: `c71e6b7d1bffcf677b73454f959b99a593c269f0`.
+- PR #52 head before merge: `097969c8f4eaf6c863849ee0420eda2ecbb7e60f`.
+- PR-head HEZQEN CI run [43778690707](https://github.com/LloydCoder/hezqen/actions/runs/43778690707) passed: lint, formatting, 175 tests, moderate dependency audit, production build, ephemeral PostgreSQL migration/runtime smoke, missing-article 404 and TypeScript.
+- PR-head Cloudflare compatibility run [43778690641](https://github.com/LloydCoder/hezqen/actions/runs/43778690641) passed: vinext compatibility, Worker build and isolated public-route smoke.
+- The GitHub commit-workflow wrapper used in this reconciliation returns pull-request-triggered runs only; it returned no records for the merge commit. The merge commit's combined status currently reports a successful Vercel status, but this is not proof that the repository's push-triggered HEZQEN CI and Cloudflare workflows completed on the merge commit. Post-merge main workflow completion remains to be independently verified.
+
+### Deployment and domain evidence
+
+- Vercel project `hezqen` is project ID `prj_aLLpKlMswGtb6ZS0y0MlabozW8lS`, Node 24.x, on the Hobby plan; project metadata reports `live=false`.
+- A READY Vercel deployment `dpl_26VkrhKLuH93iMBxpEEczkQZimVk` was created from branch `fix/cms-final-reconciliation` at merge commit `c71e6b7d1bffcf677b73454f959b99a593c269f0`. It has Preview target (`target=null`), not Production. Its generated alias is `hezqen-git-fix-cms-final-reconciliation-lloydcoders-projects.vercel.app`.
+- The latest Production-target Vercel deployment inventory contains READY deployments pointing to older commits, with the newest at `1ab4076cbf76bd505f53ffd319711bf68d2e7b46`. No Production-target deployment of PR #52's merge commit was found.
+- Vercel project metadata reports SSO protection enabled for all deployments except custom domains. The staging custom domain remains assigned to Git branch `feat/mobile-navigation-responsive-system`, not `fix/cms-final-reconciliation`; it therefore does not route to the current CMS/public-reader deployment.
+- Vercel reports the custom domains `hezqen.tinlance.com`, `admin.hezqen.tinlance.com`, `staging.hezqen.tinlance.com` and `www.hezqen.tinlance.com` as verified project domains. Domain verification is not the same as current deployment routing or production readiness.
+- No production deployment, production DNS cutover, production migration, paid-plan upgrade or production administrator bootstrap was performed.
+
+### Current operational acceptance
+
+- PR #52's public article pages, editorial division listings, correction notices/history and dynamic article sitemap are merged. They have not been accepted against the live staging database/runtime.
+- The staging environment variables for evidence storage, Resend and scheduler are branch-scoped to `fix/cms-final-reconciliation`; this is the branch used by the READY preview deployment. Secret values were not decrypted or exposed during this audit.
+- The Neon staging branch remains `br-lucky-bird-bayxt3by`; production branch remains `br-aged-surf-bavls0wu`. Both are unprotected on the current Neon plan.
+- The evidence bucket exists but its application upload/read-back/download/checksum/audit round-trip remains unaccepted.
+- Real password-reset email receipt remains unaccepted.
+- Authenticated staging administrator login, complete role matrix, deployed REST/Local API acceptance and real-PostgreSQL audit-failure rollback remain unaccepted.
+- Scheduler activation remains prohibited until authenticated staging invocation and due-only publication tests pass.
+- Vercel Hobby remains unsuitable as commercial production hosting. A commercially permitted, cost-approved host and measured runtime acceptance are mandatory.
+
+**Current verdict:** PR #52 is merged and its PR-head workflows passed. A READY Preview deployment exists for the merge commit, but the staging custom domain points to an older branch and the production deployment is stale. Post-merge push workflows and live staging acceptance remain unverified. Production remains NOT READY.
