@@ -382,3 +382,22 @@ Additional live read-only checks confirm:
 - `/api/users/me` on the canonical host returns HTTP 404.
 
 The current public Production deployment therefore does not expose the Payload admin or API route surface. This confirms that it is an older public-shell deployment, not the merged CMS release. The admin hostname must be mapped to the accepted production deployment and tested after the selected host and deployment are approved.
+
+
+## Cross-repository and supplied-brand-asset audit — 2026-11-16
+
+### HEZQEN Infrastructure Standard (HIES)
+
+- HIES repository: `LloydCoder/hezqen-infrastructure-standard`; latest main commit identified: `e2aacfd4117f41c77cdc349961422d6358fd8c11` (PR #13 merge).
+- PR #13 head `1da78e5b2f1309b5b01d0cd4f326452e65d023af` has seven successful workflows: HIES CI [43744342470], HIES Security Hygiene [43744342534], IK-01 CPU Runtime [43744342440], IK-02 PII Runtime [43744342473], IK-03 Planner Acceptance [43744342501], IK-04 Disconnected RAG [43744342560], and IK-05 Offline Bundle [43744342527].
+- HIES products remain engineering previews, not production-certified infrastructure. Physical NVIDIA GPU acceptance, ARM64 validation, SBOM/signed provenance release evidence, broader product security and deployment acceptance remain separate gates. These are not prerequisites for the initial HEZQEN editorial publication, provided the catalogue keeps its engineering-preview disclosures.
+
+### Supplied HEZQEN logo kit and usage-guideline audit
+
+- The supplied ZIP contains primary horizontal/stacked/wordmark lockups, icon variants, favicon/app icons, social artwork, Open Graph artwork and the nine-page usage guide.
+- The supplied PDF specifies: horizontal + tagline as primary; SVG as preferred web/print format; minimum 1X clear space; minimum size thresholds; Inter/Inter Display typography; sentence-case headlines; all-caps labels only; and the wordmark must never be retyped.
+- Palette: Navy `#0B1B33`, Graphite `#2A3441`, Amber `#F5A623`, Amber Deep `#A35F00`, Slate `#5B6678`, Mist `#F4F5F7`, White `#FFFFFF`. Amber on white has 2.0:1 contrast and is decorative-only; Amber Deep on white is 5.0:1 and suitable for text. The prescribed approximate color proportions are 75% white/mist, 18% navy, 5% graphite, 2% amber.
+- Repository inspection confirms `public/brand/hezqen-horizontal-color.svg`, `public/brand/hezqen-horizontal-reversed.svg`, `public/favicon.svg` and `public/site.webmanifest`. The manifest currently references only the SVG favicon. No Apple touch icon, Android 192/512 icons, maskable icon, Windows tile, Safari pinned-tab icon or supplied Open Graph PNG was found at the expected public paths. Full app/social icon integration is therefore not accepted; confirm all metadata references and deploy the supplied assets before launch.
+- The usage guide explicitly says HEZQEN has not been legally cleared. Trademark and domain clearance in target markets remains a mandatory legal release gate.
+
+**Launch boundary:** HIES workflow success and supplied brand assets do not certify the HEZQEN public service. The CMS/public-reader release, commercial host, live staging acceptance, legal clearance and operational controls remain independent blockers.
