@@ -49,7 +49,7 @@ jobs:
         run: pnpm dlx vinext@1.4.5 check
 
   vinext-worker-build:
-    name: Build and smoke-test Cloudflare Worker public routes
+    name: Build and smoke-test Cloudflare Worker public routes with an isolated CMS fixture
     needs: vinext-check
     runs-on: ubuntu-latest
     timeout-minutes: 25
