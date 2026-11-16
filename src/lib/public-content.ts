@@ -5,6 +5,7 @@ import {
   toPublicArticle,
   toPublicCorrectionHistory,
   type PublicArticle,
+  type PublicCorrectionArticle,
 } from "./public-articles.ts";
 
 function useEmptyPublicContentFixture(): boolean {
@@ -70,7 +71,7 @@ export async function findPublicArticleBySlug(slug: string): Promise<PublicArtic
   };
 }
 
-export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]> {
+export async function findPublicCorrections(limit = 50): Promise<PublicCorrectionArticle[]> {
   if (useEmptyPublicContentFixture()) return [];
   const articles = await findPublicArticles({ limit: 50 });
   const payload = await getPayload({ config });
@@ -93,12 +94,12 @@ export async function findPublicCorrections(limit = 50): Promise<PublicArticle[]
     }),
   );
 
-  const corrections = records.flat().filter((article) => article.correctionNotice !== null);
+  const corrections: PublicCorrectionArticle[] = records.flat();
   return corrections
-    .sort((left, right) => {
-      const leftDate = left.correctionNotice ? Date.parse(left.correctionNotice.correctedAt) : 0;
-      const rightDate = right.correctionNotice ? Date.parse(right.correctionNotice.correctedAt) : 0;
-      return rightDate - leftDate;
-    })
+    .sort(
+      (left, right) =>
+        Date.parse(right.correctionNotice.correctedAt) -
+        Date.parse(left.correctionNotice.correctedAt),
+    )
     .slice(0, Math.min(Math.max(limit, 1), 50));
 }
