@@ -1,6 +1,6 @@
 # HEZQEN CMS Operations and Release Contract
 
-**Status (2026-11-16):** PR #51 is merged as `2df3a0c02e55c1edac878923569392687442b972`. PR #52 is a separate draft adding public article pages and correction notices/history; its head CI and Cloudflare workflows are green (175 tests, PostgreSQL-backed Node smoke, Worker build and isolated route smoke). Live authenticated, storage, email and scheduler acceptance remain outstanding. Production remains NOT READY.  
+**Status (2026-11-16):** PR #51 and PR #52 are merged. PR #52 merge commit is `c71e6b7d1bffcf677b73454f959b99a593c269f0`. A READY Vercel Preview exists for that commit, but it is not Production and the staging custom domain still maps to an older branch. Post-merge push-workflow completion and live authenticated, storage, email and scheduler acceptance remain outstanding. Production remains NOT READY.  
 **Production:** not deployed. Do not run production migrations or attach production traffic.
 
 This document is the operational companion to docs/PHASE_STATUS.md. A source implementation or green unit test does not by itself prove live service readiness.
@@ -171,3 +171,39 @@ The public article and correction implementation in PR #52:
 - Vercel Hobby is not a commercial production host. Cloudflare Worker database connectivity/performance remains unaccepted. Do not enable a paid host or plan without an explicit billing decision.
 
 **Current operational verdict:** CI/CD is green; public reader changes are CI-accepted but still in draft PR #52. Live staging and production-readiness acceptance remain open.
+
+
+## Authoritative reconciliation after PR #52 merge — 2026-11-16
+
+This section supersedes the older "PR #52 is a draft" and "public article presentation not implemented" statements above. PR #52 is merged as `c71e6b7d1bffcf677b73454f959b99a593c269f0`. Its reader-facing article pages, published division discovery, reader-visible correction projection/history, canonical article metadata, NewsArticle structured data and article sitemap entries are now part of `main`.
+
+### Latest deployment state
+
+- READY Preview deployment: `dpl_26VkrhKLuH93iMBxpEEczkQZimVk`.
+- Source branch: `fix/cms-final-reconciliation`.
+- Source commit: `c71e6b7d1bffcf677b73454f959b99a593c269f0`.
+- Generated deployment URL: `https://hezqen-2fdm8ap5h-lloydcoders-projects.vercel.app`.
+- Target: Preview (`target=null`), not Production.
+- Staging domain `staging.hezqen.tinlance.com` is still mapped to `feat/mobile-navigation-responsive-system`; it does not currently route to this latest Preview.
+- Production deployment inventory's newest READY deployment points to older commit `1ab4076cbf76bd505f53ffd319711bf68d2e7b46`.
+- Vercel project metadata reports `live=false`, Hobby plan, Node 24.x, and SSO protection enabled for deployments except custom domains.
+- The custom domains are verified as attached to the project. That does not establish that the latest code is serving those hostnames.
+
+### Post-merge CI evidence limitation
+
+PR #52 head workflows passed before merge: HEZQEN CI [43778690707](https://github.com/LloydCoder/hezqen/actions/runs/43778690707) and Cloudflare compatibility [43778690641](https://github.com/LloydCoder/hezqen/actions/runs/43778690641). The GitHub connector's commit-workflow lookup filters to pull-request-triggered runs, so its empty result for merge commit `c71e6b7d1bffcf677b73454f959b99a593c269f0` does not establish whether push-triggered main workflows ran. Do not mark post-merge CI as verified until the push runs are inspected directly.
+
+### Remaining operational release gates
+
+1. Verify HEZQEN CI and Cloudflare compatibility workflows on the exact current `main` merge commit.
+2. Route the staging hostname to a current deployment using a supported Vercel domain-management operation, or establish a separate staging hostname; preserve production domain routing.
+3. Complete actual staging admin login, authenticated role matrix and REST/Local API acceptance.
+4. Verify PostgreSQL transaction rollback when audit insertion fails.
+5. Complete private evidence upload/read-back/download/checksum/audit round-trip.
+6. Complete real Resend password-reset delivery and controlled mailbox receipt.
+7. Complete scheduler endpoint authentication and due-only publication tests; keep Cron disabled until accepted.
+8. Select a commercially permitted and cost-approved production host. Vercel Hobby is not suitable for the commercial publication; Cloudflare Workers/vinext remains unaccepted for full Payload CMS/database runtime.
+9. Complete production runtime/performance, security, accessibility, legal/trademark, backup/restore, monitoring, incident response and rollback acceptance.
+10. Only after all preceding gates and explicit release approval: migrate the production database, bootstrap the production administrator, deploy the production target, validate TLS/domain/routing and publish approved articles.
+
+**Production boundary:** No production migration, production deployment, production DNS cutover, paid-plan upgrade, production admin bootstrap or scheduler activation was performed by this reconciliation.
