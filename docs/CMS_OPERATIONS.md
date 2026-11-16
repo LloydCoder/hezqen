@@ -184,7 +184,7 @@ This section supersedes the older "PR #52 is a draft" and "public article presen
 - Source commit: `c71e6b7d1bffcf677b73454f959b99a593c269f0`.
 - Generated deployment URL: `https://hezqen-2fdm8ap5h-lloydcoders-projects.vercel.app`.
 - Target: Preview (`target=null`), not Production.
-- Staging domain `staging.hezqen.tinlance.com` is still mapped to `feat/mobile-navigation-responsive-system`; it does not currently route to this latest Preview.
+- The Vercel project-domain metadata still records `feat/mobile-navigation-responsive-system` as the staging domain's Git-branch association. A subsequent explicit Vercel alias assignment maps `staging.hezqen.tinlance.com` to this latest Preview deployment; alias lookup confirms the deployment ID. A live HTTP smoke test is still outstanding.
 - Production deployment inventory's newest READY deployment points to older commit `1ab4076cbf76bd505f53ffd319711bf68d2e7b46`.
 - Vercel project metadata reports `live=false`, Hobby plan, Node 24.x, and SSO protection enabled for deployments except custom domains.
 - The custom domains are verified as attached to the project. That does not establish that the latest code is serving those hostnames.
