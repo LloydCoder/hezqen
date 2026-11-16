@@ -1,6 +1,6 @@
 # HEZQEN CMS Operations and Release Contract
 
-**Status (2026-11-16):** PR #51 source head `f0b1ae4e4ca78b9d654630b1581e53880d4bb67a` passed all three required pull-request workflows: HEZQEN CI [43775481003](https://github.com/LloydCoder/hezqen/actions/runs/43775481003), Payload migration verification [43775481024](https://github.com/LloydCoder/hezqen/actions/runs/43775481024), and Cloudflare compatibility including Worker build and public-route/health smoke [43775481035](https://github.com/LloydCoder/hezqen/actions/runs/43775481035). Lint, format, 169 tests, audit, Next.js production build, runtime smoke and typecheck passed; both migrations plus guarded backup/restore passed against ephemeral PostgreSQL; Worker build and local public-route smoke passed. CMS staging acceptance remains PARTIAL because live authenticated, storage, email, scheduler and public correction UI checks remain outstanding. PR #51 remains draft; production remains NOT READY.  
+**Status (2026-11-16):** PR #51 is merged as `2df3a0c02e55c1edac878923569392687442b972`. PR #52 is a separate draft adding public article pages and correction notices/history; its head CI and Cloudflare workflows are green (175 tests, PostgreSQL-backed Node smoke, Worker build and isolated route smoke). Live authenticated, storage, email and scheduler acceptance remain outstanding. Production remains NOT READY.  
 **Production:** not deployed. Do not run production migrations or attach production traffic.
 
 This document is the operational companion to docs/PHASE_STATUS.md. A source implementation or green unit test does not by itself prove live service readiness.
@@ -141,3 +141,33 @@ These checks establish a deployed preview and unauthenticated route baseline onl
 8. The Vercel Hobby plan cannot host this commercial publication in production. Cloudflare Workers Free/vinext is not accepted until CMS/admin compatibility and CPU budgets are measured on a deployed candidate.
 
 **Current verdict (superseded by the 2026-11-16 CI reconciliation at the top of this document):** the READY Vercel Preview remains an older source revision. CMS staging acceptance is PARTIAL; production remains NOT READY. No production database migration, production deployment, production administrator bootstrap, production DNS cutover, paid-plan upgrade or scheduler activation has been performed.
+
+
+## Latest operational reconciliation — 2026-11-16
+
+PR #51 is merged as `2df3a0c02e55c1edac878923569392687442b972`. PR #52 is a separate draft, head `b2ed65f0f594958e4b0aa3914a7e29b11abbda4e`, implementing public article pages, homepage/division discovery, public correction notices/history and dynamic article sitemap entries. Do not treat PR #52 as deployed or merged yet.
+
+PR #52 validation on the exact head is green:
+- [HEZQEN CI 43778471161](https://github.com/LloydCoder/hezqen/actions/runs/43778471161): lint, format, 175 tests, moderate dependency audit, production build, ephemeral PostgreSQL migrations, Node runtime route smoke including database readiness and missing-article 404, and TypeScript.
+- [Cloudflare compatibility 43778471215](https://github.com/LloydCoder/hezqen/actions/runs/43778471215): vinext compatibility, Worker build and local public-route smoke.
+- Post-merge main workflows for PR #51 passed on commit `2df3a0c02e55c1edac878923569392687442b972`: [HEZQEN CI 43776226082](https://github.com/LloydCoder/hezqen/actions/runs/43776226082) and [Cloudflare compatibility 43776226029](https://github.com/LloydCoder/hezqen/actions/runs/43776226029).
+
+The Cloudflare Worker smoke uses an explicit empty-CMS fixture and validates route rendering/build compatibility only. It does not prove that Payload can connect to PostgreSQL from a deployed Worker; database-backed CMS integration is tested in Node CI against ephemeral PostgreSQL. Do not treat this as Hyperdrive or production hosting acceptance.
+
+The public article and correction implementation in PR #52:
+- Enforces both Payload publication status and editorial workflow status.
+- Uses Local API access control for public article queries.
+- Exposes only whitelisted article fields and editor-approved correction notes/timestamps.
+- Builds correction history from article version snapshots while excluding internal correction reasons and audit internals.
+- Publishes article canonical metadata, NewsArticle structured data and sitemap entries.
+
+### Live staging status and safe operation
+
+- Vercel staging is still protected by Vercel deployment authentication in this execution environment. Administrator login, authenticated role matrix, and deployed REST/Local API acceptance have not been performed.
+- The private Neon evidence bucket remains empty; no application upload/read-back/download/checksum/audit round-trip has been accepted.
+- Resend sender and Preview configuration exist, but no real Payload password-reset message has been accepted and received by a controlled mailbox.
+- The Cloudflare scheduler Worker exists, but its Cron Trigger is disabled. Keep it disabled until the staging endpoint is reachable, the shared bearer secret is verified, and a manual invocation proves due-only publication.
+- No production migration, production deployment, DNS cutover, paid-plan upgrade or production administrator bootstrap has been performed.
+- Vercel Hobby is not a commercial production host. Cloudflare Worker database connectivity/performance remains unaccepted. Do not enable a paid host or plan without an explicit billing decision.
+
+**Current operational verdict:** CI/CD is green; public reader changes are CI-accepted but still in draft PR #52. Live staging and production-readiness acceptance remain open.
