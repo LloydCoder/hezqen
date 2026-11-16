@@ -3,6 +3,10 @@ export type PublicCorrectionNotice = {
   correctedAt: string;
 };
 
+export type PublicCorrectionArticle = PublicArticle & {
+  correctionNotice: PublicCorrectionNotice;
+};
+
 export type PublicArticle = {
   id: string;
   title: string;
