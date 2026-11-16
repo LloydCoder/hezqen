@@ -49,7 +49,7 @@ jobs:
         run: pnpm dlx vinext@1.4.5 check
 
   vinext-worker-build:
-    name: Build and smoke-test Cloudflare Worker public routes
+    name: Build and smoke-test Cloudflare Worker public routes with an isolated CMS fixture
     needs: vinext-check
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -195,7 +195,9 @@ jobs:
             cat /tmp/hezqen-vinext.log
             exit 1
           fi
-          for route in / /about /editorial-standards /api/health /api/health/ready /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /divisions/ai-technology /divisions/cybersecurity /divisions/cloud-engineering /divisions/business-startups /contact /corrections /security /privacy /cookies /terms /sitemap /robots.txt /sitemap.xml /llms.txt /llms-full.txt; do
+          # Database readiness is exercised by the Node CI job against ephemeral PostgreSQL.
+          # This Worker smoke uses an isolated empty-CMS fixture and validates route rendering only.
+          for route in / /about /editorial-standards /api/health /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /divisions/ai-technology /divisions/cybersecurity /divisions/cloud-engineering /divisions/business-startups /contact /corrections /security /privacy /cookies /terms /sitemap /robots.txt /sitemap.xml /llms.txt /llms-full.txt; do
             echo "Checking $route"
             status=$(curl --max-time 10 --silent --output /tmp/hezqen-vinext-response --write-out "%{http_code}" "http://127.0.0.1:3001$route")
             if [ "$status" != "200" ]; then

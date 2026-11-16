@@ -15,6 +15,20 @@ jobs:
     name: Quality, tests and production build
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18.7-alpine
+        env:
+          POSTGRES_USER: hezqen_ci
+          POSTGRES_PASSWORD: hezqen_ci
+          POSTGRES_DB: hezqen_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U hezqen_ci -d hezqen_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -28,6 +42,13 @@ jobs:
       - run: pnpm test
       - run: pnpm audit --audit-level moderate
       - run: pnpm run build
+        env:
+          DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
+          PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
+          NEXT_PUBLIC_SITE_URL: https://hezqen.tinlance.com
+          HEZQEN_ALLOWED_ORIGINS: https://hezqen.tinlance.com
+      - name: Apply Payload migrations for runtime smoke
+        run: pnpm payload migrate
         env:
           DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
@@ -50,7 +71,7 @@ jobs:
             cat /tmp/hezqen-next.log
             exit 1
           fi
-          for route in / /about /editorial-standards /api/health /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /divisions/ai-technology /divisions/cybersecurity /divisions/cloud-engineering /divisions/business-startups /contact /corrections /security /privacy /cookies /terms /sitemap /robots.txt /sitemap.xml /llms.txt /llms-full.txt; do
+          for route in / /about /editorial-standards /api/health /api/health/ready /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /divisions/ai-technology /divisions/cybersecurity /divisions/cloud-engineering /divisions/business-startups /contact /corrections /security /privacy /cookies /terms /sitemap /robots.txt /sitemap.xml /llms.txt /llms-full.txt; do
             status=$(curl --silent --output /tmp/hezqen-response --write-out "%{http_code}" "http://127.0.0.1:3000$route")
             if [ "$status" != "200" ]; then
               echo "Unexpected HTTP $status for $route"
@@ -59,6 +80,13 @@ jobs:
               exit 1
             fi
           done
+          article_status=$(curl --silent --output /tmp/hezqen-article-response --write-out "%{http_code}" http://127.0.0.1:3000/articles/ci-missing-article)
+          if [ "$article_status" != "404" ]; then
+            echo "Expected HTTP 404 for an unpublished/missing article, received $article_status"
+            cat /tmp/hezqen-article-response
+            cat /tmp/hezqen-next.log
+            exit 1
+          fi
         env:
           DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds

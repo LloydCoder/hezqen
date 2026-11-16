@@ -1,7 +1,17 @@
 import Link from "next/link";
 import { divisions, site } from "@/lib/site";
+import { findPublicArticles } from "@/lib/public-content";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+function formatDate(value: string): string {
+  return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(
+    new Date(value),
+  );
+}
+
+export default async function HomePage() {
+  const latestArticles = await findPublicArticles({ limit: 6 });
   return (
     <>
       <section className="hero-section">
@@ -18,8 +28,8 @@ export default function HomePage() {
               building, governing and investing in what comes next.
             </p>
             <div className="hero-actions">
-              <a className="button button-primary" href="#divisions">
-                Explore our coverage <span aria-hidden="true">↓</span>
+              <a className="button button-primary" href="#latest">
+                Latest reporting <span aria-hidden="true">↓</span>
               </a>
               <Link className="text-link" href="/editorial-standards">
                 How we work <span aria-hidden="true">↗</span>
@@ -55,11 +65,50 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+      <section className="latest-section" id="latest">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <p className="section-label">02 / LATEST REPORTING</p>
+              <h2>Research that moves understanding forward.</h2>
+            </div>
+            <p className="section-intro">
+              Published work appears here only after editorial approval and verification.
+            </p>
+          </div>
+          {latestArticles.length ? (
+            <div className="latest-grid">
+              {latestArticles.map((article) => {
+                const division = divisions.find((item) => item.slug === article.division);
+                return (
+                  <article className="latest-card" key={article.id}>
+                    <p className="latest-card-meta">
+                      {division?.name ?? "HEZQEN"} <span>·</span> {formatDate(article.publishedAt)}
+                    </p>
+                    <h3>
+                      <Link href={`/articles/${article.slug}`}>{article.title}</Link>
+                    </h3>
+                    {article.excerpt ? <p>{article.excerpt}</p> : null}
+                    <Link className="text-link" href={`/articles/${article.slug}`}>
+                      Read analysis ↗
+                    </Link>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="latest-empty">
+              Our newsroom is preparing its first verified reports. Explore the four editorial
+              divisions while new work moves through review.
+            </p>
+          )}
+        </div>
+      </section>
       <section className="divisions-section" id="divisions">
         <div className="container">
           <div className="section-heading">
             <div>
-              <p className="section-label">02 / EDITORIAL DIVISIONS</p>
+              <p className="section-label">03 / EDITORIAL DIVISIONS</p>
               <h2>Four lenses. One connected world.</h2>
             </div>
             <p className="section-intro">
@@ -92,7 +141,7 @@ export default function HomePage() {
       </section>
       <section className="platform-section">
         <div className="container">
-          <p className="section-label">03 / THE HEZQEN PLATFORM</p>
+          <p className="section-label">04 / THE HEZQEN PLATFORM</p>
           <div className="platform-grid">
             <article className="platform-card platform-card-featured">
               <span className="platform-kicker">01 — PUBLICATION</span>
@@ -142,7 +191,7 @@ export default function HomePage() {
       </section>
       <section className="standards-band">
         <div className="container standards-grid">
-          <p className="section-label">04 / OUR STANDARD</p>
+          <p className="section-label">05 / OUR STANDARD</p>
           <div>
             <h2>
               AI may assist the newsroom. <em>AI must not become the newsroom.</em>
