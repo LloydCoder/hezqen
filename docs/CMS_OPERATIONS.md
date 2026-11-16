@@ -227,3 +227,15 @@ This section supersedes the older historical statements above that describe PR #
 9. Only after staging acceptance and explicit release approval, migrate production, bootstrap production admin, deploy the accepted commit and verify canonical host/TLS/health/sitemap/article pages.
 
 **Current verdict:** PR #52 is merged and its PR-head workflows passed. A Preview deployment exists for the merge commit, but staging SSO blocks live acceptance and the public production host still serves the earlier site. Production remains NOT READY. No production migration, deployment, paid-plan upgrade, DNS cutover, admin bootstrap or scheduler activation was performed.
+
+
+### Database privilege audit addendum — 2026-11-16
+
+A fresh read-only Neon catalog audit identified two distinct roles on the staging branch:
+
+- `hezqen_cms` is a login role with `rolsuper=false`, `rolcreaterole=false`, `rolcreatedb=false`, `rolreplication=false`, and `rolbypassrls=false`. It has no DELETE on `articles`, `audit_events`, `claims`, `evidence`, `sources`, `topics` or `users`; no UPDATE/DELETE on `audit_events`, `claims`, `evidence` or `sources`. It retains Payload housekeeping DELETE grants on version/relationship/KV/lock/preferences/session tables, including `_articles_v`; those grants need documented retention/necessity review.
+- `hezqen_app`, which is the role used by the Neon SQL connector during this audit, is materially more privileged: `rolcreaterole=true`, `rolcreatedb=true`, `rolreplication=true`, `rolbypassrls=true`; it also has broad UPDATE/DELETE/TRUNCATE grants on application tables and membership in `neon_superuser` and `hezqen_cms` (with admin option on the latter).
+
+Vercel Preview environment metadata contains a branch-scoped sensitive `DATABASE_URL` record whose comment says it is the dedicated least-privilege `hezqen_cms` role. The Vercel connector did not return decrypted secret values, so the actual runtime connection username cannot be independently confirmed. Do not assume the runtime uses `hezqen_cms` until a deployed authenticated connection or safe runtime diagnostic proves it. Production `DATABASE_URL` role/endpoint mapping is also unverified.
+
+**Release gate:** prove that the deployed application runtime uses `hezqen_cms`, not `hezqen_app`; verify the same least-privilege separation for Production before migration. Do not revoke or alter the elevated `hezqen_app` role autonomously: it may be needed for owner/migration operations and its dependencies have not been mapped. Keep it out of application runtime credentials.
