@@ -281,3 +281,24 @@ This section supersedes earlier PR #51 head/count/check-status statements above.
 - Commercially permitted production hosting, runtime budget benchmark, backup/restore operations, monitoring, incident response and rollback remain open. Vercel Hobby is not an approved commercial production host.
 
 **Current verdict:** all three required PR CI/CD workflows are green on the latest source head. The CMS implementation is CI-accepted, but staging operational acceptance remains PARTIAL and public production is NOT READY. Keep PR #51 draft until the remaining staging gates and review are accepted.
+
+
+## Latest reconciliation — 2026-11-16 after CMS merge and public-reader implementation
+
+- PR #51, `feat(cms): complete transactional editorial and evidence workflows`, was merged into `main` as squash commit `2df3a0c02e55c1edac878923569392687442b972`.
+- Post-merge main workflows passed on that exact commit: [HEZQEN CI 43776226082](https://github.com/LloydCoder/hezqen/actions/runs/43776226082) and [Cloudflare compatibility 43776226029](https://github.com/LloydCoder/hezqen/actions/runs/43776226029).
+- PR #52, [public article pages and correction notices](https://github.com/LloydCoder/hezqen/pull/52), is still a draft on head `b2ed65f0f594958e4b0aa3914a7e29b11abbda4e`. It adds server-rendered article pages, homepage/division discovery, public correction notices/history from version snapshots, reader-safe projections, and article sitemap URLs. Do not describe this work as merged until PR #52 is merged.
+- PR #52 head CI is green: [HEZQEN CI 43778471161](https://github.com/LloydCoder/hezqen/actions/runs/43778471161) and [Cloudflare compatibility 43778471215](https://github.com/LloydCoder/hezqen/actions/runs/43778471215). HEZQEN CI passed lint, format, 175 tests, moderate dependency audit, production build, ephemeral PostgreSQL migrations, CMS-backed Node route smoke including database readiness, missing-article 404 and TypeScript. Cloudflare compatibility passed vinext compatibility, Worker build and local public-route smoke.
+- Cloudflare Worker route smoke deliberately uses an isolated empty-CMS fixture. It proves Worker route rendering/build compatibility only; it does not prove Payload-to-PostgreSQL connectivity or production Hyperdrive acceptance. Node CI separately exercises the CMS queries against ephemeral PostgreSQL.
+- The public correction surface is implemented in PR #52 but is not yet deployed or accepted against staging. The correction-history projection emits only editor-approved public notes and timestamps; it does not serialize internal correction reasons or audit internals.
+
+### Operational release gates still open
+
+- The Vercel staging deployment is protected by Vercel authentication from this execution environment. Actual administrator login, authenticated role matrix, and deployed REST/Local API acceptance remain unverified.
+- The private Neon staging evidence bucket exists but remains empty. A live application upload/read-back/download/checksum/audit round-trip has not been accepted.
+- Resend sender/configuration exists, but no real Payload password-reset delivery and controlled-mailbox receipt has been accepted.
+- The Cloudflare `hezqen-scheduler` Worker remains without an active Cron Trigger. The Cron schedule was disabled pending successful staging endpoint authentication and due-only publication verification. Do not re-enable it until those checks pass.
+- Vercel Hobby is not an approved commercial production host. Cloudflare Worker database connectivity and runtime performance are not accepted; a commercially permitted host and any paid-plan change require an explicit decision.
+- Neon Free does not provide the required branch-protection control. Production remains on its separate, unmigrated branch; no production migration, deployment, DNS cutover, paid upgrade or administrator bootstrap occurred.
+
+**Current verdict:** required CI/CD workflows are green on the current PR #52 head, and PR #51 is merged. HEZQEN's public editorial surface is still pending merge/deployed acceptance; live staging operations and commercial production readiness remain PARTIAL. Production is NOT READY.
