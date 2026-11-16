@@ -1,6 +1,6 @@
 # HEZQEN CMS Operations and Release Contract
 
-**Status (2026-11-16):** PR #51 is merged as `2df3a0c02e55c1edac878923569392687442b972`. PR #52 is a separate draft adding public article pages and correction notices/history; its head CI and Cloudflare workflows are green (175 tests, PostgreSQL-backed Node smoke, Worker build and isolated route smoke). Live authenticated, storage, email and scheduler acceptance remain outstanding. Production remains NOT READY.  
+**Status (2026-11-16):** PR #51 and PR #52 are merged. PR #52 merge commit is `c71e6b7d1bffcf677b73454f959b99a593c269f0`. A READY Preview exists for this commit, but staging SSO blocks live acceptance and the public production host still serves the earlier site. Production remains NOT READY.  
 **Production:** not deployed. Do not run production migrations or attach production traffic.
 
 This document is the operational companion to docs/PHASE_STATUS.md. A source implementation or green unit test does not by itself prove live service readiness.
@@ -171,3 +171,83 @@ The public article and correction implementation in PR #52:
 - Vercel Hobby is not a commercial production host. Cloudflare Worker database connectivity/performance remains unaccepted. Do not enable a paid host or plan without an explicit billing decision.
 
 **Current operational verdict:** CI/CD is green; public reader changes are CI-accepted but still in draft PR #52. Live staging and production-readiness acceptance remain open.
+
+
+## Authoritative post-PR #52 production reconciliation — 2026-11-16
+
+This section supersedes the older historical statements above that describe PR #52 as open, draft or unmerged.
+
+### Repository and CI
+
+- PR #52 is merged into `main` as `c71e6b7d1bffcf677b73454f959b99a593c269f0` (PR head `097969c8f4eaf6c863849ee0420eda2ecbb7e60f`).
+- PR-head HEZQEN CI [43778690707](https://github.com/LloydCoder/hezqen/actions/runs/43778690707) passed lint, formatting, 175 tests, moderate dependency audit, production build, ephemeral PostgreSQL migration/runtime smoke, missing-article 404 and TypeScript.
+- PR-head Cloudflare compatibility [43778690641](https://github.com/LloydCoder/hezqen/actions/runs/43778690641) passed vinext compatibility, Worker build and isolated public-route smoke.
+- The GitHub commit-workflow lookup available to this audit only returns pull-request-triggered runs; it returned no runs for merge commit `c71e6b7d1bffcf677b73454f959b99a593c269f0`. Its combined status shows a successful Vercel status only. Push-triggered post-merge HEZQEN CI and Cloudflare workflow completion remains unverified.
+
+### Vercel deployment and domains
+
+- Vercel project `hezqen` (project `prj_aLLpKlMswGtb6ZS0y0MlabozW8lS`) is Node 24.x on Hobby; project metadata reports `live=false`.
+- READY Preview deployment `dpl_26VkrhKLuH93iMBxpEEczkQZimVk` points to PR #52 merge commit `c71e6b7d1bffcf677b73454f959b99a593c269f0`, branch `fix/cms-final-reconciliation`. It is a Preview deployment (`target=null`), not Production.
+- The latest Production-target deployment inventory contains older code; its newest READY deployment points to `1ab4076cbf76bd505f53ffd319711bf68d2e7b46`.
+- Vercel reports the main, admin, staging and www custom domains as verified. The staging hostname has been explicitly aliased to the READY Preview deployment above; Vercel alias lookup confirms that mapping. The project-domain metadata retains an older Git-branch association.
+- Cloudflare DNS read-only inventory confirms `staging.hezqen.tinlance.com` is a DNS-only CNAME to `2f37e089d5bcfcf5.vercel-dns-017.com`.
+- A read-only fetch of staging homepage, readiness, sitemap, robots, division, missing article and admin login routes redirected to Vercel login/SSO. A temporary 10-minute deployment protection bypass did not bypass SSO and was immediately revoked. No bypass secret remains active. Do not disable SSO to force acceptance.
+
+### Live public production smoke
+
+- `https://hezqen.tinlance.com/` returns HTTP 200 and renders the HEZQEN homepage.
+- `https://www.hezqen.tinlance.com/` resolves to the canonical main hostname and returns the homepage.
+- `/divisions/ai-technology` returns HTTP 200.
+- `/sitemap.xml` returns HTTP 200 but contains only the homepage, About, Editorial Standards and four divisions; it contains no article URLs.
+- `/api/health/ready` returns HTTP 404.
+- `/admin/login` on both the main and admin hostnames returns HTTP 404.
+- `/articles/ci-missing-article` returns HTTP 404, but this does not prove the PR #52 article route is deployed.
+- `/corrections` returns HTTP 404.
+
+**Interpretation:** the public hostname serves the earlier HEZQEN site, not the merged CMS/public-reader release. It is not yet the production-ready publication service.
+
+### Neon staging and production state
+
+- Read-only staging SQL on Neon branch `br-lucky-bird-bayxt3by`, database `hezqen`, confirms 18 public tables and two migrations: `20261115_155359_initial` and `20261116_000000_editorial_scheduling_corrections`.
+- Staging currently has one active administrator, zero articles, zero audit events, zero evidence records and zero claims.
+- Private bucket `hezqen-evidence` exists and has zero objects. Application upload/read-back/download/checksum/audit round-trip remains unaccepted.
+- Read-only production-branch SQL on `br-aged-surf-bavls0wu` confirms zero public application tables. Production has not been migrated.
+- Both Neon branches are unprotected on the current plan.
+
+### Remaining release blockers
+
+1. Verify post-merge push-triggered CI on the exact current `main` commit.
+2. Resolve authorized staging SSO access without disabling the protection boundary; then complete HTTP, administrator login, role matrix and REST/Local API acceptance.
+3. Test real PostgreSQL rollback when audit insertion fails.
+4. Complete private evidence upload/read-back/download/checksum/audit round-trip.
+5. Complete real Payload password-reset delivery and controlled-mailbox receipt through Resend.
+6. Verify scheduler authentication and due-only publishing; keep Cron disabled until accepted.
+7. Select a commercially permitted, cost-approved production host. Vercel Hobby is not suitable for this commercial publication; Cloudflare Workers/vinext remains unaccepted for full CMS/database runtime.
+8. Complete security, legal/trademark, accessibility, performance, backup/restore, monitoring, incident response and rollback acceptance.
+9. Only after staging acceptance and explicit release approval, migrate production, bootstrap production admin, deploy the accepted commit and verify canonical host/TLS/health/sitemap/article pages.
+
+**Current verdict:** PR #52 is merged and its PR-head workflows passed. A Preview deployment exists for the merge commit, but staging SSO blocks live acceptance and the public production host still serves the earlier site. Production remains NOT READY. No production migration, deployment, paid-plan upgrade, DNS cutover, admin bootstrap or scheduler activation was performed.
+
+
+### Database privilege audit addendum — 2026-11-16
+
+A fresh read-only Neon catalog audit identified two distinct roles on the staging branch:
+
+- `hezqen_cms` is a login role with `rolsuper=false`, `rolcreaterole=false`, `rolcreatedb=false`, `rolreplication=false`, and `rolbypassrls=false`. It has no DELETE on `articles`, `audit_events`, `claims`, `evidence`, `sources`, `topics` or `users`; no UPDATE/DELETE on `audit_events`, `claims`, `evidence` or `sources`. It retains Payload housekeeping DELETE grants on version/relationship/KV/lock/preferences/session tables, including `_articles_v`; those grants need documented retention/necessity review.
+- `hezqen_app`, which is the role used by the Neon SQL connector during this audit, is materially more privileged: `rolcreaterole=true`, `rolcreatedb=true`, `rolreplication=true`, `rolbypassrls=true`; it also has broad UPDATE/DELETE/TRUNCATE grants on application tables and membership in `neon_superuser` and `hezqen_cms` (with admin option on the latter).
+
+Vercel Preview environment metadata contains a branch-scoped sensitive `DATABASE_URL` record whose comment says it is the dedicated least-privilege `hezqen_cms` role. The Vercel connector did not return decrypted secret values, so the actual runtime connection username cannot be independently confirmed. Do not assume the runtime uses `hezqen_cms` until a deployed authenticated connection or safe runtime diagnostic proves it. Production `DATABASE_URL` role/endpoint mapping is also unverified.
+
+**Release gate:** prove that the deployed application runtime uses `hezqen_cms`, not `hezqen_app`; verify the same least-privilege separation for Production before migration. Do not revoke or alter the elevated `hezqen_app` role autonomously: it may be needed for owner/migration operations and its dependencies have not been mapped. Keep it out of application runtime credentials.
+
+
+### Production admin/API route addendum — 2026-11-16
+
+Additional live read-only checks confirm:
+
+- `/admin` and `/admin/login` on the canonical host return HTTP 404.
+- `/admin` and `/admin/login` on `admin.hezqen.tinlance.com` return HTTP 404.
+- The root of `admin.hezqen.tinlance.com` returns the public HEZQEN homepage, not an admin interface.
+- `/api/users/me` on the canonical host returns HTTP 404.
+
+The current public Production deployment therefore does not expose the Payload admin or API route surface. This confirms that it is an older public-shell deployment, not the merged CMS release. The admin hostname must be mapped to the accepted production deployment and tested after the selected host and deployment are approved.

@@ -1,8 +1,8 @@
 # HEZQEN Infrastructure Discovery and Hosting Assessment
 
-**Last reconciled:** 2026-11-15  
+**Last reconciled:** 2026-11-16  
 **Canonical launch target:** `https://hezqen.tinlance.com`  
-**Decision:** Retain Vercel as the approved standard Node.js host for Next.js + Payload. Cloudflare remains complementary for DNS/edge security; Workers + vinext is a beta alternative under isolated compatibility evaluation. Keep HEZQEN isolated and make no DNS or shared-product changes. No production deployment is authorized by this document.
+**Decision:** No commercially permitted production host is currently approved. The existing Vercel project is on Hobby and is not suitable for HEZQEN's commercial publication. Cloudflare Workers/vinext has compatibility/build CI but full Payload CMS, admin, authentication and database runtime acceptance remains incomplete. The public hostname is attached and serves an earlier HEZQEN shell; a READY Preview exists for PR #52's merge commit, but staging SSO blocks live acceptance. No production deployment or cutover is approved by this assessment.
 
 ## 1. Scope and safety boundaries
 
@@ -160,3 +160,67 @@ Do not treat a preview alias as a production domain. No custom-domain attachment
 - The Tinlyt tunnel was not modified or repurposed.
 - No Neon migration was applied to staging or production.
 - No paid plan was enabled and no production deployment was made.
+
+
+## 10. Authoritative infrastructure reconciliation — 2026-11-16
+
+This section supersedes the older 2026-11-15 inventory statements above where they conflict with current provider state.
+
+### Vercel
+
+- Project `hezqen` is Node 24.x on the Hobby plan; project metadata reports `live=false`.
+- The custom domains `hezqen.tinlance.com`, `admin.hezqen.tinlance.com`, `staging.hezqen.tinlance.com` and `www.hezqen.tinlance.com` are attached and verified.
+- READY Preview deployment `dpl_26VkrhKLuH93iMBxpEEczkQZimVk` points to PR #52 merge commit `c71e6b7d1bffcf677b73454f959b99a593c269f0`. It is not a Production-target deployment.
+- The staging hostname has an explicit alias assignment to that Preview deployment. Vercel SSO still redirects external staging fetches to login; a temporary 10-minute bypass was ineffective and revoked.
+- The newest Production-target deployment points to old commit `1ab4076cbf76bd505f53ffd319711bf68d2e7b46`; the public main hostname serves the earlier shell, not the CMS/public-reader release.
+- Vercel Hobby is not an acceptable commercial production host. No Pro upgrade or recurring paid plan is approved.
+
+### Cloudflare
+
+- Zone `tinlance.com` remains active. The staging DNS record is a DNS-only CNAME to Vercel target `2f37e089d5bcfcf5.vercel-dns-017.com`.
+- Worker `hezqen-scheduler` exists and exports a `scheduled` handler, but its Cron Trigger schedule list is empty. Do not enable it until staging authentication and due-only publication acceptance pass.
+- The scheduler Worker is not the HEZQEN web application. No Cloudflare production web Worker deployment was created.
+- The isolated vinext compatibility/build workflow is not proof of Payload CMS, admin, authentication, Hyperdrive or production database connectivity.
+
+### Neon
+
+- Project `old-bird-82399990` has isolated `staging` branch `br-lucky-bird-bayxt3by` and `production` branch `br-aged-surf-bavls0wu`; both are unprotected on the current plan.
+- Staging has 18 public tables and two recorded Payload migrations. It contains one active administrator and no articles, audit events, evidence or claims.
+- The private `hezqen-evidence` bucket exists and contains no objects.
+- Production has zero public application tables and remains unmigrated.
+- The staging `hezqen_cms` role is restricted and does not have role/database creation, replication or RLS bypass attributes. The separate `hezqen_app` role has elevated owner-like privileges and must not be used by the application runtime.
+- Vercel Preview `DATABASE_URL` metadata is sensitive and its value was not decrypted; the intended runtime role/endpoint mapping remains unverified. Production `DATABASE_URL` mapping is likewise unverified.
+
+### Release decision
+
+No production database migration, production deployment, production DNS cutover, paid-plan upgrade, production administrator bootstrap or scheduler activation has occurred. Select a commercially permitted host, complete staging operational acceptance, prove least-privilege runtime DB credentials, and pass backup/restore, security, accessibility, monitoring and rollback gates before any production cutover.
+
+
+## 11. Commercial hosting decision research — 2026-11-16
+
+Official provider documentation was rechecked before selecting a production path:
+
+- Vercel states Hobby is for personal/non-commercial use; Pro is designed for professional and business use. Current listed Pro base price is USD $20/month with USD $20 included usage credit; additional usage may be charged. Sources: [Vercel pricing](https://vercel.com/pricing), [Vercel Terms of Service — Hobby Plan](https://vercel.com/legal/terms), [Vercel fair-use guidelines](https://vercel.com/docs/limits/fair-use-guidelines).
+- Cloudflare Workers Free currently has a 10 ms CPU limit per invocation and 100,000 requests/day. Cloudflare documents that SSR/auth-heavy workloads typically use 10–20 ms. Workers Paid has a USD $5/month account minimum and substantially higher CPU limits. Sources: [Workers limits](https://developers.cloudflare.com/workers/platform/limits/), [Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/).
+- Cloudflare recommends vinext for Next.js on Workers but explicitly labels vinext beta and instructs teams to run compatibility checks before production adoption. Source: [Cloudflare Next.js on Workers](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/).
+
+**Engineering recommendation:** Vercel Pro is the lowest-migration-risk production candidate because HEZQEN is already a Next.js + Payload application and the current project has a READY Vercel Preview for the merged code. It is not approved or activated because no recurring billing authorization has been given. Cloudflare Workers Paid is a viable cost-comparison candidate only after full Payload/admin/auth/database integration tests and a measured runtime benchmark; Workers Free should not be assumed suitable for the full CMS workload under its 10 ms CPU ceiling. No provider plan was upgraded and no billable resource was created.
+
+
+## Cross-repository and supplied-brand-asset audit — 2026-11-16
+
+### HEZQEN Infrastructure Standard (HIES)
+
+- HIES repository: `LloydCoder/hezqen-infrastructure-standard`; latest main commit identified: `e2aacfd4117f41c77cdc349961422d6358fd8c11` (PR #13 merge).
+- PR #13 head `1da78e5b2f1309b5b01d0cd4f326452e65d023af` has seven successful workflows: HIES CI [43744342470], HIES Security Hygiene [43744342534], IK-01 CPU Runtime [43744342440], IK-02 PII Runtime [43744342473], IK-03 Planner Acceptance [43744342501], IK-04 Disconnected RAG [43744342560], and IK-05 Offline Bundle [43744342527].
+- HIES products remain engineering previews, not production-certified infrastructure. Physical NVIDIA GPU acceptance, ARM64 validation, SBOM/signed provenance release evidence, broader product security and deployment acceptance remain separate gates. These are not prerequisites for the initial HEZQEN editorial publication, provided the catalogue keeps its engineering-preview disclosures.
+
+### Supplied HEZQEN logo kit and usage-guideline audit
+
+- The supplied ZIP contains primary horizontal/stacked/wordmark lockups, icon variants, favicon/app icons, social artwork, Open Graph artwork and the nine-page usage guide.
+- The supplied PDF specifies: horizontal + tagline as primary; SVG as preferred web/print format; minimum 1X clear space; minimum size thresholds; Inter/Inter Display typography; sentence-case headlines; all-caps labels only; and the wordmark must never be retyped.
+- Palette: Navy `#0B1B33`, Graphite `#2A3441`, Amber `#F5A623`, Amber Deep `#A35F00`, Slate `#5B6678`, Mist `#F4F5F7`, White `#FFFFFF`. Amber on white has 2.0:1 contrast and is decorative-only; Amber Deep on white is 5.0:1 and suitable for text. The prescribed approximate color proportions are 75% white/mist, 18% navy, 5% graphite, 2% amber.
+- Repository inspection confirms `public/brand/hezqen-horizontal-color.svg`, `public/brand/hezqen-horizontal-reversed.svg`, `public/favicon.svg` and `public/site.webmanifest`. The manifest currently references only the SVG favicon. No Apple touch icon, Android 192/512 icons, maskable icon, Windows tile, Safari pinned-tab icon or supplied Open Graph PNG was found at the expected public paths. Full app/social icon integration is therefore not accepted; confirm all metadata references and deploy the supplied assets before launch.
+- The usage guide explicitly says HEZQEN has not been legally cleared. Trademark and domain clearance in target markets remains a mandatory legal release gate.
+
+**Launch boundary:** HIES workflow success and supplied brand assets do not certify the HEZQEN public service. The CMS/public-reader release, commercial host, live staging acceptance, legal clearance and operational controls remain independent blockers.
