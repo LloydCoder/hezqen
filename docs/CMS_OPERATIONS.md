@@ -239,3 +239,15 @@ A fresh read-only Neon catalog audit identified two distinct roles on the stagin
 Vercel Preview environment metadata contains a branch-scoped sensitive `DATABASE_URL` record whose comment says it is the dedicated least-privilege `hezqen_cms` role. The Vercel connector did not return decrypted secret values, so the actual runtime connection username cannot be independently confirmed. Do not assume the runtime uses `hezqen_cms` until a deployed authenticated connection or safe runtime diagnostic proves it. Production `DATABASE_URL` role/endpoint mapping is also unverified.
 
 **Release gate:** prove that the deployed application runtime uses `hezqen_cms`, not `hezqen_app`; verify the same least-privilege separation for Production before migration. Do not revoke or alter the elevated `hezqen_app` role autonomously: it may be needed for owner/migration operations and its dependencies have not been mapped. Keep it out of application runtime credentials.
+
+
+### Production admin/API route addendum — 2026-11-16
+
+Additional live read-only checks confirm:
+
+- `/admin` and `/admin/login` on the canonical host return HTTP 404.
+- `/admin` and `/admin/login` on `admin.hezqen.tinlance.com` return HTTP 404.
+- The root of `admin.hezqen.tinlance.com` returns the public HEZQEN homepage, not an admin interface.
+- `/api/users/me` on the canonical host returns HTTP 404.
+
+The current public Production deployment therefore does not expose the Payload admin or API route surface. This confirms that it is an older public-shell deployment, not the merged CMS release. The admin hostname must be mapped to the accepted production deployment and tested after the selected host and deployment are approved.
