@@ -51,15 +51,15 @@ export default async function CorrectionsPage() {
             {corrections.map((article) => (
               <article
                 className="correction-record"
-                key={`${article.id}-${article.correctionNotice!.correctedAt}`}
+                key={`${article.id}-${article.correctionNotice.correctedAt}`}
               >
                 <p className="correction-record-date">
-                  Corrected {formatDate(article.correctionNotice!.correctedAt)}
+                  Corrected {formatDate(article.correctionNotice.correctedAt)}
                 </p>
                 <h3>
                   <Link href={`/articles/${article.slug}`}>{article.title}</Link>
                 </h3>
-                <p>{article.correctionNotice!.note}</p>
+                <p>{article.correctionNotice.note}</p>
               </article>
             ))}
           </div>
