@@ -8,14 +8,14 @@ import {
   type PublicCorrectionArticle,
 } from "./public-articles.ts";
 
-function useEmptyPublicContentFixture(): boolean {
+function isEmptyPublicContentTestMode(): boolean {
   return process.env.CI === "true" && process.env.HEZQEN_LOCAL_RUNTIME_TEST === "true";
 }
 
 export async function findPublicArticles(
   options: { division?: PublicArticle["division"]; limit?: number } = {},
 ): Promise<PublicArticle[]> {
-  if (useEmptyPublicContentFixture()) return [];
+  if (isEmptyPublicContentTestMode()) return [];
   const payload = await getPayload({ config });
   const result = await payload.find({
     collection: "articles",
@@ -38,7 +38,7 @@ export async function findPublicArticles(
 }
 
 export async function findPublicArticleBySlug(slug: string): Promise<PublicArticle | null> {
-  if (!slug || slug.length > 180 || useEmptyPublicContentFixture()) return null;
+  if (!slug || slug.length > 180 || isEmptyPublicContentTestMode()) return null;
   const payload = await getPayload({ config });
   const result = await payload.find({
     collection: "articles",
@@ -72,7 +72,7 @@ export async function findPublicArticleBySlug(slug: string): Promise<PublicArtic
 }
 
 export async function findPublicCorrections(limit = 50): Promise<PublicCorrectionArticle[]> {
-  if (useEmptyPublicContentFixture()) return [];
+  if (isEmptyPublicContentTestMode()) return [];
   const articles = await findPublicArticles({ limit: 50 });
   const payload = await getPayload({ config });
   const records = await Promise.all(
