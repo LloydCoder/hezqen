@@ -105,7 +105,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         ) : null}
         <div className="article-rich-text">
           {article.body ? (
-            <RichText data={article.body as SerializedEditorState} />
+            <RichText data={article.body as unknown as SerializedEditorState} />
           ) : (
             <p>Article content is not available.</p>
           )}
