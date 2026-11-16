@@ -1,8 +1,8 @@
 # HEZQEN Infrastructure Discovery and Hosting Assessment
 
-**Last reconciled:** 2026-11-15  
+**Last reconciled:** 2026-11-16  
 **Canonical launch target:** `https://hezqen.tinlance.com`  
-**Decision:** Retain Vercel as the approved standard Node.js host for Next.js + Payload. Cloudflare remains complementary for DNS/edge security; Workers + vinext is a beta alternative under isolated compatibility evaluation. Keep HEZQEN isolated and make no DNS or shared-product changes. No production deployment is authorized by this document.
+**Decision:** No commercially permitted production host is currently approved. The existing Vercel project is on Hobby and is not suitable for HEZQEN's commercial publication. Cloudflare Workers/vinext has compatibility/build CI but full Payload CMS, admin, authentication and database runtime acceptance remains incomplete. The public hostname is attached and serves an earlier HEZQEN shell; a READY Preview exists for PR #52's merge commit, but staging SSO blocks live acceptance. No production deployment or cutover is approved by this assessment.
 
 ## 1. Scope and safety boundaries
 
