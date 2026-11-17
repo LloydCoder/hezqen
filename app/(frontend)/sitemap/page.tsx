@@ -70,6 +70,12 @@ export default function HtmlSitemapPage() {
             <Link href="/infrastructure">HEZQEN Infrastructure kits</Link>
           </li>
         </ul>
+        <h2>Calculator methodology</h2>
+        <ul>
+          <li>
+            <Link href="/labs/methodology">VRAM calculator methodology</Link>
+          </li>
+        </ul>
         <h2>Policies and trust</h2>
         <ul>
           <li>
@@ -92,6 +98,9 @@ export default function HtmlSitemapPage() {
           </li>
           <li>
             <a href="/sitemap.xml">XML sitemap</a>
+          </li>
+          <li>
+            <a href="/feed.xml">RSS feed</a>
           </li>
           <li>
             <a href="/llms.txt">llms.txt</a>
