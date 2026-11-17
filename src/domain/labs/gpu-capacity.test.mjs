@@ -137,7 +137,6 @@ test("reports insufficient per-GPU memory even when aggregate VRAM appears suffi
   assert.ok(result.requiredMemoryPerGpuGiB > result.availableMemoryPerGpuGiB);
 });
 
-
 test("matches the public tensor-parallel regression vectors", () => {
   const vectors = JSON.parse(
     readFileSync(
