@@ -82,7 +82,17 @@ export default buildConfig({
       importMapFile: path.resolve(dirname, "../app/(payload)/admin/importMap.js"),
     },
   },
-  collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents, NewsletterSubscribers, ArchitectureLeads],
+  collections: [
+    Users,
+    Articles,
+    Topics,
+    Sources,
+    Evidence,
+    Claims,
+    AuditEvents,
+    NewsletterSubscribers,
+    ArchitectureLeads,
+  ],
   endpoints: [
     editorialWorkflowEndpoint,
     editorialReviewEndpoint,
