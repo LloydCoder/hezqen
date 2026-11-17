@@ -21,16 +21,10 @@ export const ArchitectureLeads: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data, operation, req }) => {
-        if (
-          operation === "create" &&
-          !hasTrustedRequestContext(req.context, "hezqenLeadWrite")
-        ) {
+        if (operation === "create" && !hasTrustedRequestContext(req.context, "hezqenLeadWrite")) {
           throw new APIError("Architecture-review requests are server-managed.", 403);
         }
-        if (
-          operation === "update" &&
-          !hasActiveRole(req.user, ["administrator", "editor"])
-        ) {
+        if (operation === "update" && !hasActiveRole(req.user, ["administrator", "editor"])) {
           throw new APIError("Only editors can update lead workflow status.", 403);
         }
         return data;
@@ -145,7 +139,11 @@ export const ArchitectureLeads: CollectionConfig = {
     {
       name: "notificationLastError",
       type: "text",
-      access: { read: ({ req }) => hasActiveRole(req.user, ["administrator"]), create: () => false, update: () => false },
+      access: {
+        read: ({ req }) => hasActiveRole(req.user, ["administrator"]),
+        create: () => false,
+        update: () => false,
+      },
     },
     {
       name: "notes",
