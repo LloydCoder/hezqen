@@ -52,19 +52,15 @@ function validEmail(value: string): boolean {
 export function parseLead(value: unknown): LeadInput | null {
   const body = asRecord(value);
   const name = typeof body.name === "string" ? body.name.trim() : "";
-  const email =
-    typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const company = typeof body.company === "string" ? body.company.trim() : "";
   const role = typeof body.role === "string" ? body.role.trim() : "";
   const projectType = typeof body.projectType === "string" ? body.projectType : "";
-  const challenge =
-    typeof body.challenge === "string" ? body.challenge.trim() : "";
-  const budgetRange =
-    typeof body.budgetRange === "string" ? body.budgetRange : "";
+  const challenge = typeof body.challenge === "string" ? body.challenge.trim() : "";
+  const budgetRange = typeof body.budgetRange === "string" ? body.budgetRange : "";
   const timeline = typeof body.timeline === "string" ? body.timeline : "";
   const source = typeof body.source === "string" ? body.source : "unknown";
-  const calculator =
-    typeof body.calculator === "string" ? body.calculator.trim() : "";
+  const calculator = typeof body.calculator === "string" ? body.calculator.trim() : "";
 
   if (
     !name ||
@@ -113,10 +109,7 @@ export const architectureReviewEndpoint: Endpoint = {
     try {
       raw = await req.json?.();
     } catch {
-      return Response.json(
-        { ok: false, message: "Invalid request body." },
-        { status: 400 },
-      );
+      return Response.json({ ok: false, message: "Invalid request body." }, { status: 400 });
     }
     const body = asRecord(raw);
     if (typeof body.website === "string" && body.website.trim()) {
@@ -149,11 +142,8 @@ export const architectureReviewEndpoint: Endpoint = {
         );
       }
       req.transactionID = transactionId;
-      const created = await withRequestContext(
-        req,
-        { hezqenLeadWrite: true },
-        () =>
-          req.payload.create({
+      const created = await withRequestContext(req, { hezqenLeadWrite: true }, () =>
+        req.payload.create({
             collection: "architecture-leads",
             data: {
               ...lead,
@@ -164,8 +154,8 @@ export const architectureReviewEndpoint: Endpoint = {
               confirmationEmailStatus: "pending",
             },
             overrideAccess: true,
-            req,
-          }),
+          req,
+        }),
       );
       await withRequestContext(req, { hezqenAuditWrite: true }, () =>
         req.payload.create({
@@ -177,9 +167,7 @@ export const architectureReviewEndpoint: Endpoint = {
             action: "architecture_review.requested",
             resource: "architecture-lead",
             resourceId: String(created.id),
-            correlationId:
-              req.headers.get("x-request-id")?.slice(0, 128) ??
-              crypto.randomUUID(),
+            correlationId: req.headers.get("x-request-id")?.slice(0, 128) ?? crypto.randomUUID(),
             outcome: "success",
           },
           overrideAccess: true,
@@ -202,9 +190,7 @@ export const architectureReviewEndpoint: Endpoint = {
         try {
           await req.payload.db.rollbackTransaction(transactionId);
         } catch {
-          console.error(
-            "[hezqen-architecture-review] transaction rollback failed",
-          );
+          console.error("[hezqen-architecture-review] transaction rollback failed");
         }
         delete req.transactionID;
       }
