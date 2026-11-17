@@ -126,7 +126,8 @@ export default function MultiGpuCapacityPanel({
             </div>
           </div>
           <p className="vram-assumption">
-            Interconnect: {result.value.interconnectLabel}.{" "}
+            Tensor-parallel formula version {result.value.formulaVersion}. Interconnect:{" "}
+            {result.value.interconnectLabel}.{" "}
             <a href={GPU_CATALOG.find((gpu) => gpu.id === gpuId)?.sourceUrl} target="_blank" rel="noreferrer">
               Manufacturer specifications
             </a>
