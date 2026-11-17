@@ -13,6 +13,8 @@ const defaults = {
   gpuHourlyCost: "1.5",
   gpuHoursPerMonth: "730",
   monthlyInfrastructureOverhead: "100",
+  monthlyEngineeringCost: "0",
+  monthlyOnCallCost: "0",
 };
 
 function NumberField({
@@ -60,6 +62,8 @@ export default function AiCostCalculator() {
           gpuHourlyCost: Number(values.gpuHourlyCost),
           gpuHoursPerMonth: Number(values.gpuHoursPerMonth),
           monthlyInfrastructureOverhead: Number(values.monthlyInfrastructureOverhead),
+          monthlyEngineeringCost: Number(values.monthlyEngineeringCost),
+          monthlyOnCallCost: Number(values.monthlyOnCallCost),
         }),
         error: null,
       };
@@ -153,6 +157,18 @@ export default function AiCostCalculator() {
                 onChange={update("monthlyInfrastructureOverhead")}
                 step={0.01}
               />
+              <NumberField
+                label="Monthly engineering labour (USD)"
+                value={values.monthlyEngineeringCost}
+                onChange={update("monthlyEngineeringCost")}
+                step={0.01}
+              />
+              <NumberField
+                label="Monthly on-call and operations (USD)"
+                value={values.monthlyOnCallCost}
+                onChange={update("monthlyOnCallCost")}
+                step={0.01}
+              />
             </div>
             <p className="vram-footnote">
               Uses the prices you enter; it does not assume a particular API vendor or GPU provider.
@@ -218,13 +234,14 @@ export default function AiCostCalculator() {
           <p>
             API cost is calculated from input and output token volume multiplied by the prices
             supplied. Self-hosted cost is GPU count × hourly GPU cost × monthly GPU hours, plus the
-            additional monthly infrastructure overhead entered above.
+            additional monthly infrastructure overhead, engineering labour and on-call/operations costs entered above.
           </p>
           <p>
             This is a cost-only break-even model, not a capacity or deployment recommendation. It
-            excludes engineering and on-call labour, model quality differences, utilization
-            inefficiency, autoscaling, networking, storage beyond the overhead input, redundancy,
-            taxes, discounts, minimum commitments and workload-specific throughput constraints.
+            includes the engineering and on-call cost inputs above, but excludes model quality
+            differences, utilization inefficiency, autoscaling, networking, storage beyond the
+            overhead input, redundancy, taxes, discounts, minimum commitments and workload-specific
+            throughput constraints.
             Confirm that the selected hardware can serve the workload before using the result for a
             purchasing decision.
           </p>
