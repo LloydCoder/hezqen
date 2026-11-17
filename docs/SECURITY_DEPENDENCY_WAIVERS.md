@@ -10,7 +10,7 @@
 The current dependency path is through Payload/Next.js build tooling:
 @payloadcms/richtext-lexical -> @payloadcms/next -> next -> sass -> chokidar -> anymatch -> picomatch.
 
-The advisory describes catastrophic regular-expression backtracking for attacker-controlled single-branch repeated extglobs such as +( *) and +(*a). The risk is relevant when untrusted glob patterns reach picomatch; HEZQEN does not intentionally expose a user-controlled glob-matching API.
+The advisory describes catastrophic regular-expression backtracking for attacker-controlled single-branch repeated extglobs such as +(*) and +(*a). The risk is relevant when untrusted glob patterns reach picomatch; HEZQEN does not intentionally expose a user-controlled glob-matching API.
 
 ## Mitigation
 
