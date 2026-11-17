@@ -127,9 +127,7 @@ export default function VramMethodologyPage() {
             </a>
           </li>
           <li>
-            <a href="https://www.nvidia.com/en-us/data-center/a100/">
-              NVIDIA A100 80GB — 80 GB
-            </a>
+            <a href="https://www.nvidia.com/en-us/data-center/a100/">NVIDIA A100 80GB — 80 GB</a>
           </li>
           <li>
             <a href="https://resources.nvidia.com/en-us-gpu-resources/h100-datasheet-24306">
