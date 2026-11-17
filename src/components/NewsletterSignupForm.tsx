@@ -36,8 +36,7 @@ export function NewsletterSignupForm({
         return;
       }
       setMessage(
-        payload.message ??
-          "If this address is eligible, a confirmation email will arrive shortly.",
+        payload.message ?? "If this address is eligible, a confirmation email will arrive shortly.",
       );
       setEmail("");
       setConsent(false);
