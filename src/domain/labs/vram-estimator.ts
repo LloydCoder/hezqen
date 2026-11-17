@@ -95,6 +95,10 @@ export function estimateVram(input: VramEstimateInput): VramEstimate {
   const kvCacheMemoryGiB = kvCacheBytesTotal / GIB;
   const runtimeReserveGiB = (weightMemoryGiB + kvCacheMemoryGiB) * (reservePercent / 100);
   const totalMemoryGiB = weightMemoryGiB + kvCacheMemoryGiB + runtimeReserveGiB;
+  const computedValues = [weightMemoryGiB, kvCacheMemoryGiB, runtimeReserveGiB, totalMemoryGiB];
+  if (!computedValues.every(Number.isFinite) || !Number.isSafeInteger(Math.ceil(totalMemoryGiB))) {
+    throw new RangeError("computed VRAM estimate exceeds the supported numeric range");
+  }
 
   return {
     formulaVersion: VRAM_FORMULA_VERSION,
