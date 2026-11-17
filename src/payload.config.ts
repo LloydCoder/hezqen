@@ -20,6 +20,12 @@ import {
   scheduledPublicationEndpoint,
 } from "./lib/editorial-endpoints.ts";
 import { createResendEmailAdapter } from "./lib/resend-email-adapter.ts";
+import {
+  newsletterConfirmEndpoint,
+  newsletterSubscribeEndpoint,
+  newsletterSyncEndpoint,
+  newsletterUnsubscribeEndpoint,
+} from "./lib/newsletter-endpoints.ts";
 import { evidenceDownloadEndpoint, evidenceUploadEndpoint } from "./lib/evidence-endpoints.ts";
 import {
   claimVerifyEndpoint,
@@ -85,6 +91,10 @@ export default buildConfig({
     evidenceDownloadEndpoint,
     evidenceVerifyEndpoint,
     claimVerifyEndpoint,
+    newsletterSubscribeEndpoint,
+    newsletterConfirmEndpoint,
+    newsletterUnsubscribeEndpoint,
+    newsletterSyncEndpoint,
   ],
   email: process.env.RESEND_API_KEY
     ? createResendEmailAdapter({
