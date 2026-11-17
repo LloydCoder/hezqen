@@ -55,7 +55,7 @@ export default function VramMethodologyPage() {
         <div className="prose-rule" />
         <h2>Current versions</h2>
         <p>
-          Calculator version <strong>1.1.0</strong> · Formula version <strong>1.0.0</strong> ·
+          Calculator version <strong>1.2.0</strong> · Formula version <strong>1.0.0</strong> ·
           Reviewed 17 November 2026.
         </p>
         <p>
@@ -85,6 +85,21 @@ export default function VramMethodologyPage() {
           allocation varies by quantization implementation, runtime, attention backend, memory
           fragmentation and deployment configuration.
         </p>
+
+        <h2>Decimal GB and binary GiB</h2>
+        <p>
+          GPU manufacturers advertise memory in decimal gigabytes (GB), while the calculator
+          reports binary gibibytes (GiB). Each catalogue value is converted using
+          GB × 1,000,000,000 / 1,073,741,824 before the 90% usable-capacity fraction is applied.
+          For example, a 48 GB GPU contains approximately 44.70 GiB, not 48 GiB.
+        </p>
+        <ul>
+          <li>24 GB → 22.35 GiB (RTX 4090)</li>
+          <li>32 GB → 29.80 GiB (RTX 5090)</li>
+          <li>48 GB → 44.70 GiB (RTX 6000 Ada)</li>
+          <li>80 GB → 74.51 GiB (A100/H100)</li>
+          <li>141 GB → 131.34 GiB (H200; preliminary)</li>
+        </ul>
         <h2>Model preset provenance</h2>
         <ul>
           <li>
@@ -140,13 +155,37 @@ export default function VramMethodologyPage() {
             </a>
           </li>
         </ul>
+        <h2>Multi-GPU tensor-parallel estimate</h2>
+        <p>
+          The multi-GPU screen estimates idealized weight sharding and vLLM-style KV-head placement
+          for a single tensor-parallel replica. It divides weight memory across the selected
+          tensor-parallel degree. KV heads are divided when the count is divisible by that degree;
+          when the degree is a multiple of the KV-head count, one KV head per GPU is modelled as
+          replicated state. It reports required and available memory per GPU rather than summing
+          VRAM as if devices formed one memory pool.
+        </p>
+        <p>
+          The estimate requires query attention heads to be divisible by the tensor-parallel degree
+          and supports only simple KV-head divisibility cases. It does not model pipeline or data
+          parallelism, uneven layers, replicated embeddings/output layers, communication buffers,
+          activation memory, CUDA graph pools or allocator fragmentation. The result is not proof
+          that a framework accepts the configuration.
+        </p>
+        <h2>Interconnect and hardware topology</h2>
+        <p>
+          The catalogue records manufacturer-listed PCIe, NVLink and SKU-dependent information.
+          A PCIe-only card may be constrained by GPU-to-GPU communication; NVLink availability
+          depends on the exact SKU, bridge, baseboard and NVSwitch configuration. A memory fit does
+          not establish interconnect bandwidth, latency or throughput. Verify the actual server
+          topology and benchmark the target model/runtime before procurement.
+        </p>
         <h2>Limitations</h2>
         <p>
           The presets cover conventional GQA architectures. MLA, hybrid layer layouts, sliding
           window cache behaviour, speculative decoding, prefix-cache sharing, training memory and
-          multimodal components are not modelled. The GPU screen is single-card capacity matching;
-          it does not sum multiple GPUs or validate interconnect, tensor parallelism, throughput or
-          framework compatibility.
+          multimodal components are not modelled. The multi-GPU estimate is an idealized memory
+          placement screen, not a runtime allocation or performance benchmark. Validate actual
+          allocations and supported topology in the target serving framework.
         </p>
         <h2>Reproducibility and change history</h2>
         <p>
