@@ -320,7 +320,12 @@ export default function VramCalculatorPage() {
               reserve.
             </p>
             <div className="vram-share-actions">
-              <button type="button" className="button-primary" onClick={copyShareLink} disabled={!result.value}>
+              <button
+                type="button"
+                className="button-primary"
+                onClick={copyShareLink}
+                disabled={!result.value}
+              >
                 Copy share link
               </button>
               <button
