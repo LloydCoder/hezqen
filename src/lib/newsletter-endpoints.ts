@@ -76,6 +76,13 @@ function getSiteOrigin(): string {
   return origin;
 }
 
+export function normalizeSubscriberId(subscriberId: string): string | number {
+  const numericId = Number(subscriberId);
+  return /^\d+$/.test(subscriberId) && Number.isSafeInteger(numericId)
+    ? numericId
+    : subscriberId;
+}
+
 function digest(value: unknown): string {
   return createHash("sha256").update(JSON.stringify(value)).digest("hex");
 }
@@ -407,9 +414,7 @@ export const newsletterUnsubscribeEndpoint: Endpoint = {
       collection: "newsletter-subscribers",
       where: {
         id: {
-          equals: /^\\d+$/.test(payload.subscriberId)
-            ? Number(payload.subscriberId)
-            : payload.subscriberId,
+          equals: normalizeSubscriberId(payload.subscriberId),
         },
       },
       limit: 1,
