@@ -34,7 +34,7 @@ Those values are the inputs for the worked example:
 | Query attention heads | 64 |
 | Key/value heads | 8 |
 | Head dimension | 128 |
-| Maximum context in model catalogue | 128,000 tokens (model-family listing) |
+| Maximum context in model catalogue | 128K tokens (131,072-token binary context) |
 
 Always inspect the exact model revision and serving configuration. A model label such as "70B" does not guarantee that every derivative has identical architecture fields.
 
