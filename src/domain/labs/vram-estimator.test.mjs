@@ -150,10 +150,10 @@ test("rejects estimates that exceed the safe numeric range", () => {
       estimateVram({
         parametersB: 7,
         weightFormat: "fp16",
-        layers: 32,
+        layers: Number.MAX_SAFE_INTEGER,
         kvHeads: 8,
         headDimension: 128,
-        contextLength: Number.MAX_SAFE_INTEGER,
+        contextLength: 4096,
         batchSize: 1,
       }),
     /exceeds the supported numeric range/,
