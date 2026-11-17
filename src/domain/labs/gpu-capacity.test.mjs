@@ -19,28 +19,26 @@ test("converts manufacturer-advertised decimal GB into binary GiB", () => {
     const gpu = GPU_CATALOG.find((candidate) => candidate.id === id);
     assert.ok(gpu);
     assert.equal(gpu.memoryGB, memoryGB);
-    assert.ok(
-      Math.abs(gpu.memoryGiB - (memoryGB * 1_000_000_000) / 1_073_741_824) < 1e-9,
-    );
+    assert.ok(Math.abs(gpu.memoryGiB - (memoryGB * 1_000_000_000) / 1_073_741_824) < 1e-9);
     assert.ok(gpu.sourceUrl.startsWith("https://"));
   }
 });
 
 test("classifies capacity fit using explicit headroom after GB-to-GiB conversion", () => {
   const assessment = assessSingleGpuCapacity(20, 0.9);
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "rtx-4090")?.status, "fit");
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "rtx-5090")?.status, "fit");
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "rtx-6000-ada")?.status, "fit");
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "a100-80gb")?.status, "fit");
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "h100-sxm-80gb")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "rtx-4090")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "rtx-5090")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "rtx-6000-ada")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "a100-80gb")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "h100-sxm-80gb")?.status, "fit");
   assert.equal(assessment.find((gpu) => gpu.gpuId === "h200-141gb")?.status, "fit");
 });
 
 test("does not mark a GPU as fit when required memory exceeds usable capacity", () => {
   const assessment = assessSingleGpuCapacity(30, 0.9);
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "rtx-4090")?.status, "insufficient");
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "rtx-5090")?.status, "insufficient");
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "rtx-6000-ada")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "rtx-4090")?.status, "insufficient");
+  assert.equal(assessment.find((gpu) => gpu.id === "rtx-5090")?.status, "insufficient");
+  assert.equal(assessment.find((gpu) => gpu.id === "rtx-6000-ada")?.status, "fit");
 });
 
 test("rejects invalid requirements and headroom fractions", () => {
@@ -51,7 +49,7 @@ test("rejects invalid requirements and headroom fractions", () => {
 
 test("applies headroom to the corrected binary capacity", () => {
   const result = assessSingleGpuCapacity(20.2, 0.9);
-  const rtx4090 = result.find((gpu) => gpu.gpuId === "rtx-4090");
+  const rtx4090 = result.find((gpu) => gpu.id === "rtx-4090");
   assert.ok(rtx4090);
   assert.equal(rtx4090.status, "insufficient");
   assert.ok(Math.abs(rtx4090.usableMemoryGiB - 20.116567611694336) < 1e-9);
