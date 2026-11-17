@@ -25,6 +25,7 @@ test("normalizes valid newsletter email addresses and rejects malformed values",
 test("normalizes signup source to the allowlisted set", () => {
   assert.equal(normalizeNewsletterSignupSource("labs"), "labs");
   assert.equal(normalizeNewsletterSignupSource("article"), "article");
+  assert.equal(normalizeNewsletterSignupSource("newsletter"), "newsletter");
   assert.equal(normalizeNewsletterSignupSource("admin"), "unknown");
   assert.equal(normalizeNewsletterSignupSource(null), "unknown");
 });
