@@ -20,7 +20,7 @@ export const ArchitectureLeads: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      ({ operation, req }) => {
+      ({ data, operation, req }) => {
         if (
           operation === "create" &&
           !hasTrustedRequestContext(req.context, "hezqenLeadWrite")
@@ -33,6 +33,7 @@ export const ArchitectureLeads: CollectionConfig = {
         ) {
           throw new APIError("Only editors can update lead workflow status.", 403);
         }
+        return data;
       },
     ],
     beforeDelete: [
