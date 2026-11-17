@@ -5,6 +5,7 @@ const SHARE_LIMITS = {
   parametersB: 1000,
   layers: 512,
   kvHeads: 256,
+  attentionHeads: 256,
   headDimension: 1024,
   contextLength: 1_048_576,
   batchSize: 1024,
@@ -16,6 +17,7 @@ export function serializeVramShareParams(input: VramEstimateInput): string {
     input.parametersB > SHARE_LIMITS.parametersB ||
     input.layers > SHARE_LIMITS.layers ||
     input.kvHeads > SHARE_LIMITS.kvHeads ||
+    (input.attentionHeads !== undefined && input.attentionHeads > SHARE_LIMITS.attentionHeads) ||
     input.headDimension > SHARE_LIMITS.headDimension ||
     input.contextLength > SHARE_LIMITS.contextLength ||
     input.batchSize > SHARE_LIMITS.batchSize
