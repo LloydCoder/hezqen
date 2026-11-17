@@ -46,7 +46,7 @@ function asRecord(value: unknown): Record<string, unknown> {
 
 async function readJson(req: PayloadRequest): Promise<Record<string, unknown>> {
   try {
-    return asRecord(await req.json());
+    return asRecord(await req.json?.());
   } catch {
     return {};
   }
@@ -208,7 +208,7 @@ export const newsletterSubscribeEndpoint: Endpoint = {
     const token = createConfirmationToken(now.getTime());
     const writeData = {
       email,
-      status: "pending",
+      status: "pending" as const,
       consentVersion: NEWSLETTER_CONSENT_VERSION,
       consentAt: nowIso,
       signupSource: source,
