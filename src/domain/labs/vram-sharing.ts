@@ -28,6 +28,7 @@ export function serializeVramShareParams(input: VramEstimateInput): string {
   params.set("weightFormat", input.weightFormat);
   params.set("layers", String(input.layers));
   params.set("kvHeads", String(input.kvHeads));
+  if (input.attentionHeads !== undefined) params.set("attentionHeads", String(input.attentionHeads));
   params.set("headDimension", String(input.headDimension));
   params.set("contextLength", String(input.contextLength));
   params.set("batchSize", String(input.batchSize));
@@ -57,6 +58,7 @@ export function parseVramShareParams(params: URLSearchParams): VramEstimateInput
     weightFormat: params.get("weightFormat") as VramEstimateInput["weightFormat"],
     layers: Number(params.get("layers")),
     kvHeads: Number(params.get("kvHeads")),
+    ...(params.has("attentionHeads") ? { attentionHeads: Number(params.get("attentionHeads")) } : {}),
     headDimension: Number(params.get("headDimension")),
     contextLength: Number(params.get("contextLength")),
     batchSize: Number(params.get("batchSize")),
