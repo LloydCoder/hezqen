@@ -95,6 +95,9 @@ The GPU list currently includes these manufacturer-published memory capacities:
 | GeForce RTX 4090 | 24 GB | [NVIDIA specifications](https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/) |
 | GeForce RTX 5090 | 32 GB | [NVIDIA specifications](https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/) |
 | NVIDIA RTX 6000 Ada Generation | 48 GB | [NVIDIA specifications](https://www.nvidia.com/en-us/products/workstations/rtx-6000/) |
+| NVIDIA A100 80GB | 80 GB | [NVIDIA specifications](https://www.nvidia.com/en-us/data-center/a100/) |
+| NVIDIA H100 SXM | 80 GB | [NVIDIA datasheet](https://resources.nvidia.com/en-us-gpu-resources/h100-datasheet-24306) |
+| NVIDIA H200 | 141 GB (preliminary) | [NVIDIA specifications](https://www.nvidia.com/en-us/data-center/h200/) |
 
 The capacity screen treats 90% of the published capacity as usable planning capacity, leaving a nominal 10% headroom. This is a conservative comparison aid, not a guarantee that the model will load or meet latency/throughput targets.
 
@@ -126,7 +129,7 @@ These vectors validate arithmetic and regression behaviour only. They are not me
 ### 1.1.0 — 2026-11-17
 
 - Added source-linked Mistral 7B Instruct v0.3 and Qwen2.5 14B Instruct architecture presets.
-- Added a single-GPU capacity screen for RTX 4090, RTX 5090 and RTX 6000 Ada.
+- Added a single-GPU capacity screen for RTX 4090, RTX 5090, RTX 6000 Ada, A100 80GB, H100 SXM 80GB and H200 141GB (preliminary specifications).
 - Added versioned shareable input URLs and copyable result summaries.
 - Published deterministic test vectors and added a test that reads the public JSON.
 - Preserved the existing weight/KV/reserve formula as formula version 1.0.0.
