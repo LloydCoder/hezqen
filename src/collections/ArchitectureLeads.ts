@@ -46,6 +46,7 @@ export const ArchitectureLeads: CollectionConfig = {
     { name: "name", type: "text", required: true, maxLength: 120 },
     { name: "email", type: "email", required: true, index: true },
     { name: "company", type: "text", maxLength: 120 },
+    { name: "calculatorContext", type: "text", maxLength: 120 },
     { name: "role", type: "text", maxLength: 80 },
     {
       name: "projectType",
