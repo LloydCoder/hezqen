@@ -29,6 +29,24 @@ export const GPU_CATALOG = [
     memoryGiB: 48,
     sourceUrl: "https://www.nvidia.com/en-us/products/workstations/rtx-6000/",
   },
+  {
+    id: "a100-80gb",
+    name: "NVIDIA A100 80GB",
+    memoryGiB: 80,
+    sourceUrl: "https://www.nvidia.com/en-us/data-center/a100/",
+  },
+  {
+    id: "h100-sxm-80gb",
+    name: "NVIDIA H100 SXM",
+    memoryGiB: 80,
+    sourceUrl: "https://resources.nvidia.com/en-us-gpu-resources/h100-datasheet-24306",
+  },
+  {
+    id: "h200-141gb",
+    name: "NVIDIA H200 (preliminary specifications)",
+    memoryGiB: 141,
+    sourceUrl: "https://www.nvidia.com/en-us/data-center/h200/",
+  },
 ] as const satisfies readonly GpuCapacity[];
 
 export function assessSingleGpuCapacity(
