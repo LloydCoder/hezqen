@@ -1,9 +1,27 @@
 import { estimateVram, type VramEstimateInput } from "./vram-estimator.ts";
 
 const SHARE_VERSION = "1";
+const SHARE_LIMITS = {
+  parametersB: 1000,
+  layers: 512,
+  kvHeads: 256,
+  headDimension: 1024,
+  contextLength: 1_048_576,
+  batchSize: 1024,
+} as const;
 
 export function serializeVramShareParams(input: VramEstimateInput): string {
   estimateVram(input);
+  if (
+    input.parametersB > SHARE_LIMITS.parametersB ||
+    input.layers > SHARE_LIMITS.layers ||
+    input.kvHeads > SHARE_LIMITS.kvHeads ||
+    input.headDimension > SHARE_LIMITS.headDimension ||
+    input.contextLength > SHARE_LIMITS.contextLength ||
+    input.batchSize > SHARE_LIMITS.batchSize
+  ) {
+    throw new RangeError("VRAM share input exceeds the supported URL limits.");
+  }
   const params = new URLSearchParams();
   params.set("v", SHARE_VERSION);
   params.set("parametersB", String(input.parametersB));
@@ -48,6 +66,16 @@ export function parseVramShareParams(params: URLSearchParams): VramEstimateInput
 
   try {
     estimateVram(input);
+    if (
+      input.parametersB > SHARE_LIMITS.parametersB ||
+      input.layers > SHARE_LIMITS.layers ||
+      input.kvHeads > SHARE_LIMITS.kvHeads ||
+      input.headDimension > SHARE_LIMITS.headDimension ||
+      input.contextLength > SHARE_LIMITS.contextLength ||
+      input.batchSize > SHARE_LIMITS.batchSize
+    ) {
+      return null;
+    }
     return input;
   } catch {
     return null;
