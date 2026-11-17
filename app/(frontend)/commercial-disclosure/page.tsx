@@ -22,8 +22,12 @@ export default function CommercialDisclosurePage() {
         }}
       />
       <div className="container prose-container">
-        <p className="eyebrow"><span className="eyebrow-line" /> OWNERSHIP &amp; TRANSPARENCY / 005</p>
-        <h1>Clear about <em>commercial interests.</em></h1>
+        <p className="eyebrow">
+          <span className="eyebrow-line" /> OWNERSHIP &amp; TRANSPARENCY / 005
+        </p>
+        <h1>
+          Clear about <em>commercial interests.</em>
+        </h1>
         <p className="prose-lede">
           HEZQEN is a publication owned and operated by Tinlance. We disclose relevant commercial
           relationships so readers can evaluate our work with the right context.
@@ -31,9 +35,9 @@ export default function CommercialDisclosurePage() {
         <div className="prose-rule" />
         <h2>Ownership</h2>
         <p>
-          Tinlance owns and operates HEZQEN. HEZQEN is not a separately owned or corporate-independent
-          newsroom. It maintains editorial standards and independent editorial judgment within its
-          ownership structure.
+          Tinlance owns and operates HEZQEN. HEZQEN is not a separately owned or
+          corporate-independent newsroom. It maintains editorial standards and independent
+          editorial judgment within its ownership structure.
         </p>
         <h2>Tinlance services</h2>
         <p>
