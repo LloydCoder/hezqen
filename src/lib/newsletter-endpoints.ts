@@ -78,9 +78,7 @@ function getSiteOrigin(): string {
 
 export function normalizeSubscriberId(subscriberId: string): string | number {
   const numericId = Number(subscriberId);
-  return /^\d+$/.test(subscriberId) && Number.isSafeInteger(numericId)
-    ? numericId
-    : subscriberId;
+  return /^\d+$/.test(subscriberId) && Number.isSafeInteger(numericId) ? numericId : subscriberId;
 }
 
 function digest(value: unknown): string {
