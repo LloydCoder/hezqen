@@ -29,7 +29,21 @@ export function createSitemap(articles: PublicArticle[] = []): MetadataRoute.Sit
   const staticRoutes = publicStaticRoutes.map((route) => ({
     url: `${site.url}${route}`,
     changeFrequency: "monthly" as const,
-    priority: route === "" ? 1 : route === "/labs" ? 0.8 : 0.6,
+    priority:
+      route === ""
+        ? 1
+        : route === "/labs"
+          ? 0.8
+          : [
+                "/about",
+                "/corrections",
+                "/editorial-standards",
+                "/research-methodology",
+                "/authors",
+                "/commercial-disclosure",
+              ].includes(route)
+            ? 0.7
+            : 0.6,
   }));
 
   const divisionRoutes = divisions.map((division) => ({
