@@ -188,4 +188,4 @@ The catalogue includes manufacturer-sourced interconnect descriptions for PCIe, 
 
 - Base VRAM formula: `1.0.0` (weight + conventional KV-cache + reserve).
 - Calculator: `1.2.0` (decimal GB/GiB correction, attention-head metadata and tensor-parallel capacity screen).
-- Tensor-parallel placement model: vLLM-style approximation implemented in `src/domain/labs/gpu-capacity.ts`; verify against the target runtime and hardware before making deployment claims.
+- Tensor-parallel placement model: `1.0.0`, a vLLM-style approximation implemented in `src/domain/labs/gpu-capacity.ts`; verify against the target runtime and hardware before making deployment claims.
