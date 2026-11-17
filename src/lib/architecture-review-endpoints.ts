@@ -144,16 +144,16 @@ export const architectureReviewEndpoint: Endpoint = {
       req.transactionID = transactionId;
       const created = await withRequestContext(req, { hezqenLeadWrite: true }, () =>
         req.payload.create({
-            collection: "architecture-leads",
-            data: {
-              ...lead,
-              contactConsent: true,
-              privacyNoticeVersion: PRIVACY_NOTICE_VERSION,
-              status: "new",
-              notificationStatus: "pending",
-              confirmationEmailStatus: "pending",
-            },
-            overrideAccess: true,
+          collection: "architecture-leads",
+          data: {
+            ...lead,
+            contactConsent: true,
+            privacyNoticeVersion: PRIVACY_NOTICE_VERSION,
+            status: "new",
+            notificationStatus: "pending",
+            confirmationEmailStatus: "pending",
+          },
+          overrideAccess: true,
           req,
         }),
       );
