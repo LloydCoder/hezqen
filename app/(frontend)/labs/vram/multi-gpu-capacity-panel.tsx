@@ -1,10 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  assessTensorParallelCapacity,
-  GPU_CATALOG,
-} from "@/domain/labs/gpu-capacity";
+import { assessTensorParallelCapacity, GPU_CATALOG } from "@/domain/labs/gpu-capacity";
 
 interface MultiGpuCapacityPanelProps {
   weightMemoryGiB: number;
@@ -47,7 +44,8 @@ export default function MultiGpuCapacityPanel({
     } catch (error) {
       return {
         value: null,
-        error: error instanceof Error ? error.message : "Unsupported tensor-parallel configuration.",
+        error:
+          error instanceof Error ? error.message : "Unsupported tensor-parallel configuration.",
       };
     }
   }, [
@@ -128,7 +126,11 @@ export default function MultiGpuCapacityPanel({
           <p className="vram-assumption">
             Tensor-parallel formula version {result.value.formulaVersion}. Interconnect:{" "}
             {result.value.interconnectLabel}.{" "}
-            <a href={GPU_CATALOG.find((gpu) => gpu.id === gpuId)?.sourceUrl} target="_blank" rel="noreferrer">
+            <a
+              href={GPU_CATALOG.find((gpu) => gpu.id === gpuId)?.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
               Manufacturer specifications
             </a>
           </p>
