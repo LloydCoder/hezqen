@@ -1,10 +1,25 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { estimateVram, type CacheFormat, type WeightFormat } from "@/domain/labs/vram-estimator";
+import { useEffect, useMemo, useState } from "react";
+import { assessSingleGpuCapacity } from "@/domain/labs/gpu-capacity";
+import { estimateVram, type CacheFormat, type VramEstimateInput, type WeightFormat } from "@/domain/labs/vram-estimator";
+import { getVramModelPreset, VRAM_MODEL_PRESETS } from "@/domain/labs/vram-presets";
+import { parseVramShareParams, serializeVramShareParams } from "@/domain/labs/vram-sharing";
 
 const formats: WeightFormat[] = ["fp16", "bf16", "int8", "int4"];
 const cacheFormats: CacheFormat[] = ["fp16", "bf16", "fp8", "int8"];
+
+const defaults = {
+  parametersB: "7",
+  weightFormat: "int4" as WeightFormat,
+  layers: "32",
+  kvHeads: "8",
+  headDimension: "128",
+  contextLength: "4096",
+  batchSize: "1",
+  kvCacheFormat: "fp16" as CacheFormat,
+  runtimeReservePercent: "15",
+};
 
 function NumberField({
   label,
@@ -59,51 +74,113 @@ function SelectField<T extends string>({
 }
 
 export default function VramCalculatorPage() {
-  const [parametersB, setParametersB] = useState("7");
-  const [weightFormat, setWeightFormat] = useState<WeightFormat>("int4");
-  const [layers, setLayers] = useState("32");
-  const [kvHeads, setKvHeads] = useState("8");
-  const [headDimension, setHeadDimension] = useState("128");
-  const [contextLength, setContextLength] = useState("4096");
-  const [batchSize, setBatchSize] = useState("1");
-  const [kvCacheFormat, setKvCacheFormat] = useState<CacheFormat>("fp16");
-  const [runtimeReservePercent, setRuntimeReservePercent] = useState("15");
+  const [values, setValues] = useState(defaults);
+  const [presetId, setPresetId] = useState("custom");
+  const [shareFeedback, setShareFeedback] = useState("");
+
+  useEffect(() => {
+    const shared = parseVramShareParams(new URLSearchParams(window.location.search));
+    if (!shared) return;
+    setValues({
+      parametersB: String(shared.parametersB),
+      weightFormat: shared.weightFormat,
+      layers: String(shared.layers),
+      kvHeads: String(shared.kvHeads),
+      headDimension: String(shared.headDimension),
+      contextLength: String(shared.contextLength),
+      batchSize: String(shared.batchSize),
+      kvCacheFormat: shared.kvCacheFormat ?? "fp16",
+      runtimeReservePercent: String(shared.runtimeReservePercent ?? 15),
+    });
+    setPresetId("custom");
+  }, []);
+
+  const update = (key: keyof typeof defaults) => (value: string) =>
+    setValues((current) => ({ ...current, [key]: value }));
+
+  const input = useMemo<VramEstimateInput>(
+    () => ({
+      parametersB: Number(values.parametersB),
+      weightFormat: values.weightFormat,
+      layers: Number(values.layers),
+      kvHeads: Number(values.kvHeads),
+      headDimension: Number(values.headDimension),
+      contextLength: Number(values.contextLength),
+      batchSize: Number(values.batchSize),
+      kvCacheFormat: values.kvCacheFormat,
+      runtimeReservePercent: Number(values.runtimeReservePercent),
+    }),
+    [values],
+  );
 
   const result = useMemo(() => {
     try {
-      return {
-        value: estimateVram({
-          parametersB: Number(parametersB),
-          weightFormat,
-          layers: Number(layers),
-          kvHeads: Number(kvHeads),
-          headDimension: Number(headDimension),
-          contextLength: Number(contextLength),
-          batchSize: Number(batchSize),
-          kvCacheFormat,
-          runtimeReservePercent: Number(runtimeReservePercent),
-        }),
-        error: null,
-      };
+      return { value: estimateVram(input), error: null };
     } catch (error) {
       return {
         value: null,
         error: error instanceof Error ? error.message : "Invalid calculator input.",
       };
     }
-  }, [
-    parametersB,
-    weightFormat,
-    layers,
-    kvHeads,
-    headDimension,
-    contextLength,
-    batchSize,
-    kvCacheFormat,
-    runtimeReservePercent,
-  ]);
+  }, [input]);
 
+  const gpuMatches = useMemo(
+    () => (result.value ? assessSingleGpuCapacity(result.value.totalMemoryGiB) : []),
+    [result.value],
+  );
+  const activePreset = getVramModelPreset(presetId);
   const formatGiB = (value: number) => `${value.toFixed(2)} GiB`;
+
+  function applyPreset(id: string) {
+    setPresetId(id);
+    const preset = getVramModelPreset(id);
+    if (!preset) return;
+    setValues((current) => ({
+      ...current,
+      parametersB: String(preset.parametersB),
+      layers: String(preset.layers),
+      kvHeads: String(preset.kvHeads),
+      headDimension: String(preset.headDimension),
+      contextLength: String(Math.min(4096, preset.maxContextLength)),
+    }));
+  }
+
+  async function copyText(value: string, successMessage: string) {
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Clipboard access is unavailable in this browser.");
+      }
+      await navigator.clipboard.writeText(value);
+      setShareFeedback(successMessage);
+    } catch {
+      setShareFeedback("Copy was unavailable. You can copy the values from the address bar.");
+    }
+  }
+
+  function copyShareLink() {
+    const url = new URL(window.location.href);
+    url.search = serializeVramShareParams(input);
+    url.hash = "";
+    void copyText(url.toString(), "Shareable calculator URL copied.");
+  }
+
+  function copySummary() {
+    if (!result.value) return;
+    const summary = [
+      "HEZQEN Labs — LLM VRAM estimate",
+      `Model parameters: ${input.parametersB}B`,
+      `Weight format: ${input.weightFormat.toUpperCase()}`,
+      `Architecture: ${input.layers} layers, ${input.kvHeads} KV heads, ${input.headDimension} head dimension`,
+      `Context length: ${input.contextLength} tokens`,
+      `Batch size: ${input.batchSize}`,
+      `KV cache format: ${(input.kvCacheFormat ?? "fp16").toUpperCase()}`,
+      `Estimated total: ${formatGiB(result.value.totalMemoryGiB)}`,
+      `Recommended available VRAM: at least ${result.value.recommendedVramGiB} GiB`,
+      "Planning estimate only; not a hardware benchmark or guaranteed fit.",
+      window.location.href,
+    ].join("\n");
+    void copyText(summary, "Calculation summary copied.");
+  }
 
   return (
     <section className="vram-page">
@@ -129,53 +206,96 @@ export default function VramCalculatorPage() {
               <h2 id="vram-input-heading">Model and serving parameters</h2>
             </div>
             <div className="vram-fields">
+              <label className="vram-field">
+                <span>Model preset</span>
+                <select value={presetId} onChange={(event) => applyPreset(event.target.value)}>
+                  <option value="custom">Custom architecture</option>
+                  {VRAM_MODEL_PRESETS.map((preset) => (
+                    <option key={preset.id} value={preset.id}>
+                      {preset.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <NumberField
                 label="Model parameters (billions)"
-                value={parametersB}
-                onChange={setParametersB}
+                value={values.parametersB}
+                onChange={update("parametersB")}
                 min={0.01}
                 step={0.1}
               />
               <SelectField
                 label="Model weight format"
-                value={weightFormat}
+                value={values.weightFormat}
                 options={formats}
-                onChange={setWeightFormat}
+                onChange={(value) => setValues((current) => ({ ...current, weightFormat: value }))}
               />
-              <NumberField label="Transformer layers" value={layers} onChange={setLayers} />
-              <NumberField label="KV heads (GQA/MQA)" value={kvHeads} onChange={setKvHeads} />
+              <NumberField label="Transformer layers" value={values.layers} onChange={update("layers")} />
+              <NumberField label="KV heads (GQA/MQA)" value={values.kvHeads} onChange={update("kvHeads")} />
               <NumberField
                 label="Head dimension"
-                value={headDimension}
-                onChange={setHeadDimension}
+                value={values.headDimension}
+                onChange={update("headDimension")}
               />
               <NumberField
                 label="Context length (tokens)"
-                value={contextLength}
-                onChange={setContextLength}
+                value={values.contextLength}
+                onChange={update("contextLength")}
               />
               <NumberField
                 label="Concurrent batch size"
-                value={batchSize}
-                onChange={setBatchSize}
+                value={values.batchSize}
+                onChange={update("batchSize")}
               />
               <SelectField
                 label="KV cache format"
-                value={kvCacheFormat}
+                value={values.kvCacheFormat}
                 options={cacheFormats}
-                onChange={setKvCacheFormat}
+                onChange={(value) => setValues((current) => ({ ...current, kvCacheFormat: value }))}
               />
               <NumberField
                 label="Runtime reserve (%)"
-                value={runtimeReservePercent}
-                onChange={setRuntimeReservePercent}
+                value={values.runtimeReservePercent}
+                onChange={update("runtimeReservePercent")}
                 min={0}
               />
             </div>
+            {activePreset ? (
+              <p className="vram-footnote">
+                Architecture values are based on the{" "}
+                <a href={activePreset.sourceUrl} target="_blank" rel="noreferrer">
+                  model card
+                </a>{" "}
+                and{" "}
+                <a href={activePreset.configUrl} target="_blank" rel="noreferrer">
+                  configuration
+                </a>
+                . Verified {activePreset.sourceVerifiedAt}. Quantization and serving context remain
+                adjustable.
+              </p>
+            ) : (
+              <p className="vram-footnote">
+                Presets are starting points. Confirm the exact model revision and runtime
+                configuration before procurement or deployment.
+              </p>
+            )}
             <p className="vram-footnote">
               All numeric inputs must be positive whole numbers except model size and runtime
               reserve.
             </p>
+            <div className="vram-share-actions">
+              <button type="button" className="button-primary" onClick={copyShareLink}>
+                Copy share link
+              </button>
+              <button type="button" className="button-primary" onClick={copySummary} disabled={!result.value}>
+                Copy result summary
+              </button>
+            </div>
+            {shareFeedback ? (
+              <p className="vram-share-feedback" role="status">
+                {shareFeedback}
+              </p>
+            ) : null}
           </section>
 
           <section
@@ -220,6 +340,38 @@ export default function VramCalculatorPage() {
           </section>
         </div>
 
+        {result.value ? (
+          <section className="vram-gpu-matches" aria-labelledby="vram-gpu-heading">
+            <p className="section-label">HARDWARE CAPACITY CHECK</p>
+            <h2 id="vram-gpu-heading">Single-GPU memory fit</h2>
+            <p>
+              This compares the estimate with 90% of each GPU's published memory capacity, leaving
+              10% headroom. It is a capacity screen only—not a guarantee that a model will load or
+              meet throughput targets. Multi-GPU memory is not summed because topology,
+              interconnect, tensor-parallel support and framework behaviour affect fit.
+            </p>
+            <ul className="vram-gpu-list">
+              {gpuMatches.map((gpu) => (
+                <li key={gpu.id}>
+                  <span>
+                    <strong>{gpu.name}</strong>
+                    <small>
+                      {gpu.memoryGiB} GB published · {gpu.usableMemoryGiB.toFixed(1)} GiB planning
+                      capacity
+                    </small>
+                  </span>
+                  <span className={gpu.status === "fit" ? "vram-gpu-fit" : "vram-gpu-no-fit"}>
+                    {gpu.status === "fit" ? "Capacity fit" : "Insufficient"}
+                  </span>
+                  <a href={gpu.sourceUrl} target="_blank" rel="noreferrer">
+                    Specifications
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
         <section className="vram-method">
           <p className="section-label">METHODOLOGY & LIMITATIONS</p>
           <h2>What this estimate includes</h2>
@@ -233,7 +385,8 @@ export default function VramCalculatorPage() {
             allowance. This is a planning estimate, not a hardware benchmark or a guarantee of fit.
             Actual allocation varies with architecture, quantization implementation, attention
             backend, tensor parallelism, fragmentation, CUDA graphs, runtime and serving framework.
-            It does not include every allocator or system-level overhead.
+            Architectures using MLA, heterogeneous layer layouts or sliding-window cache behaviour
+            may require a different formula and are not represented by the presets here.
           </p>
         </section>
       </div>
