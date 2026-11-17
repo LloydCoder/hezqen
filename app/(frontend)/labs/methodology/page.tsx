@@ -92,7 +92,7 @@ export default function VramMethodologyPage() {
               Mistral 7B Instruct v0.3 model card
             </a>{" "}
             and{" "}
-            <a href="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/blob/main/config.json">
+            <a href="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/blob/41ee164278abb69f607540425b8682669bec3ca6/config.json">
               model configuration
             </a>
             .
@@ -124,6 +124,21 @@ export default function VramMethodologyPage() {
           <li>
             <a href="https://www.nvidia.com/en-us/products/workstations/rtx-6000/">
               NVIDIA RTX 6000 Ada Generation — 48 GB
+            </a>
+          </li>
+          <li>
+            <a href="https://www.nvidia.com/en-us/data-center/a100/">
+              NVIDIA A100 80GB — 80 GB
+            </a>
+          </li>
+          <li>
+            <a href="https://resources.nvidia.com/en-us-gpu-resources/h100-datasheet-24306">
+              NVIDIA H100 SXM — 80 GB
+            </a>
+          </li>
+          <li>
+            <a href="https://www.nvidia.com/en-us/data-center/h200/">
+              NVIDIA H200 — 141 GB (preliminary specifications)
             </a>
           </li>
         </ul>
