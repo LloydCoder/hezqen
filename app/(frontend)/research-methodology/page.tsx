@@ -31,8 +31,8 @@ export default function ResearchMethodologyPage() {
         </h1>
         <p className="prose-lede">
           HEZQEN separates evidence from assertion, measurement from estimate, and analysis from
-          opinion. This methodology explains the standards we apply across reporting, investigations,
-          technical research and HEZQEN Labs.
+          opinion. This methodology explains the standards we apply across reporting,
+          investigations, technical research and HEZQEN Labs.
         </p>
         <div className="prose-rule" />
         <h2>1. Start with a testable question</h2>
@@ -48,15 +48,15 @@ export default function ResearchMethodologyPage() {
           We prioritize primary material: original research, standards, official documentation,
           regulatory filings, court records, security advisories, source repositories, product
           specifications, datasets, direct interviews and first-party disclosures. Independent
-          secondary reporting can add context and corroboration. Repetition across publications
-          that rely on the same original source is not independent confirmation.
+          secondary reporting can add context and corroboration. Repetition across publications that
+          rely on the same original source is not independent confirmation.
         </p>
         <p>
           Editors assess a source's authority, proximity to the facts, methodology, publication
-          date, incentives, independence, completeness and known limitations. We record stable
-          URLs, source titles, publishers, publication dates and access dates where relevant.
-          Material documents, excerpts, configuration files and datasets are preserved as evidence
-          where lawful and proportionate.
+          date, incentives, independence, completeness and known limitations. We record stable URLs,
+          source titles, publishers, publication dates and access dates where relevant. Material
+          documents, excerpts, configuration files and datasets are preserved as evidence where
+          lawful and proportionate.
         </p>
         <h2>3. Connect claims to evidence</h2>
         <p>
@@ -64,8 +64,8 @@ export default function ResearchMethodologyPage() {
           supports, qualifies or contradicts them. A citation is a route to evidence, not proof by
           itself. We distinguish direct observation, independently verified fact, attributed
           statement, vendor claim, calculation, estimate, forecast, interpretation and opinion.
-          Where evidence is disputed, incomplete, inaccessible or not independently verified, we
-          say so.
+          Where evidence is disputed, incomplete, inaccessible or not independently verified, we say
+          so.
         </p>
         <p>
           Consequential allegations receive heightened scrutiny. We seek corroboration, preserve
@@ -78,8 +78,8 @@ export default function ResearchMethodologyPage() {
           Technical analysis should disclose enough information for a competent reader to understand
           the method and, where practical, reproduce it. Depending on the work, this includes
           hardware, model and software versions, configuration, workload, dataset provenance,
-          baseline, measurement method, repetitions, units, environment, uncertainty, exclusions
-          and relevant limitations. We distinguish observed results from vendor specifications,
+          baseline, measurement method, repetitions, units, environment, uncertainty, exclusions and
+          relevant limitations. We distinguish observed results from vendor specifications,
           theoretical calculations and simulations.
         </p>
         <p>
@@ -94,9 +94,8 @@ export default function ResearchMethodologyPage() {
           We identify the boundary of what the evidence can establish. Estimates disclose inputs,
           units, rounding and sensitivity to assumptions. Benchmarks disclose the tested workload
           and environment. Market comparisons state the pricing date, region, service tier and
-          relevant exclusions. Forecasts and scenarios are not presented as observed outcomes.
-          Where a conclusion depends on assumptions, readers should be able to find those
-          assumptions.
+          relevant exclusions. Forecasts and scenarios are not presented as observed outcomes. Where
+          a conclusion depends on assumptions, readers should be able to find those assumptions.
         </p>
         <h2>6. Use independent human review</h2>
         <p>
@@ -110,11 +109,11 @@ export default function ResearchMethodologyPage() {
         <p>
           AI systems may assist discovery, transcription, translation, data organization, code
           review, comparison, summarization and drafting. Human staff independently verify material
-          facts, quotations, calculations, source context and conclusions. Material AI assistance
-          is disclosed when readers could reasonably misunderstand how the work was produced.
-          AI-generated material is not treated as an interview, firsthand observation, experiment
-          or independent source. No model, prompt, memory, agent or tool output can approve or
-          publish editorial work.
+          facts, quotations, calculations, source context and conclusions. Material AI assistance is
+          disclosed when readers could reasonably misunderstand how the work was produced.
+          AI-generated material is not treated as an interview, firsthand observation, experiment or
+          independent source. No model, prompt, memory, agent or tool output can approve or publish
+          editorial work.
         </p>
         <h2>8. Correct the public record</h2>
         <p>
@@ -127,8 +126,8 @@ export default function ResearchMethodologyPage() {
         <p>
           Read this methodology with our <a href="/editorial-standards">Editorial Standards</a>,
           <a href="/authors"> Authors &amp; Contributors policy</a> and
-          <a href="/commercial-disclosure"> Commercial Disclosure</a>. HEZQEN is owned and
-          published by Tinlance; editorial accountability remains with human editors.
+          <a href="/commercial-disclosure"> Commercial Disclosure</a>. HEZQEN is owned and published
+          by Tinlance; editorial accountability remains with human editors.
         </p>
       </div>
     </section>
