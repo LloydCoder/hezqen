@@ -4,7 +4,7 @@ import test from "node:test";
 import { LAB_CALCULATORS } from "../domain/labs/calculator-suite.ts";
 import { createSitemap } from "../../app/sitemap.ts";
 
-test("sitemap publishes all sixteen public Labs calculator routes", () => {
+test("sitemap publishes all sixteen public Labs calculators and methodology", () => {
   const routes = new Set(createSitemap().map((entry) => new URL(entry.url).pathname));
   assert.equal(LAB_CALCULATORS.length, 14);
   assert.equal(routes.has("/labs/vram"), true);
@@ -13,7 +13,12 @@ test("sitemap publishes all sixteen public Labs calculator routes", () => {
   for (const calculator of LAB_CALCULATORS) {
     assert.ok(routes.has(`/labs/${calculator.slug}`), `Missing sitemap route: ${calculator.slug}`);
   }
-  assert.equal([...routes].filter((route) => route.startsWith("/labs/")).length, 16);
+  assert.equal(routes.has("/labs/methodology"), true);
+  assert.equal(
+    [...routes].filter((route) => route.startsWith("/labs/") && route !== "/labs/methodology")
+      .length,
+    16,
+  );
 });
 
 test("sitemap includes core publication and infrastructure surfaces", () => {
@@ -30,6 +35,7 @@ test("sitemap includes core publication and infrastructure surfaces", () => {
     "/security",
     "/sitemap",
     "/labs",
+    "/labs/methodology",
     "/infrastructure",
   ]) {
     assert.ok(routes.has(route), `Missing sitemap route: ${route}`);
