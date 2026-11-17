@@ -51,9 +51,7 @@ export interface TensorParallelCapacityAssessment {
   warnings: string[];
 }
 
-function createGpu(
-  gpu: Omit<GpuCapacity, "memoryGiB">,
-): GpuCapacity {
+function createGpu(gpu: Omit<GpuCapacity, "memoryGiB">): GpuCapacity {
   return {
     ...gpu,
     memoryGiB: (gpu.memoryGB * BYTES_PER_GB) / BYTES_PER_GIB,
