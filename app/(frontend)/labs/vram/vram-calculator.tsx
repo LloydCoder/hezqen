@@ -168,6 +168,8 @@ export default function VramCalculatorPage() {
     if (!result.value) return;
     const summary = [
       "HEZQEN Labs — LLM VRAM estimate",
+      `Calculator version: ${result.value.calculatorVersion}`,
+      `Formula version: ${result.value.formulaVersion}`,
       `Model parameters: ${input.parametersB}B`,
       `Weight format: ${input.weightFormat.toUpperCase()}`,
       `Architecture: ${input.layers} layers, ${input.kvHeads} KV heads, ${input.headDimension} head dimension`,
