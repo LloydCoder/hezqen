@@ -22,9 +22,10 @@ For a nominal 70-billion-parameter model, the uncompressed BF16 weight payload i
 | Representation | Effective bytes/parameter | Weight memory |
 |---|---:|---:|
 | FP16/BF16 | 2 | 131.5 GiB |
-| FP8/INT8 payload floor | 1 | 65.8 GiB |
+| 8-bit payload floor | 1 | 65.8 GiB |
+| INT8 planning assumption | 1.0625 | 69.9 GiB |
 | 4-bit payload floor | 0.5 | 32.9 GiB |
-| 4-bit planning assumption | 0.5625 | 37.0 GiB |
+| INT4 planning assumption | 0.5625 | 37.0 GiB |
 
 These are arithmetic payload estimates, not exact allocations. Quantized implementations add scales, zero points, alignment and metadata; some layers remain at higher precision. The HEZQEN calculator uses 0.5625 bytes/parameter for its conservative INT4 planning assumption and 1.0625 for INT8. Actual formats must be checked against the selected quantizer and model artifact.
 
@@ -38,7 +39,7 @@ At BF16/FP16 cache precision, one sequence at 32,768 tokens requires about 10 Gi
 
 ## Why a single 141 GB GPU is not automatically enough
 
-NVIDIA publishes 141 GB of memory for the H200 SXM and H200 NVL. That is approximately 131.3 GiB after decimal-GB to binary-GiB conversion. The 70.6B configuration-derived BF16 weight estimate is about 131.5 GiB, so it exceeds the H200's binary capacity before KV cache, CUDA context, activations, workspaces or allocator headroom. A 4-bit planning estimate is about 37.0 GiB for weights; at 32k context the combined estimate is about 54.0 GiB after a 15% reserve. That is a capacity calculation, not proof that a particular quantized artifact or runtime is supported.
+NVIDIA publishes 141 GB of memory for the H200 SXM and H200 NVL and labels the specifications preliminary and subject to change. That is approximately 131.3 GiB after decimal-GB to binary-GiB conversion. The 70.6B configuration-derived BF16 weight estimate is about 131.5 GiB, so it exceeds the H200's binary capacity before KV cache, CUDA context, activations, workspaces or allocator headroom. A 4-bit planning estimate is about 37.0 GiB for weights; at 32k context the combined estimate is about 54.0 GiB after a 15% reserve. That is a capacity calculation, not proof that a particular quantized artifact or runtime is supported.
 
 Multiple GPUs do not form one transparent memory pool. Tensor parallelism shards supported layers and cache state across ranks, subject to model/framework constraints and the actual interconnect. Under the calculator's idealized placement model, four H100 80GB GPUs at tensor-parallel degree four can place the 70.6B BF16 weights, 32k-context KV cache and a 15% reserve at roughly 40.7 GiB per GPU. Two H100s at degree two require roughly 81.4 GiB per GPU under the same assumptions and exceed the 90%-usable planning capacity. These are arithmetic capacity checks, not benchmark results or proof of runtime compatibility.
 
