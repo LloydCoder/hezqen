@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { assessSingleGpuCapacity } from "@/domain/labs/gpu-capacity";
+import MultiGpuCapacityPanel from "./multi-gpu-capacity-panel";
 import {
   estimateVram,
   type CacheFormat,
@@ -18,6 +19,7 @@ const defaults = {
   parametersB: "7",
   weightFormat: "int4" as WeightFormat,
   layers: "32",
+  attentionHeads: "32",
   kvHeads: "8",
   headDimension: "128",
   contextLength: "4096",
@@ -90,6 +92,7 @@ export default function VramCalculatorPage() {
       parametersB: String(shared.parametersB),
       weightFormat: shared.weightFormat,
       layers: String(shared.layers),
+      attentionHeads: String(shared.attentionHeads ?? 32),
       kvHeads: String(shared.kvHeads),
       headDimension: String(shared.headDimension),
       contextLength: String(shared.contextLength),
@@ -108,6 +111,7 @@ export default function VramCalculatorPage() {
       parametersB: Number(values.parametersB),
       weightFormat: values.weightFormat,
       layers: Number(values.layers),
+      attentionHeads: Number(values.attentionHeads),
       kvHeads: Number(values.kvHeads),
       headDimension: Number(values.headDimension),
       contextLength: Number(values.contextLength),
@@ -144,6 +148,7 @@ export default function VramCalculatorPage() {
       ...current,
       parametersB: String(preset.parametersB),
       layers: String(preset.layers),
+      attentionHeads: String(preset.attentionHeads),
       kvHeads: String(preset.kvHeads),
       headDimension: String(preset.headDimension),
       contextLength: String(Math.min(4096, preset.maxContextLength)),
@@ -190,7 +195,7 @@ export default function VramCalculatorPage() {
       `Formula version: ${result.value.formulaVersion}`,
       `Model parameters: ${input.parametersB}B`,
       `Weight format: ${input.weightFormat.toUpperCase()}`,
-      `Architecture: ${input.layers} layers, ${input.kvHeads} KV heads, ${input.headDimension} head dimension`,
+      `Architecture: ${input.layers} layers, ${input.attentionHeads} attention heads, ${input.kvHeads} KV heads, ${input.headDimension} head dimension`,
       `Context length: ${input.contextLength} tokens`,
       `Batch size: ${input.batchSize}`,
       `KV cache format: ${(input.kvCacheFormat ?? "fp16").toUpperCase()}`,
@@ -254,6 +259,11 @@ export default function VramCalculatorPage() {
                 label="Transformer layers"
                 value={values.layers}
                 onChange={update("layers")}
+              />
+              <NumberField
+                label="Query attention heads"
+                value={values.attentionHeads}
+                onChange={update("attentionHeads")}
               />
               <NumberField
                 label="KV heads (GQA/MQA)"
@@ -394,7 +404,7 @@ export default function VramCalculatorPage() {
               This compares the estimate with 90% of each GPU's published memory capacity, leaving
               10% headroom. It is a capacity screen only—not a guarantee that a model will load or
               meet throughput targets. Multi-GPU memory is not summed because topology,
-              interconnect, tensor-parallel support and framework behaviour affect fit.
+              interconnect and framework behaviour affect fit. A separate tensor-parallel screen below estimates per-GPU memory placement.
             </p>
             <ul className="vram-gpu-list">
               {gpuMatches.map((gpu) => (
@@ -402,8 +412,7 @@ export default function VramCalculatorPage() {
                   <span>
                     <strong>{gpu.name}</strong>
                     <small>
-                      {gpu.memoryGiB} GB published · {gpu.usableMemoryGiB.toFixed(1)} GiB planning
-                      capacity
+                      {gpu.memoryGB} GB advertised ({gpu.memoryGiB.toFixed(2)} GiB) · {gpu.usableMemoryGiB.toFixed(1)} GiB planning capacity
                     </small>
                   </span>
                   <span className={gpu.status === "fit" ? "vram-gpu-fit" : "vram-gpu-no-fit"}>
@@ -416,6 +425,13 @@ export default function VramCalculatorPage() {
               ))}
             </ul>
           </section>
+          <MultiGpuCapacityPanel
+            weightMemoryGiB={result.value.weightMemoryGiB}
+            kvCacheMemoryGiB={result.value.kvCacheMemoryGiB}
+            attentionHeads={input.attentionHeads ?? 32}
+            kvHeads={input.kvHeads}
+            runtimeReservePercent={input.runtimeReservePercent ?? 15}
+          />
         ) : null}
 
         <section className="vram-method">
