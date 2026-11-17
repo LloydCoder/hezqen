@@ -404,7 +404,7 @@ export default function VramCalculatorPage() {
               This compares the estimate with 90% of each GPU's published memory capacity, leaving
               10% headroom. It is a capacity screen only—not a guarantee that a model will load or
               meet throughput targets. Multi-GPU memory is not summed because topology,
-              interconnect and framework behaviour affect fit. A separate tensor-parallel screen below estimates per-GPU memory placement.
+              interconnect and framework behaviour affect fit. The tensor-parallel screen below estimates per-GPU memory placement separately.
             </p>
             <ul className="vram-gpu-list">
               {gpuMatches.map((gpu) => (
@@ -447,8 +447,11 @@ export default function VramCalculatorPage() {
             allowance. This is a planning estimate, not a hardware benchmark or a guarantee of fit.
             Actual allocation varies with architecture, quantization implementation, attention
             backend, tensor parallelism, fragmentation, CUDA graphs, runtime and serving framework.
-            Architectures using MLA, heterogeneous layer layouts or sliding-window cache behaviour
-            may require a different formula and are not represented by the presets here.
+            GPU manufacturers advertise decimal GB; this calculator converts those values to binary
+            GiB before applying headroom. The tensor-parallel screen estimates idealized weight/KV
+            placement and lists SKU-level interconnect details, but does not validate server topology
+            or performance. Architectures using MLA, heterogeneous layer layouts or sliding-window
+            cache behaviour may require a different formula and are not represented by the presets.
           </p>
         </section>
       </div>
