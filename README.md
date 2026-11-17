@@ -149,6 +149,7 @@ Start at the [documentation index](docs/README.md).
 | Architecture decision | [ADR-0001](docs/adr/0001-editorial-cms-and-postgres.md) |
 | AI cost calculator | [Methodology](docs/AI_COST_CALCULATOR_METHODOLOGY.md) |
 | Master execution | [Master execution plan](docs/MASTER_EXECUTION_PLAN.md) |
+| Production hosting | [Hosting decision and blockers](docs/PRODUCTION_HOSTING_DECISION.md) |
 | Editorial launch | [Eight article briefs](docs/EDITORIAL_LAUNCH_BACKLOG.md) |
 | VRAM calculator | [Methodology](docs/LABS_VRAM_METHODOLOGY.md) |
 
