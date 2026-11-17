@@ -162,17 +162,28 @@ export default function VramCalculatorPage() {
     }
   }
 
+  function buildShareUrl(): string | null {
+    try {
+      const url = new URL(window.location.origin + window.location.pathname);
+      url.search = serializeVramShareParams(input);
+      return url.toString();
+    } catch {
+      setShareFeedback(
+        "This configuration is outside the supported share-link limits. Reduce the input values and try again.",
+      );
+      return null;
+    }
+  }
+
   function copyShareLink() {
-    const url = new URL(window.location.href);
-    url.search = serializeVramShareParams(input);
-    url.hash = "";
-    void copyText(url.toString(), "Shareable calculator URL copied.");
+    const shareUrl = buildShareUrl();
+    if (shareUrl) void copyText(shareUrl, "Shareable calculator URL copied.");
   }
 
   function copySummary() {
     if (!result.value) return;
-    const shareUrl = new URL(window.location.origin + window.location.pathname);
-    shareUrl.search = serializeVramShareParams(input);
+    const shareUrl = buildShareUrl();
+    if (!shareUrl) return;
     const summary = [
       "HEZQEN Labs — LLM VRAM estimate",
       `Calculator version: ${result.value.calculatorVersion}`,
@@ -186,7 +197,7 @@ export default function VramCalculatorPage() {
       `Estimated total: ${formatGiB(result.value.totalMemoryGiB)}`,
       `Recommended available VRAM: at least ${result.value.recommendedVramGiB} GiB`,
       "Planning estimate only; not a hardware benchmark or guaranteed fit.",
-      shareUrl.toString(),
+      shareUrl,
     ].join("\n");
     void copyText(summary, "Calculation summary copied.");
   }
@@ -296,12 +307,20 @@ export default function VramCalculatorPage() {
                 configuration before procurement or deployment.
               </p>
             )}
+            {activePreset && Number(values.contextLength) > activePreset.maxContextLength ? (
+              <p className="vram-warning" role="status">
+                This context length exceeds the preset's default configuration limit of{" "}
+                {activePreset.maxContextLength.toLocaleString()} tokens. Extended context may
+                require model-specific RoPE/YaRN scaling or runtime configuration that this
+                calculator does not validate.
+              </p>
+            ) : null}
             <p className="vram-footnote">
               All numeric inputs must be positive whole numbers except model size and runtime
               reserve.
             </p>
             <div className="vram-share-actions">
-              <button type="button" className="button-primary" onClick={copyShareLink}>
+              <button type="button" className="button-primary" onClick={copyShareLink} disabled={!result.value}>
                 Copy share link
               </button>
               <button
