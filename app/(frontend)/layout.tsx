@@ -70,11 +70,17 @@ const mobileNavItems = [
   { href: "/newsletter", label: "Newsletter" },
   { href: "/architecture-review", label: "Architecture review" },
   { href: "/editorial-standards", label: "Editorial standards" },
+  { href: "/research-methodology", label: "Research methodology" },
+  { href: "/authors", label: "Authors & contributors" },
+  { href: "/commercial-disclosure", label: "Commercial disclosure" },
 ] as const;
 
 const footerLinks = [
   { href: "/about", label: "About" },
   { href: "/editorial-standards", label: "Editorial standards" },
+  { href: "/research-methodology", label: "Research methodology" },
+  { href: "/authors", label: "Authors & contributors" },
+  { href: "/commercial-disclosure", label: "Commercial disclosure" },
   { href: "/corrections", label: "Corrections" },
   { href: "/contact", label: "Contact" },
   { href: "/newsletter", label: "The Intelligence Brief" },
