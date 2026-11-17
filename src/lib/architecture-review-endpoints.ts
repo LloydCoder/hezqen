@@ -13,20 +13,8 @@ const projectTypes = new Set([
   "performance-cost",
   "other",
 ]);
-const timelines = new Set([
-  "exploring",
-  "0-30-days",
-  "1-3-months",
-  "3-6-months",
-  "6-plus-months",
-]);
-const budgets = new Set([
-  "unspecified",
-  "under-5000",
-  "5000-15000",
-  "15000-50000",
-  "50000-plus",
-]);
+const timelines = new Set(["exploring", "0-30-days", "1-3-months", "3-6-months", "6-plus-months"]);
+const budgets = new Set(["unspecified", "under-5000", "5000-15000", "15000-50000", "50000-plus"]);
 const sources = new Set(["article", "labs", "contact", "unknown"]);
 
 type LeadInput = {
@@ -92,9 +80,8 @@ export function parseLead(value: unknown): LeadInput | null {
     !sources.has(source) ||
     calculator.length > 120 ||
     body.contactConsent !== true
-  ) {
+  )
     return null;
-  }
 
   return {
     name,
