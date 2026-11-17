@@ -3,12 +3,12 @@ const DEFAULT_NEWSLETTER_TEMPLATE_ID = "95fa201c-ffea-4f42-a4b4-d0495c9271d0";
 const DEFAULT_NEWSLETTER_TOPIC_ID = "afe7e941-1bab-44c9-8687-d17dce151b14";
 
 export class ResendApiError extends Error {
-  constructor(
-    message: string,
-    public readonly status: number,
-  ) {
+  public readonly status: number;
+
+  constructor(message: string, status: number) {
     super(message);
     this.name = "ResendApiError";
+    this.status = status;
   }
 }
 
