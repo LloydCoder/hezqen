@@ -23,6 +23,7 @@ Choose the section that matches what you need.
 - [AI cost calculator methodology](AI_COST_CALCULATOR_METHODOLOGY.md): formulas, assumptions and exclusions.
 - [VRAM calculator methodology](LABS_VRAM_METHODOLOGY.md): versioned formulas, model provenance, GPU capacity assumptions, limitations and public test vectors.
 - [Master execution plan](MASTER_EXECUTION_PLAN.md): authoritative workstreams, phase gates, blockers and launch acceptance.
+- [Production hosting decision](PRODUCTION_HOSTING_DECISION.md): Vercel/Cloudflare constraints, data-governance risks and deployment gate.
 - [Editorial launch briefs](EDITORIAL_LAUNCH_BACKLOG.md): eight researched article commissions and publication controls.
 - [Fourteen-calculator suite methodology](LABS_CALCULATOR_SUITE.md): formulas, units, assumptions and limitations for the additional fourteen Labs calculators.
 - [HEZQEN Labs index](/labs): public directory of all sixteen calculator tools.
