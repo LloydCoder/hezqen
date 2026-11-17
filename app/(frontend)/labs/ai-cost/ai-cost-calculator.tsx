@@ -179,7 +179,9 @@ export default function AiCostCalculator() {
               />
             </div>
             <p className="vram-footnote">
-              Uses the prices you enter; it does not assume a particular API vendor or GPU provider. For rented GPUs, use the hourly rate and leave purchase amortization at zero. For owned GPUs, enter monthly amortization and set rental cost to zero.
+              Uses the prices you enter; it does not assume a particular API vendor or GPU provider.
+              For rented GPUs, use the hourly rate and leave purchase amortization at zero. For
+              owned GPUs, enter monthly amortization and set rental cost to zero.
             </p>
           </section>
 
