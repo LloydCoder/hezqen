@@ -13,6 +13,7 @@ const defaults = {
   gpuHourlyCost: "1.5",
   gpuHoursPerMonth: "730",
   monthlyInfrastructureOverhead: "100",
+  monthlyGpuAmortizationCost: "0",
   monthlyEngineeringCost: "0",
   monthlyOnCallCost: "0",
 };
@@ -62,6 +63,7 @@ export default function AiCostCalculator() {
           gpuHourlyCost: Number(values.gpuHourlyCost),
           gpuHoursPerMonth: Number(values.gpuHoursPerMonth),
           monthlyInfrastructureOverhead: Number(values.monthlyInfrastructureOverhead),
+          monthlyGpuAmortizationCost: Number(values.monthlyGpuAmortizationCost),
           monthlyEngineeringCost: Number(values.monthlyEngineeringCost),
           monthlyOnCallCost: Number(values.monthlyOnCallCost),
         }),
@@ -158,6 +160,12 @@ export default function AiCostCalculator() {
                 step={0.01}
               />
               <NumberField
+                label="Monthly GPU purchase amortization (USD, if owned)"
+                value={values.monthlyGpuAmortizationCost}
+                onChange={update("monthlyGpuAmortizationCost")}
+                step={0.01}
+              />
+              <NumberField
                 label="Monthly engineering labour (USD)"
                 value={values.monthlyEngineeringCost}
                 onChange={update("monthlyEngineeringCost")}
@@ -171,7 +179,7 @@ export default function AiCostCalculator() {
               />
             </div>
             <p className="vram-footnote">
-              Uses the prices you enter; it does not assume a particular API vendor or GPU provider.
+              Uses the prices you enter; it does not assume a particular API vendor or GPU provider. For rented GPUs, use the hourly rate and leave purchase amortization at zero. For owned GPUs, enter monthly amortization and set rental cost to zero.
             </p>
           </section>
 
