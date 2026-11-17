@@ -88,10 +88,10 @@ export default function VramMethodologyPage() {
 
         <h2>Decimal GB and binary GiB</h2>
         <p>
-          GPU manufacturers advertise memory in decimal gigabytes (GB), while the calculator
-          reports binary gibibytes (GiB). Each catalogue value is converted using
-          GB × 1,000,000,000 / 1,073,741,824 before the 90% usable-capacity fraction is applied.
-          For example, a 48 GB GPU contains approximately 44.70 GiB, not 48 GiB.
+          GPU manufacturers advertise memory in decimal gigabytes (GB), while the calculator reports
+          binary gibibytes (GiB). Each catalogue value is converted using GB × 1,000,000,000 /
+          1,073,741,824 before the 90% usable-capacity fraction is applied. For example, a 48 GB GPU
+          contains approximately 44.70 GiB, not 48 GiB.
         </p>
         <ul>
           <li>24 GB → 22.35 GiB (RTX 4090)</li>
@@ -133,7 +133,8 @@ export default function VramMethodologyPage() {
           </li>
           <li>
             <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">
-              NVIDIA GeForce RTX 5090 — 32 GB, PCIe Gen 5; NVLink not listed in the cited specification
+              NVIDIA GeForce RTX 5090 — 32 GB, PCIe Gen 5; NVLink not listed in the cited
+              specification
             </a>
           </li>
           <li>
@@ -142,7 +143,9 @@ export default function VramMethodologyPage() {
             </a>
           </li>
           <li>
-            <a href="https://www.nvidia.com/en-us/data-center/a100/">NVIDIA A100 80GB — PCIe/SXM variants with different NVLink options</a>
+            <a href="https://www.nvidia.com/en-us/data-center/a100/">
+              NVIDIA A100 80GB — PCIe/SXM variants with different NVLink options
+            </a>
           </li>
           <li>
             <a href="https://resources.nvidia.com/en-us-gpu-resources/h100-datasheet-24306">
