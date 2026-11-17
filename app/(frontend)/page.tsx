@@ -171,8 +171,8 @@ export default async function HomePage() {
               <span className="platform-kicker">03 — IN DEVELOPMENT</span>
               <h2>HEZQEN Intelligence</h2>
               <p>
-                A planned research and briefing service for leaders making consequential technology and
-                business decisions. This offering is not yet available.
+                A planned research and briefing service for leaders making consequential technology
+                and business decisions. This offering is not yet available.
               </p>
             </article>
             <article className="platform-card">
