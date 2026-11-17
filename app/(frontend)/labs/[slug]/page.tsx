@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CalculatorExperience from "./calculator-experience";
 import { ArchitectureReviewCTA } from "@/components/ArchitectureReviewCTA";
+import { StructuredData } from "@/components/StructuredData";
 import { LAB_CALCULATORS } from "@/domain/labs/calculator-suite";
 
 export function generateStaticParams() {
@@ -48,6 +49,19 @@ export default async function LabCalculatorPage({ params }: { params: Promise<{ 
   if (!calculator) notFound();
   return (
     <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: calculator.title,
+          description: calculator.description,
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "Any",
+          url: `https://hezqen.tinlance.com/labs/${calculator.slug}`,
+          isAccessibleForFree: true,
+          publisher: { "@id": "https://hezqen.tinlance.com/#organization" },
+        }}
+      />
       <CalculatorExperience key={calculator.slug} calculator={calculator} />
       <ArchitectureReviewCTA calculator={calculator.title} />
     </>
