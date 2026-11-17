@@ -54,11 +54,7 @@ function assertPositiveFinite(name: string, value: number): void {
   }
 }
 
-function assertPositiveInteger(
-  name: string,
-  value: number,
-  max = Number.MAX_SAFE_INTEGER,
-): void {
+function assertPositiveInteger(name: string, value: number, max = Number.MAX_SAFE_INTEGER): void {
   assertPositiveFinite(name, value);
   if (!Number.isInteger(value) || value > max) {
     throw new RangeError(`${name} must be a positive integer no greater than ${max}`);
