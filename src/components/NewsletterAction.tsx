@@ -50,7 +50,12 @@ export function NewsletterAction({ action, token }: NewsletterActionProps) {
           This link is missing its verification token.
         </p>
       ) : (
-        <button className="button button-primary" type="button" onClick={runAction} disabled={submitting || complete}>
+        <button
+          className="button button-primary"
+          type="button"
+          onClick={runAction}
+          disabled={submitting || complete}
+        >
           {submitting ? "Processing…" : complete ? "Request recorded" : actionLabel}
         </button>
       )}
@@ -59,7 +64,9 @@ export function NewsletterAction({ action, token }: NewsletterActionProps) {
       </p>
       {complete ? (
         <p className="prose-signoff">
-          <Link href={destination}>{action === "confirm" ? "Return to the newsletter" : "Return to HEZQEN"}</Link>
+          <Link href={destination}>
+            {action === "confirm" ? "Return to the newsletter" : "Return to HEZQEN"}
+          </Link>
         </p>
       ) : null}
     </div>
