@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 
 type ArchitectureReviewCTAProps = {
   calculator: string;
@@ -22,7 +23,7 @@ export function ArchitectureReviewCTA({ calculator }: ArchitectureReviewCTAProps
             editorial coverage and conclusions remain governed by HEZQEN's published standards.
           </p>
         </div>
-        <Link className="button button-primary" href={href}>
+        <Link className="button button-primary" href={href as Route}>
           Request an architecture review <span aria-hidden="true">↗</span>
         </Link>
       </div>
