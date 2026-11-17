@@ -34,7 +34,10 @@ function toHttpBaseUrl(value: string): URL {
 
 function articleUrl(base: URL, slug: string): string {
   const normalizedSlug = encodeURIComponent(slug);
-  return new URL(`articles/${normalizedSlug}`, base.href.endsWith("/") ? base : new URL(`${base.href}/`)).toString();
+  return new URL(
+    `articles/${normalizedSlug}`,
+    base.href.endsWith("/") ? base : new URL(`${base.href}/`),
+  ).toString();
 }
 
 export function createRssFeed(articles: readonly PublicArticle[], siteUrl: string): string {
@@ -43,7 +46,9 @@ export function createRssFeed(articles: readonly PublicArticle[], siteUrl: strin
   const feedUrl = new URL("feed.xml", canonicalRoot).toString();
   const latestUpdate = articles.reduce<number | null>((latest, article) => {
     const timestamp = Date.parse(article.updatedAt);
-    return Number.isFinite(timestamp) && (latest === null || timestamp > latest) ? timestamp : latest;
+    return Number.isFinite(timestamp) && (latest === null || timestamp > latest)
+      ? timestamp
+      : latest;
   }, null);
 
   const items = articles.map((article) => {
@@ -72,7 +77,10 @@ export function createRssFeed(articles: readonly PublicArticle[], siteUrl: strin
     ].join("\n");
   });
 
-  const lastBuildDate = latestUpdate === null ? "" : `\n    <lastBuildDate>${new Date(latestUpdate).toUTCString()}</lastBuildDate>`;
+  const lastBuildDate =
+    latestUpdate === null
+      ? ""
+      : `\n    <lastBuildDate>${new Date(latestUpdate).toUTCString()}</lastBuildDate>`;
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
