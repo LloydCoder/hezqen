@@ -128,30 +128,30 @@ export default function VramMethodologyPage() {
         <ul>
           <li>
             <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/">
-              NVIDIA GeForce RTX 4090 — 24 GB
+              NVIDIA GeForce RTX 4090 — 24 GB, PCIe Gen 4, no NVLink
             </a>
           </li>
           <li>
             <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">
-              NVIDIA GeForce RTX 5090 — 32 GB
+              NVIDIA GeForce RTX 5090 — 32 GB, PCIe Gen 5; NVLink not listed in the cited specification
             </a>
           </li>
           <li>
             <a href="https://www.nvidia.com/en-us/products/workstations/rtx-6000/">
-              NVIDIA RTX 6000 Ada Generation — 48 GB
+              NVIDIA RTX 6000 Ada Generation — 48 GB, PCIe Gen 4, no NVLink
             </a>
           </li>
           <li>
-            <a href="https://www.nvidia.com/en-us/data-center/a100/">NVIDIA A100 80GB — 80 GB</a>
+            <a href="https://www.nvidia.com/en-us/data-center/a100/">NVIDIA A100 80GB — PCIe/SXM variants with different NVLink options</a>
           </li>
           <li>
             <a href="https://resources.nvidia.com/en-us-gpu-resources/h100-datasheet-24306">
-              NVIDIA H100 SXM — 80 GB
+              NVIDIA H100 SXM — 80 GB, NVLink up to 900 GB/s per GPU
             </a>
           </li>
           <li>
             <a href="https://www.nvidia.com/en-us/data-center/h200/">
-              NVIDIA H200 — 141 GB (preliminary specifications)
+              NVIDIA H200 — 141 GB, SXM/NVL variants (preliminary specifications; NVLink topology varies by SKU)
             </a>
           </li>
         </ul>
