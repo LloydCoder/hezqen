@@ -85,6 +85,22 @@ test("includes engineering and on-call costs in the self-hosted monthly total", 
   assert.equal(result.selfHostedMonthlyCost, 1 * 0.5 * 730 + 100 + 800 + 300);
 });
 
+test("includes amortized GPU purchase cost for owned hardware", () => {
+  const result = calculateAiCostBreakEven({
+    ...baseline,
+    monthlyGpuAmortizationCost: 500,
+  });
+  assert.equal(result.selfHostedMonthlyCost, 1 * 0.5 * 730 + 100 + 500);
+  assert.equal(result.assumptions.gpuPurchaseAmortizationIncluded, true);
+});
+
+test("rejects negative GPU purchase amortization", () => {
+  assert.throws(
+    () => calculateAiCostBreakEven({ ...baseline, monthlyGpuAmortizationCost: -1 }),
+    RangeError,
+  );
+});
+
 test("rejects negative engineering and on-call cost assumptions", () => {
   assert.throws(
     () => calculateAiCostBreakEven({ ...baseline, monthlyEngineeringCost: -1 }),
