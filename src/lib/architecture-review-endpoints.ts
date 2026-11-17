@@ -119,7 +119,13 @@ export const architectureReviewEndpoint: Endpoint = {
       return Response.json({ ok: false, message: "Check the required fields and consent, then try again." }, { status: 400 });
     }
 
+    let transactionId: string | number | null = null;
     try {
+      transactionId = await req.payload.db.beginTransaction();
+      if (!transactionId) {
+        return Response.json({ ok: false, message: "Secure request processing is temporarily unavailable." }, { status: 503 });
+      }
+      req.transactionID = transactionId;
       const created = await withRequestContext(req, { hezqenLeadWrite: true }, () =>
         req.payload.create({
           collection: "architecture-leads",
@@ -152,11 +158,22 @@ export const architectureReviewEndpoint: Endpoint = {
           req,
         }),
       );
+      await req.payload.db.commitTransaction(transactionId);
+      delete req.transactionID;
+      transactionId = null;
       return Response.json({
         ok: true,
         message: "Your request has been received. The Tinlance team will review it and follow up.",
       }, { status: 201 });
     } catch (error) {
+      if (transactionId) {
+        try {
+          await req.payload.db.rollbackTransaction(transactionId);
+        } catch {
+          console.error("[hezqen-architecture-review] transaction rollback failed");
+        }
+        delete req.transactionID;
+      }
       console.error("[hezqen-architecture-review] request persistence failed",
         error instanceof Error ? error.name : "unknown");
       return Response.json({
