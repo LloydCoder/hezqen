@@ -157,7 +157,10 @@ export const newsletterSubscribeEndpoint: Endpoint = {
   method: "post",
   handler: async (req) => {
     if (!hasAllowedOrigin(req)) {
-      return Response.json({ ok: false, message: "Request origin is not allowed." }, { status: 403 });
+      return Response.json(
+        { ok: false, message: "Request origin is not allowed." },
+        { status: 403 },
+      );
     }
 
     const body = await readJson(req);
@@ -275,22 +278,25 @@ export const newsletterConfirmEndpoint: Endpoint = {
   method: "post",
   handler: async (req) => {
     if (!hasAllowedOrigin(req)) {
-      return Response.json({ ok: false, message: "Request origin is not allowed." }, { status: 403 });
+      return Response.json(
+        { ok: false, message: "Request origin is not allowed." },
+        { status: 403 },
+      );
     }
     const body = await readJson(req);
     const token = typeof body.token === "string" ? body.token : "";
     if (token.length < 32 || token.length > 128) {
-      return Response.json({ ok: false, message: "This confirmation link is invalid or expired." }, { status: 400 });
+      return Response.json(
+          { ok: false, message: "This confirmation link is invalid or expired." },
+          { status: 400 },
+        );
     }
 
     const tokenHash = hashConfirmationToken(token);
     const result = await req.payload.find({
       collection: "newsletter-subscribers",
       where: {
-        and: [
-          { confirmationTokenHash: { equals: tokenHash } },
-          { status: { equals: "pending" } },
-        ],
+        and: [{ confirmationTokenHash: { equals: tokenHash } }, { status: { equals: "pending" } }],
       },
       limit: 1,
       depth: 0,
@@ -334,7 +340,8 @@ export const newsletterConfirmEndpoint: Endpoint = {
         return Response.json({
           ok: true,
           status: "suppressed",
-          message: "Your confirmation was recorded, but this address has an existing provider-wide unsubscribe preference.",
+          message:
+            "Your confirmation was recorded, but this address has an existing provider-wide unsubscribe preference.",
         });
       }
       await updateSubscriber(req, confirmed.id, {
@@ -345,7 +352,8 @@ export const newsletterConfirmEndpoint: Endpoint = {
       return Response.json({
         ok: true,
         status: "confirmed",
-        message: "Your subscription is confirmed. You are now on the HEZQEN Intelligence Brief list.",
+        message:
+          "Your subscription is confirmed. You are now on the HEZQEN Intelligence Brief list.",
       });
     } catch (error) {
       await updateSubscriber(req, confirmed.id, { providerSyncStatus: "failed" });
@@ -362,7 +370,8 @@ export const newsletterConfirmEndpoint: Endpoint = {
       return Response.json({
         ok: true,
         status: "sync-pending",
-        message: "Your consent is confirmed. Delivery activation is being retried; you do not need to submit again.",
+        message:
+          "Your consent is confirmed. Delivery activation is being retried; you do not need to submit again.",
       });
     }
   },
@@ -373,7 +382,10 @@ export const newsletterUnsubscribeEndpoint: Endpoint = {
   method: "post",
   handler: async (req) => {
     if (!hasAllowedOrigin(req)) {
-      return Response.json({ ok: false, message: "Request origin is not allowed." }, { status: 403 });
+      return Response.json(
+        { ok: false, message: "Request origin is not allowed." },
+        { status: 403 },
+      );
     }
     const body = await readJson(req);
     const token = typeof body.token === "string" ? body.token : "";
@@ -381,12 +393,21 @@ export const newsletterUnsubscribeEndpoint: Endpoint = {
       process.env.HEZQEN_NEWSLETTER_UNSUBSCRIBE_SECRET ?? process.env.PAYLOAD_SECRET ?? "";
     const payload = verifyUnsubscribeToken(token, secret);
     if (!payload) {
-      return Response.json({ ok: false, message: "This unsubscribe link is invalid." }, { status: 400 });
+      return Response.json(
+          { ok: false, message: "This unsubscribe link is invalid." },
+          { status: 400 },
+        );
     }
 
     const result = await req.payload.find({
       collection: "newsletter-subscribers",
-      where: { id: { equals: /^\\d+$/.test(payload.subscriberId) ? Number(payload.subscriberId) : payload.subscriberId } },
+      where: {
+        id: {
+          equals: /^\\d+$/.test(payload.subscriberId)
+            ? Number(payload.subscriberId)
+            : payload.subscriberId,
+        },
+      },
       limit: 1,
       depth: 0,
       overrideAccess: true,
@@ -394,13 +415,19 @@ export const newsletterUnsubscribeEndpoint: Endpoint = {
     });
     const subscriber = result.docs[0] as unknown as SubscriberRecord | undefined;
     if (!subscriber || subscriber.confirmedAt !== payload.confirmedAt) {
-      return Response.json({ ok: false, message: "This unsubscribe link is invalid or no longer active." }, { status: 400 });
+      return Response.json(
+          { ok: false, message: "This unsubscribe link is invalid or no longer active." },
+          { status: 400 },
+        );
     }
     if (subscriber.status === "unsubscribed") {
       return Response.json({ ok: true, message: "This address is already unsubscribed." });
     }
     if (subscriber.status !== "confirmed") {
-      return Response.json({ ok: false, message: "This address is not currently subscribed." }, { status: 409 });
+      return Response.json(
+          { ok: false, message: "This address is not currently subscribed." },
+          { status: 409 },
+        );
     }
 
     const unsubscribedAt = new Date().toISOString();
@@ -448,7 +475,10 @@ export const newsletterSyncEndpoint: Endpoint = {
   method: "post",
   handler: async (req) => {
     if (!hasActiveRole(req.user, ["administrator"])) {
-      return Response.json({ ok: false, message: "Administrator access is required." }, { status: 403 });
+      return Response.json(
+          { ok: false, message: "Administrator access is required." },
+          { status: 403 },
+        );
     }
     const result = await req.payload.find({
       collection: "newsletter-subscribers",
