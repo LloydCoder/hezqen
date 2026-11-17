@@ -131,7 +131,7 @@ Do not fabricate author names, reviewer credentials, experiments or publication 
 - Formula and calculator versions are explicit.
 - Shared URLs contain validated, allowlisted calculator inputs only; no personal data.
 - Copyable summaries include formula/calculator version.
-- Single-GPU matcher compares estimate to published GPU capacity with explicit headroom.
+- Single-GPU matcher compares estimate to published GPU capacity with explicit headroom; the current catalogue includes RTX 4090/5090, RTX 6000 Ada, A100 80GB, H100 SXM 80GB and H200 141GB (preliminary specifications).
 - Multi-GPU VRAM is not naively summed.
 - Public methodology, limitations, changelog and deterministic test vectors are published.
 - MLA, hybrid attention, sliding-window cache and runtime-specific allocations remain explicit limitations until implemented and tested.
