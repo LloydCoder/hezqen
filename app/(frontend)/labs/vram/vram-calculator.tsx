@@ -397,7 +397,8 @@ export default function VramCalculatorPage() {
         </div>
 
         {result.value ? (
-          <section className="vram-gpu-matches" aria-labelledby="vram-gpu-heading">
+          <>
+            <section className="vram-gpu-matches" aria-labelledby="vram-gpu-heading">
             <p className="section-label">HARDWARE CAPACITY CHECK</p>
             <h2 id="vram-gpu-heading">Single-GPU memory fit</h2>
             <p>
@@ -425,13 +426,14 @@ export default function VramCalculatorPage() {
               ))}
             </ul>
           </section>
-          <MultiGpuCapacityPanel
-            weightMemoryGiB={result.value.weightMemoryGiB}
-            kvCacheMemoryGiB={result.value.kvCacheMemoryGiB}
-            attentionHeads={input.attentionHeads ?? 32}
-            kvHeads={input.kvHeads}
-            runtimeReservePercent={input.runtimeReservePercent ?? 15}
-          />
+            <MultiGpuCapacityPanel
+              weightMemoryGiB={result.value.weightMemoryGiB}
+              kvCacheMemoryGiB={result.value.kvCacheMemoryGiB}
+              attentionHeads={input.attentionHeads ?? 32}
+              kvHeads={input.kvHeads}
+              runtimeReservePercent={input.runtimeReservePercent ?? 15}
+            />
+          </>
         ) : null}
 
         <section className="vram-method">
