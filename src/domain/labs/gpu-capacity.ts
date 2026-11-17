@@ -1,3 +1,5 @@
+export const TENSOR_PARALLEL_FORMULA_VERSION = "1.0.0";
+
 const BYTES_PER_GB = 1_000_000_000;
 const BYTES_PER_GIB = 1_073_741_824;
 
@@ -30,6 +32,7 @@ export interface TensorParallelCapacityInput {
 }
 
 export interface TensorParallelCapacityAssessment {
+  formulaVersion: typeof TENSOR_PARALLEL_FORMULA_VERSION;
   gpuId: string;
   gpuName: string;
   gpuMemoryGB: number;
@@ -230,6 +233,7 @@ export function assessTensorParallelCapacity(
   }
 
   return {
+    formulaVersion: TENSOR_PARALLEL_FORMULA_VERSION,
     gpuId: gpu.id,
     gpuName: gpu.name,
     gpuMemoryGB: gpu.memoryGB,
