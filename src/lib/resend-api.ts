@@ -77,7 +77,8 @@ async function requestResend(
 }
 
 function contactIdFrom(data: Record<string, unknown>): string | null {
-  const nested = data.data && typeof data.data === "object" ? (data.data as Record<string, unknown>) : data;
+  const nested =
+    data.data && typeof data.data === "object" ? (data.data as Record<string, unknown>) : data;
   return typeof nested.id === "string" ? nested.id : null;
 }
 
@@ -112,7 +113,10 @@ export async function sendNewsletterConfirmation(
   });
   const data = await readJson(response);
   if (!response.ok) {
-    throw new ResendApiError(`Newsletter confirmation delivery failed (HTTP ${response.status}).`, response.status);
+    throw new ResendApiError(
+      `Newsletter confirmation delivery failed (HTTP ${response.status}).`,
+      response.status,
+    );
   }
   return typeof data.id === "string" ? data.id : null;
 }
@@ -160,9 +164,10 @@ export async function syncNewsletterContact(
       existing.response.status,
     );
   }
-  const contact = existing.data.data && typeof existing.data.data === "object"
-    ? (existing.data.data as Record<string, unknown>)
-    : existing.data;
+  const contact =
+    existing.data.data && typeof existing.data.data === "object"
+      ? (existing.data.data as Record<string, unknown>)
+      : existing.data;
   const contactId = typeof contact.id === "string" ? contact.id : null;
   if (contact.unsubscribed === true) return { status: "blocked", contactId };
 
@@ -251,7 +256,10 @@ export async function sendTransactionalEmail(
   });
   const data = await readJson(response);
   if (!response.ok) {
-    throw new ResendApiError(`Transactional email delivery failed (HTTP ${response.status}).`, response.status);
+    throw new ResendApiError(
+      `Transactional email delivery failed (HTTP ${response.status}).`,
+      response.status,
+    );
   }
   return typeof data.id === "string" ? data.id : null;
 }
