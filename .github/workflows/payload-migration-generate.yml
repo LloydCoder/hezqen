@@ -41,22 +41,30 @@ jobs:
           package-manager-cache: false
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
-      - name: Check whether an initial migration already exists
-        id: migration-state
-        run: |
-          if find src/migrations -type f -name '*.ts' ! -name 'index.ts' -print -quit 2>/dev/null | grep -q .; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Generate initial migration
-        if: steps.migration-state.outputs.exists == 'false'
-        run: pnpm payload migrate:create initial --skip-empty
+      - name: Apply current migrations to ephemeral PostgreSQL
+        run: pnpm payload migrate
         env:
           DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
           PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
           NEXT_PUBLIC_SITE_URL: https://hezqen.tinlance.com
           HEZQEN_ALLOWED_ORIGINS: https://hezqen.tinlance.com
+      - name: Generate migration for this branch
+        env:
+          BRANCH: ${{ github.ref_name }}
+          DATABASE_URL: postgres://hezqen_ci:hezqen_ci@127.0.0.1:5432/hezqen_ci
+          PAYLOAD_SECRET: ci-only-secret-never-use-outside-builds
+          NEXT_PUBLIC_SITE_URL: https://hezqen.tinlance.com
+          HEZQEN_ALLOWED_ORIGINS: https://hezqen.tinlance.com
+        run: |
+          MIGRATION_NAME="${BRANCH#db/migration-}"
+          if [ "$MIGRATION_NAME" = "$BRANCH" ] || ! [[ "$MIGRATION_NAME" =~ ^[a-z0-9-]+$ ]]; then
+            echo "Branch must use the db/migration-<name> convention."
+            exit 1
+          fi
+          if ! find src/migrations -type f -name '*.ts' ! -name 'index.ts' -print -quit 2>/dev/null | grep -q .; then
+            MIGRATION_NAME="initial"
+          fi
+          pnpm payload migrate:create "$MIGRATION_NAME" --skip-empty
       - name: Format generated migrations
         run: pnpm dlx @biomejs/biome@2.6.7 format --write src/migrations
       - name: Commit generated migration
