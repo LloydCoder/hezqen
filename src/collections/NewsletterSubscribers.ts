@@ -88,7 +88,13 @@ export const NewsletterSubscribers: CollectionConfig = {
       access: { read: () => false, create: () => false, update: () => false },
     },
     {
-      name: "lastConfirmationSentAt",
+      name: "confirmationWindowStartedAt",
+      type: "date",
+      admin: { hidden: true },
+      access: { read: () => false, create: () => false, update: () => false },
+    },
+    {
+      name: "lastConfirmationAttemptAt",
       type: "date",
       admin: { hidden: true },
       access: { read: () => false, create: () => false, update: () => false },
