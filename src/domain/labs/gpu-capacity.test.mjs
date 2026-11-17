@@ -4,6 +4,7 @@ import {
   assessSingleGpuCapacity,
   assessTensorParallelCapacity,
   GPU_CATALOG,
+  TENSOR_PARALLEL_FORMULA_VERSION,
 } from "./gpu-capacity.ts";
 
 test("converts manufacturer-advertised decimal GB into binary GiB", () => {
@@ -70,6 +71,7 @@ test("estimates vLLM-style tensor-parallel sharding and interconnect metadata", 
   assert.equal(result.kvPlacement, "sharded");
   assert.equal(result.kvHeadsPerGpu, 2);
   assert.equal(result.tensorParallelSize, 4);
+  assert.equal(result.formulaVersion, TENSOR_PARALLEL_FORMULA_VERSION);
   assert.equal(result.interconnectClass, "nvlink");
   assert.ok(result.requiredMemoryPerGpuGiB > 0);
   assert.ok(result.availableMemoryPerGpuGiB > result.requiredMemoryPerGpuGiB);
