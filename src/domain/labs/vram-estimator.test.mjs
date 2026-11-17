@@ -153,7 +153,7 @@ test("rejects estimates that exceed the safe numeric range", () => {
         layers: Number.MAX_SAFE_INTEGER,
         kvHeads: 8,
         headDimension: 128,
-        contextLength: 4096,
+        contextLength: Number.MAX_SAFE_INTEGER,
         batchSize: 1,
       }),
     /exceeds the supported numeric range/,
