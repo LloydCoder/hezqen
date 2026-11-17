@@ -287,9 +287,9 @@ export const newsletterConfirmEndpoint: Endpoint = {
     const token = typeof body.token === "string" ? body.token : "";
     if (token.length < 32 || token.length > 128) {
       return Response.json(
-          { ok: false, message: "This confirmation link is invalid or expired." },
-          { status: 400 },
-        );
+        { ok: false, message: "This confirmation link is invalid or expired." },
+        { status: 400 },
+      );
     }
 
     const tokenHash = hashConfirmationToken(token);
@@ -304,8 +304,15 @@ export const newsletterConfirmEndpoint: Endpoint = {
       req,
     });
     const subscriber = result.docs[0] as unknown as SubscriberRecord | undefined;
-    if (!subscriber || !subscriber.confirmationExpiresAt || Date.parse(subscriber.confirmationExpiresAt) <= Date.now()) {
-      return Response.json({ ok: false, message: "This confirmation link is invalid or expired." }, { status: 410 });
+    if (
+      !subscriber ||
+      !subscriber.confirmationExpiresAt ||
+      Date.parse(subscriber.confirmationExpiresAt) <= Date.now()
+    ) {
+      return Response.json(
+        { ok: false, message: "This confirmation link is invalid or expired." },
+        { status: 410 },
+      );
     }
 
     const confirmedAt = new Date().toISOString();
@@ -394,9 +401,9 @@ export const newsletterUnsubscribeEndpoint: Endpoint = {
     const payload = verifyUnsubscribeToken(token, secret);
     if (!payload) {
       return Response.json(
-          { ok: false, message: "This unsubscribe link is invalid." },
-          { status: 400 },
-        );
+        { ok: false, message: "This unsubscribe link is invalid." },
+        { status: 400 },
+      );
     }
 
     const result = await req.payload.find({
@@ -416,18 +423,18 @@ export const newsletterUnsubscribeEndpoint: Endpoint = {
     const subscriber = result.docs[0] as unknown as SubscriberRecord | undefined;
     if (!subscriber || subscriber.confirmedAt !== payload.confirmedAt) {
       return Response.json(
-          { ok: false, message: "This unsubscribe link is invalid or no longer active." },
-          { status: 400 },
-        );
+        { ok: false, message: "This unsubscribe link is invalid or no longer active." },
+        { status: 400 },
+      );
     }
     if (subscriber.status === "unsubscribed") {
       return Response.json({ ok: true, message: "This address is already unsubscribed." });
     }
     if (subscriber.status !== "confirmed") {
       return Response.json(
-          { ok: false, message: "This address is not currently subscribed." },
-          { status: 409 },
-        );
+        { ok: false, message: "This address is not currently subscribed." },
+        { status: 409 },
+      );
     }
 
     const unsubscribedAt = new Date().toISOString();
@@ -476,9 +483,9 @@ export const newsletterSyncEndpoint: Endpoint = {
   handler: async (req) => {
     if (!hasActiveRole(req.user, ["administrator"])) {
       return Response.json(
-          { ok: false, message: "Administrator access is required." },
-          { status: 403 },
-        );
+        { ok: false, message: "Administrator access is required." },
+        { status: 403 },
+      );
     }
     const result = await req.payload.find({
       collection: "newsletter-subscribers",
