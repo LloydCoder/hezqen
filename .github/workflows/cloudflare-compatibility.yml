@@ -2,7 +2,7 @@ name: HEZQEN Cloudflare Compatibility
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/hezqen-g2-g12-staging-acceptance]
     paths:
       - "app/**"
       - "src/**"
@@ -13,7 +13,7 @@ on:
       - "docs/INFRASTRUCTURE_DISCOVERY.md"
       - ".github/workflows/cloudflare-compatibility.yml"
   pull_request:
-    branches: [main]
+    branches: [main, feat/hezqen-g2-g12-staging-acceptance]
     paths:
       - "app/**"
       - "src/**"
