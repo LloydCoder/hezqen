@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 import {
   assessSingleGpuCapacity,
   assessTensorParallelCapacity,
@@ -134,4 +135,29 @@ test("reports insufficient per-GPU memory even when aggregate VRAM appears suffi
   assert.equal(result.status, "insufficient");
   assert.equal(result.interconnectClass, "pcie");
   assert.ok(result.requiredMemoryPerGpuGiB > result.availableMemoryPerGpuGiB);
+});
+
+
+test("matches the public tensor-parallel regression vectors", () => {
+  const vectors = JSON.parse(
+    readFileSync(
+      new URL("../../../public/labs/tensor-parallel-test-vectors.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  assert.equal(vectors.formulaVersion, TENSOR_PARALLEL_FORMULA_VERSION);
+  for (const vector of vectors.vectors) {
+    const actual = assessTensorParallelCapacity(vector.input);
+    for (const [key, expected] of Object.entries(vector.expected)) {
+      const value = actual[key];
+      if (typeof expected === "number") {
+        assert.ok(
+          Math.abs(value - expected) < 1e-9,
+          `${vector.id}: expected ${key}=${expected}, received ${value}`,
+        );
+      } else {
+        assert.equal(value, expected, `${vector.id}: ${key}`);
+      }
+    }
+  }
 });
