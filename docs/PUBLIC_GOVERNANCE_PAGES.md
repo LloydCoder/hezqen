@@ -10,3 +10,5 @@ These public pages form the reader-facing governance layer:
 - `/corrections` — how readers report concerns and how material corrections are displayed.
 
 The pages are linked from the site footer and mobile navigation and included in the dynamic XML sitemap. The policies describe the intended editorial controls; operational acceptance still requires actual human assignments, review records and approved publication workflows. No contributor identity or credential should be invented to populate a profile.
+
+Route inclusion is guarded by `src/lib/sitemap.test.mjs` and the full repository CI workflow.
