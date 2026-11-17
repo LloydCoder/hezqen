@@ -36,10 +36,18 @@ export default function AboutPage() {
           Automated systems may assist research and production, but they cannot approve or publish
           editorial work.
         </p>
-        <h2>Who publishes HEZQEN</h2>
+        <h2>Ownership and commercial relationships</h2>
         <p>
-          HEZQEN is published by Tinlance and maintains its own editorial identity and governance.
-          Commercial relationships do not confer editorial approval rights.
+          HEZQEN is owned and operated by Tinlance. Tinlance separately provides AI, cybersecurity,
+          cloud and software engineering services. Where HEZQEN presents a Tinlance service,
+          sponsored placement, affiliate link or other commercial offer, that relationship must be
+          clearly disclosed. A commercial relationship does not purchase editorial coverage or
+          determine research findings, product assessments or conclusions.
+        </p>
+        <p>
+          HEZQEN maintains editorial governance within Tinlance. Authors and editors must disclose
+          relevant financial, professional and personal conflicts, and the editorial team retains
+          final responsibility for coverage and publication decisions.
         </p>
         <p className="prose-signoff">{site.tagline}</p>
       </div>

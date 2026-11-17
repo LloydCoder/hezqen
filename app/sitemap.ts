@@ -18,6 +18,7 @@ const publicStaticRoutes = [
   "/security",
   "/sitemap",
   "/labs",
+  "/labs/methodology",
   "/infrastructure",
 ];
 

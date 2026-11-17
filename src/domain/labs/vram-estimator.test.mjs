@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { estimateVram } from "./vram-estimator.ts";
 
@@ -123,5 +124,38 @@ test("rejects excessive reserve percentages", () => {
         runtimeReservePercent: 101,
       }),
     /runtimeReservePercent/,
+  );
+});
+
+test("matches every published deterministic VRAM test vector", () => {
+  const vectors = JSON.parse(
+    readFileSync(new URL("../../../public/labs/vram-test-vectors.json", import.meta.url), "utf8"),
+  );
+
+  for (const vector of vectors.cases) {
+    const result = estimateVram(vector.input);
+    assert.ok(Math.abs(result.weightMemoryGiB - vector.expected.weightMemoryGiB) < 1e-9);
+    assert.ok(Math.abs(result.kvCacheMemoryGiB - vector.expected.kvCacheMemoryGiB) < 1e-9);
+    assert.ok(Math.abs(result.runtimeReserveGiB - vector.expected.runtimeReserveGiB) < 1e-9);
+    assert.ok(Math.abs(result.totalMemoryGiB - vector.expected.totalMemoryGiB) < 1e-9);
+    assert.equal(result.recommendedVramGiB, vector.expected.recommendedVramGiB);
+    assert.equal(result.formulaVersion, vectors.formulaVersion);
+    assert.equal(result.calculatorVersion, vectors.calculatorVersion);
+  }
+});
+
+test("rejects estimates that exceed the safe numeric range", () => {
+  assert.throws(
+    () =>
+      estimateVram({
+        parametersB: 7,
+        weightFormat: "fp16",
+        layers: Number.MAX_SAFE_INTEGER,
+        kvHeads: 8,
+        headDimension: 128,
+        contextLength: Number.MAX_SAFE_INTEGER,
+        batchSize: 1,
+      }),
+    /exceeds the supported numeric range/,
   );
 });

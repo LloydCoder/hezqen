@@ -71,7 +71,7 @@ jobs:
             cat /tmp/hezqen-next.log
             exit 1
           fi
-          for route in / /about /editorial-standards /api/health /api/health/ready /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /divisions/ai-technology /divisions/cybersecurity /divisions/cloud-engineering /divisions/business-startups /contact /corrections /security /privacy /cookies /terms /sitemap /robots.txt /sitemap.xml /llms.txt /llms-full.txt; do
+          for route in / /about /editorial-standards /api/health /api/health/ready /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /labs/methodology /labs/vram-test-vectors.json /feed.xml /divisions/ai-technology /divisions/cybersecurity /divisions/cloud-engineering /divisions/business-startups /contact /corrections /security /privacy /cookies /terms /sitemap /robots.txt /sitemap.xml /llms.txt /llms-full.txt; do
             status=$(curl --silent --output /tmp/hezqen-response --write-out "%{http_code}" "http://127.0.0.1:3000$route")
             if [ "$status" != "200" ]; then
               echo "Unexpected HTTP $status for $route"
@@ -80,7 +80,17 @@ jobs:
               exit 1
             fi
           done
-          article_status=$(curl --silent --output /tmp/hezqen-article-response --write-out "%{http_code}" http://127.0.0.1:3000/articles/ci-missing-article)
+          feed_content_type=$(curl --silent --output /tmp/hezqen-feed --write-out "%{content_type}" http://127.0.0.1:3000/feed.xml)
+          case "$feed_content_type" in
+            application/rss+xml*) ;;
+            *)
+              echo "Unexpected RSS content type: $feed_content_type"
+              cat /tmp/hezqen-feed
+              exit 1
+              ;;
+          esac
+          node -e 'JSON.parse(require("node:fs").readFileSync("public/labs/vram-test-vectors.json", "utf8"))'
+                    article_status=$(curl --silent --output /tmp/hezqen-article-response --write-out "%{http_code}" http://127.0.0.1:3000/articles/ci-missing-article)
           if [ "$article_status" != "404" ]; then
             echo "Expected HTTP 404 for an unpublished/missing article, received $article_status"
             cat /tmp/hezqen-article-response

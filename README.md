@@ -21,7 +21,7 @@ HEZQEN is a global technology and business intelligence publication and engineer
 
 The canonical public hostname is **https://hezqen.tinlance.com** and currently serves the earlier HEZQEN public shell, but it is **not yet the production-ready CMS/publication release**. Live checks on 2026-11-16 confirmed the homepage and one division route return HTTP 200, while the sitemap contains no article URLs and `/api/health/ready`, `/admin/login` and `/corrections` return HTTP 404. PR #52, which adds public article pages and correction history, is merged at `c71e6b7d1bffcf677b73454f959b99a593c269f0`. A READY Vercel Preview exists for that commit at [the deployment](https://hezqen-2fdm8ap5h-lloydcoders-projects.vercel.app), and `staging.hezqen.tinlance.com` is aliased to it, but Vercel SSO blocks external staging acceptance. The Vercel project is on Hobby, which is not an acceptable commercial production host for HEZQEN; no commercially permitted host has been approved. Cloudflare vinext compatibility/build checks pass, but full Payload CMS/admin/database runtime acceptance remains outstanding. The repository disables automatic Vercel Git deployments; use controlled deployments only.
 
-The public application shell and sixteen HEZQEN Labs calculators can be exercised locally using the Quick Start instructions below.
+The public application shell and sixteen HEZQEN Labs calculators can be exercised locally using the Quick Start instructions below. PR #54 is the current launch-foundation implementation slice; it adds RSS, public VRAM methodology/test vectors, source-linked presets, shareable calculator results, GPU capacity screening, disclosed architecture-review CTAs and expanded AI operating-cost inputs. These additions remain unmerged until both required workflows and the PR audit pass.
 
 ## HEZQEN Labs
 
@@ -148,7 +148,10 @@ Start at the [documentation index](docs/README.md).
 | Brand application | [Brand system](docs/BRAND_SYSTEM.md) |
 | Architecture decision | [ADR-0001](docs/adr/0001-editorial-cms-and-postgres.md) |
 | AI cost calculator | [Methodology](docs/AI_COST_CALCULATOR_METHODOLOGY.md) |
-| VRAM calculator | [Methodology](docs/LABS_METHODOLOGY.md) |
+| Master execution | [Master execution plan](docs/MASTER_EXECUTION_PLAN.md) |
+| Production hosting | [Hosting decision and blockers](docs/PRODUCTION_HOSTING_DECISION.md) |
+| Editorial launch | [Eight article briefs](docs/EDITORIAL_LAUNCH_BACKLOG.md) |
+| VRAM calculator | [Methodology](docs/LABS_VRAM_METHODOLOGY.md) |
 
 Machine-readable documentation entry points: [llms.txt](public/llms.txt) and [llms-full.txt](public/llms-full.txt).
 

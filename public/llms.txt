@@ -20,6 +20,8 @@ Tagline: Research. Intelligence. Perspective.
 
 ## Labs and infrastructure
 - [HEZQEN Labs](https://hezqen.tinlance.com/labs): sixteen planning calculators with visible assumptions and deterministic formulas.
+- [VRAM calculator methodology](https://hezqen.tinlance.com/labs/methodology): versioned formulas, model provenance, limitations and public test vectors.
+- [RSS feed](https://hezqen.tinlance.com/feed.xml): published article feed.
 - [VRAM sizing calculator](https://hezqen.tinlance.com/labs/vram)
 - [AI API vs self-hosted cost calculator](https://hezqen.tinlance.com/labs/ai-cost)
 - [HEZQEN Infrastructure](https://hezqen.tinlance.com/infrastructure): five engineering-preview kits, not production-certified or commercially released.
@@ -40,6 +42,8 @@ Tagline: Research. Intelligence. Perspective.
 - [Editorial workflow](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_WORKFLOW.md)
 - [Research evidence](https://github.com/LloydCoder/hezqen/blob/main/docs/RESEARCH_EVIDENCE.md)
 - [Implementation phase status](https://github.com/LloydCoder/hezqen/blob/main/docs/PHASE_STATUS.md)
+- [Master execution plan](https://github.com/LloydCoder/hezqen/blob/main/docs/MASTER_EXECUTION_PLAN.md)
+- [Editorial launch briefs](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_LAUNCH_BACKLOG.md)
 
 ## Important status qualifications
 - Human editors retain approval and publishing authority.

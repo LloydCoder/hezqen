@@ -8,6 +8,9 @@ export interface AiCostBreakEvenInput {
   gpuHourlyCost: number;
   gpuHoursPerMonth: number;
   monthlyInfrastructureOverhead: number;
+  monthlyGpuAmortizationCost?: number;
+  monthlyEngineeringCost?: number;
+  monthlyOnCallCost?: number;
 }
 
 export interface AiCostBreakEvenResult {
@@ -22,8 +25,10 @@ export interface AiCostBreakEvenResult {
     tokenPriceUnit: "USD per million tokens";
     currency: "USD";
     gpuHoursPerMonth: number;
-    infrastructureOverheadIncluded: boolean;
-    capacityAndEngineeringExcluded: true;
+    infrastructureOverheadIncluded: true;
+    gpuPurchaseAmortizationIncluded: true;
+    engineeringAndOnCallIncluded: true;
+    capacityAndThroughputExcluded: true;
   };
 }
 
@@ -50,6 +55,12 @@ export function calculateAiCostBreakEven(input: AiCostBreakEvenInput): AiCostBre
   assertFiniteNonNegative("gpuHourlyCost", input.gpuHourlyCost);
   assertIntegerInRange("gpuHoursPerMonth", input.gpuHoursPerMonth, 1, 744);
   assertFiniteNonNegative("monthlyInfrastructureOverhead", input.monthlyInfrastructureOverhead);
+  const monthlyGpuAmortizationCost = input.monthlyGpuAmortizationCost ?? 0;
+  assertFiniteNonNegative("monthlyGpuAmortizationCost", monthlyGpuAmortizationCost);
+  const monthlyEngineeringCost = input.monthlyEngineeringCost ?? 0;
+  const monthlyOnCallCost = input.monthlyOnCallCost ?? 0;
+  assertFiniteNonNegative("monthlyEngineeringCost", monthlyEngineeringCost);
+  assertFiniteNonNegative("monthlyOnCallCost", monthlyOnCallCost);
 
   const apiCostPerRequest =
     (input.inputTokensPerRequest * input.apiInputPricePerMillion +
@@ -58,7 +69,10 @@ export function calculateAiCostBreakEven(input: AiCostBreakEvenInput): AiCostBre
   const apiMonthlyCost = apiCostPerRequest * input.monthlyRequests;
   const selfHostedMonthlyCost =
     input.gpuCount * input.gpuHourlyCost * input.gpuHoursPerMonth +
-    input.monthlyInfrastructureOverhead;
+    input.monthlyInfrastructureOverhead +
+    monthlyGpuAmortizationCost +
+    monthlyEngineeringCost +
+    monthlyOnCallCost;
   const monthlySavings = apiMonthlyCost - selfHostedMonthlyCost;
   const savingsPercent = apiMonthlyCost === 0 ? 0 : (monthlySavings / apiMonthlyCost) * 100;
   const breakEvenMonthlyRequests =
@@ -83,7 +97,9 @@ export function calculateAiCostBreakEven(input: AiCostBreakEvenInput): AiCostBre
       currency: "USD",
       gpuHoursPerMonth: input.gpuHoursPerMonth,
       infrastructureOverheadIncluded: true,
-      capacityAndEngineeringExcluded: true,
+      gpuPurchaseAmortizationIncluded: true,
+      engineeringAndOnCallIncluded: true,
+      capacityAndThroughputExcluded: true,
     },
   };
 }

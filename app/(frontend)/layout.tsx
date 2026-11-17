@@ -14,18 +14,30 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   openGraph: {
     type: "website",
     siteName: site.name,
     title: "HEZQEN — Global Technology & Business Intelligence",
     description: site.description,
     url: site.url,
+    images: [
+      {
+        url: "/brand/hezqen-og.png",
+        width: 1200,
+        height: 630,
+        alt: "HEZQEN — Global Technology & Business Intelligence",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "HEZQEN — Global Technology & Business Intelligence",
     description: site.description,
+    images: ["/brand/hezqen-og.png"],
   },
   icons: { icon: "/favicon.svg" },
   manifest: "/site.webmanifest",
@@ -45,6 +57,8 @@ const navItems = [
   { href: "/divisions/cloud-engineering", label: "Cloud & Engineering" },
   { href: "/divisions/business-startups", label: "Business & Startups" },
   { href: "/labs", label: "Labs" },
+  { href: "/labs/methodology", label: "Labs methodology" },
+  { href: "/feed.xml", label: "RSS feed" },
   { href: "/infrastructure", label: "Infrastructure" },
 ] as const;
 
@@ -136,7 +150,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             </div>
             <div className="container footer-bottom">
               <span>© {new Date().getFullYear()} HEZQEN. Published by Tinlance.</span>
-              <span>Independent by design. Accountable by principle.</span>
+              <span>Editorially accountable. Published by Tinlance.</span>
             </div>
           </footer>
         </div>

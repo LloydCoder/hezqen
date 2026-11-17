@@ -21,7 +21,10 @@ Choose the section that matches what you need.
 - [Data model](DATA_MODEL.md): entities, relationships and integrity requirements.
 - [Platform acceptance criteria](PLATFORM_ACCEPTANCE_CRITERIA.md): implementation and release gates.
 - [AI cost calculator methodology](AI_COST_CALCULATOR_METHODOLOGY.md): formulas, assumptions and exclusions.
-- [VRAM calculator methodology](LABS_METHODOLOGY.md): memory calculations and limitations.
+- [VRAM calculator methodology](LABS_VRAM_METHODOLOGY.md): versioned formulas, model provenance, GPU capacity assumptions, limitations and public test vectors.
+- [Master execution plan](MASTER_EXECUTION_PLAN.md): authoritative workstreams, phase gates, blockers and launch acceptance.
+- [Production hosting decision](PRODUCTION_HOSTING_DECISION.md): Vercel/Cloudflare constraints, data-governance risks and deployment gate.
+- [Editorial launch briefs](EDITORIAL_LAUNCH_BACKLOG.md): eight researched article commissions and publication controls.
 - [Fourteen-calculator suite methodology](LABS_CALCULATOR_SUITE.md): formulas, units, assumptions and limitations for the additional fourteen Labs calculators.
 - [HEZQEN Labs index](/labs): public directory of all sixteen calculator tools.
 - [ADR-0001](adr/0001-editorial-cms-and-postgres.md): accepted CMS and PostgreSQL decision.
@@ -36,6 +39,8 @@ Choose the section that matches what you need.
 - [Brand system](BRAND_SYSTEM.md): official visual identity and application rules.
 - [Infrastructure discovery](INFRASTRUCTURE_DISCOVERY.md): confirmed resources and outstanding infrastructure gates.
 - [Phase status](PHASE_STATUS.md): evidence-backed implementation progress.
+- [HEZQEN Labs methodology page](/labs/methodology): public calculator methodology and source links.
+- [RSS feed](/feed.xml): public feed of published articles.
 
 ## Documentation conventions
 

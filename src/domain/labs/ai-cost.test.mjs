@@ -75,3 +75,36 @@ test("rejects fractional GPU counts and invalid monthly GPU hours", () => {
   assert.throws(() => calculateAiCostBreakEven({ ...baseline, gpuCount: 1.5 }), RangeError);
   assert.throws(() => calculateAiCostBreakEven({ ...baseline, gpuHoursPerMonth: 800 }), RangeError);
 });
+
+test("includes engineering and on-call costs in the self-hosted monthly total", () => {
+  const result = calculateAiCostBreakEven({
+    ...baseline,
+    monthlyEngineeringCost: 800,
+    monthlyOnCallCost: 300,
+  });
+  assert.equal(result.selfHostedMonthlyCost, 1 * 0.5 * 730 + 100 + 800 + 300);
+});
+
+test("includes amortized GPU purchase cost for owned hardware", () => {
+  const result = calculateAiCostBreakEven({
+    ...baseline,
+    monthlyGpuAmortizationCost: 500,
+  });
+  assert.equal(result.selfHostedMonthlyCost, 1 * 0.5 * 730 + 100 + 500);
+  assert.equal(result.assumptions.gpuPurchaseAmortizationIncluded, true);
+});
+
+test("rejects negative GPU purchase amortization", () => {
+  assert.throws(
+    () => calculateAiCostBreakEven({ ...baseline, monthlyGpuAmortizationCost: -1 }),
+    RangeError,
+  );
+});
+
+test("rejects negative engineering and on-call cost assumptions", () => {
+  assert.throws(
+    () => calculateAiCostBreakEven({ ...baseline, monthlyEngineeringCost: -1 }),
+    RangeError,
+  );
+  assert.throws(() => calculateAiCostBreakEven({ ...baseline, monthlyOnCallCost: -1 }), RangeError);
+});
