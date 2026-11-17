@@ -5,6 +5,7 @@ export interface VramModelPreset {
   parametersB: number;
   layers: number;
   kvHeads: number;
+  attentionHeads: number;
   headDimension: number;
   maxContextLength: number;
   attentionType: "gqa";
@@ -21,6 +22,7 @@ export const VRAM_MODEL_PRESETS = [
     parametersB: 7,
     layers: 32,
     kvHeads: 8,
+    attentionHeads: 32,
     headDimension: 128,
     maxContextLength: 32768,
     attentionType: "gqa",
@@ -36,6 +38,7 @@ export const VRAM_MODEL_PRESETS = [
     parametersB: 14.7,
     layers: 48,
     kvHeads: 8,
+    attentionHeads: 40,
     headDimension: 128,
     maxContextLength: 32768,
     attentionType: "gqa",
