@@ -33,12 +33,14 @@ function NumberField({
   value,
   onChange,
   min = 1,
+  max,
   step = 1,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   min?: number;
+  max?: number;
   step?: number;
 }) {
   return (
@@ -47,6 +49,7 @@ function NumberField({
       <input
         type="number"
         min={min}
+        max={max}
         step={step}
         value={value}
         onChange={(event) => onChange(event.target.value)}
@@ -264,6 +267,7 @@ export default function VramCalculatorPage() {
                 label="Query attention heads"
                 value={values.attentionHeads}
                 onChange={update("attentionHeads")}
+                max={256}
               />
               <NumberField
                 label="KV heads (GQA/MQA)"
