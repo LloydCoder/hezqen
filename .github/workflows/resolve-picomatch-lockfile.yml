@@ -1,0 +1,48 @@
+name: Resolve local picomatch security patch
+
+on:
+  push:
+    branches:
+      - feat/hezqen-vram-unit-topology
+
+permissions:
+  contents: write
+
+concurrency:
+  group: picomatch-lockfile-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  resolve-lockfile:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24.22.3
+          package-manager-cache: false
+      - run: corepack enable
+      - name: Resolve patched dependency and verify the mitigation
+        run: |
+          if [ ! -f patches/picomatch@4.0.7.patch ]; then
+            echo "Patch not staged yet; nothing to resolve."
+            exit 0
+          fi
+          pnpm install --no-frozen-lockfile
+          node --experimental-strip-types --test src/domain/security/picomatch-redos.test.mjs
+          pnpm audit --audit-level moderate
+      - name: Commit generated lockfile
+        run: |
+          if git diff --quiet -- pnpm-lock.yaml; then
+            echo "Lockfile already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pnpm-lock.yaml
+          git commit -m "chore(deps): lock patched picomatch security fix"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
