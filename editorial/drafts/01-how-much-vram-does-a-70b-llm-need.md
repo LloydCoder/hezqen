@@ -17,6 +17,22 @@ research_updated: "2026-11-17"
 
 Meta's model card names Llama 3.3 70B as a 70-billion-parameter model. Its published configuration specifies 80 layers, 64 query heads, 8 KV heads, a head dimension of 128 and a 131,072-token maximum context. Reconstructing the parameter count from the configuration's untied token embeddings, attention projections, MLP dimensions and normalization weights gives an approximate 70.55B parameters; HEZQEN's preset rounds this configuration-derived planning count to 70.6B. The model-card name and the configuration-derived count are different levels of precision.
 
+A reproducible parameter-count reconstruction from the published dimensions is:
+
+```
+2 × (vocab_size × hidden_size)
++ layers × [
+    2 × hidden_size²
+  + 2 × hidden_size × (KV_heads × head_dimension)
+  + 3 × hidden_size × intermediate_size
+  + 2 × hidden_size
+]
++ hidden_size
+≈ 70.55 billion parameters
+```
+
+This reconstruction assumes the standard Llama decoder projections, untied token embeddings and no projection biases as specified by the config. It is an architecture-derived estimate, not a parameter count published by Meta.
+
 For a nominal 70-billion-parameter model, the uncompressed BF16 weight payload is approximately 130.4 GiB. At 70.6B, the same calculation is approximately 131.5 GiB. The uncompressed weight payload is therefore already larger than the H200's approximately 131.3 GiB binary capacity, before runtime memory or KV cache. The uncompressed weight payload for 70.6B parameters is approximately:
 
 | Representation | Effective bytes/parameter | Weight memory |
