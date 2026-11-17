@@ -66,7 +66,7 @@ export function estimateVram(input: VramEstimateInput): VramEstimate {
   assertPositiveInteger("layers", input.layers);
   assertPositiveInteger("kvHeads", input.kvHeads);
   if (input.attentionHeads !== undefined) {
-    assertPositiveInteger("attentionHeads", input.attentionHeads);
+    assertPositiveInteger("attentionHeads", input.attentionHeads, 256);
     if (input.attentionHeads < input.kvHeads || input.attentionHeads % input.kvHeads !== 0) {
       throw new RangeError("attentionHeads must be a multiple of kvHeads");
     }
