@@ -53,15 +53,15 @@ export default function AuthorsPage() {
         <h2>Contributor profiles</h2>
         <p>
           Published profiles may describe a contributor's relevant experience, professional
-          background, research interests and selected work. Credentials and affiliations are
-          checked against reliable information and presented with appropriate context. Profiles
-          are published with the contributor's knowledge and consent. A contributor's views are
-          not automatically the views of an employer, client, institution or partner.
+          background, research interests and selected work. Credentials and affiliations are checked
+          against reliable information and presented with appropriate context. Profiles are
+          published with the contributor's knowledge and consent. A contributor's views are not
+          automatically the views of an employer, client, institution or partner.
         </p>
         <h2>Reviewers and editors</h2>
         <p>
-          Technical reviewers assess work within their specialist competence. Fact-checkers
-          examine material claims and source context. Editors determine scope, fairness, clarity,
+          Technical reviewers assess work within their specialist competence. Fact-checkers examine
+          material claims and source context. Editors determine scope, fairness, clarity,
           disclosures and publication readiness. These roles are not interchangeable: a technical
           review is not final editorial approval, and an author cannot approve their own work.
           Reviewer acknowledgement is published only with consent and where it adds useful
