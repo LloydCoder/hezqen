@@ -20,13 +20,14 @@ export const NewsletterSubscribers: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      ({ operation, req }) => {
+      ({ data, operation, req }) => {
         if (
           !["create", "update"].includes(operation) ||
           !hasTrustedRequestContext(req.context, "hezqenNewsletterWrite")
         ) {
           throw new APIError("Newsletter consent records are server-managed.", 403);
         }
+        return data;
       },
     ],
     beforeDelete: [
