@@ -7,14 +7,21 @@ const { isMatch, makeRe } = picomatch;
 
 test("picomatch collapses single-branch repeated extglobs containing a star", () => {
   for (const pattern of ["+(*)", "+(*a)", "*(*a)", "+(a*)", "+(a*b)", "*(*.js)"]) {
-    assert.doesNotMatch(makeRe(pattern).source, /\)[+*]/, pattern + " must not nest unbounded quantifiers");
+    assert.doesNotMatch(
+      makeRe(pattern).source,
+      /\)[+*]/,
+      pattern + " must not nest unbounded quantifiers",
+    );
   }
 
   const hostileInput = "a".repeat(50) + "b";
   for (const pattern of ["+(*a)", "*(*a)", "+(*a)c", "x+(*a)"]) {
     const startedAt = performance.now();
     assert.equal(isMatch(hostileInput, pattern), false);
-    assert.ok(performance.now() - startedAt < 250, pattern + " exceeded the ReDoS regression budget");
+    assert.ok(
+      performance.now() - startedAt < 250,
+      pattern + " exceeded the ReDoS regression budget",
+    );
   }
 
   assert.equal(isMatch("abc", "+(*)c"), true);
