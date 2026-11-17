@@ -175,6 +175,12 @@ export default function VramMethodologyPage() {
           activation memory, CUDA graph pools or allocator fragmentation. The result is not proof
           that a framework accepts the configuration.
         </p>
+        <p>
+          The tensor-parallel placement formula is version 1.0.0. Its deterministic inputs and
+          expected outputs are published in the
+          <a href="/labs/tensor-parallel-test-vectors.json">tensor-parallel regression vectors</a>.
+          These vectors validate arithmetic only; they are not measured GPU benchmark results.
+        </p>
         <h2>Interconnect and hardware topology</h2>
         <p>
           The catalogue records manufacturer-listed PCIe, NVLink and SKU-dependent information. A
