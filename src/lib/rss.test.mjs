@@ -24,7 +24,10 @@ test("creates a valid RSS channel with canonical article links and dates", () =>
   assert.match(feed, /<link>https:\/\/hezqen\.tinlance\.com<\/link>/);
   assert.match(feed, /<title>GPU &amp; AI &lt;in practice&gt;<\/title>/);
   assert.match(feed, /<link>https:\/\/hezqen\.tinlance\.com\/articles\/gpu-ai-in-practice<\/link>/);
-  assert.match(feed, /<guid isPermaLink="true">https:\/\/hezqen\.tinlance\.com\/articles\/gpu-ai-in-practice<\/guid>/);
+  assert.match(
+    feed,
+    /<guid isPermaLink="true">https:\/\/hezqen\.tinlance\.com\/articles\/gpu-ai-in-practice<\/guid>/,
+  );
   assert.match(feed, /<dc:creator>Research Desk<\/dc:creator>/);
   assert.match(feed, /<category>AI &amp; Technology<\/category>/);
   assert.match(feed, /<pubDate>Mon, 16 Nov 2026 10:00:00 GMT<\/pubDate>/);
@@ -32,7 +35,7 @@ test("creates a valid RSS channel with canonical article links and dates", () =>
 
 test("escapes XML-sensitive characters in channel and item text", () => {
   const feed = createRssFeed(
-    [{ ...article, title: "A & B \"quoted\"", excerpt: "5 < 7 & 8 > 3" }],
+    [{ ...article, title: 'A & B "quoted"', excerpt: "5 < 7 & 8 > 3" }],
     "https://hezqen.tinlance.com",
   );
 
