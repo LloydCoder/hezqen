@@ -168,6 +168,9 @@ export function assessTensorParallelCapacity(
   assertPositiveInteger("attentionHeads", input.attentionHeads, 256);
   assertPositiveInteger("kvHeads", input.kvHeads, 256);
   assertPositiveInteger("tensorParallelSize", input.tensorParallelSize, 64);
+  if (input.kvHeads > input.attentionHeads || input.attentionHeads % input.kvHeads !== 0) {
+    throw new RangeError("kvHeads must not exceed attentionHeads and must divide attentionHeads");
+  }
 
   const runtimeReservePercent = input.runtimeReservePercent ?? 15;
   if (
