@@ -148,7 +148,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             </div>
             <div className="container footer-bottom">
               <span>© {new Date().getFullYear()} HEZQEN. Published by Tinlance.</span>
-              <span>Independent by design. Accountable by principle.</span>
+              <span>Editorially accountable. Published by Tinlance.</span>
             </div>
           </footer>
         </div>
