@@ -151,3 +151,41 @@ Any change to the weight-byte assumptions, KV-cache equation, reserve semantics,
 5. Receive independent technical review before release.
 
 UI, preset metadata or GPU catalogue changes that do not alter the formula increment the calculator version but do not require a formula-version change.
+
+
+## GPU capacity units and multi-GPU planning (calculator v1.2.0)
+
+GPU manufacturers publish memory capacities in decimal gigabytes (GB). The calculator converts each published capacity to binary gibibytes (GiB) before applying the default 90% usable-capacity fraction:
+
+`memoryGiB = memoryGB × 1,000,000,000 / 1,073,741,824`
+
+Examples:
+
+| GPU | Advertised memory | Converted memory |
+|---|---:|---:|
+| GeForce RTX 4090 | 24 GB | 22.35 GiB |
+| GeForce RTX 5090 | 32 GB | 29.80 GiB |
+| RTX 6000 Ada | 48 GB | 44.70 GiB |
+| A100 80GB | 80 GB | 74.51 GiB |
+| H100 SXM | 80 GB | 74.51 GiB |
+| H200 | 141 GB | 131.34 GiB |
+
+The tensor-parallel screen is a separate first-pass model. It estimates even weight sharding across the selected tensor-parallel degree and a vLLM-style KV-head layout: KV heads are divided across ranks when divisible; if the parallel degree is a multiple of the KV-head count, one KV head is assigned per GPU and the KV state is replicated. It rejects layouts outside those simple divisibility cases.
+
+For each GPU, the screen calculates:
+
+- weight shard = total weight memory / tensor-parallel size
+- KV cache per GPU = total KV cache × (KV heads per GPU / total KV heads)
+- runtime reserve = (weight shard + KV cache per GPU) × reserve percentage
+- required memory per GPU = weight shard + KV cache per GPU + runtime reserve
+- available memory per GPU = converted GPU GiB × usable fraction
+
+This is an idealized memory placement estimate, not an exact vLLM allocation model. It does not account for uneven layer sizes, replicated embeddings/output layers, activation and communication buffers, CUDA graph pools, allocator fragmentation, pipeline parallelism, data parallelism, heterogeneous layers, or runtime-specific constraints. It does not prove that a model/runtime supports the selected tensor-parallel degree.
+
+The catalogue includes manufacturer-sourced interconnect descriptions for PCIe, NVLink and SKU-dependent variants. These descriptions are not a topology discovery mechanism. Confirm the exact GPU SKU, server baseboard, PCIe root complex, NVLink bridge/NVSwitch configuration, firmware and framework support. Memory fit does not establish bandwidth, latency or throughput.
+
+### Versioning
+
+- Base VRAM formula: `1.0.0` (weight + conventional KV-cache + reserve).
+- Calculator: `1.2.0` (decimal GB/GiB correction, attention-head metadata and tensor-parallel capacity screen).
+- Tensor-parallel placement model: vLLM-style approximation implemented in `src/domain/labs/gpu-capacity.ts`; verify against the target runtime and hardware before making deployment claims.
