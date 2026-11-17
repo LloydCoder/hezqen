@@ -5,7 +5,7 @@ export const site = {
   tagline: "Research. Intelligence. Perspective.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hezqen.tinlance.com",
   description:
-    "Independent reporting, original research and technical analysis across AI, cybersecurity, cloud engineering, and business.",
+    "Evidence-led reporting, original research and technical analysis across AI, cybersecurity, cloud engineering, and business.",
 } as const;
 
 export const divisions = [
