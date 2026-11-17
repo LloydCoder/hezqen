@@ -79,8 +79,8 @@ Presets prefill architecture fields from the linked model card and configuration
 
 | Preset | Parameters | Layers | KV heads | Head dimension | Source |
 |---|---:|---:|---:|---:|---|
-| Mistral 7B Instruct v0.3 | 7B (model-card label) | 32 | 8 | 128 | [Model card](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3) · [config.json](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/blob/main/config.json) |
-| Qwen2.5 14B Instruct | 14.7B | 48 | 8 | 128 | [Model card](https://huggingface.co/Qwen/Qwen2.5-14B-Instruct) · [config.json](https://huggingface.co/Qwen/Qwen2.5-14B-Instruct/blob/main/config.json) |
+| Mistral 7B Instruct v0.3 | 7B (model-card label) | 32 | 8 | 128 | [Model card](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3) · [config.json](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/blob/41ee164278abb69f607540425b8682669bec3ca6/config.json) |
+| Qwen2.5 14B Instruct | 14.7B | 48 | 8 | 128 | [Model card](https://huggingface.co/Qwen/Qwen2.5-14B-Instruct) · [config.json](https://huggingface.co/Qwen/Qwen2.5-14B-Instruct/blob/76ca6ba/config.json) |
 
 The Mistral model card identifies the model as 7B; the preset uses 7.0B as a nominal parameter-count input rather than implying a more precise count. The Qwen2.5 14B model card describes 40 query heads and 8 KV heads, 48 layers, and 14.7B total parameters. The head dimension is derived as hidden size 5,120 divided by 40 query heads, or 128. Its current config.json sets max_position_embeddings to 32,768. The model card documents support up to 131,072 tokens only with YaRN scaling (factor 4); the preset therefore uses the default config limit of 32,768 and starts the calculator at 4,096 tokens.
 
