@@ -6,3 +6,10 @@ overrides:
   dompurify: 3.4.17
   happy-dom: 21.0.4
   esbuild: 0.25.0
+
+patchedDependencies:
+  picomatch@4.0.7: patches/picomatch@4.0.7.patch
+
+audit:
+  ignore:
+    - GHSA-fc5q-39xc-vjpf

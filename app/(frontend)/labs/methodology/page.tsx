@@ -123,6 +123,19 @@ export default function VramMethodologyPage() {
             . The config defaults to 32,768 positions; the model card documents 131,072-token
             context only with YaRN scaling factor 4.
           </li>
+          <li>
+            <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama3_3/MODEL_CARD.md">
+              Meta Llama 3.3 70B model card
+            </a>{" "}
+            and{" "}
+            <a href="https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct/blob/main/config.json">
+              model configuration
+            </a>
+            . The model card labels it 70B; the preset uses a rounded 70.6B architecture-derived
+            planning count from the configuration's 80 layers, 64 query heads, 8 KV heads and
+            128-dimensional heads. This derived count is an estimate, not a figure published by
+            Meta.
+          </li>
         </ul>
         <h2>GPU capacity sources</h2>
         <ul>

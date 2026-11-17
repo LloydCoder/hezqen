@@ -173,7 +173,13 @@ export default function VramCalculatorPage() {
   function buildShareUrl(): string | null {
     try {
       const url = new URL(window.location.origin + window.location.pathname);
-      url.search = serializeVramShareParams(input);
+      const params = new URLSearchParams(serializeVramShareParams(input));
+      const currentParams = new URLSearchParams(window.location.search);
+      for (const key of ["tpGpu", "tpSize"]) {
+        const value = currentParams.get(key);
+        if (value) params.set(key, value);
+      }
+      url.search = params.toString();
       return url.toString();
     } catch {
       setShareFeedback(
