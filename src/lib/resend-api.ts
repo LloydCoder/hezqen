@@ -26,6 +26,7 @@ export interface NewsletterContactInput {
   consentAt: string;
   consentVersion: string;
   signupSource: string;
+  unsubscribeUrl: string;
 }
 
 export interface ResendContactSyncResult {
@@ -129,6 +130,7 @@ export async function syncNewsletterContact(
     hezqen_newsletter_consent_at: input.consentAt,
     hezqen_newsletter_consent_version: input.consentVersion,
     hezqen_newsletter_signup_source: input.signupSource,
+    hezqen_newsletter_unsubscribe_url: input.unsubscribeUrl,
   };
   const created = await requestResend(options, "/contacts", "POST", {
     email: input.email,
