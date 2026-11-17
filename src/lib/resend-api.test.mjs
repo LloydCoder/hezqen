@@ -60,6 +60,7 @@ test("creates a contact with topic opt-in only after the app has confirmed conse
       consentAt: "2026-11-17T10:00:00.000Z",
       consentVersion: "hezqen-intelligence-brief-v1",
       signupSource: "labs",
+      unsubscribeUrl: "https://hezqen.example/newsletter/unsubscribe?token=signed",
     },
     { ...options, fetchImpl },
   );
@@ -68,6 +69,10 @@ test("creates a contact with topic opt-in only after the app has confirmed conse
   assert.equal(captured.body.unsubscribed, false);
   assert.deepEqual(captured.body.topics, [{ id: "topic_test", subscription: "opt_in" }]);
   assert.equal(captured.body.properties.hezqen_newsletter_status, "confirmed");
+  assert.equal(
+    captured.body.properties.hezqen_newsletter_unsubscribe_url,
+    "https://hezqen.example/newsletter/unsubscribe?token=signed",
+  );
 });
 
 test("does not override a provider-wide unsubscribe on an existing contact", async () => {
@@ -83,6 +88,7 @@ test("does not override a provider-wide unsubscribe on an existing contact", asy
       consentAt: "2026-11-17T10:00:00.000Z",
       consentVersion: "hezqen-intelligence-brief-v1",
       signupSource: "footer",
+      unsubscribeUrl: "https://hezqen.example/newsletter/unsubscribe?token=signed",
     },
     { ...options, fetchImpl },
   );
@@ -104,6 +110,7 @@ test("updates an existing contact's properties and topic preference", async () =
       consentAt: "2026-11-17T10:00:00.000Z",
       consentVersion: "hezqen-intelligence-brief-v1",
       signupSource: "article",
+      unsubscribeUrl: "https://hezqen.example/newsletter/unsubscribe?token=signed",
     },
     { ...options, fetchImpl },
   );
