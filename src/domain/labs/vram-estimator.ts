@@ -1,3 +1,6 @@
+export const VRAM_FORMULA_VERSION = "1.0.0";
+export const VRAM_CALCULATOR_VERSION = "1.1.0";
+
 export type WeightFormat = "fp16" | "bf16" | "int8" | "int4";
 export type CacheFormat = "fp16" | "bf16" | "fp8" | "int8";
 
@@ -14,6 +17,8 @@ export interface VramEstimateInput {
 }
 
 export interface VramEstimate {
+  formulaVersion: typeof VRAM_FORMULA_VERSION;
+  calculatorVersion: typeof VRAM_CALCULATOR_VERSION;
   weightMemoryGiB: number;
   kvCacheMemoryGiB: number;
   runtimeReserveGiB: number;
@@ -92,6 +97,8 @@ export function estimateVram(input: VramEstimateInput): VramEstimate {
   const totalMemoryGiB = weightMemoryGiB + kvCacheMemoryGiB + runtimeReserveGiB;
 
   return {
+    formulaVersion: VRAM_FORMULA_VERSION,
+    calculatorVersion: VRAM_CALCULATOR_VERSION,
     weightMemoryGiB,
     kvCacheMemoryGiB,
     runtimeReserveGiB,
