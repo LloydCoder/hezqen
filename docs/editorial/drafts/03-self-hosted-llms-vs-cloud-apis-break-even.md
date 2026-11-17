@@ -102,7 +102,7 @@ Utilization is also not a free control knob. Raising utilization may increase qu
 
 ## 4. A real provider price snapshot
 
-Runpod's published pricing page, reviewed 12 November 2026, listed these Secure Cloud hourly examples:
+Runpod's published pricing page, reviewed 12 November 2026, listed the following per-hour Pod rates:
 
 | GPU | Listed hourly rate | 730-hour month, one GPU |
 |---|---:|---:|
