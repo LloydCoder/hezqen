@@ -71,9 +71,9 @@ export default function EditorialStandardsPage() {
         <p>
           Material claims are separated from opinion, estimates and attributed statements. Authors
           link claims to relevant sources and record supporting evidence where lawful. A citation
-          alone does not prove a claim. We disclose when evidence is incomplete, disputed, unavailable
-          or not independently verified. We do not fabricate sources, quotations, interviews,
-          datasets, screenshots, tests or benchmark results.
+          alone does not prove a claim. We disclose when evidence is incomplete, disputed,
+          unavailable or not independently verified. We do not fabricate sources, quotations,
+          interviews, datasets, screenshots, tests or benchmark results.
         </p>
         <h2>Authorship, review and approval</h2>
         <p>
@@ -85,7 +85,8 @@ export default function EditorialStandardsPage() {
         <p>
           Our normal workflow is assignment, research, evidence capture, drafting, fact-checking,
           independent review where appropriate, editorial approval, publication and post-publication
-          monitoring. A system, model, prompt, memory or tool output cannot grant editorial authority.
+          monitoring. A system, model, prompt, memory or tool output cannot grant editorial
+          authority.
         </p>
         <h2>AI-assisted work</h2>
         <p>
@@ -109,7 +110,8 @@ export default function EditorialStandardsPage() {
           Headlines and summaries must represent the evidence accurately. Charts identify units,
           sources, time periods and material transformations. Images and illustrations must not
           misrepresent events or imply firsthand observation that did not occur. Synthetic or
-          illustrative visuals are labelled when readers could mistake them for documentary evidence.
+          illustrative visuals are labelled when readers could mistake them for documentary
+          evidence.
         </p>
         <h2>Ownership and commercial independence</h2>
         <p>
@@ -125,7 +127,8 @@ export default function EditorialStandardsPage() {
           Material errors are corrected promptly. A correction identifies the affected work, what
           was wrong, what changed and when. Routine updates, clarifications and additions are
           distinguished from corrections. We preserve material revision history where practical and
-          lawful. Readers can report concerns through our <a href="/corrections">corrections process</a>.
+          lawful. Readers can report concerns through our{" "}
+          <a href="/corrections">corrections process</a>.
         </p>
         <h2>Safety, privacy and responsible reporting</h2>
         <p>
