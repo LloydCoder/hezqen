@@ -122,6 +122,25 @@ export const ArchitectureLeads: CollectionConfig = {
       ],
     },
     {
+      name: "confirmationEmailStatus",
+      type: "select",
+      defaultValue: "pending",
+      options: [
+        { label: "Pending", value: "pending" },
+        { label: "Sent", value: "sent" },
+        { label: "Failed", value: "failed" },
+      ],
+    },
+    {
+      name: "confirmationEmailLastError",
+      type: "text",
+      access: {
+        read: ({ req }) => hasActiveRole(req.user, ["administrator"]),
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
       name: "notificationLastError",
       type: "text",
       access: { read: ({ req }) => hasActiveRole(req.user, ["administrator"]), create: () => false, update: () => false },
