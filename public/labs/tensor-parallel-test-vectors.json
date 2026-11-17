@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "formulaVersion": "1.0.0",
+  "purpose": "Public deterministic regression vectors for idealized tensor-parallel memory placement. These are calculations, not hardware benchmarks.",
+  "units": {
+    "gpuVendorMemory": "decimal GB",
+    "calculatorMemory": "binary GiB"
+  },
+  "vectors": [
+    {
+      "id": "llama-3.3-70b-bf16-32k-tp4-h100-sxm",
+      "assumptions": "Nominal 70B BF16 weight estimate 130.385 GiB; 10 GiB KV cache at 32K context and batch 1; 64 query heads; 8 KV heads; 15% runtime reserve; 90% usable GPU memory.",
+      "input": {
+        "gpuId": "h100-sxm-80gb",
+        "weightMemoryGiB": 130.385,
+        "kvCacheMemoryGiB": 10,
+        "attentionHeads": 64,
+        "kvHeads": 8,
+        "tensorParallelSize": 4,
+        "runtimeReservePercent": 15,
+        "usableFraction": 0.9
+      },
+      "expected": {
+        "gpuMemoryGB": 80,
+        "gpuMemoryGiB": 74.50580596923828,
+        "weightPerGpuGiB": 32.59625,
+        "kvHeadsPerGpu": 2,
+        "kvCachePerGpuGiB": 2.5,
+        "kvPlacement": "sharded",
+        "runtimeReserveGiB": 5.2644375,
+        "requiredMemoryPerGpuGiB": 40.3606875,
+        "availableMemoryPerGpuGiB": 67.05522537231445,
+        "interconnectClass": "nvlink",
+        "status": "fit"
+      }
+    },
+    {
+      "id": "llama-3.3-70b-bf16-32k-tp16-h100-sxm",
+      "assumptions": "Same model and memory assumptions as TP4, with 16 tensor-parallel ranks. Eight KV heads are replicated one per rank under this simplified placement model.",
+      "input": {
+        "gpuId": "h100-sxm-80gb",
+        "weightMemoryGiB": 130.385,
+        "kvCacheMemoryGiB": 10,
+        "attentionHeads": 64,
+        "kvHeads": 8,
+        "tensorParallelSize": 16,
+        "runtimeReservePercent": 15,
+        "usableFraction": 0.9
+      },
+      "expected": {
+        "gpuMemoryGB": 80,
+        "gpuMemoryGiB": 74.50580596923828,
+        "weightPerGpuGiB": 8.1490625,
+        "kvHeadsPerGpu": 1,
+        "kvCachePerGpuGiB": 1.25,
+        "kvPlacement": "replicated",
+        "runtimeReserveGiB": 1.409859375,
+        "requiredMemoryPerGpuGiB": 10.808921875,
+        "availableMemoryPerGpuGiB": 67.05522537231445,
+        "interconnectClass": "nvlink",
+        "status": "fit"
+      }
+    },
+    {
+      "id": "llama-3.3-70b-bf16-32k-tp2-rtx4090",
+      "assumptions": "Same model and memory assumptions, but only two RTX 4090 GPUs. Per-GPU memory is insufficient even though aggregate advertised memory is 48 GB.",
+      "input": {
+        "gpuId": "rtx-4090",
+        "weightMemoryGiB": 130,
+        "kvCacheMemoryGiB": 10,
+        "attentionHeads": 64,
+        "kvHeads": 8,
+        "tensorParallelSize": 2,
+        "runtimeReservePercent": 15,
+        "usableFraction": 0.9
+      },
+      "expected": {
+        "gpuMemoryGB": 24,
+        "gpuMemoryGiB": 22.351741790771484,
+        "weightPerGpuGiB": 65,
+        "kvHeadsPerGpu": 4,
+        "kvCachePerGpuGiB": 5,
+        "kvPlacement": "sharded",
+        "runtimeReserveGiB": 10.5,
+        "requiredMemoryPerGpuGiB": 80.5,
+        "availableMemoryPerGpuGiB": 20.116567611694336,
+        "interconnectClass": "pcie",
+        "status": "insufficient"
+      }
+    }
+  ]
+}
