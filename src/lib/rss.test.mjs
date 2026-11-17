@@ -21,7 +21,7 @@ test("creates a valid RSS channel with canonical article links and dates", () =>
 
   assert.match(feed, /<rss version="2\.0"/);
   assert.match(feed, /<title>HEZQEN — Global Technology &amp; Business Intelligence<\/title>/);
-  assert.match(feed, /<link>https:\/\/hezqen\.tinlance\.com<\/link>/);
+  assert.match(feed, /<link>https:\/\/hezqen\.tinlance\.com\/<\/link>/);
   assert.match(feed, /<title>GPU &amp; AI &lt;in practice&gt;<\/title>/);
   assert.match(feed, /<link>https:\/\/hezqen\.tinlance\.com\/articles\/gpu-ai-in-practice<\/link>/);
   assert.match(
@@ -53,4 +53,13 @@ test("emits a valid empty feed without inventing article entries", () => {
 
 test("rejects invalid canonical site URLs", () => {
   assert.throws(() => createRssFeed([], "not a URL"), /valid absolute HTTP/);
+});
+
+test("removes XML 1.0 forbidden control characters", () => {
+  const feed = createRssFeed(
+    [{ ...article, title: "GPU\u0001 memory" }],
+    "https://hezqen.tinlance.com",
+  );
+
+  assert.match(feed, /<title>GPU memory<\/title>/);
 });
