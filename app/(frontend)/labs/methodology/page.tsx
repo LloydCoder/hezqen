@@ -49,8 +49,8 @@ export default function VramMethodologyPage() {
           VRAM estimates, <em>explained.</em>
         </h1>
         <p className="prose-lede">
-          The calculator is a deterministic first-pass memory-planning tool. This page documents
-          the formula, model sources, hardware assumptions, limitations and regression vectors.
+          The calculator is a deterministic first-pass memory-planning tool. This page documents the
+          formula, model sources, hardware assumptions, limitations and regression vectors.
         </p>
         <div className="prose-rule" />
         <h2>Current versions</h2>
@@ -67,10 +67,10 @@ export default function VramMethodologyPage() {
         </p>
         <h2>Model-weight memory</h2>
         <p>
-          Weight memory is estimated as parameter count multiplied by effective bytes per
-          parameter, divided by 2³⁰ to express the result in GiB. FP16 and BF16 use 2 bytes per
-          parameter. INT8 uses 1.0625 bytes and INT4 uses 0.5625 bytes as conservative planning
-          assumptions that include metadata allowance.
+          Weight memory is estimated as parameter count multiplied by effective bytes per parameter,
+          divided by 2³⁰ to express the result in GiB. FP16 and BF16 use 2 bytes per parameter. INT8
+          uses 1.0625 bytes and INT4 uses 0.5625 bytes as conservative planning assumptions that
+          include metadata allowance.
         </p>
         <h2>Key-value cache</h2>
         <p>
