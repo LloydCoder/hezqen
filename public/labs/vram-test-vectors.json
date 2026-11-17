@@ -9,7 +9,7 @@
       "id": "mistral-7b-instruct-v0.3-int4-4096",
       "model": "Mistral 7B Instruct v0.3",
       "input": {
-        "parametersB": 7.3,
+        "parametersB": 7,
         "weightFormat": "int4",
         "layers": 32,
         "kvHeads": 8,
@@ -20,10 +20,10 @@
         "runtimeReservePercent": 15
       },
       "expected": {
-        "weightMemoryGiB": 3.824243322,
+        "weightMemoryGiB": 3.667082638,
         "kvCacheMemoryGiB": 0.5,
-        "runtimeReserveGiB": 0.648636498,
-        "totalMemoryGiB": 4.97287982,
+        "runtimeReserveGiB": 0.625062396,
+        "totalMemoryGiB": 4.792145033,
         "recommendedVramGiB": 5
       },
       "source": "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3"
