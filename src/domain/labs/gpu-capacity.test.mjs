@@ -121,6 +121,21 @@ test("rejects tensor-parallel degrees incompatible with attention or KV head lay
   );
 });
 
+test("rejects invalid attention-to-KV head architecture ratios", () => {
+  assert.throws(
+    () =>
+      assessTensorParallelCapacity({
+        gpuId: "h100-sxm-80gb",
+        weightMemoryGiB: 100,
+        kvCacheMemoryGiB: 10,
+        attentionHeads: 64,
+        kvHeads: 80,
+        tensorParallelSize: 4,
+      }),
+    /kvHeads must not exceed attentionHeads and must divide attentionHeads/,
+  );
+});
+
 test("reports insufficient per-GPU memory even when aggregate VRAM appears sufficient", () => {
   const result = assessTensorParallelCapacity({
     gpuId: "rtx-4090",
