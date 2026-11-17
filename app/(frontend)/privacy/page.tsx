@@ -46,12 +46,41 @@ export default function PrivacyPage() {
           confidential, personal or regulated information. The site should not be treated as a
           secure data-processing environment for sensitive workloads.
         </p>
-        <h2>Accounts, newsletters and payments</h2>
+        <h2>Newsletter subscriptions</h2>
         <p>
-          Reader accounts, newsletter subscriptions and paid reader services are not currently
-          represented as active public features. This notice must be updated before any such feature
-          is launched, including its providers, data flows, lawful basis, retention and user
-          controls.
+          If you subscribe to The HEZQEN Intelligence Brief, we process your email address, signup
+          source, consent version and timestamps, confirmation state and unsubscribe preference.
+          Subscription begins only after you confirm the email we send. Confirmation tokens are
+          stored as hashes and expire after 24 hours. We apply a per-address confirmation cooldown
+          and send limit to reduce abuse.
+        </p>
+        <p>
+          Resend provides newsletter email delivery and contact/topic management. We synchronize an
+          address to the HEZQEN newsletter topic only after confirmation. You can unsubscribe at any
+          time using the link provided in newsletter communications. We retain a minimal suppression
+          record so an unsubscribed address is not accidentally re-added.
+        </p>
+        <h2>Architecture-review requests</h2>
+        <p>
+          If you submit an architecture-review request, we process the name and work email you
+          provide, optional company and role, project category, description, indicative budget and
+          timeline, referral source and your permission for Tinlance to respond. The information is
+          stored in the HEZQEN CMS and used to evaluate and answer that specific enquiry. It is not
+          newsletter consent.
+        </p>
+        <p>
+          Resend may deliver the acknowledgement to you and the enquiry notification to
+          sales@tinlance.com. Do not include passwords, API keys, payment details, confidential
+          customer data or other secrets in the form.
+        </p>
+        <h2>Retention and user choices</h2>
+        <p>
+          Active newsletter records are retained while subscribed. Unsubscribe records are retained
+          in a minimized form to respect the preference. Architecture-review enquiries are reviewed
+          for deletion after 12 months without meaningful activity unless an ongoing commercial
+          relationship, legal obligation or dispute requires longer retention. You can request
+          access, correction or deletion by contacting hello@tinlance.com, subject to applicable
+          legal requirements.
         </p>
         <h2>Cookies and similar technologies</h2>
         <p>
