@@ -61,7 +61,8 @@ function validEmail(value: string): boolean {
   return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-export function parseLead(body: Record<string, unknown>): LeadInput | null {
+export function parseLead(value: unknown): LeadInput | null {
+  const body = asRecord(value);
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const company = typeof body.company === "string" ? body.company.trim() : "";
