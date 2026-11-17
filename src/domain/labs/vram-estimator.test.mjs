@@ -143,3 +143,10 @@ test("matches every published deterministic VRAM test vector", () => {
     assert.equal(result.calculatorVersion, vectors.calculatorVersion);
   }
 });
+
+test("rejects estimates that exceed the safe numeric range", () => {
+  assert.throws(
+    () => estimateVram({ ...baseInput, contextLength: Number.MAX_SAFE_INTEGER }),
+    /exceeds the supported numeric range/,
+  );
+});
