@@ -5,6 +5,7 @@ import "./globals.css";
 import { site } from "@/lib/site";
 import { StructuredData, publisherGraph } from "@/components/StructuredData";
 import { MobileNavigation } from "@/components/MobileNavigation";
+import { NewsletterSignupForm } from "@/components/NewsletterSignupForm";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -66,6 +67,8 @@ const mobileNavItems = [
   ...navItems,
   { href: "/about", label: "About HEZQEN" },
   { href: "/contact", label: "Contact" },
+  { href: "/newsletter", label: "Newsletter" },
+  { href: "/architecture-review", label: "Architecture review" },
   { href: "/editorial-standards", label: "Editorial standards" },
 ] as const;
 
@@ -74,6 +77,8 @@ const footerLinks = [
   { href: "/editorial-standards", label: "Editorial standards" },
   { href: "/corrections", label: "Corrections" },
   { href: "/contact", label: "Contact" },
+  { href: "/newsletter", label: "The Intelligence Brief" },
+  { href: "/architecture-review", label: "Architecture review" },
   { href: "/security", label: "Security" },
   { href: "/privacy", label: "Privacy" },
   { href: "/cookies", label: "Cookies" },
@@ -147,6 +152,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   Tinlance
                 </a>
               </nav>
+            </div>
+            <div className="container footer-newsletter">
+              <div className="footer-newsletter-copy">
+                <p className="section-label">THE HEZQEN INTELLIGENCE BRIEF</p>
+                <h2>Signal over noise.</h2>
+                <p>Get the research, technical analysis and context worth your attention.</p>
+              </div>
+              <NewsletterSignupForm source="footer" compact />
             </div>
             <div className="container footer-bottom">
               <span>© {new Date().getFullYear()} HEZQEN. Published by Tinlance.</span>
