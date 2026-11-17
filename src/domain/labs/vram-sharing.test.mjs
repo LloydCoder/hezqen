@@ -7,6 +7,7 @@ const input = {
   weightFormat: "int4",
   layers: 48,
   kvHeads: 8,
+  attentionHeads: 40,
   headDimension: 128,
   contextLength: 8192,
   batchSize: 2,

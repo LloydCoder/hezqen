@@ -44,6 +44,13 @@ export default function ContactPage() {
           review substantive corrections under our{" "}
           <Link href="/corrections">corrections policy</Link>.
         </p>
+        <h2>Architecture reviews and commercial enquiries</h2>
+        <p>
+          For GPU sizing, AI infrastructure, cloud architecture, cybersecurity or production
+          engineering enquiries, use the
+          <Link href="/architecture-review">architecture-review request form</Link> or email
+          <a href="mailto:sales@tinlance.com">sales@tinlance.com</a>.
+        </p>
         <h2>Editorial independence</h2>
         <p>
           HEZQEN is published by Tinlance and maintains its own editorial identity and governance.

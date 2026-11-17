@@ -1,9 +1,12 @@
+import Link from "next/link";
+import type { Route } from "next";
+
 type ArchitectureReviewCTAProps = {
   calculator: string;
 };
 
 export function ArchitectureReviewCTA({ calculator }: ArchitectureReviewCTAProps) {
-  const subject = encodeURIComponent(`HEZQEN architecture review — ${calculator}`);
+  const href = `/architecture-review?source=labs&calculator=${encodeURIComponent(calculator)}`;
 
   return (
     <section className="architecture-review-cta" aria-labelledby="architecture-review-heading">
@@ -20,9 +23,9 @@ export function ArchitectureReviewCTA({ calculator }: ArchitectureReviewCTAProps
             editorial coverage and conclusions remain governed by HEZQEN's published standards.
           </p>
         </div>
-        <a className="button button-primary" href={`mailto:sales@tinlance.com?subject=${subject}`}>
+        <Link className="button button-primary" href={href as Route}>
           Request an architecture review <span aria-hidden="true">↗</span>
-        </a>
+        </Link>
       </div>
     </section>
   );
