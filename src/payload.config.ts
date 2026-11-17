@@ -4,10 +4,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
 
+import { ArchitectureLeads } from "./collections/ArchitectureLeads";
 import { Articles } from "./collections/Articles";
 import { AuditEvents } from "./collections/AuditEvents";
 import { Claims } from "./collections/Claims";
 import { Evidence } from "./collections/Evidence";
+import { NewsletterSubscribers } from "./collections/NewsletterSubscribers";
 import { Sources } from "./collections/Sources";
 import { Topics } from "./collections/Topics";
 import { Users } from "./collections/Users";
@@ -74,7 +76,7 @@ export default buildConfig({
       importMapFile: path.resolve(dirname, "../app/(payload)/admin/importMap.js"),
     },
   },
-  collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents],
+  collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents, NewsletterSubscribers, ArchitectureLeads],
   endpoints: [
     editorialWorkflowEndpoint,
     editorialReviewEndpoint,
