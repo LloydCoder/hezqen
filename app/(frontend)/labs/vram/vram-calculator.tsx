@@ -455,11 +455,12 @@ export default function VramCalculatorPage() {
             allowance. This is a planning estimate, not a hardware benchmark or a guarantee of fit.
             Actual allocation varies with architecture, quantization implementation, attention
             backend, tensor parallelism, fragmentation, CUDA graphs, runtime and serving framework.
-            GPU manufacturers advertise decimal GB; this calculator converts those values to binary
-            GiB before applying headroom. The tensor-parallel screen estimates idealized weight/KV
-            placement and lists SKU-level interconnect details, but does not validate server topology
-            or performance. Architectures using MLA, heterogeneous layer layouts or sliding-window
-            cache behaviour may require a different formula and are not represented by the presets.
+            GPU manufacturers advertise decimal GB; this calculator converts those values to
+            binary GiB before applying headroom. The tensor-parallel screen estimates idealized
+            weight/KV placement and lists SKU-level interconnect details, but does not validate
+            server topology or performance. Architectures using MLA, heterogeneous layer layouts
+            or sliding-window cache behaviour may require a different formula and are not
+            represented by the presets.
           </p>
         </section>
       </div>
