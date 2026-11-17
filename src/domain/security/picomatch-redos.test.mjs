@@ -28,6 +28,10 @@ test("picomatch collapses single-branch repeated extglobs containing a star", ()
   assert.equal(isMatch("aaa", "+(*a)"), true);
   assert.equal(isMatch("a.a", "+(*a)"), true);
   assert.equal(isMatch("ab", "+(*a)"), false);
+  assert.equal(
+    isMatch("", "*(*a)", { dot: true }),
+    isMatch("", "*(*a)", { dot: true, maxExtglobRecursion: false }),
+  );
   assert.equal(isMatch("axbayb", "+(a*b)"), true);
   assert.equal(isMatch("axbay", "+(a*b)"), false);
   assert.equal(isMatch("foo.js", "*(*.js)"), true);
