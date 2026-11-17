@@ -20,10 +20,7 @@ export function ArchitectureReviewCTA({ calculator }: ArchitectureReviewCTAProps
             editorial coverage and conclusions remain governed by HEZQEN's published standards.
           </p>
         </div>
-        <a
-          className="button button-primary"
-          href={`mailto:sales@tinlance.com?subject=${subject}`}
-        >
+        <a className="button button-primary" href={`mailto:sales@tinlance.com?subject=${subject}`}>
           Request an architecture review <span aria-hidden="true">↗</span>
         </a>
       </div>
