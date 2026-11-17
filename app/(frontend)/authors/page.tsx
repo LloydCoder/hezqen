@@ -40,8 +40,8 @@ export default function AuthorsPage() {
         <p>
           Reviewers assess the work within their actual competence and disclose relevant conflicts.
           Technical review, fact-checking and final editorial approval are distinct
-          responsibilities. A reviewer does not become the author unless they materially
-          contributed to the work and agree to that attribution.
+          responsibilities. A reviewer does not become the author unless they materially contributed
+          to the work and agree to that attribution.
         </p>
         <h2>Corrections and accountability</h2>
         <p>
