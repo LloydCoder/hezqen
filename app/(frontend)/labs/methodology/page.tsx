@@ -202,6 +202,30 @@ export default function VramMethodologyPage() {
           establish interconnect bandwidth, latency or throughput. Verify the actual server topology
           and benchmark the target model/runtime before procurement.
         </p>
+        <h2>GPU memory units</h2>
+        <p>
+          Manufacturer capacities are stated in decimal GB. HEZQEN converts them to binary GiB using
+          1 GB = 1,000,000,000 bytes and 1 GiB = 1,073,741,824 bytes before applying the default 90%
+          usable-capacity assumption. The 10% planning margin is not a guarantee of successful model
+          loading.
+        </p>
+        <h2>Multi-GPU tensor-parallel planning</h2>
+        <p>
+          The separate tensor-parallel screen models even weight sharding across the selected
+          tensor-parallel degree. For conventional GQA/MQA placement, KV heads are divided across
+          ranks when divisible; when the tensor-parallel degree is a multiple of the KV-head count,
+          one KV head is represented per GPU and KV state is replicated. Unsupported divisibility
+          layouts are rejected by the estimator.
+        </p>
+        <p>
+          This is an idealized memory-placement approximation, not a complete vLLM runtime model. It
+          does not include uneven layer allocation, replicated embeddings or output layers,
+          activation/workspace buffers, allocator fragmentation, communication buffers, pipeline
+          parallelism, MLA, hybrid or sliding-window cache layouts. A memory fit does not establish
+          runtime support, interconnect bandwidth, latency or throughput. Confirm the exact GPU SKU,
+          server baseboard, PCIe root complex, NVLink bridge or NVSwitch topology and serving
+          framework before procurement.
+        </p>
         <h2>Limitations</h2>
         <p>
           The presets cover conventional GQA architectures. MLA, hybrid layer layouts, sliding
