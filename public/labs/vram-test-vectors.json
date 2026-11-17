@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "formulaVersion": "1.0.0",
-  "calculatorVersion": "1.1.0",
+  "calculatorVersion": "1.2.0",
   "unit": "GiB",
   "description": "Deterministic public regression vectors for the HEZQEN Labs VRAM estimator. Values are formula outputs, not measured GPU benchmarks.",
   "cases": [
