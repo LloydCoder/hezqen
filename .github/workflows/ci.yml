@@ -71,7 +71,7 @@ jobs:
             cat /tmp/hezqen-next.log
             exit 1
           fi
-          for route in / /about /editorial-standards /api/health /api/health/ready /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /labs/methodology /labs/vram-test-vectors.json /feed.xml /divisions/ai-technology /divisions/cybersecurity /divisions/cloud-engineering /divisions/business-startups /contact /corrections /security /privacy /cookies /terms /sitemap /robots.txt /sitemap.xml /llms.txt /llms-full.txt; do
+          for route in / /about /editorial-standards /research-methodology /authors /commercial-disclosure /api/health /api/health/ready /labs /infrastructure /labs/vram /labs/ai-cost /labs/rag-storage /labs/ai-data-risk /labs/hardware-roi /labs/finetune-vs-rag /labs/cloud-migration /labs/kubernetes-cost /labs/database-capacity /labs/api-pricing /labs/inference-throughput /labs/incident-cost /labs/saas-margin /labs/datacenter-energy /labs/storage-growth /labs/agent-cost /labs/methodology /labs/vram-test-vectors.json /feed.xml /divisions/ai-technology /divisions/cybersecurity /divisions/cloud-engineering /divisions/business-startups /contact /corrections /security /privacy /cookies /terms /sitemap /robots.txt /sitemap.xml /llms.txt /llms-full.txt; do
             status=$(curl --silent --output /tmp/hezqen-response --write-out "%{http_code}" "http://127.0.0.1:3000$route")
             if [ "$status" != "200" ]; then
               echo "Unexpected HTTP $status for $route"
