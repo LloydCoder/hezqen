@@ -107,11 +107,11 @@ export function parseLead(value: unknown): LeadInput | null {
     !validEmail(email) ||
     company.length > 120 ||
     role.length > 80 ||
-    !projectTypes.has(projectType) ||
+    !isProjectType(projectType) ||
     challenge.length < 10 ||
     challenge.length > 2000 ||
-    !budgets.has(budgetRange) ||
-    !timelines.has(timeline) ||
+    !isLeadBudget(budgetRange) ||
+    !isLeadTimeline(timeline) ||
     !isLeadSource(source) ||
     calculator.length > 120 ||
     body.contactConsent !== true
