@@ -234,16 +234,16 @@ export default function AiCostCalculator() {
           <p>
             API cost is calculated from input and output token volume multiplied by the prices
             supplied. Self-hosted cost is GPU count × hourly GPU cost × monthly GPU hours, plus the
-            additional monthly infrastructure overhead, engineering labour and on-call/operations costs entered above.
+            additional monthly infrastructure overhead, engineering labour and on-call/operations
+            costs entered above.
           </p>
           <p>
             This is a cost-only break-even model, not a capacity or deployment recommendation. It
             includes the engineering and on-call cost inputs above, but excludes model quality
             differences, utilization inefficiency, autoscaling, networking, storage beyond the
             overhead input, redundancy, taxes, discounts, minimum commitments and workload-specific
-            throughput constraints.
-            Confirm that the selected hardware can serve the workload before using the result for a
-            purchasing decision.
+            throughput constraints. Confirm that the selected hardware can serve the workload before
+            using the result for a purchasing decision.
           </p>
         </section>
       </div>
