@@ -2,7 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { assessSingleGpuCapacity } from "@/domain/labs/gpu-capacity";
-import { estimateVram, type CacheFormat, type VramEstimateInput, type WeightFormat } from "@/domain/labs/vram-estimator";
+import {
+  estimateVram,
+  type CacheFormat,
+  type VramEstimateInput,
+  type WeightFormat,
+} from "@/domain/labs/vram-estimator";
 import { getVramModelPreset, VRAM_MODEL_PRESETS } from "@/domain/labs/vram-presets";
 import { parseVramShareParams, serializeVramShareParams } from "@/domain/labs/vram-sharing";
 
@@ -232,8 +237,16 @@ export default function VramCalculatorPage() {
                 options={formats}
                 onChange={(value) => setValues((current) => ({ ...current, weightFormat: value }))}
               />
-              <NumberField label="Transformer layers" value={values.layers} onChange={update("layers")} />
-              <NumberField label="KV heads (GQA/MQA)" value={values.kvHeads} onChange={update("kvHeads")} />
+              <NumberField
+                label="Transformer layers"
+                value={values.layers}
+                onChange={update("layers")}
+              />
+              <NumberField
+                label="KV heads (GQA/MQA)"
+                value={values.kvHeads}
+                onChange={update("kvHeads")}
+              />
               <NumberField
                 label="Head dimension"
                 value={values.headDimension}
@@ -289,7 +302,12 @@ export default function VramCalculatorPage() {
               <button type="button" className="button-primary" onClick={copyShareLink}>
                 Copy share link
               </button>
-              <button type="button" className="button-primary" onClick={copySummary} disabled={!result.value}>
+              <button
+                type="button"
+                className="button-primary"
+                onClick={copySummary}
+                disabled={!result.value}
+              >
                 Copy result summary
               </button>
             </div>
