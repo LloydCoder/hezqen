@@ -25,7 +25,7 @@ export const VRAM_MODEL_PRESETS = [
     maxContextLength: 32768,
     attentionType: "gqa",
     sourceUrl: "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3",
-    configUrl: "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/blob/main/config.json",
+    configUrl: "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/blob/41ee164278abb69f607540425b8682669bec3ca6/config.json",
     sourceVerifiedAt: "2026-11-17",
   },
   {
@@ -39,7 +39,7 @@ export const VRAM_MODEL_PRESETS = [
     maxContextLength: 32768,
     attentionType: "gqa",
     sourceUrl: "https://huggingface.co/Qwen/Qwen2.5-14B-Instruct",
-    configUrl: "https://huggingface.co/Qwen/Qwen2.5-14B-Instruct/blob/main/config.json",
+    configUrl: "https://huggingface.co/Qwen/Qwen2.5-14B-Instruct/blob/76ca6ba/config.json",
     sourceVerifiedAt: "2026-11-17",
   },
 ] as const satisfies readonly VramModelPreset[];
