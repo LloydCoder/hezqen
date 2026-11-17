@@ -25,7 +25,11 @@ Monthly API cost:
 
 Monthly self-hosted cost:
 
-`G × C_h × H + X`
+`G × C_h × H + X + E + O`
+
+where:
+- (E) = monthly engineering labour cost
+- (O) = monthly on-call and operations cost
 
 Break-even monthly request volume:
 
@@ -37,11 +41,12 @@ If API cost per request is zero, break-even volume is not reached.
 
 - Prices are user-supplied USD per million input/output tokens.
 - GPU cost is a flat hourly rate for every GPU for the entered number of hours.
-- Additional infrastructure overhead is a user-supplied monthly amount.
+- Additional infrastructure overhead, engineering labour and on-call/operations are user-supplied monthly amounts.
+- Engineering and on-call costs default to zero when the user has no estimate; this is an explicit assumption, not evidence that the work is free.
 - The model compares costs only; it does not infer capacity, utilization or performance.
 
 ## Exclusions
 
-Engineering labour, on-call coverage, model quality, utilization inefficiency, autoscaling, networking, storage beyond the overhead input, redundancy, taxes, discounts, minimum commitments and workload-specific throughput constraints are excluded. GPU capacity must be independently validated.
+Model quality, utilization inefficiency, autoscaling, networking, storage beyond the overhead input, redundancy, taxes, discounts, minimum commitments and workload-specific throughput constraints are excluded. Engineering labour and on-call costs are included only when entered by the user. GPU capacity must be independently validated.
 
 The calculator is a planning aid, not a procurement recommendation or vendor quote.
