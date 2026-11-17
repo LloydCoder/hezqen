@@ -219,7 +219,7 @@ export const newsletterSubscribeEndpoint: Endpoint = {
       confirmationSendCount: sendCount,
       confirmationWindowStartedAt: windowStartedAt,
       lastConfirmationAttemptAt: nowIso,
-      providerSyncStatus: "pending",
+      providerSyncStatus: "pending" as const,
       providerContactId: null,
     };
 
