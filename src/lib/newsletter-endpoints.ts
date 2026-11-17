@@ -216,7 +216,8 @@ export const newsletterSubscribeEndpoint: Endpoint = {
       unsubscribedAt: null,
       confirmationTokenHash: token.tokenHash,
       confirmationExpiresAt: token.expiresAt,
-      confirmationSendCount: sendCount,
+      // Count the attempt before contacting the provider so failed sends consume the daily budget.
+      confirmationSendCount: sendCount + 1,
       confirmationWindowStartedAt: windowStartedAt,
       lastConfirmationAttemptAt: nowIso,
       providerSyncStatus: "pending" as const,
@@ -251,10 +252,6 @@ export const newsletterSubscribeEndpoint: Endpoint = {
         email,
         confirmationUrl: confirmationUrl(token.token),
         idempotencyKey: `hezqen-newsletter-confirm/${subscriber.id}/${token.tokenHash}`,
-      });
-      await updateSubscriber(req, subscriber.id, {
-        confirmationSendCount: sendCount + 1,
-        lastConfirmationAttemptAt: nowIso,
       });
     } catch (error) {
       await appendAuditEvent(req, {
