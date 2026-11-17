@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "formulaVersion": "1.0.0",
+  "calculatorVersion": "1.1.0",
+  "unit": "GiB",
+  "description": "Deterministic public regression vectors for the HEZQEN Labs VRAM estimator. Values are formula outputs, not measured GPU benchmarks.",
+  "cases": [
+    {
+      "id": "mistral-7b-instruct-v0.3-int4-4096",
+      "model": "Mistral 7B Instruct v0.3",
+      "input": {
+        "parametersB": 7.3,
+        "weightFormat": "int4",
+        "layers": 32,
+        "kvHeads": 8,
+        "headDimension": 128,
+        "contextLength": 4096,
+        "batchSize": 1,
+        "kvCacheFormat": "fp16",
+        "runtimeReservePercent": 15
+      },
+      "expected": {
+        "weightMemoryGiB": 3.824243322,
+        "kvCacheMemoryGiB": 0.5,
+        "runtimeReserveGiB": 0.648636498,
+        "totalMemoryGiB": 4.97287982,
+        "recommendedVramGiB": 5
+      },
+      "source": "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3"
+    },
+    {
+      "id": "qwen2.5-14b-instruct-int4-4096",
+      "model": "Qwen2.5 14B Instruct",
+      "input": {
+        "parametersB": 14.7,
+        "weightFormat": "int4",
+        "layers": 48,
+        "kvHeads": 8,
+        "headDimension": 128,
+        "contextLength": 4096,
+        "batchSize": 1,
+        "kvCacheFormat": "fp16",
+        "runtimeReservePercent": 15
+      },
+      "expected": {
+        "weightMemoryGiB": 7.700873539,
+        "kvCacheMemoryGiB": 0.75,
+        "runtimeReserveGiB": 1.267631031,
+        "totalMemoryGiB": 9.71850457,
+        "recommendedVramGiB": 10
+      },
+      "source": "https://huggingface.co/Qwen/Qwen2.5-14B-Instruct"
+    },
+    {
+      "id": "qwen2.5-14b-instruct-int4-8192-batch2-fp8-cache",
+      "model": "Qwen2.5 14B Instruct",
+      "input": {
+        "parametersB": 14.7,
+        "weightFormat": "int4",
+        "layers": 48,
+        "kvHeads": 8,
+        "headDimension": 128,
+        "contextLength": 8192,
+        "batchSize": 2,
+        "kvCacheFormat": "fp8",
+        "runtimeReservePercent": 20
+      },
+      "expected": {
+        "weightMemoryGiB": 7.700873539,
+        "kvCacheMemoryGiB": 1.5,
+        "runtimeReserveGiB": 1.840174708,
+        "totalMemoryGiB": 11.041048247,
+        "recommendedVramGiB": 12
+      },
+      "source": "https://huggingface.co/Qwen/Qwen2.5-14B-Instruct"
+    }
+  ]
+}
