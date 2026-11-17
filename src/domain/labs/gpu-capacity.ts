@@ -167,8 +167,8 @@ export function assessTensorParallelCapacity(
 ): TensorParallelCapacityAssessment {
   assertNonNegativeFinite("weightMemoryGiB", input.weightMemoryGiB);
   assertNonNegativeFinite("kvCacheMemoryGiB", input.kvCacheMemoryGiB);
-  assertPositiveInteger("attentionHeads", input.attentionHeads);
-  assertPositiveInteger("kvHeads", input.kvHeads);
+  assertPositiveInteger("attentionHeads", input.attentionHeads, 256);
+  assertPositiveInteger("kvHeads", input.kvHeads, 256);
   assertPositiveInteger("tensorParallelSize", input.tensorParallelSize, 64);
 
   const runtimeReservePercent = input.runtimeReservePercent ?? 15;
