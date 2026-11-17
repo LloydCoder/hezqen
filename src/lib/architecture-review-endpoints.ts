@@ -15,7 +15,12 @@ const projectTypes = new Set([
 ]);
 const timelines = new Set(["exploring", "0-30-days", "1-3-months", "3-6-months", "6-plus-months"]);
 const budgets = new Set(["unspecified", "under-5000", "5000-15000", "15000-50000", "50000-plus"]);
-const sources = new Set(["article", "labs", "contact", "unknown"]);
+type LeadSource = "article" | "labs" | "contact" | "unknown";
+const sources = new Set<LeadSource>(["article", "labs", "contact", "unknown"]);
+
+function isLeadSource(value: string): value is LeadSource {
+  return sources.has(value as LeadSource);
+}
 
 type LeadInput = {
   name: string;
@@ -26,7 +31,7 @@ type LeadInput = {
   challenge: string;
   budgetRange: string;
   timeline: string;
-  source: string;
+  source: LeadSource;
   calculatorContext?: string;
 };
 
@@ -73,7 +78,7 @@ export function parseLead(value: unknown): LeadInput | null {
     challenge.length > 2000 ||
     !budgets.has(budgetRange) ||
     !timelines.has(timeline) ||
-    !sources.has(source) ||
+    !isLeadSource(source) ||
     calculator.length > 120 ||
     body.contactConsent !== true
   )
