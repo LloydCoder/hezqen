@@ -403,33 +403,35 @@ export default function VramCalculatorPage() {
         {result.value ? (
           <>
             <section className="vram-gpu-matches" aria-labelledby="vram-gpu-heading">
-            <p className="section-label">HARDWARE CAPACITY CHECK</p>
-            <h2 id="vram-gpu-heading">Single-GPU memory fit</h2>
-            <p>
-              This compares the estimate with 90% of each GPU's published memory capacity, leaving
-              10% headroom. It is a capacity screen only—not a guarantee that a model will load or
-              meet throughput targets. Multi-GPU memory is not summed because topology,
-              interconnect and framework behaviour affect fit. The tensor-parallel screen below estimates per-GPU memory placement separately.
-            </p>
-            <ul className="vram-gpu-list">
-              {gpuMatches.map((gpu) => (
-                <li key={gpu.id}>
-                  <span>
-                    <strong>{gpu.name}</strong>
-                    <small>
-                      {gpu.memoryGB} GB advertised ({gpu.memoryGiB.toFixed(2)} GiB) · {gpu.usableMemoryGiB.toFixed(1)} GiB planning capacity
-                    </small>
-                  </span>
-                  <span className={gpu.status === "fit" ? "vram-gpu-fit" : "vram-gpu-no-fit"}>
-                    {gpu.status === "fit" ? "Capacity fit" : "Insufficient"}
-                  </span>
-                  <a href={gpu.sourceUrl} target="_blank" rel="noreferrer">
-                    Specifications
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
+              <p className="section-label">HARDWARE CAPACITY CHECK</p>
+              <h2 id="vram-gpu-heading">Single-GPU memory fit</h2>
+              <p>
+                This compares the estimate with 90% of each GPU's published memory capacity,
+                leaving 10% headroom. It is a capacity screen only—not a guarantee that a model
+                will load or meet throughput targets. Multi-GPU memory is not summed because
+                topology, interconnect and framework behaviour affect fit. The tensor-parallel
+                screen below estimates per-GPU memory placement separately.
+              </p>
+              <ul className="vram-gpu-list">
+                {gpuMatches.map((gpu) => (
+                  <li key={gpu.id}>
+                    <span>
+                      <strong>{gpu.name}</strong>
+                      <small>
+                        {gpu.memoryGB} GB advertised ({gpu.memoryGiB.toFixed(2)} GiB) ·{" "}
+                        {gpu.usableMemoryGiB.toFixed(1)} GiB planning capacity
+                      </small>
+                    </span>
+                    <span className={gpu.status === "fit" ? "vram-gpu-fit" : "vram-gpu-no-fit"}>
+                      {gpu.status === "fit" ? "Capacity fit" : "Insufficient"}
+                    </span>
+                    <a href={gpu.sourceUrl} target="_blank" rel="noreferrer">
+                      Specifications
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
             <MultiGpuCapacityPanel
               weightMemoryGiB={result.value.weightMemoryGiB}
               kvCacheMemoryGiB={result.value.kvCacheMemoryGiB}
