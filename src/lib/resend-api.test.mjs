@@ -41,7 +41,10 @@ test("sends newsletter confirmation through the published template with an idemp
   assert.equal(result, "email_test_1");
   assert.equal(captured.url, "https://api.resend.com/emails");
   assert.equal(captured.init.headers.authorization, `Bearer ${apiKey}`);
-  assert.equal(captured.init.headers["idempotency-key"], "newsletter-confirm/subscriber-1/token-hash");
+  assert.equal(
+    captured.init.headers["idempotency-key"],
+    "newsletter-confirm/subscriber-1/token-hash",
+  );
   assert.deepEqual(captured.body.template, {
     id: "template_test",
     variables: { CONFIRMATION_URL: "https://hezqen.example/newsletter/confirm?token=opaque" },
@@ -127,14 +130,8 @@ test("records topic-level unsubscribe without changing global contact status", a
     captured = { url, init, body: JSON.parse(init.body) };
     return jsonResponse(200, { id: "contact_test_4" });
   };
-  await unsubscribeNewsletterContact(
-    { email: "reader@example.com" },
-    { ...options, fetchImpl },
-  );
-  assert.equal(
-    captured.url,
-    "https://api.resend.com/contacts/reader%40example.com/topics",
-  );
+  await unsubscribeNewsletterContact({ email: "reader@example.com" }, { ...options, fetchImpl });
+  assert.equal(captured.url, "https://api.resend.com/contacts/reader%40example.com/topics");
   assert.equal(captured.init.method, "PATCH");
   assert.deepEqual(captured.body.topics, [{ id: "topic_test", subscription: "opt_out" }]);
 });
