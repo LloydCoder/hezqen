@@ -20,6 +20,7 @@ import {
   scheduledPublicationEndpoint,
 } from "./lib/editorial-endpoints.ts";
 import { createResendEmailAdapter } from "./lib/resend-email-adapter.ts";
+import { architectureReviewEndpoint } from "./lib/architecture-review-endpoints.ts";
 import {
   newsletterConfirmEndpoint,
   newsletterSubscribeEndpoint,
@@ -101,6 +102,7 @@ export default buildConfig({
     evidenceDownloadEndpoint,
     evidenceVerifyEndpoint,
     claimVerifyEndpoint,
+    architectureReviewEndpoint,
     newsletterSubscribeEndpoint,
     newsletterConfirmEndpoint,
     newsletterUnsubscribeEndpoint,
