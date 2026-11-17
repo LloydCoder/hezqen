@@ -55,6 +55,15 @@ export default function EditorialStandardsPage() {
             </article>
           ))}
         </div>
+        <h2>Ownership and commercial disclosures</h2>
+        <p>
+          HEZQEN is owned and operated by Tinlance, which also provides commercial technology and
+          engineering services. Relevant Tinlance services, sponsorships, affiliate relationships
+          and other material commercial interests must be disclosed clearly where they appear.
+          Payment, partnership status or a service relationship does not grant an advertiser,
+          sponsor, affiliate partner or Tinlance sales team editorial approval rights. Authors and
+          editors must disclose relevant conflicts to the accountable editor before publication.
+        </p>
         <h2>AI use</h2>
         <p>
           AI tools may assist research discovery, transcription, translation, data organization,
