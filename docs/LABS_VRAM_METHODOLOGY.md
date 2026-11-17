@@ -101,7 +101,7 @@ The GPU list currently includes these manufacturer-published memory capacities:
 
 The capacity screen treats 90% of the published capacity as usable planning capacity, leaving a nominal 10% headroom. This is a conservative comparison aid, not a guarantee that the model will load or meet latency/throughput targets.
 
-The current matcher is intentionally single-GPU only. It does not sum VRAM across multiple cards. Multi-GPU feasibility depends on tensor-parallel support, layer placement, interconnect bandwidth/topology, PCIe/NVLink, framework/runtime behaviour and per-device allocation.
+The single-GPU matcher compares each card independently. A separate tensor-parallel screen provides an idealized per-GPU memory-placement estimate for selected multi-GPU configurations. It does not pool VRAM or discover the actual topology. Multi-GPU feasibility still depends on tensor-parallel support, layer placement, interconnect bandwidth/topology, PCIe/NVLink, framework/runtime behaviour and per-device allocation.
 
 ## Supported and unsupported architecture assumptions
 
@@ -133,6 +133,14 @@ These vectors validate arithmetic and regression behaviour only. They are not me
 - Added versioned shareable input URLs and copyable result summaries.
 - Published deterministic test vectors and added a test that reads the public JSON.
 - Preserved the existing weight/KV/reserve formula as formula version 1.0.0.
+
+### 1.2.0 — 2026-11-17
+
+- Corrected manufacturer GB capacities to binary GiB before applying the 90% usable-capacity fraction.
+- Added attention-head metadata and a separate multi-GPU tensor-parallel memory-placement screen.
+- Added source-linked GPU interconnect descriptions and deterministic public regression vectors.
+- Added shareable tensor-parallel settings using the `tpGpu` and `tpSize` URL parameters.
+- Preserved the base weight/KV/reserve formula as formula version 1.0.0; the tensor-parallel placement model is version 1.0.0.
 
 ### Formula 1.0.0
 
