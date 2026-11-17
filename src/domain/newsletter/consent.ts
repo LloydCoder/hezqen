@@ -6,7 +6,13 @@ export const NEWSLETTER_RESEND_COOLDOWN_MS = 15 * 60 * 1000;
 export const NEWSLETTER_SEND_WINDOW_MS = 24 * 60 * 60 * 1000;
 export const NEWSLETTER_MAX_CONFIRMATION_SENDS_PER_DAY = 3;
 
-export type NewsletterSignupSource = "footer" | "article" | "labs" | "contact" | "newsletter" | "unknown";
+export type NewsletterSignupSource =
+  | "footer"
+  | "article"
+  | "labs"
+  | "contact"
+  | "newsletter"
+  | "unknown";
 
 export interface ConfirmationToken {
   token: string;
@@ -22,18 +28,18 @@ export interface UnsubscribeTokenPayload {
 export function normalizeNewsletterEmail(value: unknown): string | null {
   if (typeof value !== "string") return null;
   const email = value.trim().toLowerCase();
-  if (
-    email.length > 254 ||
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-    email.includes("..")
-  ) {
+  if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.includes("..")) {
     return null;
   }
   return email;
 }
 
 export function normalizeNewsletterSignupSource(value: unknown): NewsletterSignupSource {
-  return value === "footer" || value === "article" || value === "labs" || value === "contact" || value === "newsletter"
+  return value === "footer" ||
+    value === "article" ||
+    value === "labs" ||
+    value === "contact" ||
+    value === "newsletter"
     ? value
     : "unknown";
 }
@@ -59,10 +65,12 @@ export function canSendConfirmation(
 ): boolean {
   if (!Number.isInteger(sendCount) || sendCount < 0) return false;
   const windowStart = windowStartedAt ? Date.parse(windowStartedAt) : Number.NaN;
-  const windowActive = Number.isFinite(windowStart) && now - windowStart < NEWSLETTER_SEND_WINDOW_MS;
+  const windowActive =
+    Number.isFinite(windowStart) && now - windowStart < NEWSLETTER_SEND_WINDOW_MS;
   if (windowActive && sendCount >= NEWSLETTER_MAX_CONFIRMATION_SENDS_PER_DAY) return false;
   const lastAttempt = lastAttemptAt ? Date.parse(lastAttemptAt) : Number.NaN;
-  if (Number.isFinite(lastAttempt) && now - lastAttempt < NEWSLETTER_RESEND_COOLDOWN_MS) return false;
+  if (Number.isFinite(lastAttempt) && now - lastAttempt < NEWSLETTER_RESEND_COOLDOWN_MS)
+    return false;
   return true;
 }
 
