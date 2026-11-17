@@ -88,10 +88,10 @@ export default function VramMethodologyPage() {
 
         <h2>Decimal GB and binary GiB</h2>
         <p>
-          GPU manufacturers advertise memory in decimal gigabytes (GB), while the calculator
-          reports binary gibibytes (GiB). Each catalogue value is converted using GB ×
-          1,000,000,000 / 1,073,741,824 before the 90% usable-capacity fraction is applied.
-          For example, a 48 GB GPU contains approximately 44.70 GiB, not 48 GiB.
+          GPU manufacturers advertise memory in decimal gigabytes (GB), while the calculator reports
+          binary gibibytes (GiB). Each catalogue value is converted using GB × 1,000,000,000 /
+          1,073,741,824 before the 90% usable-capacity fraction is applied. For example, a 48 GB GPU
+          contains approximately 44.70 GiB, not 48 GiB.
         </p>
         <ul>
           <li>24 GB → 22.35 GiB (RTX 4090)</li>
@@ -154,7 +154,8 @@ export default function VramMethodologyPage() {
           </li>
           <li>
             <a href="https://www.nvidia.com/en-us/data-center/h200/">
-              NVIDIA H200 — 141 GB, SXM/NVL variants (preliminary specifications; NVLink topology varies by SKU)
+              NVIDIA H200 — 141 GB, SXM/NVL variants (preliminary specifications; NVLink topology
+              varies by SKU)
             </a>
           </li>
         </ul>
@@ -176,11 +177,11 @@ export default function VramMethodologyPage() {
         </p>
         <h2>Interconnect and hardware topology</h2>
         <p>
-          The catalogue records manufacturer-listed PCIe, NVLink and SKU-dependent information.
-          A PCIe-only card may be constrained by GPU-to-GPU communication; NVLink availability
-          depends on the exact SKU, bridge, baseboard and NVSwitch configuration. A memory fit does
-          not establish interconnect bandwidth, latency or throughput. Verify the actual server
-          topology and benchmark the target model/runtime before procurement.
+          The catalogue records manufacturer-listed PCIe, NVLink and SKU-dependent information. A
+          PCIe-only card may be constrained by GPU-to-GPU communication; NVLink availability depends
+          on the exact SKU, bridge, baseboard and NVSwitch configuration. A memory fit does not
+          establish interconnect bandwidth, latency or throughput. Verify the actual server topology
+          and benchmark the target model/runtime before procurement.
         </p>
         <h2>Limitations</h2>
         <p>
