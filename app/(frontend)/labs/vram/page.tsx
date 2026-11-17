@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import VramCalculator from "./vram-calculator";
 import { ArchitectureReviewCTA } from "@/components/ArchitectureReviewCTA";
+import { StructuredData } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   title: "LLM VRAM Sizing Calculator | HEZQEN Labs",
@@ -34,6 +35,19 @@ export const metadata: Metadata = {
 export default function VramCalculatorPage() {
   return (
     <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: "HEZQEN Labs LLM VRAM Sizing Calculator",
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "Any",
+          url: "https://hezqen.tinlance.com/labs/vram",
+          isAccessibleForFree: true,
+          softwareVersion: "1.1.0",
+          publisher: { "@id": "https://hezqen.tinlance.com/#organization" },
+        }}
+      />
       <VramCalculator />
       <ArchitectureReviewCTA calculator="LLM VRAM sizing" />
     </>
