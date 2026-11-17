@@ -176,6 +176,9 @@ overrides:
   happy-dom: 21.0.4
   esbuild: 0.25.0
 
+patchedDependencies:
+  picomatch@4.0.7: c0afd715ec17c236f9f8fe0ca6e0f68e8d76ff378fb1bcf8dcf8d4d99cf8a4cd
+
 importers:
 
   .:
@@ -217,6 +220,9 @@ importers:
       '@types/react-dom':
         specifier: 19.3.0
         version: 19.3.0(@types/react@19.3.0)
+      picomatch:
+        specifier: 4.0.7
+        version: 4.0.7(patch_hash=c0afd715ec17c236f9f8fe0ca6e0f68e8d76ff378fb1bcf8dcf8d4d99cf8a4cd)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -3473,9 +3479,9 @@ snapshots:
 
   fast-uri@3.1.9: {}
 
-  fdir@6.5.0(picomatch@4.0.7):
+  fdir@6.5.0(picomatch@4.0.7(patch_hash=c0afd715ec17c236f9f8fe0ca6e0f68e8d76ff378fb1bcf8dcf8d4d99cf8a4cd)):
     optionalDependencies:
-      picomatch: 4.0.7
+      picomatch: 4.0.7(patch_hash=c0afd715ec17c236f9f8fe0ca6e0f68e8d76ff378fb1bcf8dcf8d4d99cf8a4cd)
 
   file-type@21.3.4:
     dependencies:
@@ -4049,7 +4055,7 @@ snapshots:
 
   picomatch@2.3.2: {}
 
-  picomatch@4.0.7: {}
+  picomatch@4.0.7(patch_hash=c0afd715ec17c236f9f8fe0ca6e0f68e8d76ff378fb1bcf8dcf8d4d99cf8a4cd): {}
 
   pino-abstract-transport@2.0.0:
     dependencies:
@@ -4317,8 +4323,8 @@ snapshots:
 
   tinyglobby@0.2.17:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.7)
-      picomatch: 4.0.7
+      fdir: 6.5.0(picomatch@4.0.7(patch_hash=c0afd715ec17c236f9f8fe0ca6e0f68e8d76ff378fb1bcf8dcf8d4d99cf8a4cd))
+      picomatch: 4.0.7(patch_hash=c0afd715ec17c236f9f8fe0ca6e0f68e8d76ff378fb1bcf8dcf8d4d99cf8a4cd)
 
   to-no-case@1.0.2: {}
 
