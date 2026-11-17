@@ -3,6 +3,7 @@ import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypt
 export const NEWSLETTER_CONSENT_VERSION = "hezqen-intelligence-brief-v1-2026-11-17";
 export const NEWSLETTER_CONFIRMATION_TTL_MS = 24 * 60 * 60 * 1000;
 export const NEWSLETTER_RESEND_COOLDOWN_MS = 15 * 60 * 1000;
+export const NEWSLETTER_SEND_WINDOW_MS = 24 * 60 * 60 * 1000;
 export const NEWSLETTER_MAX_CONFIRMATION_SENDS_PER_DAY = 3;
 
 export type NewsletterSignupSource = "footer" | "article" | "labs" | "contact" | "unknown";
@@ -52,15 +53,17 @@ export function hashConfirmationToken(token: string): string {
 
 export function canSendConfirmation(
   sendCount: number,
-  lastSentAt: string | null | undefined,
+  windowStartedAt: string | null | undefined,
+  lastAttemptAt: string | null | undefined,
   now = Date.now(),
 ): boolean {
   if (!Number.isInteger(sendCount) || sendCount < 0) return false;
-  if (sendCount >= NEWSLETTER_MAX_CONFIRMATION_SENDS_PER_DAY) return false;
-  if (!lastSentAt) return true;
-  const lastSent = Date.parse(lastSentAt);
-  if (!Number.isFinite(lastSent)) return true;
-  return now - lastSent >= NEWSLETTER_RESEND_COOLDOWN_MS;
+  const windowStart = windowStartedAt ? Date.parse(windowStartedAt) : Number.NaN;
+  const windowActive = Number.isFinite(windowStart) && now - windowStart < NEWSLETTER_SEND_WINDOW_MS;
+  if (windowActive && sendCount >= NEWSLETTER_MAX_CONFIRMATION_SENDS_PER_DAY) return false;
+  const lastAttempt = lastAttemptAt ? Date.parse(lastAttemptAt) : Number.NaN;
+  if (Number.isFinite(lastAttempt) && now - lastAttempt < NEWSLETTER_RESEND_COOLDOWN_MS) return false;
+  return true;
 }
 
 export function createUnsubscribeToken(
