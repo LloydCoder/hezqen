@@ -1,6 +1,6 @@
 # HEZQEN Labs VRAM Calculator Methodology
 
-**Calculator version:** 1.1.0  
+**Calculator version:** 1.2.0  
 **Formula version:** 1.0.0  
 **Last reviewed:** 2026-11-17  
 **Public regression vectors:** [/labs/vram-test-vectors.json](/labs/vram-test-vectors.json)
