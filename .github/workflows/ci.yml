@@ -1,9 +1,9 @@
 name: HEZQEN CI
 on:
   pull_request:
-    branches: [main]
+    branches: [main, feat/hezqen-g2-g12-staging-acceptance]
   push:
-    branches: [main]
+    branches: [main, feat/hezqen-g2-g12-staging-acceptance]
   workflow_dispatch:
 permissions:
   contents: read
