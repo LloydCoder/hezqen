@@ -6,6 +6,9 @@ test("includes manufacturer-sourced GPU memory capacities", () => {
   assert.ok(GPU_CATALOG.some((gpu) => gpu.id === "rtx-4090" && gpu.memoryGiB === 24));
   assert.ok(GPU_CATALOG.some((gpu) => gpu.id === "rtx-5090" && gpu.memoryGiB === 32));
   assert.ok(GPU_CATALOG.some((gpu) => gpu.id === "rtx-6000-ada" && gpu.memoryGiB === 48));
+  assert.ok(GPU_CATALOG.some((gpu) => gpu.id === "a100-80gb" && gpu.memoryGiB === 80));
+  assert.ok(GPU_CATALOG.some((gpu) => gpu.id === "h100-sxm-80gb" && gpu.memoryGiB === 80));
+  assert.ok(GPU_CATALOG.some((gpu) => gpu.id === "h200-141gb" && gpu.memoryGiB === 141));
   assert.ok(GPU_CATALOG.every((gpu) => gpu.sourceUrl.startsWith("https://")));
 });
 
@@ -14,6 +17,9 @@ test("classifies capacity fit using explicit headroom, not raw VRAM alone", () =
   assert.equal(assessment.find((gpu) => gpu.id === "rtx-4090")?.status, "fit");
   assert.equal(assessment.find((gpu) => gpu.id === "rtx-5090")?.status, "fit");
   assert.equal(assessment.find((gpu) => gpu.id === "rtx-6000-ada")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "a100-80gb")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "h100-sxm-80gb")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "h200-141gb")?.status, "fit");
 });
 
 test("does not mark a GPU as fit when required memory exceeds usable capacity", () => {
