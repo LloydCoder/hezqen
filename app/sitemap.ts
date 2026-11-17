@@ -25,6 +25,7 @@ const publicStaticRoutes = [
   "/infrastructure",
 ];
 
+// Give readers direct, crawlable paths to the publication's governance and methodology.
 const editorialTrustRoutes = new Set([
   "/about",
   "/corrections",
