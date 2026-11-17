@@ -150,7 +150,7 @@ Start at the [documentation index](docs/README.md).
 | AI cost calculator | [Methodology](docs/AI_COST_CALCULATOR_METHODOLOGY.md) |
 | Master execution | [Master execution plan](docs/MASTER_EXECUTION_PLAN.md) |
 | Editorial launch | [Eight article briefs](docs/EDITORIAL_LAUNCH_BACKLOG.md) |
-| VRAM calculator | [Methodology](docs/LABS_METHODOLOGY.md) |
+| VRAM calculator | [Methodology](docs/LABS_VRAM_METHODOLOGY.md) |
 
 Machine-readable documentation entry points: [llms.txt](public/llms.txt) and [llms-full.txt](public/llms-full.txt).
 
