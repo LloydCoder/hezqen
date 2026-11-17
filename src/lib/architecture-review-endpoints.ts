@@ -5,7 +5,18 @@ import { withRequestContext } from "./request-context.ts";
 
 const PRIVACY_NOTICE_VERSION = "2026-11-17";
 
-const projectTypes = new Set([
+type ProjectType =
+  | "ai-infrastructure"
+  | "cloud-architecture"
+  | "cybersecurity"
+  | "ai-agents"
+  | "performance-cost"
+  | "other";
+type LeadTimeline = "exploring" | "0-30-days" | "1-3-months" | "3-6-months" | "6-plus-months";
+type LeadBudget = "unspecified" | "under-5000" | "5000-15000" | "15000-50000" | "50000-plus";
+type LeadSource = "article" | "labs" | "contact" | "unknown";
+
+const projectTypes = new Set<ProjectType>([
   "ai-infrastructure",
   "cloud-architecture",
   "cybersecurity",
@@ -13,10 +24,33 @@ const projectTypes = new Set([
   "performance-cost",
   "other",
 ]);
-const timelines = new Set(["exploring", "0-30-days", "1-3-months", "3-6-months", "6-plus-months"]);
-const budgets = new Set(["unspecified", "under-5000", "5000-15000", "15000-50000", "50000-plus"]);
-type LeadSource = "article" | "labs" | "contact" | "unknown";
+const timelines = new Set<LeadTimeline>([
+  "exploring",
+  "0-30-days",
+  "1-3-months",
+  "3-6-months",
+  "6-plus-months",
+]);
+const budgets = new Set<LeadBudget>([
+  "unspecified",
+  "under-5000",
+  "5000-15000",
+  "15000-50000",
+  "50000-plus",
+]);
 const sources = new Set<LeadSource>(["article", "labs", "contact", "unknown"]);
+
+function isProjectType(value: string): value is ProjectType {
+  return projectTypes.has(value as ProjectType);
+}
+
+function isLeadTimeline(value: string): value is LeadTimeline {
+  return timelines.has(value as LeadTimeline);
+}
+
+function isLeadBudget(value: string): value is LeadBudget {
+  return budgets.has(value as LeadBudget);
+}
 
 function isLeadSource(value: string): value is LeadSource {
   return sources.has(value as LeadSource);
@@ -27,10 +61,10 @@ type LeadInput = {
   email: string;
   company?: string;
   role?: string;
-  projectType: string;
+  projectType: ProjectType;
   challenge: string;
-  budgetRange: string;
-  timeline: string;
+  budgetRange: LeadBudget;
+  timeline: LeadTimeline;
   source: LeadSource;
   calculatorContext?: string;
 };
