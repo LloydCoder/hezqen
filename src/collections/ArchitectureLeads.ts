@@ -148,7 +148,11 @@ export const ArchitectureLeads: CollectionConfig = {
     {
       name: "notes",
       type: "textarea",
-      access: { read: canReadLeads, create: canReadLeads, update: canReadLeads },
+      access: {
+        read: ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]),
+        create: ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]),
+        update: ({ req }) => hasActiveRole(req.user, ["administrator", "editor"]),
+      },
     },
   ],
   timestamps: true,
