@@ -102,10 +102,11 @@ export default function VramMethodologyPage() {
               Qwen2.5 14B Instruct model card
             </a>{" "}
             and{" "}
-            <a href="https://huggingface.co/Qwen/Qwen2.5-14B-Instruct/blob/main/config.json">
+            <a href="https://huggingface.co/Qwen/Qwen2.5-14B-Instruct/blob/76ca6ba/config.json">
               model configuration
             </a>
-            .
+            . The config defaults to 32,768 positions; the model card documents 131,072-token
+            context only with YaRN scaling factor 4.
           </li>
         </ul>
         <h2>GPU capacity sources</h2>
