@@ -146,7 +146,16 @@ test("matches every published deterministic VRAM test vector", () => {
 
 test("rejects estimates that exceed the safe numeric range", () => {
   assert.throws(
-    () => estimateVram({ ...baseInput, contextLength: Number.MAX_SAFE_INTEGER }),
+    () =>
+      estimateVram({
+        parametersB: 7,
+        weightFormat: "fp16",
+        layers: 32,
+        kvHeads: 8,
+        headDimension: 128,
+        contextLength: Number.MAX_SAFE_INTEGER,
+        batchSize: 1,
+      }),
     /exceeds the supported numeric range/,
   );
 });
