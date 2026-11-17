@@ -62,6 +62,7 @@ export const NewsletterSubscribers: CollectionConfig = {
         { label: "Article", value: "article" },
         { label: "Labs", value: "labs" },
         { label: "Contact", value: "contact" },
+        { label: "Newsletter page", value: "newsletter" },
         { label: "Unknown", value: "unknown" },
       ],
     },
