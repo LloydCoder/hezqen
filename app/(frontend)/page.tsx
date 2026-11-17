@@ -168,11 +168,11 @@ export default async function HomePage() {
               </Link>
             </article>
             <article className="platform-card">
-              <span className="platform-kicker">03 — DECISION SUPPORT</span>
+              <span className="platform-kicker">03 — IN DEVELOPMENT</span>
               <h2>HEZQEN Intelligence</h2>
               <p>
-                Deeper research and briefings for leaders making consequential technology and
-                business decisions.
+                A planned research and briefing service for leaders making consequential technology and
+                business decisions. This offering is not yet available.
               </p>
             </article>
             <article className="platform-card">
