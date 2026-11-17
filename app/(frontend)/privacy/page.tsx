@@ -69,10 +69,10 @@ export default function PrivacyPage() {
           newsletter consent.
         </p>
         <p>
-          Architecture-review requests are stored in the HEZQEN CMS for human review. An
-          automated acknowledgement or sales notification is not currently guaranteed; do not
-          assume that submitting the form creates an email conversation. Do not include passwords,
-          API keys, payment details, confidential customer data or other secrets in the form.
+          Architecture-review requests are stored in the HEZQEN CMS for human review. An automated
+          acknowledgement or sales notification is not currently guaranteed; do not assume that
+          submitting the form creates an email conversation. Do not include passwords, API keys,
+          payment details, confidential customer data or other secrets in the form.
         </p>
         <h2>Retention and user choices</h2>
         <p>
