@@ -433,7 +433,7 @@ This section supersedes older phase numbering and status snapshots in this histo
 |---|---|---|
 | G1 Production | **HELD PENDING** | Deliberate policy hold; production host and production runtime acceptance remain unresolved. |
 | G2 Governance | **PARTIAL** | About, Editorial Standards summary and Corrections surfaces exist; complete public policy suite and final HEOS acceptance remain outstanding. |
-| G3 Articles | **NOT STARTED** | Eight briefs exist; researched drafts, named consenting authors/reviewers and human editorial approvals remain outstanding. |
+| G3 Articles | **DRAFTS PREPARED — NOT ACCEPTED** | Eight sourced research drafts now exist under `docs/editorial/drafts/`; named consenting authors/reviewers, editor assignments, fact-checking, experiments where required and human editorial approval remain outstanding. |
 | G4 VRAM Labs | **PARTIAL** | Sourced presets, versioning, sharing, single-GPU fit and vectors exist; architecture-specific and multi-GPU capability remains limited/unaccepted. |
 | G5 Conversion/newsletter | **PARTIAL** | Architecture-review CTA exists; secure lead workflow and double-opt-in newsletter lifecycle remain outstanding. |
 | G6 Break-even calculator | **PARTIAL** | `/labs/ai-cost` exists and includes engineering/on-call inputs; full model/sensitivity audit and acceptance remain outstanding. |
