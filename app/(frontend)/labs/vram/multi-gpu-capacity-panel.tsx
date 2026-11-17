@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { assessTensorParallelCapacity, GPU_CATALOG } from "@/domain/labs/gpu-capacity";
 
 interface MultiGpuCapacityPanelProps {
@@ -26,6 +26,33 @@ export default function MultiGpuCapacityPanel({
 }: MultiGpuCapacityPanelProps) {
   const [gpuId, setGpuId] = useState("h100-sxm-80gb");
   const [tensorParallelSize, setTensorParallelSize] = useState("4");
+  const [shareStatus, setShareStatus] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const requestedGpu = params.get("tpGpu");
+    const requestedSize = params.get("tpSize");
+
+    if (requestedGpu && GPU_CATALOG.some((gpu) => gpu.id === requestedGpu)) {
+      setGpuId(requestedGpu);
+    }
+    if (requestedSize && tensorParallelOptions.some((size) => String(size) === requestedSize)) {
+      setTensorParallelSize(requestedSize);
+    }
+  }, []);
+
+  async function copyConfigurationLink() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("tpGpu", gpuId);
+    url.searchParams.set("tpSize", tensorParallelSize);
+
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setShareStatus("Configuration link copied.");
+    } catch {
+      setShareStatus("Clipboard access is unavailable in this browser.");
+    }
+  }
 
   const result = useMemo(() => {
     try {
@@ -91,6 +118,14 @@ export default function MultiGpuCapacityPanel({
             ))}
           </select>
         </label>
+      </div>
+      <div className="vram-share">
+        <button className="button button-primary" type="button" onClick={copyConfigurationLink}>
+          Copy multi-GPU configuration link
+        </button>
+        <p role="status" aria-live="polite">
+          {shareStatus}
+        </p>
       </div>
       {result.error ? (
         <p className="vram-warning" role="status">
