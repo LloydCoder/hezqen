@@ -88,10 +88,10 @@ export default function VramMethodologyPage() {
 
         <h2>Decimal GB and binary GiB</h2>
         <p>
-          GPU manufacturers advertise memory in decimal gigabytes (GB), while the calculator reports
-          binary gibibytes (GiB). Each catalogue value is converted using GB × 1,000,000,000 /
-          1,073,741,824 before the 90% usable-capacity fraction is applied. For example, a 48 GB GPU
-          contains approximately 44.70 GiB, not 48 GiB.
+          GPU manufacturers advertise memory in decimal gigabytes (GB), while the calculator
+          reports binary gibibytes (GiB). Each catalogue value is converted using GB ×
+          1,000,000,000 / 1,073,741,824 before the 90% usable-capacity fraction is applied.
+          For example, a 48 GB GPU contains approximately 44.70 GiB, not 48 GiB.
         </p>
         <ul>
           <li>24 GB → 22.35 GiB (RTX 4090)</li>
