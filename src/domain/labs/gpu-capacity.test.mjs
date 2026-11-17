@@ -32,7 +32,7 @@ test("classifies capacity fit using explicit headroom after GB-to-GiB conversion
   assert.equal(assessment.find((gpu) => gpu.id === "rtx-6000-ada")?.status, "fit");
   assert.equal(assessment.find((gpu) => gpu.id === "a100-80gb")?.status, "fit");
   assert.equal(assessment.find((gpu) => gpu.id === "h100-sxm-80gb")?.status, "fit");
-  assert.equal(assessment.find((gpu) => gpu.gpuId === "h200-141gb")?.status, "fit");
+  assert.equal(assessment.find((gpu) => gpu.id === "h200-141gb")?.status, "fit");
 });
 
 test("does not mark a GPU as fit when required memory exceeds usable capacity", () => {
