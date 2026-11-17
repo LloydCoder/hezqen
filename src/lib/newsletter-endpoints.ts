@@ -198,7 +198,7 @@ export const newsletterSubscribeEndpoint: Endpoint = {
     const windowStartedAt = windowExpired ? nowIso : priorWindowStart;
     const sendCount = windowExpired ? 0 : priorCount;
 
-    if (existing?.status === "pending" && !canSendConfirmation(sendCount, windowStartedAt, priorAttempt, now.getTime())) {
+    if (existing && !canSendConfirmation(sendCount, windowStartedAt, priorAttempt, now.getTime())) {
       return genericSignupResponse();
     }
 
@@ -386,7 +386,7 @@ export const newsletterUnsubscribeEndpoint: Endpoint = {
 
     const result = await req.payload.find({
       collection: "newsletter-subscribers",
-      where: { id: { equals: payload.subscriberId } },
+      where: { id: { equals: /^\\d+$/.test(payload.subscriberId) ? Number(payload.subscriberId) : payload.subscriberId } },
       limit: 1,
       depth: 0,
       overrideAccess: true,
@@ -470,18 +470,34 @@ export const newsletterSyncEndpoint: Endpoint = {
         if (document.status === "unsubscribed") {
           await unsubscribeNewsletterContact({ email: document.email });
         } else {
-          await syncNewsletterContact({
+          const sync = await syncNewsletterContact({
             email: document.email,
             consentAt: document.consentAt,
             consentVersion: document.consentVersion,
             signupSource: document.signupSource,
             unsubscribeUrl: unsubscribeUrl(document),
           });
+          if (sync.status === "blocked") {
+            await updateSubscriber(req, document.id, {
+              status: "suppressed",
+              providerSyncStatus: "blocked",
+              providerContactId: sync.contactId,
+            });
+            synced += 1;
+            continue;
+          }
+          await updateSubscriber(req, document.id, {
+            providerSyncStatus: "synced",
+            providerContactId: sync.contactId,
+            providerSyncedAt: new Date().toISOString(),
+          });
         }
-        await updateSubscriber(req, document.id, {
-          providerSyncStatus: "synced",
-          providerSyncedAt: new Date().toISOString(),
-        });
+        if (document.status === "unsubscribed") {
+          await updateSubscriber(req, document.id, {
+            providerSyncStatus: "synced",
+            providerSyncedAt: new Date().toISOString(),
+          });
+        }
         synced += 1;
       } catch {
         await updateSubscriber(req, document.id, { providerSyncStatus: "failed" });
