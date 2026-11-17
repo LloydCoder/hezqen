@@ -6,7 +6,7 @@ export const NEWSLETTER_RESEND_COOLDOWN_MS = 15 * 60 * 1000;
 export const NEWSLETTER_SEND_WINDOW_MS = 24 * 60 * 60 * 1000;
 export const NEWSLETTER_MAX_CONFIRMATION_SENDS_PER_DAY = 3;
 
-export type NewsletterSignupSource = "footer" | "article" | "labs" | "contact" | "unknown";
+export type NewsletterSignupSource = "footer" | "article" | "labs" | "contact" | "newsletter" | "unknown";
 
 export interface ConfirmationToken {
   token: string;
@@ -33,7 +33,7 @@ export function normalizeNewsletterEmail(value: unknown): string | null {
 }
 
 export function normalizeNewsletterSignupSource(value: unknown): NewsletterSignupSource {
-  return value === "footer" || value === "article" || value === "labs" || value === "contact"
+  return value === "footer" || value === "article" || value === "labs" || value === "contact" || value === "newsletter"
     ? value
     : "unknown";
 }
