@@ -31,7 +31,7 @@
 - The corrections page and editorial standards page already exist.
 - The public homepage currently has no published articles in the staging inventory last audited on 2026-11-16.
 - The latest authoritative production audit found the public host serving an older deployment; health, admin and correction routes were returning 404. The production Neon branch had no application tables.
-- Vercel Hobby is not an approved commercial production host. The prior decision was to defer paid upgrade; no paid host change is assumed by this plan.
+- Vercel Hobby is not an approved commercial production host and its current content-training terms require a separate data-governance review. Its current terms also include a content-training provision for Hobby/trial Pro; see [Production Hosting Decision](PRODUCTION_HOSTING_DECISION.md). The prior decision was to defer paid upgrade; no paid host change is assumed by this plan.
 - The latest branch changes are not merged or deployed until PR #54 is accepted.
 
 ## Phase register
@@ -52,6 +52,8 @@
 | G12 | Ecosystem integration and final launch | NOT STARTED | Governed Tinlyt/Searqon/TAS integrations, read-only public MCP, full forensic audit and release approval |
 
 ## G1 — Production infrastructure
+
+The production hosting decision is documented in [PRODUCTION_HOSTING_DECISION.md](PRODUCTION_HOSTING_DECISION.md). Do not treat the existing Hobby deployment or a green compatibility build as permission to launch the commercial publication.
 
 ### Required work
 
