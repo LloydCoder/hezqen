@@ -11,6 +11,8 @@ test("ships model presets with traceable source metadata and architecture fields
     assert.ok(preset.parametersB > 0);
     assert.ok(preset.layers > 0);
     assert.ok(preset.kvHeads > 0);
+    assert.ok(preset.attentionHeads >= preset.kvHeads);
+    assert.equal(preset.attentionHeads % preset.kvHeads, 0);
     assert.ok(preset.headDimension > 0);
     assert.ok(preset.maxContextLength > 0);
   }
