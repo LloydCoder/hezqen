@@ -23,6 +23,9 @@ Only the assigned human editor may approve or publish after fact-checking, discl
 - https://hezqen.tinlance.com/terms
 - https://hezqen.tinlance.com/sitemap
 - https://hezqen.tinlance.com/labs
+- https://hezqen.tinlance.com/labs/methodology
+- https://hezqen.tinlance.com/labs/vram-test-vectors.json
+- https://hezqen.tinlance.com/feed.xml
 - https://hezqen.tinlance.com/infrastructure
 - https://hezqen.tinlance.com/divisions/ai-technology
 - https://hezqen.tinlance.com/divisions/cybersecurity
@@ -33,7 +36,7 @@ Only the assigned human editor may approve or publish after fact-checking, discl
 The application uses Next.js App Router 16, React 19, strict TypeScript, Node.js 24, pnpm 12, Payload CMS 3, PostgreSQL 18, Biome and the Node built-in test runner. The architecture is a modular monolith.
 
 ## Current implementation
-The public application shell includes the homepage, About, Editorial Standards, four division routes, sixteen Labs calculators, Infrastructure catalog, and public trust/policy routes. Calculator domain logic is deterministic and has regression tests. See docs/LABS_CALCULATOR_SUITE.md for formulas and limitations.
+The public application shell includes the homepage, About, Editorial Standards, four division routes, sixteen Labs calculators, the VRAM methodology page and public test vectors, RSS feed, Infrastructure catalog, and public trust/policy routes. Calculator domain logic is deterministic and has regression tests. See docs/LABS_CALCULATOR_SUITE.md for formulas and limitations.
 
 Payload CMS is integrated with the Next.js App Router, admin/API route mounting and restricted collections for users, articles, topics, sources, evidence, claims and audit events. Initial database migrations, staging validation and production CMS acceptance remain release gates.
 
@@ -52,6 +55,9 @@ The contact, corrections, security, privacy, cookie and terms pages are initial 
 ## Non-claims
 Premium subscriptions, reader accounts, production search, a fully operational CMS, persistent evidence storage, automated publishing and complete ASVS compliance are not claimed as available. Check docs/PHASE_STATUS.md for current acceptance gates.
 
+## Commercial relationship
+HEZQEN is owned and operated by Tinlance. Architecture-review CTAs and any other Tinlance service offers are commercial enquiries, not editorial endorsements. Sponsorships and affiliate relationships must be disclosed; commercial relationships do not grant editorial approval rights.
+
 ## Documentation
 - [Repository README](https://github.com/LloydCoder/hezqen/blob/main/README.md)
 - [Documentation index](https://github.com/LloydCoder/hezqen/blob/main/docs/README.md)
@@ -62,4 +68,7 @@ Premium subscriptions, reader accounts, production search, a fully operational C
 - [Threat model](https://github.com/LloydCoder/hezqen/blob/main/docs/THREAT_MODEL.md)
 - [CMS setup](https://github.com/LloydCoder/hezqen/blob/main/docs/CMS_SETUP.md)
 - [Data model](https://github.com/LloydCoder/hezqen/blob/main/docs/DATA_MODEL.md)
+- [Master execution plan](https://github.com/LloydCoder/hezqen/blob/main/docs/MASTER_EXECUTION_PLAN.md)
+- [Editorial launch briefs](https://github.com/LloydCoder/hezqen/blob/main/docs/EDITORIAL_LAUNCH_BACKLOG.md)
+- [VRAM methodology](https://github.com/LloydCoder/hezqen/blob/main/docs/LABS_VRAM_METHODOLOGY.md)
 - [Phase status](https://github.com/LloydCoder/hezqen/blob/main/docs/PHASE_STATUS.md)
