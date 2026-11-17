@@ -57,6 +57,8 @@ const navItems = [
   { href: "/divisions/cloud-engineering", label: "Cloud & Engineering" },
   { href: "/divisions/business-startups", label: "Business & Startups" },
   { href: "/labs", label: "Labs" },
+  { href: "/labs/methodology", label: "Labs methodology" },
+  { href: "/feed.xml", label: "RSS feed" },
   { href: "/infrastructure", label: "Infrastructure" },
 ] as const;
 
