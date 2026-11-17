@@ -7,9 +7,24 @@ const DIVISION_LABELS: Record<PublicArticle["division"], string> = {
   "business-startups": "Business & Startups",
 };
 
+function removeInvalidXmlCharacters(value: string): string {
+  return Array.from(value)
+    .filter((character) => {
+      const codePoint = character.codePointAt(0) ?? 0;
+      return (
+        codePoint === 0x09 ||
+        codePoint === 0x0a ||
+        codePoint === 0x0d ||
+        (codePoint >= 0x20 && codePoint <= 0xd7ff) ||
+        (codePoint >= 0xe000 && codePoint <= 0xfffd) ||
+        (codePoint >= 0x10000 && codePoint <= 0x10ffff)
+      );
+    })
+    .join("");
+}
+
 function escapeXml(value: string): string {
-  return value
-    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "")
+  return removeInvalidXmlCharacters(value)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
