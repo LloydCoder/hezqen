@@ -41,6 +41,7 @@ export function createSitemap(articles: PublicArticle[] = []): MetadataRoute.Sit
                 "/research-methodology",
                 "/authors",
                 "/commercial-disclosure",
+                "/labs/methodology",
               ].includes(route)
             ? 0.7
             : 0.6,
