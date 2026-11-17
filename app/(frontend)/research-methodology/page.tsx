@@ -110,8 +110,8 @@ export default function ResearchMethodologyPage() {
           receive a dated, visible correction.
         </p>
         <p>
-          This methodology applies across AI &amp; Technology, Cybersecurity, Cloud &amp; Engineering,
-          and Business &amp; Startups. It is read together with our
+          This methodology applies across AI &amp; Technology, Cybersecurity, Cloud &amp;
+          Engineering, and Business &amp; Startups. It is read together with our
           <a href="/editorial-standards"> Editorial Standards</a> and
           <a href="/commercial-disclosure"> Commercial Disclosure</a>.
         </p>
