@@ -77,6 +77,7 @@ export function parseVramShareParams(params: URLSearchParams): VramEstimateInput
       input.parametersB > SHARE_LIMITS.parametersB ||
       input.layers > SHARE_LIMITS.layers ||
       input.kvHeads > SHARE_LIMITS.kvHeads ||
+      (input.attentionHeads !== undefined && input.attentionHeads > SHARE_LIMITS.attentionHeads) ||
       input.headDimension > SHARE_LIMITS.headDimension ||
       input.contextLength > SHARE_LIMITS.contextLength ||
       input.batchSize > SHARE_LIMITS.batchSize
