@@ -36,8 +36,8 @@ export default function CommercialDisclosurePage() {
         <h2>Ownership</h2>
         <p>
           Tinlance owns and operates HEZQEN. HEZQEN is not a separately owned or
-          corporate-independent newsroom. It maintains editorial standards and independent
-          editorial judgment within its ownership structure.
+          corporate-independent newsroom. It maintains editorial standards and independent editorial
+          judgment within its ownership structure.
         </p>
         <h2>Tinlance services</h2>
         <p>
