@@ -41,10 +41,27 @@ test("creates a cryptographically random confirmation token with a hashed record
 test("enforces confirmation resend cooldown and daily limit", () => {
   const now = Date.parse("2026-11-17T12:00:00.000Z");
   assert.equal(canSendConfirmation(0, null, null, now), true);
-  assert.equal(canSendConfirmation(1, "2026-11-17T11:00:00.000Z", "2026-11-17T11:50:00.000Z", now), false);
-  assert.equal(canSendConfirmation(1, "2026-11-17T11:00:00.000Z", "2026-11-17T11:44:00.000Z", now), true);
-  assert.equal(canSendConfirmation(3, "2026-11-17T10:00:00.000Z", "2026-11-17T10:00:00.000Z", now), false);
-  assert.equal(canSendConfirmation(3, "2026-11-17T10:00:00.000Z", "2026-11-17T10:00:00.000Z", now + 25 * 60 * 60 * 1000), true);
+  assert.equal(
+    canSendConfirmation(1, "2026-11-17T11:00:00.000Z", "2026-11-17T11:50:00.000Z", now),
+    false,
+  );
+  assert.equal(
+    canSendConfirmation(1, "2026-11-17T11:00:00.000Z", "2026-11-17T11:44:00.000Z", now),
+    true,
+  );
+  assert.equal(
+    canSendConfirmation(3, "2026-11-17T10:00:00.000Z", "2026-11-17T10:00:00.000Z", now),
+    false,
+  );
+  assert.equal(
+    canSendConfirmation(
+      3,
+      "2026-11-17T10:00:00.000Z",
+      "2026-11-17T10:00:00.000Z",
+      now + 25 * 60 * 60 * 1000,
+    ),
+    true,
+  );
   assert.equal(canSendConfirmation(-1, null, null, now), false);
 });
 
