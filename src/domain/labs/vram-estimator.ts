@@ -1,5 +1,5 @@
 export const VRAM_FORMULA_VERSION = "1.0.0";
-export const VRAM_CALCULATOR_VERSION = "1.1.0";
+export const VRAM_CALCULATOR_VERSION = "1.2.0";
 
 export type WeightFormat = "fp16" | "bf16" | "int8" | "int4";
 export type CacheFormat = "fp16" | "bf16" | "fp8" | "int8";
@@ -9,6 +9,7 @@ export interface VramEstimateInput {
   weightFormat: WeightFormat;
   layers: number;
   kvHeads: number;
+  attentionHeads?: number;
   headDimension: number;
   contextLength: number;
   batchSize: number;
@@ -53,10 +54,10 @@ function assertPositiveFinite(name: string, value: number): void {
   }
 }
 
-function assertPositiveInteger(name: string, value: number): void {
+function assertPositiveInteger(name: string, value: number, max = Number.MAX_SAFE_INTEGER): void {
   assertPositiveFinite(name, value);
-  if (!Number.isInteger(value)) {
-    throw new RangeError(`${name} must be a positive integer`);
+  if (!Number.isInteger(value) || value > max) {
+    throw new RangeError(`${name} must be a positive integer no greater than ${max}`);
   }
 }
 
@@ -64,6 +65,12 @@ export function estimateVram(input: VramEstimateInput): VramEstimate {
   assertPositiveFinite("parametersB", input.parametersB);
   assertPositiveInteger("layers", input.layers);
   assertPositiveInteger("kvHeads", input.kvHeads);
+  if (input.attentionHeads !== undefined) {
+    assertPositiveInteger("attentionHeads", input.attentionHeads, 256);
+    if (input.attentionHeads < input.kvHeads || input.attentionHeads % input.kvHeads !== 0) {
+      throw new RangeError("attentionHeads must be a multiple of kvHeads");
+    }
+  }
   assertPositiveInteger("headDimension", input.headDimension);
   assertPositiveInteger("contextLength", input.contextLength);
   assertPositiveInteger("batchSize", input.batchSize);

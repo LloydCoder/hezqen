@@ -110,6 +110,22 @@ test("rejects non-positive, non-finite and non-integer architecture inputs", () 
   );
 });
 
+test("validates optional query attention heads for tensor-parallel estimates", () => {
+  const input = {
+    parametersB: 7,
+    weightFormat: "int4",
+    layers: 32,
+    kvHeads: 8,
+    attentionHeads: 32,
+    headDimension: 128,
+    contextLength: 4096,
+    batchSize: 1,
+  };
+  assert.doesNotThrow(() => estimateVram(input));
+  assert.throws(() => estimateVram({ ...input, attentionHeads: 30 }), /attentionHeads/);
+  assert.throws(() => estimateVram({ ...input, attentionHeads: 4 }), /attentionHeads/);
+});
+
 test("rejects excessive reserve percentages", () => {
   assert.throws(
     () =>

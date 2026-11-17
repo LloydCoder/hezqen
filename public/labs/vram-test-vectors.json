@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "formulaVersion": "1.0.0",
-  "calculatorVersion": "1.1.0",
+  "calculatorVersion": "1.2.0",
   "unit": "GiB",
   "description": "Deterministic public regression vectors for the HEZQEN Labs VRAM estimator. Values are formula outputs, not measured GPU benchmarks.",
   "cases": [
@@ -27,6 +27,30 @@
         "recommendedVramGiB": 5
       },
       "source": "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3"
+    },
+    {
+      "id": "llama-3.3-70b-instruct-int4-32768",
+      "model": "Meta Llama 3.3 70B Instruct (70.6B config-derived planning count)",
+      "input": {
+        "parametersB": 70.6,
+        "weightFormat": "int4",
+        "layers": 80,
+        "kvHeads": 8,
+        "attentionHeads": 64,
+        "headDimension": 128,
+        "contextLength": 32768,
+        "batchSize": 1,
+        "kvCacheFormat": "fp16",
+        "runtimeReservePercent": 15
+      },
+      "expected": {
+        "weightMemoryGiB": 36.98514774441719,
+        "kvCacheMemoryGiB": 10,
+        "runtimeReserveGiB": 7.047772161662579,
+        "totalMemoryGiB": 54.03291990607977,
+        "recommendedVramGiB": 55
+      },
+      "source": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct"
     },
     {
       "id": "qwen2.5-14b-instruct-int4-4096",

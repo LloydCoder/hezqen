@@ -11,9 +11,23 @@ test("ships model presets with traceable source metadata and architecture fields
     assert.ok(preset.parametersB > 0);
     assert.ok(preset.layers > 0);
     assert.ok(preset.kvHeads > 0);
+    assert.ok(preset.attentionHeads >= preset.kvHeads);
+    assert.equal(preset.attentionHeads % preset.kvHeads, 0);
     assert.ok(preset.headDimension > 0);
     assert.ok(preset.maxContextLength > 0);
   }
+});
+
+test("includes Llama 3.3 70B with its documented GQA architecture", () => {
+  const llama = getVramModelPreset("llama-3.3-70b-instruct");
+  assert.ok(llama);
+  assert.equal(llama.parametersB, 70.6);
+  assert.equal(llama.layers, 80);
+  assert.equal(llama.attentionHeads, 64);
+  assert.equal(llama.kvHeads, 8);
+  assert.equal(llama.headDimension, 128);
+  assert.equal(llama.maxContextLength, 131072);
+  assert.match(llama.configUrl, /Llama-3\.3-70B-Instruct/);
 });
 
 test("resolves known presets and rejects unknown identifiers", () => {

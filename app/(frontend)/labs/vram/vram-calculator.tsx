@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { assessSingleGpuCapacity } from "@/domain/labs/gpu-capacity";
+import MultiGpuCapacityPanel from "./multi-gpu-capacity-panel";
 import {
   estimateVram,
   type CacheFormat,
@@ -18,6 +19,7 @@ const defaults = {
   parametersB: "7",
   weightFormat: "int4" as WeightFormat,
   layers: "32",
+  attentionHeads: "32",
   kvHeads: "8",
   headDimension: "128",
   contextLength: "4096",
@@ -31,12 +33,14 @@ function NumberField({
   value,
   onChange,
   min = 1,
+  max,
   step = 1,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   min?: number;
+  max?: number;
   step?: number;
 }) {
   return (
@@ -45,6 +49,7 @@ function NumberField({
       <input
         type="number"
         min={min}
+        max={max}
         step={step}
         value={value}
         onChange={(event) => onChange(event.target.value)}
@@ -90,6 +95,7 @@ export default function VramCalculatorPage() {
       parametersB: String(shared.parametersB),
       weightFormat: shared.weightFormat,
       layers: String(shared.layers),
+      attentionHeads: String(shared.attentionHeads ?? 32),
       kvHeads: String(shared.kvHeads),
       headDimension: String(shared.headDimension),
       contextLength: String(shared.contextLength),
@@ -108,6 +114,7 @@ export default function VramCalculatorPage() {
       parametersB: Number(values.parametersB),
       weightFormat: values.weightFormat,
       layers: Number(values.layers),
+      attentionHeads: Number(values.attentionHeads),
       kvHeads: Number(values.kvHeads),
       headDimension: Number(values.headDimension),
       contextLength: Number(values.contextLength),
@@ -144,6 +151,7 @@ export default function VramCalculatorPage() {
       ...current,
       parametersB: String(preset.parametersB),
       layers: String(preset.layers),
+      attentionHeads: String(preset.attentionHeads),
       kvHeads: String(preset.kvHeads),
       headDimension: String(preset.headDimension),
       contextLength: String(Math.min(4096, preset.maxContextLength)),
@@ -165,7 +173,13 @@ export default function VramCalculatorPage() {
   function buildShareUrl(): string | null {
     try {
       const url = new URL(window.location.origin + window.location.pathname);
-      url.search = serializeVramShareParams(input);
+      const params = new URLSearchParams(serializeVramShareParams(input));
+      const currentParams = new URLSearchParams(window.location.search);
+      for (const key of ["tpGpu", "tpSize"]) {
+        const value = currentParams.get(key);
+        if (value) params.set(key, value);
+      }
+      url.search = params.toString();
       return url.toString();
     } catch {
       setShareFeedback(
@@ -190,7 +204,7 @@ export default function VramCalculatorPage() {
       `Formula version: ${result.value.formulaVersion}`,
       `Model parameters: ${input.parametersB}B`,
       `Weight format: ${input.weightFormat.toUpperCase()}`,
-      `Architecture: ${input.layers} layers, ${input.kvHeads} KV heads, ${input.headDimension} head dimension`,
+      `Architecture: ${input.layers} layers, ${input.attentionHeads} attention heads, ${input.kvHeads} KV heads, ${input.headDimension} head dimension`,
       `Context length: ${input.contextLength} tokens`,
       `Batch size: ${input.batchSize}`,
       `KV cache format: ${(input.kvCacheFormat ?? "fp16").toUpperCase()}`,
@@ -254,6 +268,12 @@ export default function VramCalculatorPage() {
                 label="Transformer layers"
                 value={values.layers}
                 onChange={update("layers")}
+              />
+              <NumberField
+                label="Query attention heads"
+                value={values.attentionHeads}
+                onChange={update("attentionHeads")}
+                max={256}
               />
               <NumberField
                 label="KV heads (GQA/MQA)"
@@ -387,35 +407,45 @@ export default function VramCalculatorPage() {
         </div>
 
         {result.value ? (
-          <section className="vram-gpu-matches" aria-labelledby="vram-gpu-heading">
-            <p className="section-label">HARDWARE CAPACITY CHECK</p>
-            <h2 id="vram-gpu-heading">Single-GPU memory fit</h2>
-            <p>
-              This compares the estimate with 90% of each GPU's published memory capacity, leaving
-              10% headroom. It is a capacity screen only—not a guarantee that a model will load or
-              meet throughput targets. Multi-GPU memory is not summed because topology,
-              interconnect, tensor-parallel support and framework behaviour affect fit.
-            </p>
-            <ul className="vram-gpu-list">
-              {gpuMatches.map((gpu) => (
-                <li key={gpu.id}>
-                  <span>
-                    <strong>{gpu.name}</strong>
-                    <small>
-                      {gpu.memoryGiB} GB published · {gpu.usableMemoryGiB.toFixed(1)} GiB planning
-                      capacity
-                    </small>
-                  </span>
-                  <span className={gpu.status === "fit" ? "vram-gpu-fit" : "vram-gpu-no-fit"}>
-                    {gpu.status === "fit" ? "Capacity fit" : "Insufficient"}
-                  </span>
-                  <a href={gpu.sourceUrl} target="_blank" rel="noreferrer">
-                    Specifications
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <>
+            <section className="vram-gpu-matches" aria-labelledby="vram-gpu-heading">
+              <p className="section-label">HARDWARE CAPACITY CHECK</p>
+              <h2 id="vram-gpu-heading">Single-GPU memory fit</h2>
+              <p>
+                This compares the estimate with 90% of each GPU's published memory capacity, leaving
+                10% headroom. It is a capacity screen only—not a guarantee that a model will load or
+                meet throughput targets. Multi-GPU memory is not summed because topology,
+                interconnect and framework behaviour affect fit. The tensor-parallel screen below
+                estimates per-GPU memory placement separately.
+              </p>
+              <ul className="vram-gpu-list">
+                {gpuMatches.map((gpu) => (
+                  <li key={gpu.id}>
+                    <span>
+                      <strong>{gpu.name}</strong>
+                      <small>
+                        {gpu.memoryGB} GB advertised ({gpu.memoryGiB.toFixed(2)} GiB) ·{" "}
+                        {gpu.usableMemoryGiB.toFixed(1)} GiB planning capacity
+                      </small>
+                    </span>
+                    <span className={gpu.status === "fit" ? "vram-gpu-fit" : "vram-gpu-no-fit"}>
+                      {gpu.status === "fit" ? "Capacity fit" : "Insufficient"}
+                    </span>
+                    <a href={gpu.sourceUrl} target="_blank" rel="noreferrer">
+                      Specifications
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+            <MultiGpuCapacityPanel
+              weightMemoryGiB={result.value.weightMemoryGiB}
+              kvCacheMemoryGiB={result.value.kvCacheMemoryGiB}
+              attentionHeads={input.attentionHeads ?? 32}
+              kvHeads={input.kvHeads}
+              runtimeReservePercent={input.runtimeReservePercent ?? 15}
+            />
+          </>
         ) : null}
 
         <section className="vram-method">
@@ -431,8 +461,12 @@ export default function VramCalculatorPage() {
             allowance. This is a planning estimate, not a hardware benchmark or a guarantee of fit.
             Actual allocation varies with architecture, quantization implementation, attention
             backend, tensor parallelism, fragmentation, CUDA graphs, runtime and serving framework.
-            Architectures using MLA, heterogeneous layer layouts or sliding-window cache behaviour
-            may require a different formula and are not represented by the presets here.
+            GPU manufacturers advertise decimal GB; this calculator converts those values to binary
+            GiB before applying headroom. The tensor-parallel screen estimates idealized weight/KV
+            placement and lists SKU-level interconnect details, but does not validate server
+            topology or performance. Architectures using MLA, heterogeneous layer layouts or
+            sliding-window cache behaviour may require a different formula and are not represented
+            by the presets.
           </p>
         </section>
       </div>

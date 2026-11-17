@@ -5,6 +5,7 @@ export interface VramModelPreset {
   parametersB: number;
   layers: number;
   kvHeads: number;
+  attentionHeads: number;
   headDimension: number;
   maxContextLength: number;
   attentionType: "gqa";
@@ -21,6 +22,7 @@ export const VRAM_MODEL_PRESETS = [
     parametersB: 7,
     layers: 32,
     kvHeads: 8,
+    attentionHeads: 32,
     headDimension: 128,
     maxContextLength: 32768,
     attentionType: "gqa",
@@ -30,12 +32,28 @@ export const VRAM_MODEL_PRESETS = [
     sourceVerifiedAt: "2026-11-17",
   },
   {
+    id: "llama-3.3-70b-instruct",
+    name: "Meta Llama 3.3 70B Instruct (70.6B config estimate)",
+    provider: "Meta",
+    parametersB: 70.6,
+    layers: 80,
+    kvHeads: 8,
+    attentionHeads: 64,
+    headDimension: 128,
+    maxContextLength: 131072,
+    attentionType: "gqa",
+    sourceUrl: "https://github.com/meta-llama/llama-models/blob/main/models/llama3_3/MODEL_CARD.md",
+    configUrl: "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct/blob/main/config.json",
+    sourceVerifiedAt: "2026-11-17",
+  },
+  {
     id: "qwen2.5-14b-instruct",
     name: "Qwen2.5 14B Instruct",
     provider: "Qwen",
     parametersB: 14.7,
     layers: 48,
     kvHeads: 8,
+    attentionHeads: 40,
     headDimension: 128,
     maxContextLength: 32768,
     attentionType: "gqa",

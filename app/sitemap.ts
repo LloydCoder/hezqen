@@ -25,11 +25,29 @@ const publicStaticRoutes = [
   "/infrastructure",
 ];
 
+// Give readers direct, crawlable paths to the publication's governance and methodology.
+const editorialTrustRoutes = new Set([
+  "/about",
+  "/corrections",
+  "/editorial-standards",
+  "/research-methodology",
+  "/authors",
+  "/commercial-disclosure",
+  "/labs/methodology",
+]);
+
+function getRoutePriority(route: string): number {
+  if (route === "") return 1;
+  if (route === "/labs") return 0.8;
+  if (editorialTrustRoutes.has(route)) return 0.7;
+  return 0.6;
+}
+
 export function createSitemap(articles: PublicArticle[] = []): MetadataRoute.Sitemap {
   const staticRoutes = publicStaticRoutes.map((route) => ({
     url: `${site.url}${route}`,
     changeFrequency: "monthly" as const,
-    priority: route === "" ? 1 : route === "/labs" ? 0.8 : 0.6,
+    priority: getRoutePriority(route),
   }));
 
   const divisionRoutes = divisions.map((division) => ({

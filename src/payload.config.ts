@@ -4,10 +4,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
 
+import { ArchitectureLeads } from "./collections/ArchitectureLeads";
 import { Articles } from "./collections/Articles";
 import { AuditEvents } from "./collections/AuditEvents";
 import { Claims } from "./collections/Claims";
 import { Evidence } from "./collections/Evidence";
+import { NewsletterSubscribers } from "./collections/NewsletterSubscribers";
 import { Sources } from "./collections/Sources";
 import { Topics } from "./collections/Topics";
 import { Users } from "./collections/Users";
@@ -18,6 +20,13 @@ import {
   scheduledPublicationEndpoint,
 } from "./lib/editorial-endpoints.ts";
 import { createResendEmailAdapter } from "./lib/resend-email-adapter.ts";
+import { architectureReviewEndpoint } from "./lib/architecture-review-endpoints.ts";
+import {
+  newsletterConfirmEndpoint,
+  newsletterSubscribeEndpoint,
+  newsletterSyncEndpoint,
+  newsletterUnsubscribeEndpoint,
+} from "./lib/newsletter-endpoints.ts";
 import { evidenceDownloadEndpoint, evidenceUploadEndpoint } from "./lib/evidence-endpoints.ts";
 import {
   claimVerifyEndpoint,
@@ -74,7 +83,17 @@ export default buildConfig({
       importMapFile: path.resolve(dirname, "../app/(payload)/admin/importMap.js"),
     },
   },
-  collections: [Users, Articles, Topics, Sources, Evidence, Claims, AuditEvents],
+  collections: [
+    Users,
+    Articles,
+    Topics,
+    Sources,
+    Evidence,
+    Claims,
+    AuditEvents,
+    NewsletterSubscribers,
+    ArchitectureLeads,
+  ],
   endpoints: [
     editorialWorkflowEndpoint,
     editorialReviewEndpoint,
@@ -83,6 +102,11 @@ export default buildConfig({
     evidenceDownloadEndpoint,
     evidenceVerifyEndpoint,
     claimVerifyEndpoint,
+    architectureReviewEndpoint,
+    newsletterSubscribeEndpoint,
+    newsletterConfirmEndpoint,
+    newsletterUnsubscribeEndpoint,
+    newsletterSyncEndpoint,
   ],
   email: process.env.RESEND_API_KEY
     ? createResendEmailAdapter({
