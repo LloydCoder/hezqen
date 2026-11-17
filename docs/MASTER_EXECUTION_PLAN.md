@@ -4,8 +4,8 @@
 **Publication:** HEZQEN — Global Technology & Business Intelligence  
 **Last reconciled:** 2026-11-17  
 **Canonical domain:** https://hezqen.tinlance.com  
-**Current execution branch:** `feat/hezqen-launch-foundation`  
-**Current change set:** [PR #54](https://github.com/LloydCoder/hezqen/pull/54)  
+**Current execution branch:** `feat/hezqen-g2-g12-execution`  
+**Current execution policy:** [docs/EXECUTION_POLICY.md](EXECUTION_POLICY.md)  
 **Release verdict:** NOT READY FOR PUBLIC PRODUCTION
 
 ## Operating rules
@@ -26,13 +26,14 @@
 - HEZQEN uses Next.js 16, React 19, Payload CMS 3.93 and PostgreSQL.
 - The CMS contains Articles, Users, Topics, Sources, Claims, Evidence and AuditEvents collections.
 - Public article projections and dynamic sitemap generation already exist.
-- The Labs suite contains sixteen additional calculators, plus dedicated VRAM and API-versus-self-hosted AI cost calculators. The second flagship cost calculator already exists; its scope is being expanded rather than duplicated.
+- The Labs suite contains sixteen calculators in total, including the VRAM and API-versus-self-hosted AI cost calculators. The API cost calculator already exists; expand and validate it rather than duplicating it.
 - A dynamic `robots.txt`, XML sitemap, HTML sitemap, `llms.txt` and `llms-full.txt` already exist.
 - The corrections page and editorial standards page already exist.
 - The public homepage currently has no published articles in the staging inventory last audited on 2026-11-16.
 - The latest authoritative production audit found the public host serving an older deployment; health, admin and correction routes were returning 404. The production Neon branch had no application tables.
 - Vercel Hobby is not an approved commercial production host and its current content-training terms require a separate data-governance review. Its current terms also include a content-training provision for Hobby/trial Pro; see [Production Hosting Decision](PRODUCTION_HOSTING_DECISION.md). The prior decision was to defer paid upgrade; no paid host change is assumed by this plan.
-- The latest branch changes are not merged or deployed until PR #54 is accepted.
+- PR #54 was merged into `main` at `5b7280d519e9c76dca303e36631045a9a29c7c85`. HEZQEN CI (run 44080825318) and Cloudflare Compatibility (run 44080825413) both completed successfully on that exact commit. This validates those workflow checks only; it does not establish production acceptance.
+- The adopted G1-pending / G2–G12 staging execution order is authoritative in [EXECUTION_POLICY.md](EXECUTION_POLICY.md). Its gate numbering supersedes older numbering in the historical phase descriptions below.
 
 ## Phase register
 
@@ -301,7 +302,7 @@ PR #54 is the current implementation slice. It includes:
 - Public disclosure improvements.
 - CI smoke coverage for RSS, methodology and test vectors.
 
-PR #54 is not a production release. Its HEZQEN CI and Cloudflare compatibility workflows must pass on the final head, then the code and docs must be audited before merge. It does not implement newsletter subscription, consent management, social pixels, paid checkout, production deployment or article publication.
+PR #54 is merged into `main` at `5b7280d519e9c76dca303e36631045a9a29c7c85`; both HEZQEN CI and Cloudflare Compatibility passed on that exact commit. It is not a production release. It does not implement newsletter subscription, consent management, social pixels, paid checkout, production deployment or the eight flagship articles. Continue under the adopted [G1-pending execution policy](EXECUTION_POLICY.md).
 
 ## Final launch acceptance
 

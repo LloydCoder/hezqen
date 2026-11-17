@@ -401,3 +401,47 @@ The current public Production deployment therefore does not expose the Payload a
 - The usage guide explicitly says HEZQEN has not been legally cleared. Trademark and domain clearance in target markets remains a mandatory legal release gate.
 
 **Launch boundary:** HIES workflow success and supplied brand assets do not certify the HEZQEN public service. The CMS/public-reader release, commercial host, live staging acceptance, legal clearance and operational controls remain independent blockers.
+
+
+---
+
+## Authoritative execution-policy reconciliation — 2026-11-17
+
+This section supersedes older phase numbering and status snapshots in this historical register. The binding gate sequence and operating boundaries are maintained in [EXECUTION_POLICY.md](EXECUTION_POLICY.md).
+
+### Adopted execution decision
+
+- **G1 is deliberately held pending.** Do not promote production, change DNS, mutate the production database or production credentials, or activate scheduled publishing.
+- Execute **G2–G12** in staging, local environments and isolated test fixtures.
+- Accessibility, security, privacy, performance and CI are cross-cutting acceptance criteria.
+- Staging results must not be described as production acceptance.
+
+### Verified repository and CI reconciliation
+
+- PR #54 is merged into `main` at `5b7280d519e9c76dca303e36631045a9a29c7c85`.
+- On that exact commit, HEZQEN CI run [44080825318](https://github.com/LloydCoder/hezqen/actions/runs/44080825318) completed with **success**.
+- On that exact commit, Cloudflare Compatibility run [44080825413](https://github.com/LloydCoder/hezqen/actions/runs/44080825413) completed with **success**; both jobs succeeded.
+- Scheduled uptime run 44081663551 was **skipped**, not failed. The uptime workflow remains dormant and is not evidence of an operational monitoring acceptance.
+- The repository contains sixteen Labs calculators in total, including VRAM and API-versus-self-hosted AI cost. The latter is an existing tool to extend, not a new duplicate.
+- The eight article entries in `docs/EDITORIAL_LAUNCH_BACKLOG.md` are commissioning briefs only. They are not completed articles and must not be represented as published.
+- PR #54 provides VRAM presets, bounded share links, versioned formulas, single-GPU capacity screening, test vectors, RSS and related metadata/CTA improvements. It does not establish multi-GPU/tensor-parallel/interconnect acceptance, newsletter lifecycle, consent-managed pixels, checkout, or article publication.
+- Production hosting, production DB initialization and runtime-role verification remain G1 blockers.
+
+### Current gate assessment
+
+| Gate | Status | Evidence / outstanding acceptance |
+|---|---|---|
+| G1 Production | **HELD PENDING** | Deliberate policy hold; production host and production runtime acceptance remain unresolved. |
+| G2 Governance | **PARTIAL** | About, Editorial Standards summary and Corrections surfaces exist; complete public policy suite and final HEOS acceptance remain outstanding. |
+| G3 Articles | **DRAFTS PREPARED — NOT ACCEPTED** | Eight sourced research drafts now exist under `docs/editorial/drafts/`; named consenting authors/reviewers, editor assignments, fact-checking, experiments where required and human editorial approval remain outstanding. |
+| G4 VRAM Labs | **PARTIAL** | Sourced presets, versioning, sharing, single-GPU fit and vectors exist; architecture-specific and multi-GPU capability remains limited/unaccepted. |
+| G5 Conversion/newsletter | **PARTIAL** | Architecture-review CTA exists; secure lead workflow and double-opt-in newsletter lifecycle remain outstanding. |
+| G6 Break-even calculator | **PARTIAL** | `/labs/ai-cost` exists and includes engineering/on-call inputs; full model/sensitivity audit and acceptance remain outstanding. |
+| G7 SEO/discovery | **PARTIAL** | Sitemap, robots, RSS, canonical and social metadata foundations exist; staging/live crawl and structured-data validation remain outstanding. |
+| G8 Measurement | **NOT STARTED** | Consent manager, first-party event pipeline, provider controls and automated consent tests not accepted. |
+| G9 Monetization | **NOT STARTED** | Affiliate verification, partner/offer records, payment adapter and secure fulfillment not accepted. |
+| G10 Growth | **NOT STARTED** | Distribution operations and contributor programme not evidenced as operational. |
+| G11 Research | **NOT STARTED** | Reproducible research artifacts and independently reproduced benchmark results not accepted. |
+| G12 Ecosystem | **NOT STARTED** | Tinlyt, Searqon, TAS and public read-only MCP integrations not accepted. |
+
+No gate should be marked complete solely because its documentation exists or a CI workflow is green. Record implementation, tests, merge, deployment and acceptance separately.

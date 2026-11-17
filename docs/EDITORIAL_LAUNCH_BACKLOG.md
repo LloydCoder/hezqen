@@ -1,8 +1,21 @@
 # HEZQEN Editorial Launch Package — Article Briefs
 
-**Status:** Commissioning briefs only; none of these entries should be represented as published work.  
+**Status:** Eight working research drafts now exist in `docs/editorial/drafts/`. They are not published, independently reviewed or editor-approved. No author, reviewer or editor names have been fabricated.  
 **Editorial standard:** HEOS / docs/EDITORIAL_STANDARDS.md  
 **Research process:** assignment → primary sources → evidence preservation → claim verification → technical reproduction → draft → independent review → editor approval.
+
+**Draft inventory (2026-11-17):**
+
+1. [70B VRAM](editorial/drafts/01-how-much-vram-does-a-70b-llm-need.md)
+2. [GPU memory explained](editorial/drafts/02-gpu-memory-explained-weights-kv-cache-context-batch.md)
+3. [Self-hosted vs API break-even](editorial/drafts/03-self-hosted-llms-vs-cloud-apis-break-even.md)
+4. [Production agent economics](editorial/drafts/04-real-cost-of-running-production-ai-agents.md)
+5. [Local AI hardware requirements](editorial/drafts/05-running-local-ai-models-hardware-requirements.md)
+6. [Securing self-hosted LLM infrastructure](editorial/drafts/06-how-to-secure-self-hosted-llm-infrastructure.md)
+7. [Hidden AI SaaS infrastructure costs](editorial/drafts/07-hidden-infrastructure-costs-of-ai-saas.md)
+8. [When startups should self-host](editorial/drafts/08-when-should-a-startup-self-host-ai-models.md)
+
+These files are research drafts, not CMS articles. Each still requires a consenting named human author, independent reviewer and editor, fact verification, any required experiment, and formal editorial approval.
 
 ## 1. How Much VRAM Does a 70B LLM Actually Need?
 
