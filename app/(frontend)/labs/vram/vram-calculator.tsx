@@ -171,6 +171,8 @@ export default function VramCalculatorPage() {
 
   function copySummary() {
     if (!result.value) return;
+    const shareUrl = new URL(window.location.origin + window.location.pathname);
+    shareUrl.search = serializeVramShareParams(input);
     const summary = [
       "HEZQEN Labs — LLM VRAM estimate",
       `Calculator version: ${result.value.calculatorVersion}`,
@@ -184,7 +186,7 @@ export default function VramCalculatorPage() {
       `Estimated total: ${formatGiB(result.value.totalMemoryGiB)}`,
       `Recommended available VRAM: at least ${result.value.recommendedVramGiB} GiB`,
       "Planning estimate only; not a hardware benchmark or guaranteed fit.",
-      window.location.href,
+      shareUrl.toString(),
     ].join("\n");
     void copyText(summary, "Calculation summary copied.");
   }
