@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import AiCostCalculator from "./ai-cost-calculator";
 import { ArchitectureReviewCTA } from "@/components/ArchitectureReviewCTA";
+import { StructuredData } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   title: "API vs Self-Hosted AI Cost Calculator | HEZQEN Labs",
@@ -33,6 +34,18 @@ export const metadata: Metadata = {
 export default function AiCostCalculatorPage() {
   return (
     <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: "HEZQEN Labs API vs Self-Hosted AI Cost Calculator",
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "Any",
+          url: "https://hezqen.tinlance.com/labs/ai-cost",
+          isAccessibleForFree: true,
+          publisher: { "@id": "https://hezqen.tinlance.com/#organization" },
+        }}
+      />
       <AiCostCalculator />
       <ArchitectureReviewCTA calculator="API vs self-hosted AI economics" />
     </>
