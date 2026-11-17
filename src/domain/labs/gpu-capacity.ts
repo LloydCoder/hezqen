@@ -44,10 +44,12 @@ export function assessSingleGpuCapacity(
 
   return GPU_CATALOG.map((gpu) => {
     const usableMemoryGiB = gpu.memoryGiB * usableFraction;
+    const status: GpuCapacityAssessment["status"] =
+      requiredGiB <= usableMemoryGiB ? "fit" : "insufficient";
     return {
       ...gpu,
       usableMemoryGiB,
-      status: requiredGiB <= usableMemoryGiB ? "fit" : "insufficient",
+      status,
     };
   });
 }
