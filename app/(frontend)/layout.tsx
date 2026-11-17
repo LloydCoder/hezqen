@@ -14,18 +14,30 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   openGraph: {
     type: "website",
     siteName: site.name,
     title: "HEZQEN — Global Technology & Business Intelligence",
     description: site.description,
     url: site.url,
+    images: [
+      {
+        url: "/brand/hezqen-og.png",
+        width: 1200,
+        height: 630,
+        alt: "HEZQEN — Global Technology & Business Intelligence",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "HEZQEN — Global Technology & Business Intelligence",
     description: site.description,
+    images: ["/brand/hezqen-og.png"],
   },
   icons: { icon: "/favicon.svg" },
   manifest: "/site.webmanifest",
