@@ -1169,6 +1169,48 @@ a:focus-visible {
   }
 }
 
+.architecture-review-cta {
+  padding: 64px 0;
+  border-top: 1px solid var(--line);
+  background: var(--mist);
+}
+.architecture-review-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: center;
+}
+.architecture-review-inner h2 {
+  max-width: 720px;
+  margin: 12px 0;
+  color: var(--navy);
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: -0.045em;
+}
+.architecture-review-inner p:not(.section-label) {
+  max-width: 720px;
+  color: var(--slate);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.architecture-review-inner .architecture-review-disclosure {
+  margin-top: 14px;
+  font-size: 11px;
+}
+.architecture-review-inner .button-primary {
+  white-space: nowrap;
+}
+@media (max-width: 800px) {
+  .architecture-review-inner {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .architecture-review-inner .button-primary {
+    justify-self: start;
+    white-space: normal;
+  }
+}
+
 /* HEZQEN Infrastructure product surface */
 .infrastructure-hero {
   padding: 86px 0 72px;
