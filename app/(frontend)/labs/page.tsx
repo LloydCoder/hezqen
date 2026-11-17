@@ -33,6 +33,11 @@ export default function LabsIndexPage() {
           Sixteen interactive planning tools with visible assumptions and deterministic formulas.
           Replace illustrative defaults with your own workload, contract and infrastructure inputs.
         </p>
+        <p style={{ color: "#5b6678", fontSize: ".86rem", marginTop: ".75rem" }}>
+          <Link href="/labs/methodology" style={{ color: "#a35f00", fontWeight: 700 }}>
+            Read the VRAM calculator methodology, sources and test vectors ↗
+          </Link>
+        </p>
         <section style={{ marginTop: "2.5rem" }}>
           <h2
             style={{
