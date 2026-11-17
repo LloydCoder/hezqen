@@ -19,10 +19,10 @@ Meta's model card names Llama 3.3 70B as a 70-billion-parameter model. Its publi
 
 For a nominal 70-billion-parameter model, the uncompressed BF16 weight payload is approximately 130.4 GiB. At 70.6B, the same calculation is approximately 131.5 GiB. The uncompressed weight payload is therefore already larger than the H200's approximately 131.3 GiB binary capacity, before runtime memory or KV cache. The uncompressed weight payload for 70.6B parameters is approximately:
 
-| Representation | Nominal bytes/parameter | Weight memory |
+| Representation | Effective bytes/parameter | Weight memory |
 |---|---:|---:|
-| FP16/BF16 | 2 | 130.4 GiB |
-| FP8/INT8 payload floor | 1 | 65.2 GiB |
+| FP16/BF16 | 2 | 131.5 GiB |
+| FP8/INT8 payload floor | 1 | 65.8 GiB |
 | 4-bit payload floor | 0.5 | 32.9 GiB |
 | 4-bit planning assumption | 0.5625 | 37.0 GiB |
 
